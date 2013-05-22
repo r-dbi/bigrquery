@@ -5,9 +5,9 @@
 \alias{bigrquery-package}
 \title{An R interface to google's bigquery.}
 \description{
-  An R interface to google's bigquery.
-}
-\details{
-  To get started, see \code{\link{query_exec}}
+  For more information about how bigrquery works, and how
+  to get started, please see the project development page:
+  \url{github.com/hadley/bigrquery}. The most important
+  method to get started with is \code{\link{query_exec}}.
 }
 

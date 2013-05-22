@@ -22,10 +22,11 @@
   \code{\link{list_tabledata}})
 }
 \examples{
-\dontrun{
-sql <- "SELECT year, avg(weight_pounds) FROM natality WHERE year > 2005
-  GROUP BY year"
-query_exec("publicdata", "samples", sql, billing = "yourproject")
+\donttest{
+library(bigrquery)
+billing_project <- "341409650721" # put your project number here
+sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
+query_exec("publicdata", "samples", sql, billing = billing_project)
 }
 }
 \seealso{
