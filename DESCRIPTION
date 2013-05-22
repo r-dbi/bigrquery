@@ -1,0 +1,23 @@
+Package: bigrquery
+Title: An interface to google's bigquery API
+Version: 0.1
+Authors@R: 'Hadley Wickham <h.wickham@gmail.com> [aut,cre]'
+Description: 
+Depends:
+    R (>= 3.0.0)
+Imports:
+    httr,
+    RJSONIO,
+    assertthat
+License: GPL-3
+LazyData: true
+Collate:
+    'auth.r'
+    'datasets.r'
+    'jobs.r'
+    'projects.r'
+    'query.r'
+    'request.r'
+    'tabledata.r'
+    'tables.r'
+    'utils.r'
