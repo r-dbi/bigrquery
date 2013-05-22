@@ -26,6 +26,8 @@ get_access_cred <- function() {
 
   cred
 }
+
+#' @importFrom httr sign_oauth2.0
 get_sig <- function() {
   sign_oauth2.0(get_access_cred()$access_token)
 }

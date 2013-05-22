@@ -5,7 +5,7 @@ bq_get <- function(url, config = list(), ..., sig = get_sig()) {
   process_request(req)
 }
 
-#' @importFrom httr GET add_headers
+#' @importFrom httr POST add_headers
 #' @importFrom RJSONIO toJSON
 bq_post <- function(url, body, config = list(), ..., sig = get_sig()) {
   json <- toJSON(body)
