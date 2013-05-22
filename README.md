@@ -2,6 +2,13 @@
 
 The bigrquery provides a read-only interface to [Google's bigquery](https://developers.google.com/bigquery/). It makes it easy to retrieve metadata about your projects, datasets, tables and jobs, and provides a convenient wrapper for working with bigquery from R.
 
+bigrquery is not currently available on CRAN, but you can install it with devtools:
+
+```R
+devtools::install_github("assertthat")
+devtools::install_github("bigrquery")
+```
+
 ## Authentication
 
 The first time you use bigrquery in a session, it will ask you to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. This gives bigrquery the credentials to access data on your behalf. The credentials are not stored on disk, and need to be re-entered every time you restart R.
