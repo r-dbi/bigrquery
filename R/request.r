@@ -1,3 +1,5 @@
+base_url <- "https://www.googleapis.com/bigquery/v2/"
+
 #' @importFrom httr GET
 bq_get <- function(url, config = list(), ..., sig = get_sig()) {
   config <- c(config, sig)

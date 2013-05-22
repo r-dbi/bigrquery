@@ -1,5 +1,16 @@
-
+#' Retrieve data from a table
+#'
+#' @inheritParams insert_query_job
+#' @param table name of the table
+#' @param max_pages maximum number of pages to retrieve. Use \code{Inf}
+#'  to retrieve the complete dataset.
+#' @seealso API documentation at
+#'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
+#' @export
 list_tabledata <- function(project, dataset, table, max_pages = Inf) {
+  assert_that(is.string(project), is.string(dataset), is.string(table))
+  assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
+
   cat("Retrieving data")
   table_info <- get_table(project, dataset, table)
   schema <- table_info$schema

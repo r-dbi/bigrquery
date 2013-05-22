@@ -21,3 +21,4 @@ Collate:
     'tabledata.r'
     'tables.r'
     'utils.r'
+    'bigrquery.r'
