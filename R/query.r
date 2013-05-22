@@ -22,7 +22,6 @@ query_exec <- function(project, dataset, query, billing = project) {
   assert_that(is.string(project), is.string(dataset), is.string(query),
     is.string(billing))
 
-  cat("Running query")
   job <- insert_query_job(project, dataset, query, billing)
   jobref <- job$jobReference
 
@@ -40,6 +39,22 @@ query_exec <- function(project, dataset, query, billing = project) {
     stop(err$message, call. = FALSE)
   }
 
+  bytes <- as.numeric(job$statistics$totalBytesProcessed)
+  message(format(size_units(bytes)), " processed")
+
   dest <- job$configuration$query$destinationTable
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId)
+}
+
+
+size_units <- function(x) {
+  i <- floor(log2(x) / 10)
+  unit <- c("", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta")[i + 1]
+
+  structure(x, i = i, unit = unit, class = "size")
+}
+#' @S3method format size
+format.size <- function(x, ...) {
+  y <- x * 1024 ^ -attr(x, "i")
+  sprintf("%.1f %sbytes", y, attr(x, "unit"))
 }
