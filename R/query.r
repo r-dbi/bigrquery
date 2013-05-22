@@ -10,13 +10,18 @@ query_exec <- function(project, dataset, query, billing = project) {
 
   elapsed <- timer()
   while(job$status$state != "DONE") {
-    cat("\nRunning query: ", job$status$state, " ", elapsed(), "s", sep = "")
+    cat("\rRunning query:   ", job$status$state, " ",
+      sprintf("%4.1f", elapsed()), "s", sep = "")
     Sys.sleep(0.25)
     job <- get_job(jobref$projectId, jobref$jobId)
   }
   cat("\n")
 
-  dest <- job$configuration$query$destinationTable
+  err <- job$status$errorResult
+  if (!is.null(err)) {
+    stop(err$message, call. = FALSE)
+  }
 
+  dest <- job$configuration$query$destinationTable
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId)
 }

@@ -1,5 +1,6 @@
 
 list_tabledata <- function(project, dataset, table, max_pages = Inf) {
+  cat("Retrieving data")
   table_info <- get_table(project, dataset, table)
   schema <- table_info$schema
 
@@ -7,12 +8,12 @@ list_tabledata <- function(project, dataset, table, max_pages = Inf) {
     table)
   cur_page <- 0
 
+  elapsed <- timer()
   data <- bq_get(url)
   rows <- list(extract_data(data$rows, schema))
 
-  cat("Downloading pages")
   while(cur_page < max_pages && !is.null(data$rows)) {
-    cat(".")
+    cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
     data <- bq_get(url, query = list(pageToken = data$pageToken, maxResults = 2048))
     rows <- c(rows, list(extract_data(data$rows, schema)))
   }
