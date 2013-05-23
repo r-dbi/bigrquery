@@ -6,6 +6,7 @@ bigrquery is not currently available on CRAN, but you can install it with devtoo
 
 ```R
 devtools::install_github("assertthat")
+devtools::install_github("dplyr")
 devtools::install_github("bigrquery")
 ```
 
@@ -33,4 +34,18 @@ library(bigrquery)
 billing_project <- "341409650721" # put your project number here
 sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 query_exec("publicdata", "samples", sql, billing = billing_project)
+```
+
+## dplyr support
+
+bigrquery also supports the dplyr methods, so you can create a bigquery data source and then interact with it in the same way that you interact with data frames, data tables and local databases:
+
+```R
+library(bigrquery)
+billing <- "341409650721" # put your project number here
+births <- source_bigquery("publicdata", "samples", "natality", ling)
+dim(births)
+colnames(births)
+
+head(births)
 ```
