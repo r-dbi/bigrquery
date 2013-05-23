@@ -2,7 +2,8 @@
 \alias{list_tabledata}
 \title{Retrieve data from a table}
 \usage{
-  list_tabledata(project, dataset, table, max_pages = Inf)
+  list_tabledata(project, dataset, table,
+    page_size = 10000, max_pages = 10)
 }
 \arguments{
   \item{table}{name of the table}

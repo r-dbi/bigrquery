@@ -2,7 +2,8 @@
 \alias{query_exec}
 \title{Run a asynchronous query and retrieve results.}
 \usage{
-  query_exec(project, dataset, query, billing = project)
+  query_exec(project, dataset, query, billing = project,
+    page_size = 10000, max_pages = 10)
 }
 \arguments{
   \item{project}{project name}

@@ -7,7 +7,8 @@
 #' @seealso API documentation at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 #' @export
-list_tabledata <- function(project, dataset, table, max_pages = Inf) {
+list_tabledata <- function(project, dataset, table, page_size = 1e4,
+                           max_pages = 10) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
@@ -25,10 +26,18 @@ list_tabledata <- function(project, dataset, table, max_pages = Inf) {
 
   while(cur_page < max_pages && !is.null(data$rows)) {
     cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
-    data <- bq_get(url, query = list(pageToken = data$pageToken, maxResults = 2048))
+    data <- bq_get(url, query = list(
+      pageToken = data$pageToken,
+      maxResults = page_size)
+    )
     rows <- c(rows, list(extract_data(data$rows, schema)))
   }
   cat("\n")
+
+  if (!is.null(data$rows)) {
+    warning("Only first ", max_pages, " pages of ", page_size, " size ",
+      " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
+  }
 
   do.call("rbind", rows)
 }

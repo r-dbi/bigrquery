@@ -18,7 +18,8 @@
 #' sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 #' query_exec("publicdata", "samples", sql, billing = billing_project)
 #' }
-query_exec <- function(project, dataset, query, billing = project) {
+query_exec <- function(project, dataset, query, billing = project,
+                       page_size = 1e4, max_pages = 10) {
   assert_that(is.string(project), is.string(dataset), is.string(query),
     is.string(billing))
 
