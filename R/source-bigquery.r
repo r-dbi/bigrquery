@@ -8,12 +8,19 @@
 #' otherwise affect operation.
 #'
 #' @examples
+#' library(dplyr)
 #' billing <- "341409650721" # put your project number here
 #' births <- source_bigquery("publicdata", "samples", "natality", billing)
 #' dim(births)
 #' colnames(births)
 #'
 #' head(births)
+#'
+#' summarise(births, first_year = min(year), last_year = max(year))
+#' date_info <- select(births, year:wday)
+#' head(date_info)
+#'
+#' head(filter(select(births, year:wday), year > 2000)
 source_bigquery <- function(project, dataset, table, billing = project) {
   assert_that(is.string(project), is.string(dataset), is.string(table),
     is.string(billing))
@@ -36,7 +43,7 @@ source_bigquery <- function(project, dataset, table, billing = project) {
 #' @importFrom dplyr source_vars
 #' @S3method source_vars source_bigquery
 source_vars.source_bigquery <- function(x) {
-  x$vars
+  x$select %||% x$vars
 }
 
 #' @S3method as.data.frame source_bigquery
@@ -65,12 +72,12 @@ print.source_bigquery <- function(x, ...) {
 
 #' @S3method dimnames source_bigquery
 dimnames.source_bigquery <- function(x) {
-  list(NULL, x$vars)
+  list(NULL, source_vars(x))
 }
 
 #' @S3method dim source_bigquery
 dim.source_bigquery <- function(x) {
-  c(x$n, x$p)
+  c(x$n, length(source_vars(x)))
 }
 
 #' @S3method head source_bigquery
@@ -115,4 +122,67 @@ bq_select <- function(x, select = NULL, where = NULL, order_by = NULL, ...,
 
   query_exec(x$project, x$dataset, query = sql,
     billing = x$billing, max_pages = max_pages, page_size = page_size)
+}
+
+# Standard manipulation methods -----------------------------------------------
+
+#' @rdname source_bigquery
+#' @export
+#' @method filter source_bigquery
+filter.source_bigquery <- function(.data, ...) {
+  input <- partial_eval(dots(...), .data, parent.frame())
+  .data$filter <- c(.data$filter, input)
+  .data
+}
+
+#' @rdname source_bigquery
+#' @export
+#' @method arrange source_bigquery
+arrange.source_bigquery <- function(.data, ...) {
+  input <- partial_eval(dots(...), .data, parent.frame())
+  .data$arrange <- c(.data$arrange, input)
+  .data
+}
+
+#' @rdname source_bigquery
+#' @export
+#' @method select source_bigquery
+select.source_bigquery <- function(.data, ...) {
+  input <- var_eval(dots(...), .data, parent.frame())
+  .data$select <- c(.data$select, input)
+  .data
+}
+
+#' @rdname source_bigquery
+#' @export
+#' @method summarise source_bigquery
+summarise.source_bigquery <- function(.data, ..., .max_pages = 10L,
+                                      .page_size = 1e4L) {
+  assert_that(length(.max_pages) == 1, .max_pages > 0L)
+  assert_that(length(.page_size) == 1, .page_size > 0L)
+
+  if (!is.null(.data$select)) {
+    warning("Summarise ignores selected variables", call. = FALSE)
+  }
+
+  select <- trans_bigquery(dots(...), .data, parent.frame())
+  out <- bq_select(.data, select = select, max_pages = .max_pages,
+    page_size = .page_size)
+
+  source_df(out)
+}
+
+#' @rdname source_bigquery
+#' @export
+#' @method mutate source_bigquery
+mutate.source_bigquery <- function(.data, ..., .max_pages = 10L,
+                                   .page_size = 1e4L) {
+  assert_that(length(.max_pages) == 1, .max_pages > 0L)
+  assert_that(length(.page_size) == 1, .page_size > 0L)
+
+  old_vars <- .data$select %||% .data$vars
+  new_vars <- trans_bigquery(dots(...), .data, parent.frame())
+
+  out <- bq_select(.data, select = c(old_vars, new_vars), n = .n)
+  source_df(out)
 }
