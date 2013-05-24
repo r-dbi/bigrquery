@@ -134,7 +134,7 @@ bq_select <- function(x, select = NULL, where = NULL, order_by = NULL, ...,
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.flag(show))
 
-  select <- select %||% x$select %||% x$vars
+  select <- select %||% x$select %||% "*"
   where <- where %||% trans_bigquery(x$filter)
   order_by <- order_by %||% trans_bigquery(x$arrange)
 
@@ -215,7 +215,7 @@ mutate.source_bigquery <- function(.data, ..., .max_pages = 10L,
   assert_that(length(.max_pages) == 1, .max_pages > 0L)
   assert_that(length(.page_size) == 1, .page_size > 0L)
 
-  old_vars <- .data$select %||% .data$vars
+  old_vars <- .data$select %||% "*"
   new_vars <- trans_bigquery(dots(...), .data, parent.frame())
 
   out <- bq_select(.data, select = c(old_vars, new_vars), n = .n)
