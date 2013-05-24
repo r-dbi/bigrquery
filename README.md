@@ -43,7 +43,8 @@ bigrquery also supports the dplyr methods, so you can create a bigquery data sou
 ```R
 library(bigrquery)
 billing <- "341409650721" # put your project number here
-births <- source_bigquery("publicdata", "samples", "natality", ling)
+births <- source_bigquery("publicdata", "samples", "natality", 
+  billing)
 dim(births)
 colnames(births)
 
