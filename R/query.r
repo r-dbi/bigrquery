@@ -1,5 +1,3 @@
-# https://code.google.com/apis/console
-
 #' Run a asynchronous query and retrieve results.
 #'
 #' This is a high-level function that inserts a query job

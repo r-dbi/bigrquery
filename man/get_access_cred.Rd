@@ -19,5 +19,9 @@
   functions but they are provided in case you want to
   switch credentials mid-stream.
 }
+\section{API console}{
+  To manage your google projects, use the API console:
+  \url{https://code.google.com/apis/console}
+}
 \keyword{internal}
 

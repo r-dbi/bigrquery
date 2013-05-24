@@ -1,5 +1,3 @@
-# https://code.google.com/apis/console
-
 #' @importFrom httr oauth_endpoint oauth_app oauth2.0_token
 google <- oauth_endpoint(NULL, "auth", "token",
   base_url = "https://accounts.google.com/o/oauth2")
@@ -19,6 +17,10 @@ if (!exists("bq_env")) {
 #' private environment. In ordinary operation, you should never need to use
 #' these functions but they are provided in case you want to switch
 #' credentials mid-stream.
+#'
+#' @section API console:
+#' To manage your google projects, use the API console:
+#' \url{https://code.google.com/apis/console}
 #'
 #' @keywords internal
 #' @export

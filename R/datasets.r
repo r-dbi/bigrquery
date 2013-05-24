@@ -1,5 +1,3 @@
-# https://developers.google.com/bigquery/docs/reference/v2/datasets
-
 #' List the datasets in a project
 #'
 #' @param project The project name, a string

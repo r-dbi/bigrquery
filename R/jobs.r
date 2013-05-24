@@ -1,5 +1,3 @@
-# https://developers.google.com/bigquery/docs/reference/v2/jobs
-
 #' Create a new query job.
 #'
 #' This is a low-level function that creates a query job. To wait until it

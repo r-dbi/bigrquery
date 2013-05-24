@@ -16,7 +16,6 @@ named_dots <- function(...) {
   args
 }
 
-
 as_df <- function(x) {
   class(x) <- "data.frame"
   attr(x, "row.names") <- c(NA_integer_, -length(x[[1]]))
@@ -32,7 +31,6 @@ timer <- function() {
 }
 
 "%||%" <- function(x, y) if(is.null(x)) y else x
-
 
 names2 <- function(x) {
   names(x) %||% rep("", length(x))
