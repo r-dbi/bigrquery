@@ -25,4 +25,4 @@ Collate:
     'bigrquery.r'
     'source-bigquery.r'
     'translate-bigquery.r'
-    'manip-bigquery.r'
+    'group-bigquery.r'

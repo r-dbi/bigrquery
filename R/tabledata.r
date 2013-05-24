@@ -8,7 +8,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 #' @export
 list_tabledata <- function(project, dataset, table, page_size = 1e4,
-                           max_pages = 10) {
+                           max_pages = 10, warn = TRUE) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
@@ -31,10 +31,11 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
       maxResults = page_size)
     )
     rows <- c(rows, list(extract_data(data$rows, schema)))
+    cur_page <- cur_page + 1
   }
   cat("\n")
 
-  if (!is.null(data$rows)) {
+  if (isTRUE(warn) && !is.null(data$rows)) {
     warning("Only first ", max_pages, " pages of ", page_size, " size ",
       " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
   }

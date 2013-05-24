@@ -20,7 +20,7 @@
 #' date_info <- select(births, year:wday)
 #' head(date_info)
 #'
-#' head(filter(select(births, year:wday), year > 2000)
+#' head(filter(select(births, year:wday), year > 2000))
 source_bigquery <- function(project, dataset, table, billing = project) {
   assert_that(is.string(project), is.string(dataset), is.string(table),
     is.string(billing))
@@ -40,6 +40,10 @@ source_bigquery <- function(project, dataset, table, billing = project) {
   )
 }
 
+is_table <- function(x) {
+ is.null(x$select) && is.null(x$filter) && is.null(x$arrange)
+}
+
 #' @importFrom dplyr source_vars
 #' @S3method source_vars source_bigquery
 source_vars.source_bigquery <- function(x) {
@@ -48,26 +52,30 @@ source_vars.source_bigquery <- function(x) {
 
 #' @S3method as.data.frame source_bigquery
 as.data.frame.source_bigquery <- function(x, row.names = NULL, optional = NULL,
-                                          ..., max_pages = 10L,
-                                          page_size = 1e4L) {
+                                          ..., n = 1e5) {
   if (!is.null(row.names)) warning("row.names argument ignored", call. = FALSE)
   if (!is.null(optional)) warning("optional argument ignored", call. = FALSE)
 
-  bq_select(x, n = n)
+  get_n_rows(x, n)
 }
 
 #' @S3method print source_bigquery
+#' @importFrom dplyr dim_desc trunc_mat
 print.source_bigquery <- function(x, ...) {
-  cat("Source:  Bigquery [", x$path, "]\n", sep = "")
-  cat("Table:   ", x$table, dim_desc(x), "\n", sep = "")
+  cat("Source:  Bigquery [", x$project, ":", x$dataset, "/", x$table, "]\n",
+    sep = "")
+  cat("Table:   ", x$table, " ", dim_desc(x), "\n", sep = "")
   if (!is.null(x$filter)) {
     cat(wrap("Filter:  ", commas(deparse_all(x$filter))), "\n")
   }
   if (!is.null(x$arrange)) {
     cat(wrap("Arrange:  ", commas(deparse_all(x$arrange))), "\n")
   }
-  cat("\n")
-  trunc_mat(x)
+
+  if (is_table(x)) {
+    cat("\n")
+    trunc_mat(x)
+  }
 }
 
 #' @S3method dimnames source_bigquery
@@ -84,7 +92,7 @@ dim.source_bigquery <- function(x) {
 head.source_bigquery <- function(x, n = 6L, ...) {
   assert_that(length(n) == 1, n > 0L)
 
-  bq_select(x, limit = n)
+  get_n_rows(x, n, warn = FALSE)
 }
 
 #' @S3method tail source_bigquery
@@ -94,10 +102,33 @@ tail.source_bigquery <- function(x, n = 6L, ...) {
   stop("tail not currently supported for bigquery source", call. = FALSE)
 }
 
+# Retrieve data, switching between the (cheap) list_tabledata vs. the
+# (expensive) query_exec depending on where or not we actually need to
+# run a query
+get_n_rows <- function(x, n, warn = TRUE) {
+  assert_that(is.numeric(n), length(n) == 1, n > 0)
+
+  if (is_table(x)) {
+    if (n > 1e4) {
+      page_size <- 1e4
+      max_pages <- ceiling(n / 1e4)
+    } else {
+      page_size <- n
+      max_pages <- 1
+    }
+
+
+    list_tabledata(x$project, x$dataset, x$table, warn = warn,
+      max_pages = max_pages, page_size = page_size)[seq_len(n), , drop = FALSE]
+  } else {
+    bq_select(x, n = n, warn = warn)
+  }
+}
+
 
 #' @importFrom dplyr is.source select_query
 bq_select <- function(x, select = NULL, where = NULL, order_by = NULL, ...,
-                       max_pages = 10L, page_size = 1e4L,
+                       max_pages = 10L, page_size = 1e4L, warn = TRUE,
                        show = getOption("dplyr.show_sql", FALSE)) {
   assert_that(is.source(x))
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
@@ -120,8 +151,8 @@ bq_select <- function(x, select = NULL, where = NULL, order_by = NULL, ...,
     cat("\n")
   }
 
-  query_exec(x$project, x$dataset, query = sql,
-    billing = x$billing, max_pages = max_pages, page_size = page_size)
+  query_exec(x$project, x$dataset, query = sql, billing = x$billing,
+    warn = warn, max_pages = max_pages, page_size = page_size)
 }
 
 # Standard manipulation methods -----------------------------------------------
@@ -129,6 +160,7 @@ bq_select <- function(x, select = NULL, where = NULL, order_by = NULL, ...,
 #' @rdname source_bigquery
 #' @export
 #' @method filter source_bigquery
+#' @importFrom dplyr filter
 filter.source_bigquery <- function(.data, ...) {
   input <- partial_eval(dots(...), .data, parent.frame())
   .data$filter <- c(.data$filter, input)
@@ -138,6 +170,7 @@ filter.source_bigquery <- function(.data, ...) {
 #' @rdname source_bigquery
 #' @export
 #' @method arrange source_bigquery
+#' @importFrom dplyr arrange
 arrange.source_bigquery <- function(.data, ...) {
   input <- partial_eval(dots(...), .data, parent.frame())
   .data$arrange <- c(.data$arrange, input)
@@ -147,6 +180,7 @@ arrange.source_bigquery <- function(.data, ...) {
 #' @rdname source_bigquery
 #' @export
 #' @method select source_bigquery
+#' @importFrom dplyr select
 select.source_bigquery <- function(.data, ...) {
   input <- var_eval(dots(...), .data, parent.frame())
   .data$select <- c(.data$select, input)
@@ -156,6 +190,7 @@ select.source_bigquery <- function(.data, ...) {
 #' @rdname source_bigquery
 #' @export
 #' @method summarise source_bigquery
+#' @importFrom dplyr summarise
 summarise.source_bigquery <- function(.data, ..., .max_pages = 10L,
                                       .page_size = 1e4L) {
   assert_that(length(.max_pages) == 1, .max_pages > 0L)
@@ -175,6 +210,7 @@ summarise.source_bigquery <- function(.data, ..., .max_pages = 10L,
 #' @rdname source_bigquery
 #' @export
 #' @method mutate source_bigquery
+#' @importFrom dplyr mutate
 mutate.source_bigquery <- function(.data, ..., .max_pages = 10L,
                                    .page_size = 1e4L) {
   assert_that(length(.max_pages) == 1, .max_pages > 0L)

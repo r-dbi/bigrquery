@@ -46,6 +46,6 @@ summarise(births, first_year = min(year), last_year = max(year))
 date_info <- select(births, year:wday)
 head(date_info)
 
-head(filter(select(births, year:wday), year > 2000)
+head(filter(select(births, year:wday), year > 2000))
 }
 

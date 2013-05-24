@@ -32,3 +32,8 @@ timer <- function() {
 }
 
 "%||%" <- function(x, y) if(is.null(x)) y else x
+
+
+names2 <- function(x) {
+  names(x) %||% rep("", length(x))
+}

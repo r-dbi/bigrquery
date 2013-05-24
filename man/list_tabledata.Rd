@@ -3,7 +3,7 @@
 \title{Retrieve data from a table}
 \usage{
   list_tabledata(project, dataset, table,
-    page_size = 10000, max_pages = 10)
+    page_size = 10000, max_pages = 10, warn = TRUE)
 }
 \arguments{
   \item{table}{name of the table}

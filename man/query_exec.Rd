@@ -3,7 +3,7 @@
 \title{Run a asynchronous query and retrieve results.}
 \usage{
   query_exec(project, dataset, query, billing = project,
-    page_size = 10000, max_pages = 10)
+    page_size = 10000, max_pages = 10, warn = TRUE)
 }
 \arguments{
   \item{project}{project name}

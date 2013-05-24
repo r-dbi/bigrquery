@@ -19,7 +19,7 @@
 #' query_exec("publicdata", "samples", sql, billing = billing_project)
 #' }
 query_exec <- function(project, dataset, query, billing = project,
-                       page_size = 1e4, max_pages = 10) {
+                       page_size = 1e4, max_pages = 10, warn = TRUE) {
   assert_that(is.string(project), is.string(dataset), is.string(query),
     is.string(billing))
 
@@ -44,7 +44,8 @@ query_exec <- function(project, dataset, query, billing = project,
   message(format(size_units(bytes)), " processed")
 
   dest <- job$configuration$query$destinationTable
-  list_tabledata(dest$projectId, dest$datasetId, dest$tableId)
+  list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
+    page_size = page_size, max_pages = max_pages, warn = warn)
 }
 
 
