@@ -117,7 +117,6 @@ get_n_rows <- function(x, n, warn = TRUE) {
       max_pages <- 1
     }
 
-
     list_tabledata(x$project, x$dataset, x$table, warn = warn,
       max_pages = max_pages, page_size = page_size)[seq_len(n), , drop = FALSE]
   } else {
