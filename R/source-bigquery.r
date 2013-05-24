@@ -36,7 +36,7 @@ source_bigquery <- function(project, dataset, table, billing = project) {
       vars = vars, n = n, p = p,
       select = NULL, filter = NULL, arrange = NULL
     ),
-    class = c("source_bigquery", "source", "op")
+    class = c("source_bigquery", "source")
   )
 }
 
