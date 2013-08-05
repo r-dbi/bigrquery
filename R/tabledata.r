@@ -24,7 +24,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   data <- bq_get(url)
   rows <- list(extract_data(data$rows, schema))
 
-  while(cur_page < max_pages && !is.null(data$rows)) {
+  while(cur_page < max_pages && !is.null(data$pageToken)) {
     cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
     data <- bq_get(url, query = list(
       pageToken = data$pageToken,
@@ -35,7 +35,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   }
   cat("\n")
 
-  if (isTRUE(warn) && !is.null(data$rows)) {
+  if (isTRUE(warn) && !is.null(data$pageToken)) {
     warning("Only first ", max_pages, " pages of ", page_size, " size ",
       " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
   }
