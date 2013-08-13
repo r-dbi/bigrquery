@@ -1,7 +1,10 @@
 base_url <- "https://www.googleapis.com/bigquery/v2/"
 
 #' @importFrom httr GET config
-bq_get <- function(url, config = httr::config(), ..., sig = get_sig()) {
+bq_get <- function(url, config = NULL, ..., sig = get_sig()) {
+  if (is.null(config)) {
+    config <- config()
+  }
   config <- c(config, sig)
   req <- GET(paste0(base_url, url), config, ...)
   process_request(req)
@@ -9,7 +12,10 @@ bq_get <- function(url, config = httr::config(), ..., sig = get_sig()) {
 
 #' @importFrom httr POST add_headers config
 #' @importFrom RJSONIO toJSON
-bq_post <- function(url, body, config = httr::config(), ..., sig = get_sig()) {
+bq_post <- function(url, body, config = NULL, ..., sig = get_sig()) {
+  if (is.null(config)) {
+    config <- config()
+  }
   json <- toJSON(body)
   config <- c(config, sig, add_headers("Content-type" = "application/json"))
 
