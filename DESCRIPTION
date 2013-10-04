@@ -8,8 +8,7 @@ Depends:
 Imports:
     httr,
     RJSONIO,
-    assertthat,
-    dplyr
+    assertthat
 License: GPL-3
 LazyData: true
 Collate:
@@ -23,6 +22,3 @@ Collate:
     'tables.r'
     'utils.r'
     'bigrquery.r'
-    'source-bigquery.r'
-    'translate-bigquery.r'
-    'group-bigquery.r'
