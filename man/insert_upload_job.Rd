@@ -26,6 +26,7 @@
 list_datasets("193487687779")
 list_tables("193487687779", "houston")
 job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
+wait_for(job)
 list_tables("193487687779", "houston")
 }
 }

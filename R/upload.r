@@ -8,11 +8,13 @@
 #' @param value data frame of data to upload
 #' @seealso Google API documentation: 
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
+#' @export
 #' @examples
 #' \dontrun{
 #' list_datasets("193487687779")
 #' list_tables("193487687779", "houston")
 #' job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
+#' wait_for(job)
 #' list_tables("193487687779", "houston")
 #' }
 insert_upload_job <- function(project, dataset, table, values, billing = project) {

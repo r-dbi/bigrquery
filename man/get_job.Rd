@@ -19,5 +19,7 @@
 \seealso{
   API documentation for get method:
   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
+
+  \code{\link{wait_for}} to wait for a job to complete
 }
 

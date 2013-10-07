@@ -11,7 +11,6 @@
 #' @export
 #' @examples
 #' \donttest{
-#' library(bigrquery)
 #' billing_project <- "341409650721" # put your project number here
 #' sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 #' query_exec("publicdata", "samples", sql, billing = billing_project)
@@ -22,39 +21,9 @@ query_exec <- function(project, dataset, query, billing = project,
     is.string(billing))
 
   job <- insert_query_job(project, dataset, query, billing)
-  jobref <- job$jobReference
-
-  elapsed <- timer()
-  while(job$status$state != "DONE") {
-    cat("\rRunning query:   ", job$status$state, " ",
-      sprintf("%4.1f", elapsed()), "s", sep = "")
-    Sys.sleep(0.25)
-    job <- get_job(jobref$projectId, jobref$jobId)
-  }
-  cat("\n")
-
-  err <- job$status$errorResult
-  if (!is.null(err)) {
-    stop(err$message, call. = FALSE)
-  }
-
-  bytes <- as.numeric(job$statistics$totalBytesProcessed)
-  message(format(size_units(bytes)), " processed")
+  job <- wait_for(job)
 
   dest <- job$configuration$query$destinationTable
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
     page_size = page_size, max_pages = max_pages, warn = warn)
-}
-
-
-size_units <- function(x) {
-  i <- floor(log2(x) / 10)
-  unit <- c("", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta")[i + 1]
-
-  structure(x, i = i, unit = unit, class = "size")
-}
-#' @S3method format size
-format.size <- function(x, ...) {
-  y <- x * 1024 ^ -attr(x, "i")
-  sprintf("%.1f %sbytes", y, attr(x, "unit"))
 }

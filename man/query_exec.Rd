@@ -24,7 +24,6 @@
 }
 \examples{
 \donttest{
-library(bigrquery)
 billing_project <- "341409650721" # put your project number here
 sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 query_exec("publicdata", "samples", sql, billing = billing_project)
