@@ -22,3 +22,4 @@ Collate:
     'tables.r'
     'utils.r'
     'bigrquery.r'
+    'upload.r'
