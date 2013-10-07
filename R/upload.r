@@ -47,7 +47,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
 
 schema_fields <- function(data) {
   types <- vapply(data, data_type, character(1))
-  Map(function(type, name) list(name = name, type = type), types, names(data))
+  unname(Map(function(type, name) list(name = name, type = type), types, names(data)))
 }
 
 data_type <- function(x) {
