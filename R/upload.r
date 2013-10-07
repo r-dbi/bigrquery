@@ -76,7 +76,7 @@ standard_csv <- function(values) {
   
   tmp <- tempfile(fileext = ".csv")
   write.table(values, tmp, sep = ",", quote = FALSE, qmethod = "escape",
-    row.names = FALSE, col.names = FALSE)
+    row.names = FALSE, col.names = FALSE, na = "")
   
   # Don't read trailing nl
   readChar(tmp, file.info(tmp)$size - 1, useBytes = TRUE)
