@@ -79,8 +79,15 @@ wait_for <- function(job, quiet = FALSE, pause = 0.25) {
   }
   
   if (!quiet) {
-    bytes <- as.numeric(job$statistics$totalBytesProcessed)
-    message(format(size_units(bytes)), " processed")
+    if ("load" %in% names(job$config)) {
+      in_bytes <- as.numeric(job$statistics$load$inputFileBytes)
+      out_bytes <- as.numeric(job$statistics$load$outputBytes)
+      message(format(size_units(in_bytes)), " input bytes")
+      message(format(size_units(out_bytes)), " output bytes")  
+    } else if ("query" %in% names(job$config)) {
+      bytes <- as.numeric(job$statistics$totalBytesProcessed)
+      message(format(size_units(bytes)), " processed")      
+    }
   }
   
   job
