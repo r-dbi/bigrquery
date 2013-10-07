@@ -83,7 +83,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   if (!quiet) cat("\n")
   
   if (isTRUE(warn) && !is.null(req$pageToken)) {
-    warning("Only first ", max_pages, " pages of ", page_size, " size ",
+    warning("Only first ", max_pages, " pages of size ", page_size,
       " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
   }
   
