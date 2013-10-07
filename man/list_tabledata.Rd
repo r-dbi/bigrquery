@@ -1,12 +1,27 @@
 \name{list_tabledata}
 \alias{list_tabledata}
-\title{Retrieve data from a table}
+\alias{list_tabledata_callback}
+\title{Retrieve data from a table.}
 \usage{
   list_tabledata(project, dataset, table,
-    page_size = 10000, max_pages = 10, warn = TRUE)
+    page_size = 10000, table_info = NULL, max_pages = 10,
+    warn = TRUE, quiet = FALSE)
+
+  list_tabledata_callback(project, dataset, table,
+    callback, table_info = NULL, page_size = 10000,
+    max_pages = 10, warn = TRUE, quiet = FALSE)
 }
 \arguments{
   \item{table}{name of the table}
+
+  \item{callback}{function called with single argument, the
+  data from the current page of data}
+
+  \item{quiet}{if \code{FALSE}, prints informative status
+  messages.}
+
+  \item{table_info}{if known, the table information
+  retrieved with \code{\link{get_table}}}
 
   \item{max_pages}{maximum number of pages to retrieve. Use
   \code{Inf} to retrieve the complete dataset.}
@@ -16,7 +31,15 @@
   \item{dataset}{dataset name}
 }
 \description{
-  Retrieve data from a table
+  \code{list_tabledata} returns a single dataframe.
+  \code{list_tabledata_callback} calls the supplied
+  callback with each page of data.
+}
+\examples{
+billing_project <- "341409650721" # put your project number here
+natal <- list_tabledata("publicdata", "samples", "natality", max_pages = 2,
+  page_size = 10)
+dim(natal)
 }
 \seealso{
   API documentation at
