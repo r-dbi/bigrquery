@@ -8,6 +8,7 @@
 #' @param value data frame of data to upload
 #' @seealso Google API documentation: 
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
+#' @family jobs
 #' @export
 #' @examples
 #' \dontrun{
@@ -16,6 +17,7 @@
 #' job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
 #' wait_for(job)
 #' list_tables("193487687779", "houston")
+#' delete_table("193487687779", "houston", "mtcars")
 #' }
 insert_upload_job <- function(project, dataset, table, values, billing = project) {
   assert_that(is.string(project), is.string(dataset), is.string(table),

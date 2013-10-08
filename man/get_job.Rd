@@ -21,5 +21,8 @@
   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
 
   \code{\link{wait_for}} to wait for a job to complete
+
+  Other jobs: \code{\link{insert_query_job}},
+  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
 

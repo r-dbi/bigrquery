@@ -28,10 +28,14 @@ list_tables("193487687779", "houston")
 job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
 wait_for(job)
 list_tables("193487687779", "houston")
+delete_table("193487687779", "houston", "mtcars")
 }
 }
 \seealso{
   Google API documentation:
   \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
+
+  Other jobs: \code{\link{get_job}},
+  \code{\link{insert_query_job}}, \code{\link{wait_for}}
 }
 

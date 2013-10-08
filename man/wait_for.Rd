@@ -2,7 +2,7 @@
 \alias{wait_for}
 \title{Wait for a job to complete, optionally printing updates}
 \usage{
-  wait_for(job, quiet = FALSE, pause = 0.25)
+  wait_for(job, quiet = NA, pause = 0.5)
 }
 \arguments{
   \item{job}{job to wait for. Probably result of
@@ -10,12 +10,18 @@
   \code{\link{insert_update_job}}}
 
   \item{quiet}{if \code{FALSE} print informative progress
-  messages}
+  messages, if \code{TRUE} is silent, if \code{NA} displays
+  messages for long-running jobs.}
 
   \item{pause}{amount of time to wait between status
   requests}
 }
 \description{
   Wait for a job to complete, optionally printing updates
+}
+\seealso{
+  Other jobs: \code{\link{get_job}},
+  \code{\link{insert_query_job}},
+  \code{\link{insert_upload_job}}
 }
 

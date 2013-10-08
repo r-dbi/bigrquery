@@ -42,6 +42,7 @@ insert_query_job <- function(project, dataset, query, billing = project) {
 #' @seealso API documentation for get method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
 #' @seealso \code{\link{wait_for}} to wait for a job to complete
+#' @family jobs
 #' @export
 get_job <- function(project, job) {
   assert_that(is.string(project), is.string(job))
@@ -55,20 +56,25 @@ get_job <- function(project, job) {
 #' 
 #' @param job job to wait for. Probably result of \code{\link{insert_query_job}}
 #'   or \code{\link{insert_update_job}}
-#' @param quiet if \code{FALSE} print informative progress messages
+#' @param quiet if \code{FALSE} print informative progress messages, if 
+#'   \code{TRUE} is silent, if \code{NA} displays messages for long-running
+#'   jobs.
 #' @param pause amount of time to wait between status requests
+#' @family jobs
 #' @export
-wait_for <- function(job, quiet = FALSE, pause = 0.25) {
+wait_for <- function(job, quiet = NA, pause = 0.5) {
   elapsed <- timer()
+  is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
+  
   while(job$status$state != "DONE") {
-    if (!quiet) {
+    if (!is_quiet()) {
       cat("\rRunning query:   ", job$status$state, " ",
         sprintf("%4.1f", elapsed()), "s", sep = "")
     }
     Sys.sleep(pause)
     job <- get_job(job$jobReference$projectId, job$jobReference$jobId)
   }
-  if (!quiet) cat("\n")
+  if (!is_quiet()) cat("\n")
   
   err <- job$status$errorResult
   if (!is.null(err)) {
@@ -78,7 +84,7 @@ wait_for <- function(job, quiet = FALSE, pause = 0.25) {
     stop(err$message, "\n\n", paste0(errors, collapse = "\n"), call. = FALSE)
   }
   
-  if (!quiet) {
+  if (!is_quiet()) {
     if ("load" %in% names(job$config)) {
       in_bytes <- as.numeric(job$statistics$load$inputFileBytes)
       out_bytes <- as.numeric(job$statistics$load$outputBytes)
