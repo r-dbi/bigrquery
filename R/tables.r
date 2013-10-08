@@ -41,3 +41,22 @@ get_table <- function(project, dataset, table) {
   bq_get(url)
 }
 
+#' Delete a table.
+#'
+#' @inheritParams insert_query_job
+#' @param table name of the table
+#' @seealso API documentation:
+#'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}
+#' @family tables
+#' @export
+#' @examples
+#' \donttest{
+#' get_table("publicdata", "samples", "natality")
+#' }
+delete_table <- function(project, dataset, table) {
+  assert_that(is.string(project), is.string(dataset), is.string(table))
+  
+  url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
+  bq_delete(url)
+}
+

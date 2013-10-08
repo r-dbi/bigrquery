@@ -11,6 +11,17 @@ bq_get <- function(url, config = NULL, ..., sig = get_sig()) {
   process_request(req)
 }
 
+#' @importFrom httr DELETE config
+bq_delete <- function(url, config = NULL, ..., sig = get_sig()) {
+  if (is.null(config)) {
+    config <- config()
+  }
+  config <- c(config, sig)
+  req <- DELETE(paste0(base_url, url), config, ...)
+  
+  process_request(req)
+}
+
 #' @importFrom httr POST add_headers config
 #' @importFrom RJSONIO toJSON
 bq_post <- function(url, body, config = NULL, ..., sig = get_sig()) {
@@ -41,6 +52,9 @@ bq_upload <- function(url, parts, config = NULL, ..., sig = get_sig()) {
 
 #' @importFrom httr http_status content parse_media
 process_request <- function(req) {
+  # No content -> success
+  if (req$status_code == 204) return(TRUE)
+  
   if (http_status(req)$category == "success") {
     return(content(req, "parsed", "application/json"))
   }

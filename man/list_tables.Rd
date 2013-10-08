@@ -24,6 +24,7 @@ list_tables("publicdata", "samples")
   API documentation:
   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
 
-  Other tables: \code{\link{get_table}}
+  Other tables: \code{\link{delete_table}},
+  \code{\link{get_table}}
 }
 
