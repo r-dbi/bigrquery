@@ -26,6 +26,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
     configuration = list(
       load = list(
         sourceFormat = "CSV",
+        
         schema = list(
           fields = schema_fields(values)
         ),
@@ -72,7 +73,14 @@ standard_csv <- function(values) {
   
   # Encode special characters in strings
   is_char <- vapply(values, is.character, logical(1))
-  values[is_char] <- lapply(values[is_char], encodeString)
+  values[is_char] <- lapply(values[is_char], encodeString, na.encode = FALSE, quote = '"')
+  
+  # Encode dates and times
+  is_time <- vapply(values, function(x) inherits(x, "POSIXct"), logical(1))
+  values[is_time] <- lapply(values[is_time], as.numeric)
+
+  is_date <- vapply(values, function(x) inherits(x, "Date"), logical(1))
+  values[is_date] <- lapply(values[is_date], function(x) as.numeric(as.POSIXct(x)))
   
   tmp <- tempfile(fileext = ".csv")
   write.table(values, tmp, sep = ",", quote = FALSE, qmethod = "escape",
