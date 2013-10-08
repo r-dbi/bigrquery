@@ -26,7 +26,6 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
     configuration = list(
       load = list(
         sourceFormat = "CSV",
-        
         schema = list(
           fields = schema_fields(values)
         ),
