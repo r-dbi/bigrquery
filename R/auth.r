@@ -10,9 +10,9 @@ bigqr <- oauth_app("google",
 in_devtools <- exists(".__DEVTOOLS__")
 if (in_devtools) {
   if (!exists("__bq_env", globalenv())) {
-    globalenv()$`__bq_env` <- new.env(parent = emptyenv())
+    assign("__bq_env", new.env(parent = emptyenv()), envir = globalenv())
   }
-  bq_env <- globalenv()$`__bq_env`
+  bq_env <- get("__bq_env", envir = globalenv())
 } else {
   bq_env <- new.env(parent = emptyenv())
 }
