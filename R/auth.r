@@ -5,7 +5,15 @@ bigqr <- oauth_app("google",
   "465736758727.apps.googleusercontent.com",
   "fJbIIyoIag0oA6p114lwsV2r")
 
-if (!exists("bq_env")) {
+# If loaded through devtools, store in global environment; otherwise
+# store in local environment
+in_devtools <- exists(".__DEVTOOLS__")
+if (in_devtools) {
+  if (!exists("__bq_env", globalenv())) {
+    globalenv()$`__bq_env` <- new.env(parent = emptyenv())
+  }
+  bq_env <- globalenv()$`__bq_env`
+} else {
   bq_env <- new.env(parent = emptyenv())
 }
 
@@ -41,7 +49,15 @@ get_access_cred <- function() {
 
 #' @rdname get_access_cred
 #' @export
-set_access_cred <- function(value) bq_env$access_cred <- value
+set_access_cred <- function(value) {
+  bq_env$access_cred <- value
+}
+
+#' @rdname get_access_cred
+#' @export
+reset_access_cred <- function() {
+  set_access_cred(NULL)
+}
 
 #' @importFrom httr sign_oauth2.0
 get_sig <- function() {

@@ -1,11 +1,14 @@
 \name{get_access_cred}
 \alias{get_access_cred}
+\alias{reset_access_cred}
 \alias{set_access_cred}
 \title{Get and set access credentials}
 \usage{
   get_access_cred()
 
   set_access_cred(value)
+
+  reset_access_cred()
 }
 \arguments{
   \item{value}{new access credentials, as returned by
