@@ -34,3 +34,10 @@ billing_project <- "341409650721" # put your project number here
 sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 query_exec("publicdata", "samples", sql, billing = billing_project)
 ```
+
+## Useful links
+
+* [SQL reference](https://developers.google.com/bigquery/query-reference)
+* [API reference](https://developers.google.com/bigquery/docs/reference/v2/)
+* [Query/job console](https://bigquery.cloud.google.com/)
+* [Billing console](https://cloud.google.com/console)
