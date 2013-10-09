@@ -62,7 +62,15 @@ process_request <- function(req) {
   type <- parse_media(req$headers$`Content-type`)
   if (type$complete == "application/json") {
     out <- content(req, "parsed", "application/json")
-    stop(out$err$message, call. = FALSE)
+    
+    if (out$error$code == 401) {
+      reset_access_cred()
+      stop("Invalid access credentials have been reset. Please try again.",
+        call. = FALSE)
+    } else {
+      stop(out$err$message, call. = FALSE)  
+    }
+    
   } else {
     out <- content(req, "text")
     stop("HTTP error [", req$status, "] ", out, call. = FALSE)
