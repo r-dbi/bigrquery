@@ -23,7 +23,7 @@
 #' dim(natal)
 list_tabledata <- function(project, dataset, table, page_size = 1e4,
                            table_info = NULL, max_pages = 10, warn = TRUE, 
-                           quiet = FALSE) {
+                           quiet = getOption("bigquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
   
@@ -48,26 +48,29 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
 list_tabledata_callback <- function(project, dataset, table, callback, 
                                     table_info = NULL,
                                     page_size = 1e4, max_pages = 10, 
-                                    warn = TRUE, quiet = FALSE) {
+                                    warn = TRUE, 
+                                    quiet = getOption("bigquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.function(callback))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
+
+  elapsed <- timer()
+  is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
   
-  if (!quiet) cat("Retrieving data")
+  if (!is_quiet()) cat("Retrieving data")
   table_info <- table_info %||% get_table(project, dataset, table)
   schema <- table_info$schema
   
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
   cur_page <- 1
-  elapsed <- timer()
   
   req <- bq_get(url, query = list(maxResults = page_size))
   data <- extract_data(req$rows, schema)
   callback(data)
   
   while(cur_page < max_pages && !is.null(req$pageToken)) {
-    if (!quiet) {
+    if (!is_quiet()) {
       cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
     }
 
@@ -80,7 +83,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
     
     cur_page <- cur_page + 1
   }
-  if (!quiet) cat("\n")
+  if (!is_quiet()) cat("\n")
   
   if (isTRUE(warn) && !is.null(req$pageToken)) {
     warning("Only first ", max_pages, " pages of size ", page_size,

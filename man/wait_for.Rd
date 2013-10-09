@@ -2,7 +2,8 @@
 \alias{wait_for}
 \title{Wait for a job to complete, optionally printing updates}
 \usage{
-  wait_for(job, quiet = NA, pause = 0.5)
+  wait_for(job, quiet = getOption("bigquery.quiet"),
+    pause = 0.5)
 }
 \arguments{
   \item{job}{job to wait for. Probably result of

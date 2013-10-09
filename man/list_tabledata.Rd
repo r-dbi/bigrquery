@@ -5,11 +5,12 @@
 \usage{
   list_tabledata(project, dataset, table,
     page_size = 10000, table_info = NULL, max_pages = 10,
-    warn = TRUE, quiet = FALSE)
+    warn = TRUE, quiet = getOption("bigquery.quiet"))
 
   list_tabledata_callback(project, dataset, table,
     callback, table_info = NULL, page_size = 10000,
-    max_pages = 10, warn = TRUE, quiet = FALSE)
+    max_pages = 10, warn = TRUE,
+    quiet = getOption("bigquery.quiet"))
 }
 \arguments{
   \item{table}{name of the table}
