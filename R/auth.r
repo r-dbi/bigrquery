@@ -47,19 +47,18 @@ get_access_cred <- function() {
   cred
 }
 
-#' @rdname get_access_cred
+#' @rdname set_access_cred
 #' @export
 set_access_cred <- function(value) {
   bq_env$access_cred <- value
 }
 
-#' @rdname get_access_cred
+#' @rdname reset_access_cred
 #' @export
 reset_access_cred <- function() {
   set_access_cred(NULL)
 }
 
-#' @importFrom httr sign_oauth2.0
 get_sig <- function() {
-  sign_oauth2.0(get_access_cred()$access_token)
+  stop("Deprecated: use get_access_cred directly", call. = FALSE)
 }

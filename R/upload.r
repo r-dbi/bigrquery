@@ -6,6 +6,7 @@
 #' @inheritParams insert_query_job 
 #' @param table name of table to insert values into
 #' @param value data frame of data to upload
+#' @importFrom jsonlite toJSON
 #' @seealso Google API documentation: 
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
