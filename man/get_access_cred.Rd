@@ -15,16 +15,13 @@
   \code{\link[httr]{oauth2.0_token}}}
 }
 \description{
-  Since the majority of bigquery API requests need to be
-  authenticated bigrquery maintains package-wide OAuth
-  authentication credentials in a private environment. In
-  ordinary operation, you should never need to use these
-  functions but they are provided in case you want to
-  switch credentials mid-stream.
+  These functions allow you to manually get or set the credentials used
+  by \code{bigrquery}. In ordinary operation, you shouldn't need to call
+  these functions directly.
 }
 \section{API console}{
   To manage your google projects, use the API console:
-  \url{https://code.google.com/apis/console}
+  \url{https://cloud.google.com/console}
 }
 \keyword{internal}
 

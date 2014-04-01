@@ -28,7 +28,7 @@ if (in_devtools) {
 #'
 #' @section API console:
 #' To manage your google projects, use the API console:
-#' \url{https://code.google.com/apis/console}
+#' \url{https://cloud.google.com/console}
 #'
 #' @keywords internal
 #' @export
