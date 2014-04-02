@@ -23,12 +23,11 @@ bq_delete <- function(url, config = NULL, ..., token = get_access_cred()) {
 }
 
 #' @importFrom httr POST add_headers config
-#' @importFrom jsonlite toJSON
 bq_post <- function(url, body, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()
   }
-  json <- toJSON(body)
+  json <- jsonlite::toJSON(body)
   config <- c(config, token = token, add_headers("Content-type" = "application/json"))
 
   req <- POST(paste0(base_url, url), config, body = json, ...)
@@ -36,7 +35,6 @@ bq_post <- function(url, body, config = NULL, ..., token = get_access_cred()) {
 }
 
 #' @importFrom httr POST add_headers config
-#' @importFrom jsonlite toJSON
 bq_upload <- function(url, parts, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()

@@ -6,7 +6,6 @@
 #' @inheritParams insert_query_job 
 #' @param table name of table to insert values into
 #' @param value data frame of data to upload
-#' @importFrom jsonlite toJSON
 #' @seealso Google API documentation: 
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
@@ -41,7 +40,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
     )
   )
   config_part <- part(c("Content-type" = "application/json; charset=UTF-8"),
-    toJSON(config, pretty = TRUE))
+    jsonlite::toJSON(config, pretty = TRUE))
 
   csv <- standard_csv(values)
   csv_part <- part(c("Content-type" = "application/octet-stream"), csv)
