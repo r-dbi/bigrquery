@@ -2,47 +2,45 @@ base_url <- "https://www.googleapis.com/bigquery/v2/"
 upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
 
 #' @importFrom httr GET config
-bq_get <- function(url, config = NULL, ..., sig = get_sig()) {
+bq_get <- function(url, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()
   }
-  config <- c(config, sig)
+  config <- c(config, token = token)
   req <- GET(paste0(base_url, url), config, ...)
   process_request(req)
 }
 
 #' @importFrom httr DELETE config
-bq_delete <- function(url, config = NULL, ..., sig = get_sig()) {
+bq_delete <- function(url, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()
   }
-  config <- c(config, sig)
+  config <- c(config, token = token)
   req <- DELETE(paste0(base_url, url), config, ...)
   
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-#' @importFrom RJSONIO toJSON
-bq_post <- function(url, body, config = NULL, ..., sig = get_sig()) {
+bq_post <- function(url, body, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()
   }
-  json <- toJSON(body)
-  config <- c(config, sig, add_headers("Content-type" = "application/json"))
+  json <- jsonlite::toJSON(body)
+  config <- c(config, token = token, add_headers("Content-type" = "application/json"))
 
   req <- POST(paste0(base_url, url), config, body = json, ...)
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-#' @importFrom RJSONIO toJSON
-bq_upload <- function(url, parts, config = NULL, ..., sig = get_sig()) {
+bq_upload <- function(url, parts, config = NULL, ..., token = get_access_cred()) {
   if (is.null(config)) {
     config <- config()
   }
   
-  config <- c(config, sig)
+  config <- c(config, token = token)
   
   url <- paste0(upload_url, url)
   req <- POST_multipart_related(url, config, parts = parts, ...)

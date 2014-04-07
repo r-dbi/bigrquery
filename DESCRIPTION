@@ -7,7 +7,7 @@ Depends:
     R (>= 3.0.0)
 Imports:
     httr,
-    RJSONIO,
+    jsonlite,
     assertthat
 License: GPL-3
 LazyData: true

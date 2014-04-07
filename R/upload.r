@@ -40,7 +40,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
     )
   )
   config_part <- part(c("Content-type" = "application/json; charset=UTF-8"),
-    toJSON(config, pretty = TRUE))
+    jsonlite::toJSON(config, pretty = TRUE))
 
   csv <- standard_csv(values)
   csv_part <- part(c("Content-type" = "application/octet-stream"), csv)
