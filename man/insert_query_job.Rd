@@ -22,7 +22,7 @@
 \description{
   This is a low-level function that creates a query job. To
   wait until it is finished and then retrieve the results,
-  see \code{\link{query_exec}}
+  see \code{\link{query_exec}}.
 }
 \seealso{
   API documentation for insert method:

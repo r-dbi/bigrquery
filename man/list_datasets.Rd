@@ -11,7 +11,7 @@
   a character vector of dataset names
 }
 \description{
-  List the datasets in a project
+  List the datasets in a project.
 }
 \examples{
 \donttest{
