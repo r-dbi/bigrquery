@@ -38,9 +38,11 @@ get_access_cred <- function() {
   cred <- bq_env$access_cred
   if (is.null(cred)) {
     cred <- oauth2.0_token(google, bigqr,
-      scope = "https://www.googleapis.com/auth/bigquery")
+      scope = c(
+          "https://www.googleapis.com/auth/bigquery",
+          "https://www.googleapis.com/auth/cloud-platform"))
 
-    # Stop if unsuccesful
+    # Stop if unsuccessful
     set_access_cred(cred)
   }
 
