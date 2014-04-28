@@ -64,12 +64,17 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
   cur_page <- 1
+  rows_fetched <- 0
   
   req <- bq_get(url, query = list(maxResults = page_size))
   data <- extract_data(req$rows, schema)
   callback(data)
-  
-  while(cur_page < max_pages && !is.null(req$pageToken)) {
+  if (!is.null(data)) {
+    rows_fetched <- rows_fetched + nrow(data)
+  }
+  is_complete <- function(rows_fetched) rows_fetched >= as.integer(req$totalRows)
+
+  while(cur_page < max_pages && !is_complete(rows_fetched)) {
     if (!is_quiet()) {
       cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
     }
@@ -80,12 +85,15 @@ list_tabledata_callback <- function(project, dataset, table, callback,
     )
     data <- extract_data(req$rows, schema)
     callback(data)
+    if (!is.null(data)) {
+      rows_fetched <- rows_fetched + nrow(data)
+    }
     
     cur_page <- cur_page + 1
   }
   if (!is_quiet()) cat("\n")
   
-  if (isTRUE(warn) && !is.null(req$pageToken)) {
+  if (isTRUE(warn) && !is_complete(rows_fetched)) {
     warning("Only first ", max_pages, " pages of size ", page_size,
       " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
   }
