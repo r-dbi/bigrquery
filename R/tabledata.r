@@ -107,7 +107,7 @@ converter <- list(
   float = as.double,
   boolean = as.logical,
   string = identity,
-  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "GMT")
+  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
 )
 
 extract_data <- function(rows, schema) {
