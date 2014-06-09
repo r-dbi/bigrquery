@@ -101,12 +101,13 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   invisible(TRUE)
 }
 
-
+#Types can be loaded into R, record is not supported yet.
 converter <- list(
   integer = as.integer,
   float = as.double,
   boolean = as.logical,
-  string = identity
+  string = identity,
+  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
 )
 
 extract_data <- function(rows, schema) {
