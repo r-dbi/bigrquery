@@ -7,13 +7,15 @@
 #' @param dataset dataset name
 #' @param query SQL query string
 #' @param billing project to bill to, if different to \code{project}
+#' @param destination (optional) destination table for large queries
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
-insert_query_job <- function(project, dataset, query, billing = project) {
+insert_query_job <- function(project, dataset, query, billing = project,
+                             destination = NULL) {
   assert_that(is.string(project), is.string(dataset), is.string(query),
     is.string(billing))
 
@@ -30,6 +32,16 @@ insert_query_job <- function(project, dataset, query, billing = project) {
       )
     )
   )
+
+  if (!is.null(destination)) {
+    body$configuration$query$allowLargeResults <- TRUE
+    body$configuration$query$destinationTable <- list(
+      projectId = project,
+      datasetId = dataset,
+      tableId = destination
+    )
+  }
+
   bq_post(url, body)
 }
 
