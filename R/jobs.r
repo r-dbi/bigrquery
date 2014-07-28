@@ -53,10 +53,10 @@ get_job <- function(project, job) {
 
 
 #' Wait for a job to complete, optionally printing updates
-#' 
+#'
 #' @param job job to wait for. Probably result of \code{\link{insert_query_job}}
 #'   or \code{\link{insert_update_job}}
-#' @param quiet if \code{FALSE} print informative progress messages, if 
+#' @param quiet if \code{FALSE} print informative progress messages, if
 #'   \code{TRUE} is silent, if \code{NA} displays messages for long-running
 #'   jobs.
 #' @param pause amount of time to wait between status requests
@@ -65,7 +65,7 @@ get_job <- function(project, job) {
 wait_for <- function(job, quiet = getOption("bigquery.quiet"), pause = 0.5) {
   elapsed <- timer()
   is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
-  
+
   while(job$status$state != "DONE") {
     if (!is_quiet()) {
       cat("\rRunning query:   ", job$status$state, " ",
@@ -75,40 +75,40 @@ wait_for <- function(job, quiet = getOption("bigquery.quiet"), pause = 0.5) {
     job <- get_job(job$jobReference$projectId, job$jobReference$jobId)
   }
   if (!is_quiet()) cat("\n")
-  
+
   err <- job$status$errorResult
   if (!is.null(err)) {
     err_message <- function(x) paste0(x$location, " ", x$reason, ". ", x$message)
     errors <- vapply(job$status$errors, err_message, character(1))
-    
+
     stop(err$message, "\n\n", paste0(errors, collapse = "\n"), call. = FALSE)
   }
-  
+
   if (!is_quiet()) {
     if ("load" %in% names(job$config)) {
       in_bytes <- as.numeric(job$statistics$load$inputFileBytes)
       out_bytes <- as.numeric(job$statistics$load$outputBytes)
       message(format(size_units(in_bytes)), " input bytes")
-      message(format(size_units(out_bytes)), " output bytes")  
+      message(format(size_units(out_bytes)), " output bytes")
     } else if ("query" %in% names(job$config)) {
       bytes <- as.numeric(job$statistics$totalBytesProcessed)
-      message(format(size_units(bytes)), " processed")      
+      message(format(size_units(bytes)), " processed")
     }
   }
-  
+
   job
 }
 
 size_units <- function(x) {
   i <- floor(log2(x) / 10)
   unit <- c("", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta")[i + 1]
-  
+
   structure(x, i = i, unit = unit, class = "size")
 }
-#' @S3method format size
+#' @export
 format.size <- function(x, ...) {
   if (x == 0) return("0 bytes")
-  
+
   y <- x * 1024 ^ -attr(x, "i")
   sprintf("%.1f %sbytes", y, attr(x, "unit"))
 }
