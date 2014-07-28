@@ -1,10 +1,10 @@
 .onAttach <- function(libname, pkgname) {
   op <- options()
-  defautlts <- list(
+  defaults <- list(
     bigquery.quiet = NA
   )
-  toset <- !(names(defautlts) %in% names(op))
-  if (any(toset)) options(defautlts[toset])
-  
+  toset <- !(names(defaults) %in% names(op))
+  if (any(toset)) options(defaults[toset])
+
   invisible()
 }
