@@ -4,7 +4,7 @@
 \title{Run a asynchronous query and retrieve results.}
 \usage{
 query_exec(project, dataset, query, billing = project, page_size = 10000,
-  max_pages = 10, warn = TRUE)
+  max_pages = 10, warn = TRUE, destination = NULL)
 }
 \arguments{
 \item{project}{project name}
@@ -34,7 +34,7 @@ query_exec("publicdata", "samples", sql, billing = billing_project)
 Google documentation describing asynchronous queries:
  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
 
-Google documentation for handling large results:
-\url{https://developers.google.com/bigquery/querying-data#largequeryresults}
+ Google documentation for handling large results:
+ \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 }
 

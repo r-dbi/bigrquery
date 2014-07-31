@@ -3,7 +3,8 @@
 \alias{insert_query_job}
 \title{Create a new query job.}
 \usage{
-insert_query_job(project, dataset, query, billing = project)
+insert_query_job(project, dataset, query, billing = project,
+  destination = NULL)
 }
 \arguments{
 \item{project}{project name}
