@@ -13,6 +13,8 @@ insert_query_job(project, dataset, query, billing = project)
 \item{query}{SQL query string}
 
 \item{billing}{project to bill to, if different to \code{project}}
+
+\item{destination}{(optional) destination table for large queries}
 }
 \value{
 a job resource list, as documented at

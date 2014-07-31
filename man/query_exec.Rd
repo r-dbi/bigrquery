@@ -14,6 +14,8 @@ query_exec(project, dataset, query, billing = project, page_size = 10000,
 \item{query}{SQL query string}
 
 \item{billing}{project to bill to, if different to \code{project}}
+
+\item{destination}{(optional) destination table for large queries}
 }
 \description{
 This is a high-level function that inserts a query job
@@ -31,5 +33,8 @@ query_exec("publicdata", "samples", sql, billing = billing_project)
 \seealso{
 Google documentation describing asynchronous queries:
  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+
+Google documentation for handling large results:
+\url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 }
 

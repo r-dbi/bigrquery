@@ -8,6 +8,9 @@
 #' @inheritParams insert_query_job
 #' @seealso Google documentation describing asynchronous queries:
 #'  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+#'  
+#'  Google documentation for handling large results:
+#'  \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 #' @export
 #' @examples
 #' \donttest{
@@ -16,11 +19,12 @@
 #' query_exec("publicdata", "samples", sql, billing = billing_project)
 #' }
 query_exec <- function(project, dataset, query, billing = project,
-                       page_size = 1e4, max_pages = 10, warn = TRUE) {
+                       page_size = 1e4, max_pages = 10, warn = TRUE,
+                       destination = NULL) {
   assert_that(is.string(project), is.string(dataset), is.string(query),
     is.string(billing))
 
-  job <- insert_query_job(project, dataset, query, billing)
+  job <- insert_query_job(project, dataset, query, billing, destination)
   job <- wait_for(job)
 
   dest <- job$configuration$query$destinationTable
