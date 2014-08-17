@@ -6,9 +6,9 @@
 list_tables(project, dataset)
 }
 \arguments{
-\item{project}{project name}
+\item{project}{project containing this table}
 
-\item{dataset}{dataset name}
+\item{dataset}{dataset containing this table}
 }
 \value{
 a character vector of table names

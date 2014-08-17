@@ -1,44 +1,59 @@
 #' Create a new query job.
 #'
-#' This is a low-level function that creates a query job. To wait until it
-#' is finished and then retrieve the results, see \code{\link{query_exec}}
+#' This is a low-level function that creates a query job. To wait until it is
+#' finished and then retrieve the results, see \code{\link{query_exec}}
 #'
-#' @param project project name
-#' @param dataset dataset name
 #' @param query SQL query string
-#' @param billing project to bill to, if different to \code{project}
-#' @param destination (optional) destination table for large queries
+#' @param project project name
+#' @param destination_table (optional) destination table for large queries,
+#'   either as a string in the format used by BigQuery, or as a list with
+#'   \code{project_id}, \code{dataset_id}, and \code{table_id} entries
+#' @param default_dataset (optional) default dataset for any table references in
+#'   \code{query}, either as a string in the format used by BigQuery or as a
+#'   list with \code{project_id} and \code{dataset_id} entries
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
-insert_query_job <- function(project, dataset, query, billing = project,
-                             destination = NULL) {
-  assert_that(is.string(project), is.string(dataset), is.string(query),
-    is.string(billing))
+insert_query_job <- function(query, project, destination_table = NULL,
+                             default_dataset = NULL) {
+  assert_that(is.string(project), is.string(query))
 
-  url <- sprintf("projects/%s/jobs", billing)
+  url <- sprintf("projects/%s/jobs", project)
   body <- list(
-    kind = "bigquery#job",
     configuration = list(
       query = list(
-        query = query,
-        defaultDataset = list(
-          projectId = project,
-          datasetId = dataset
-        )
+        query = query
       )
     )
   )
 
-  if (!is.null(destination)) {
+  if (!is.null(destination_table)) {
+    if (is.character(destination_table)) {
+      destination_table <- parse_table(destination_table, project_id = project)
+    }
+    assert_that(is.string(destination_table$project_id),
+                is.string(destination_table$dataset_id),
+                is.string(destination_table$table_id))
     body$configuration$query$allowLargeResults <- TRUE
     body$configuration$query$destinationTable <- list(
-      projectId = project,
-      datasetId = dataset,
-      tableId = destination
+      projectId = destination_table$project_id,
+      datasetId = destination_table$dataset_id,
+      tableId = destination_table$table_id
+    )
+  }
+
+  if (!is.null(default_dataset)) {
+    if (is.character(default_dataset)) {
+      default_dataset <- parse_dataset(default_dataset, project_id = project)
+    }
+    assert_that(is.string(default_dataset$project_id),
+                is.string(default_dataset$dataset_id))
+    body$configuration$query$defaultDataset <- list(
+      projectId = default_dataset$project_id,
+      datasetId = default_dataset$dataset_id
     )
   }
 

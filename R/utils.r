@@ -50,6 +50,22 @@ rsplit_one <- function(str, sep) {
   list(left = left, right = right)
 }
 
+#' Parse a BQ-style identifier into project/dataset IDs.
+#'
+#' @param dataset dataset name
+#' @param project_id (optional) project ID to use if none is provided
+#' in \code{dataset}
+#' @return a list with \code{project_id} and \code{dataset_id} components
+#' (either of which may be \code{NULL}).
+#' @export
+parse_dataset <- function(dataset, project_id = NULL) {
+  assert_that(is.string(dataset), is.null(project_id) || is.string(project_id))
+  first_split <- rsplit_one(dataset, ":")
+  dataset_id <- first_split$right
+  project_id <- first_split$left %||% project_id
+  list(project_id = project_id, dataset_id = dataset_id)
+}
+
 #' Parse a BQ-style identifier into project/dataset/table IDs.
 #'
 #' @param table table name
