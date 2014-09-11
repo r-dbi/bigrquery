@@ -17,7 +17,7 @@ bq_delete <- function(url, ..., token = get_access_cred()) {
 bq_post <- function(url, body, ..., token = get_access_cred()) {
   json <- jsonlite::toJSON(body)
   req <- POST(paste0(base_url, url), body = json, config(token = token),
-    add_headers("Content-type" = "application/json"), ...)
+    add_headers("Content-Type" = "application/json"), ...)
   process_request(req)
 }
 
