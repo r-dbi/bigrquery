@@ -1,5 +1,7 @@
 # bigrquery
 
+[![Build Status](https://travis-ci.org/hadley/bigrquery.png?branch=master)](https://travis-ci.org/hadley/bigrquery)
+
 The bigrquery provides a read-only interface to
 [Google BigQuery](https://developers.google.com/bigquery/). It makes it easy
 to retrieve metadata about your projects, datasets, tables and jobs, and
