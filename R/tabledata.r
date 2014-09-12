@@ -4,8 +4,7 @@
 #' \code{list_tabledata_callback} calls the supplied callback with each page
 #' of data.
 #'
-#' @inheritParams insert_query_job
-#' @param table name of the table
+#' @inheritParams get_table
 #' @param callback function called with single argument, the data from the
 #'   current page of data
 #' @param quiet if \code{FALSE}, prints informative status messages.

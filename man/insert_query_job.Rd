@@ -3,27 +3,29 @@
 \alias{insert_query_job}
 \title{Create a new query job.}
 \usage{
-insert_query_job(project, dataset, query, billing = project,
-  destination = NULL)
+insert_query_job(query, project, destination_table = NULL,
+  default_dataset = NULL)
 }
 \arguments{
-\item{project}{project name}
-
-\item{dataset}{dataset name}
-
 \item{query}{SQL query string}
 
-\item{billing}{project to bill to, if different to \code{project}}
+\item{project}{project name}
 
-\item{destination}{(optional) destination table for large queries}
+\item{destination_table}{(optional) destination table for large queries,
+either as a string in the format used by BigQuery, or as a list with
+\code{project_id}, \code{dataset_id}, and \code{table_id} entries}
+
+\item{default_dataset}{(optional) default dataset for any table references in
+\code{query}, either as a string in the format used by BigQuery or as a
+list with \code{project_id} and \code{dataset_id} entries}
 }
 \value{
 a job resource list, as documented at
   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 }
 \description{
-This is a low-level function that creates a query job. To wait until it
-is finished and then retrieve the results, see \code{\link{query_exec}}
+This is a low-level function that creates a query job. To wait until it is
+finished and then retrieve the results, see \code{\link{query_exec}}
 }
 \seealso{
 API documentation for insert method:

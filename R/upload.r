@@ -3,9 +3,9 @@
 #' This sends all of the data inline in the HTTP request so is only suitable
 #' for relatively small datasets.
 #'
-#' @inheritParams insert_query_job
+#' @inheritParams get_table
 #' @param table name of table to insert values into
-#' @param values data frame of data to upload
+#' @param value data frame of data to upload
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs

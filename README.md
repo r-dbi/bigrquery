@@ -46,14 +46,17 @@ To create a project:
 down to "BigQuery API", and clicking the button at the right from "OFF" to
 "ON".
 5. Click on "Overview" at the left
-6. Either the `Project ID` or `Project Number` at the top can be used to
-identify your project with `bigrquery`.
+6. Use the `Project ID` or `Project Number` to identify your project with
+`bigrquery`. (You can also use the project number, though it's harder to
+remember.)
+
+To run your first query:
 
 ```R
 library(bigrquery)
-billing_project <- "341409650721" # put your project number here
-sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
-query_exec("publicdata", "samples", sql, billing = billing_project)
+project <- "fantastic-voyage-389" # put your project ID here
+sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
+query_exec(sql, project = project)
 ```
 
 ## Useful links

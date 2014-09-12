@@ -1,6 +1,6 @@
 #' List available tables in dataset.
 #'
-#' @inheritParams insert_query_job
+#' @inheritParams get_table
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -23,7 +23,8 @@ list_tables <- function(project, dataset) {
 
 #' Retrieve table metadata
 #'
-#' @inheritParams insert_query_job
+#' @param project project containing this table
+#' @param dataset dataset containing this table
 #' @param table name of the table
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
@@ -45,8 +46,7 @@ get_table <- function(project, dataset, table) {
 
 #' Delete a table.
 #'
-#' @inheritParams insert_query_job
-#' @param table name of the table
+#' @inheritParams get_table
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}
 #' @family tables

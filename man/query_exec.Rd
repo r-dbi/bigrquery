@@ -3,17 +3,21 @@
 \alias{query_exec}
 \title{Run a asynchronous query and retrieve results.}
 \usage{
-query_exec(project, dataset, query, billing = project, page_size = 10000,
-  max_pages = 10, warn = TRUE, destination = NULL)
+query_exec(query, project, destination_table = NULL, default_dataset = NULL,
+  page_size = 10000, max_pages = 10, warn = TRUE)
 }
 \arguments{
-\item{project}{project name}
-
-\item{dataset}{dataset name}
-
 \item{query}{SQL query string}
 
-\item{billing}{project to bill to, if different to \code{project}}
+\item{project}{project name}
+
+\item{destination_table}{(optional) destination table for large queries,
+either as a string in the format used by BigQuery, or as a list with
+\code{project_id}, \code{dataset_id}, and \code{table_id} entries}
+
+\item{default_dataset}{(optional) default dataset for any table references in
+\code{query}, either as a string in the format used by BigQuery or as a
+list with \code{project_id} and \code{dataset_id} entries}
 
 \item{page_size}{Number of items per page.}
 
@@ -22,8 +26,6 @@ to retrieve the complete dataset.}
 
 \item{warn}{If \code{TRUE}, warn when there are rows remaining to
 be pulled down from database.}
-
-\item{destination}{(optional) destination table for large queries}
 }
 \description{
 This is a high-level function that inserts a query job
@@ -33,9 +35,14 @@ This is a high-level function that inserts a query job
 }
 \examples{
 \donttest{
-billing_project <- "341409650721" # put your project number here
+project <- "fantastic-voyage-389" # put your project ID here
+sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
+query_exec(sql, project = project)
+# Put the results in a table you own (which uses project by default)
+query_exec(sql, project = project, destination_table = "my_dataset.results")
+# Use a default dataset for the query
 sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
-query_exec("publicdata", "samples", sql, billing = billing_project)
+query_exec(sql, project = project, default_dataset = "publicdata:samples")
 }
 }
 \seealso{

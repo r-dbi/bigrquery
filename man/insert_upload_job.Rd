@@ -6,15 +6,13 @@
 insert_upload_job(project, dataset, table, values, billing = project)
 }
 \arguments{
-\item{project}{project name}
+\item{project}{project containing this table}
 
-\item{dataset}{dataset name}
+\item{dataset}{dataset containing this table}
 
 \item{table}{name of table to insert values into}
 
-\item{values}{data frame of data to upload}
-
-\item{billing}{project to bill to, if different to \code{project}}
+\item{value}{data frame of data to upload}
 }
 \description{
 This sends all of the data inline in the HTTP request so is only suitable
