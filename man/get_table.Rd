@@ -22,6 +22,7 @@ Retrieve table metadata
 \examples{
 \donttest{
 get_table("publicdata", "samples", "natality")
+get_table("githubarchive", "github", "timeline")
 }
 }
 \seealso{

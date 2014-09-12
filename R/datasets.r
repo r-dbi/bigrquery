@@ -8,6 +8,7 @@
 #' @examples
 #' \donttest{
 #' list_datasets("publicdata")
+#' list_datasets("githubarchive")
 #' }
 list_datasets <- function(project) {
   assert_that(is.string(project))

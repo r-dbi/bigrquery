@@ -9,6 +9,7 @@
 #' @examples
 #' \donttest{
 #' list_tables("publicdata", "samples")
+#' list_tables("githubarchive", "github")
 #' }
 list_tables <- function(project, dataset) {
   assert_that(is.string(project), is.string(dataset))
@@ -33,6 +34,7 @@ list_tables <- function(project, dataset) {
 #' @examples
 #' \donttest{
 #' get_table("publicdata", "samples", "natality")
+#' get_table("githubarchive", "github", "timeline")
 #' }
 get_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
@@ -55,7 +57,7 @@ get_table <- function(project, dataset, table) {
 #' }
 delete_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
-  
+
   url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
   bq_delete(url)
 }

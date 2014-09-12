@@ -19,6 +19,7 @@ List available tables in dataset.
 \examples{
 \donttest{
 list_tables("publicdata", "samples")
+list_tables("githubarchive", "github")
 }
 }
 \seealso{

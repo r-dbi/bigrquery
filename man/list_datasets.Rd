@@ -17,6 +17,7 @@ List the datasets in a project
 \examples{
 \donttest{
 list_datasets("publicdata")
+list_datasets("githubarchive")
 }
 }
 \seealso{
