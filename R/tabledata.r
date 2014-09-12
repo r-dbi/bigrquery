@@ -11,6 +11,9 @@
 #' @param quiet if \code{FALSE}, prints informative status messages.
 #' @param table_info if known, the table information retrieved with
 #'   \code{\link{get_table}}
+#' @param page_size Number of items per page.
+#' @param warn If \code{TRUE}, warn when there are rows remaining to
+#'   be pulled down from database.
 #' @param max_pages maximum number of pages to retrieve. Use \code{Inf}
 #'  to retrieve the complete dataset.
 #' @seealso API documentation at

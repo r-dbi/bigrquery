@@ -19,11 +19,16 @@ list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
 
 \item{table}{name of the table}
 
+\item{page_size}{Number of items per page.}
+
 \item{table_info}{if known, the table information retrieved with
 \code{\link{get_table}}}
 
 \item{max_pages}{maximum number of pages to retrieve. Use \code{Inf}
 to retrieve the complete dataset.}
+
+\item{warn}{If \code{TRUE}, warn when there are rows remaining to
+be pulled down from database.}
 
 \item{quiet}{if \code{FALSE}, prints informative status messages.}
 

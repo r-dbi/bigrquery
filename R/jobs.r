@@ -67,7 +67,7 @@ get_job <- function(project, job) {
 #' Wait for a job to complete, optionally printing updates
 #'
 #' @param job job to wait for. Probably result of \code{\link{insert_query_job}}
-#'   or \code{\link{insert_update_job}}
+#'   or \code{\link{insert_upload_job}}
 #' @param quiet if \code{FALSE} print informative progress messages, if
 #'   \code{TRUE} is silent, if \code{NA} displays messages for long-running
 #'   jobs.

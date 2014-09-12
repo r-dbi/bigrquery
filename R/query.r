@@ -6,9 +6,10 @@
 #' (with \code{\link{list_tabledata}})
 #'
 #' @inheritParams insert_query_job
+#' @inheritParams list_tabledata
 #' @seealso Google documentation describing asynchronous queries:
 #'  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
-#'  
+#'
 #'  Google documentation for handling large results:
 #'  \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 #' @export

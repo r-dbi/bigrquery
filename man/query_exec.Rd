@@ -15,6 +15,14 @@ query_exec(project, dataset, query, billing = project, page_size = 10000,
 
 \item{billing}{project to bill to, if different to \code{project}}
 
+\item{page_size}{Number of items per page.}
+
+\item{max_pages}{maximum number of pages to retrieve. Use \code{Inf}
+to retrieve the complete dataset.}
+
+\item{warn}{If \code{TRUE}, warn when there are rows remaining to
+be pulled down from database.}
+
 \item{destination}{(optional) destination table for large queries}
 }
 \description{
