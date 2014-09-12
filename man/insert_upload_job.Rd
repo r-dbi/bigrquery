@@ -21,7 +21,7 @@ This sends all of the data inline in the HTTP request so is only suitable
 for relatively small datasets.
 }
 \examples{
-\dontrun{
+\donttest{
 list_datasets("193487687779")
 list_tables("193487687779", "houston")
 job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
