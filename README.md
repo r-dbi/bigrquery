@@ -11,7 +11,6 @@ bigrquery is not currently available on CRAN, but you can install it with
 devtools:
 
 ```R
-devtools::install_github("assertthat")
 devtools::install_github("bigrquery")
 ```
 
