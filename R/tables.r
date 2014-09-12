@@ -52,9 +52,6 @@ get_table <- function(project, dataset, table) {
 #' @family tables
 #' @export
 #' @examples
-#' \donttest{
-#' get_table("publicdata", "samples", "natality")
-#' }
 delete_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
 

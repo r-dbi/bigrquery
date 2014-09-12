@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hadley/bigrquery.png?branch=master)](https://travis-ci.org/hadley/bigrquery)
 
-The bigrquery provides a read-only interface to
+The bigrquery packages provides an R interface to
 [Google BigQuery](https://developers.google.com/bigquery/). It makes it easy
 to retrieve metadata about your projects, datasets, tables and jobs, and
 provides a convenient wrapper for working with bigquery from R.
