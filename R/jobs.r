@@ -43,7 +43,6 @@ insert_query_job <- function(query, project, destination_table = NULL,
       datasetId = destination_table$dataset_id,
       tableId = destination_table$table_id
     )
-    #WRITE_TRUNCATE, #WRITE_APPEND, #WRITE_EMPTY
     body$configuration$query$writeDisposition <- if(is.null(write_disposition)) "WRITE_EMPTY" else write_disposition
   }
 

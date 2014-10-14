@@ -20,6 +20,9 @@
 #' query_exec(sql, project = project)
 #' # Put the results in a table you own (which uses project by default)
 #' query_exec(sql, project = project, destination_table = "my_dataset.results")
+#' # Put the results in a table you own (which uses project by default) and define the write strategy id the table already exists
+#' # WRITE_TRUNCATE - truncate and overwrite, #WRITE_APPEND - append new data, #WRITE_EMPTY - throws error if table exists
+#' query_exec(sql, project = project, destination_table = "my_dataset.results", write_disposition = "WRITE_APPEND")
 #' # Use a default dataset for the query
 #' sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 #' query_exec(sql, project = project, default_dataset = "publicdata:samples")
