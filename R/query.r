@@ -26,11 +26,11 @@
 #' }
 query_exec <- function(query, project, destination_table = NULL,
                        default_dataset = NULL, page_size = 1e4, max_pages = 10,
-                       warn = TRUE) {
+                       warn = TRUE, write_disposition = NULL) {
   assert_that(is.string(query), is.string(project))
 
   job <- insert_query_job(query, project, destination_table = destination_table,
-                          default_dataset = default_dataset)
+                          default_dataset = default_dataset, write_disposition = write_disposition)
   job <- wait_for(job)
 
   dest <- job$configuration$query$destinationTable

@@ -18,7 +18,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
 insert_query_job <- function(query, project, destination_table = NULL,
-                             default_dataset = NULL) {
+                             default_dataset = NULL, write_disposition = NULL) {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
@@ -43,6 +43,8 @@ insert_query_job <- function(query, project, destination_table = NULL,
       datasetId = destination_table$dataset_id,
       tableId = destination_table$table_id
     )
+    #WRITE_TRUNCATE, #WRITE_APPEND, #WRITE_EMPTY
+    body$configuration$writeDisposition <- if(is.null(write_disposition)) "WRITE_EMPTY" else write_disposition
   }
 
   if (!is.null(default_dataset)) {
