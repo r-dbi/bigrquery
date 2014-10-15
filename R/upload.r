@@ -39,7 +39,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
       )
     )
   )
-  config$configuration$load$writeDisposition <- if(is.null(write_disposition)) "WRITE_EMPTY" else write_disposition
+  config$configuration$load$writeDisposition <- if(is.null(write_disposition)) "WRITE_APPEND" else write_disposition
   config_part <- part(c("Content-type" = "application/json; charset=UTF-8"),
     jsonlite::toJSON(config, pretty = TRUE))
 
