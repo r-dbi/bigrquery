@@ -3,12 +3,14 @@
 \alias{list_tables}
 \title{List available tables in dataset.}
 \usage{
-list_tables(project, dataset)
+list_tables(project, dataset, max_results = 50)
 }
 \arguments{
 \item{project}{project containing this table}
 
 \item{dataset}{dataset containing this table}
+
+\item{max_results}{Maximum number of results to retrieve.}
 }
 \value{
 a character vector of table names

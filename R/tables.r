@@ -1,6 +1,7 @@
 #' List available tables in dataset.
 #'
 #' @inheritParams get_table
+#' @param max_results Maximum number of results to retrieve.
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -11,10 +12,11 @@
 #' list_tables("publicdata", "samples")
 #' list_tables("githubarchive", "github")
 #' }
-list_tables <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
+list_tables <- function(project, dataset, max_results = 50) {
+  assert_that(is.string(project), is.string(dataset),
+              is.numeric(max_results), length(max_results) == 1)
 
-  url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
+  url <- sprintf("projects/%s/datasets/%s/tables?maxResults=%d", project, dataset, max_results)
   data <- bq_get(url)$tables
   do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
