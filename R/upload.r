@@ -74,7 +74,7 @@ standard_csv <- function(values) {
 
   # Encode special characters in strings
   is_char <- vapply(values, is.character, logical(1))
-  values[is_char] <- lapply(values[is_char], encodeString, na.encode = FALSE, quote = '"')
+  values[is_char] <- lapply(values[is_char], encodeString, na.encode = FALSE)
 
   # Encode dates and times
   is_time <- vapply(values, function(x) inherits(x, "POSIXct"), logical(1))
@@ -84,8 +84,8 @@ standard_csv <- function(values) {
   values[is_date] <- lapply(values[is_date], function(x) as.numeric(as.POSIXct(x)))
 
   tmp <- tempfile(fileext = ".csv")
-  write.table(values, tmp, sep = ",", quote = FALSE, qmethod = "escape",
-    row.names = FALSE, col.names = FALSE, na = "")
+  write.table(values, tmp, sep = ",", na = "", qmethod = "double",
+              row.names = FALSE, col.names = FALSE)
 
   # Don't read trailing nl
   readChar(tmp, file.info(tmp)$size - 1, useBytes = TRUE)
