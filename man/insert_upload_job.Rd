@@ -12,7 +12,9 @@ insert_upload_job(project, dataset, table, values, billing = project)
 
 \item{table}{name of table to insert values into}
 
-\item{value}{data frame of data to upload}
+\item{values}{data frame of data to upload}
+
+\item{billing}{project ID to use for billing}
 }
 \description{
 This sends all of the data inline in the HTTP request so is only suitable

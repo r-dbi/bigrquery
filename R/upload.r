@@ -5,7 +5,8 @@
 #'
 #' @inheritParams get_table
 #' @param table name of table to insert values into
-#' @param value data frame of data to upload
+#' @param values data frame of data to upload
+#' @param billing project ID to use for billing
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
