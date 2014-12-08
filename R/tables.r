@@ -14,8 +14,10 @@
 #' list_tables("githubarchive", "github")
 #' }
 list_tables <- function(project, dataset, max_results = NULL) {
-  assert_that(is.string(project), is.string(dataset),
-              is.numeric(max_results), length(max_results) == 1)
+  assert_that(is.string(project), is.string(dataset))
+  if (!is.null(max_results)) {
+    assert_that(is.numeric(max_results), length(max_results) == 1)
+  }
 
   url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
   if (!is.null(max_results)) {

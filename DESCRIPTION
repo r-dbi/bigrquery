@@ -9,7 +9,8 @@ Depends:
 Imports:
     httr,
     jsonlite,
-    assertthat
+    assertthat,
+    dplyr (>= 0.3.0)
 Suggests:
     testthat
 License: GPL-3
