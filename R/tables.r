@@ -19,7 +19,7 @@ list_tables <- function(project, dataset, max_results = NULL) {
 
   url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
   if (!is.null(max_results)) {
-    url <- modify_url(url, query = list(maxResults = max_results))
+    url <- httr::modify_url(url, query = list(maxResults = max_results))
   }
   data <- bq_get(url)$tables
   do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
