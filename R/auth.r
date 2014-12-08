@@ -5,17 +5,7 @@ bigqr <- oauth_app("google",
   "465736758727.apps.googleusercontent.com",
   "fJbIIyoIag0oA6p114lwsV2r")
 
-# If loaded through devtools, store in global environment; otherwise
-# store in local environment
-in_devtools <- exists(".__DEVTOOLS__")
-if (in_devtools) {
-  if (!exists("__bq_env", globalenv())) {
-    assign("__bq_env", new.env(parent = emptyenv()), envir = globalenv())
-  }
-  bq_env <- get("__bq_env", envir = globalenv())
-} else {
-  bq_env <- new.env(parent = emptyenv())
-}
+bq_env <- new.env(parent = emptyenv())
 
 
 #' Get and set access credentials
