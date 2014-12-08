@@ -6,9 +6,9 @@
 delete_table(project, dataset, table)
 }
 \arguments{
-\item{project}{project name}
+\item{project}{project containing this table}
 
-\item{dataset}{dataset name}
+\item{dataset}{dataset containing this table}
 
 \item{table}{name of the table}
 }

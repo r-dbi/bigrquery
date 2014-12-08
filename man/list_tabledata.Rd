@@ -13,9 +13,9 @@ list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
   quiet = getOption("bigquery.quiet"))
 }
 \arguments{
-\item{project}{project name}
+\item{project}{project containing this table}
 
-\item{dataset}{dataset name}
+\item{dataset}{dataset containing this table}
 
 \item{table}{name of the table}
 

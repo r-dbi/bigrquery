@@ -1,6 +1,8 @@
 #' List available tables in dataset.
 #'
-#' @inheritParams insert_query_job
+#' @inheritParams get_table
+#' @param max_results (optional) Maximum number of results to
+#'   retrieve.
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -11,10 +13,14 @@
 #' list_tables("publicdata", "samples")
 #' list_tables("githubarchive", "github")
 #' }
-list_tables <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
+list_tables <- function(project, dataset, max_results = NULL) {
+  assert_that(is.string(project), is.string(dataset),
+              is.numeric(max_results), length(max_results) == 1)
 
   url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
+  if (!is.null(max_results)) {
+    url <- modify_url(url, query = list(maxResults = max_results))
+  }
   data <- bq_get(url)$tables
   do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
@@ -23,7 +29,8 @@ list_tables <- function(project, dataset) {
 
 #' Retrieve table metadata
 #'
-#' @inheritParams insert_query_job
+#' @param project project containing this table
+#' @param dataset dataset containing this table
 #' @param table name of the table
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
@@ -45,8 +52,7 @@ get_table <- function(project, dataset, table) {
 
 #' Delete a table.
 #'
-#' @inheritParams insert_query_job
-#' @param table name of the table
+#' @inheritParams get_table
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}
 #' @family tables

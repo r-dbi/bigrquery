@@ -15,17 +15,22 @@
 #' @export
 #' @examples
 #' \donttest{
-#' billing_project <- "341409650721" # put your project number here
+#' project <- "fantastic-voyage-389" # put your project ID here
+#' sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
+#' query_exec(sql, project = project)
+#' # Put the results in a table you own (which uses project by default)
+#' query_exec(sql, project = project, destination_table = "my_dataset.results")
+#' # Use a default dataset for the query
 #' sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
-#' query_exec("publicdata", "samples", sql, billing = billing_project)
+#' query_exec(sql, project = project, default_dataset = "publicdata:samples")
 #' }
-query_exec <- function(project, dataset, query, billing = project,
-                       page_size = 1e4, max_pages = 10, warn = TRUE,
-                       destination = NULL) {
-  assert_that(is.string(project), is.string(dataset), is.string(query),
-    is.string(billing))
+query_exec <- function(query, project, destination_table = NULL,
+                       default_dataset = NULL, page_size = 1e4, max_pages = 10,
+                       warn = TRUE) {
+  assert_that(is.string(query), is.string(project))
 
-  job <- insert_query_job(project, dataset, query, billing, destination)
+  job <- insert_query_job(query, project, destination_table = destination_table,
+                          default_dataset = default_dataset)
   job <- wait_for(job)
 
   dest <- job$configuration$query$destinationTable
