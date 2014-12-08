@@ -10,6 +10,7 @@ Imports:
     httr,
     jsonlite,
     assertthat,
+    R6 (>= 2.0.0),
     dplyr (>= 0.3.0)
 Suggests:
     testthat

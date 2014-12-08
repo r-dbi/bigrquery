@@ -21,8 +21,21 @@ and \code{tbl} to connect to tables within that database.
 library(dplyr)
 
 # To run this example, replace billing with the id of one of your projects
-# with set up with billing
-gh <- src_bigquery("githubarchive", "github", billing = "465736758727")
+# set up for billing
+pd <- src_bigquery("publicdata", "samples", billing = "465736758727")
+pd \%>\% tbl("shakespeare")
+
+# With bigquery data, it's always a good idea to start by selecting
+# only the variables you're interested in - this reduces the amount of
+# data that needs to be scanned and hence decreases costs
+natality <- pd \%>\%
+  tbl("natality") \%>\%
+  select(year:day, state, child_race, weight_pounds)
+year_weights <- natality \%>\%
+  group_by(year) \%>\%
+  summarise(weight = mean(weight_pounds), n = n()) \%>\%
+  collect()
+plot(year_weights$year, year_weights$weight, type = "b")
 }
 }
 
