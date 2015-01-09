@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^\.httr-oauth$
 ^\.travis\.yml$
+^cran-comments\.md$
