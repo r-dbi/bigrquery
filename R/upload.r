@@ -85,8 +85,12 @@ standard_csv <- function(values) {
   values[is_date] <- lapply(values[is_date], function(x) as.numeric(as.POSIXct(x)))
 
   tmp <- tempfile(fileext = ".csv")
-  write.table(values, tmp, sep = ",", na = "", qmethod = "double",
-              row.names = FALSE, col.names = FALSE)
+  on.exit(unlink(tmp))
+
+  conn <- file(tmp, open = "wb")
+  write.table(values, conn, sep = ",", na = "", qmethod = "double",
+              row.names = FALSE, col.names = FALSE, eol = "\12")
+  close(conn)
 
   # Don't read trailing nl
   readChar(tmp, file.info(tmp)$size - 1, useBytes = TRUE)
