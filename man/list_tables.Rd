@@ -24,6 +24,7 @@ List available tables in dataset.
 \donttest{
 list_tables("publicdata", "samples")
 list_tables("githubarchive", "github")
+list_tables("publicdata", "samples", max_results = 2)
 }
 }
 \seealso{

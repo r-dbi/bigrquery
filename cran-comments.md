@@ -6,7 +6,12 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There was 1 NOTE:
+There were 2 NOTEs:
+
+* Possibly mis-spelled words in DESCRIPTION:
+  API (2:42) BigQuery (2:33, 3:38)
+  
+  These are correctly spelled.
 
 * checking dependencies in R code ... NOTE
   Namespace in Imports field not imported from: 'R6'
