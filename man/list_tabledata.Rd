@@ -42,7 +42,7 @@ current page of data}
 of data.
 }
 \examples{
-\donttest{
+\dontrun{
 billing_project <- "341409650721" # put your project number here
 natal <- list_tabledata("publicdata", "samples", "natality", max_pages = 2,
   page_size = 10)

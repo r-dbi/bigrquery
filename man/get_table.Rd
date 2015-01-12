@@ -21,7 +21,7 @@ A table resource list, as described by
 Retrieve table metadata
 }
 \examples{
-\donttest{
+\dontrun{
 get_table("publicdata", "samples", "natality")
 get_table("githubarchive", "github", "timeline")
 }

@@ -9,7 +9,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' list_tables("publicdata", "samples")
 #' list_tables("githubarchive", "github")
 #' list_tables("publicdata", "samples", max_results = 2)
@@ -43,7 +43,7 @@ list_tables <- function(project, dataset, max_results = NULL) {
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_table("publicdata", "samples", "natality")
 #' get_table("githubarchive", "github", "timeline")
 #' }
@@ -62,7 +62,7 @@ get_table <- function(project, dataset, table) {
 #' @family tables
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' get_table("publicdata", "samples", "natality")
 #' }
 delete_table <- function(project, dataset, table) {

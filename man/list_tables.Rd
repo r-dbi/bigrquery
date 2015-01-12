@@ -21,7 +21,7 @@ a character vector of table names
 List available tables in dataset.
 }
 \examples{
-\donttest{
+\dontrun{
 list_tables("publicdata", "samples")
 list_tables("githubarchive", "github")
 list_tables("publicdata", "samples", max_results = 2)

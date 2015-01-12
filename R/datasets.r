@@ -6,7 +6,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/datasets/list}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' list_datasets("publicdata")
 #' list_datasets("githubarchive")
 #' }

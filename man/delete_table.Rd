@@ -17,7 +17,7 @@ delete_table(project, dataset, table)
 Delete a table.
 }
 \examples{
-\donttest{
+\dontrun{
 get_table("publicdata", "samples", "natality")
 }
 }

@@ -16,7 +16,7 @@ a character vector of dataset names
 List the datasets in a project
 }
 \examples{
-\donttest{
+\dontrun{
 list_datasets("publicdata")
 list_datasets("githubarchive")
 }

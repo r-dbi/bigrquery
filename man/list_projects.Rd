@@ -14,7 +14,7 @@ a character vector of project ids named with their friendly names
 List projects that you have access to
 }
 \examples{
-\donttest{
+\dontrun{
 list_projects()
 }
 }
