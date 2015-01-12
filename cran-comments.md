@@ -1,3 +1,10 @@
+This is a resubmission. Compared to the previous submission, I have:
+
+* replaced `\donttest{}` with `\dontrun{}`
+* wrapped Authors@R in `as.person()`
+
+---
+
 ## Test environments
 * local OS X install, R 3.1.2
 * ubuntu 12.04 (on travis-ci), R 3.1.2
