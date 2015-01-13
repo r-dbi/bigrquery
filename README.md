@@ -7,10 +7,18 @@ The bigrquery packages provides an R interface to
 to retrieve metadata about your projects, datasets, tables and jobs, and
 provides a convenient wrapper for working with bigquery from R.
 
-bigrquery is not currently available on CRAN, but you can install it with
-devtools:
+## Installation
+
+The current bigrquery release can be installed from CRAN: 
 
 ```R
+install.packages("bigrquery")
+```
+
+The newest development release can be installed from github:
+
+```R
+# install.packages('devtools')
 devtools::install_github("hadley/bigrquery")
 ```
 
