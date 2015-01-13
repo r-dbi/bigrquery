@@ -1,7 +1,6 @@
 This is a resubmission. Compared to the previous submission, I have:
 
-* replaced `\donttest{}` with `\dontrun{}`
-* wrapped Authors@R in `as.person()`
+* replaced `as.person()` with `person()` in Authors@R
 
 ---
 

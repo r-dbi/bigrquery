@@ -2,7 +2,10 @@ Package: bigrquery
 Title: An Interface to Google's BigQuery API
 Description: Easily talk to Google's BigQuery database from R.
 Version: 0.1.0
-Authors@R: as.person("Hadley Wickham <hadley@rstudio.com> [aut, cre]")
+Authors@R: c(
+    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
+    person("RStudio", role = "cph")
+    )
 Depends:
     R (>= 3.1.0)
 Imports:
