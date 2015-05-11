@@ -124,7 +124,7 @@ wait_for <- function(job, quiet = getOption("bigquery.quiet"), pause = 0.5) {
     }
   }
 
-  job
+  invisible(job)
 }
 
 size_units <- function(x) {
