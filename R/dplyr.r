@@ -213,6 +213,9 @@ src_translate_env.src_bigquery <- function(x) {
           dplyr::escape(match), dplyr::escape(replace))
       },
 
+      # Other scalar functions
+      ifelse = dplyr::sql_prefix("IF"),
+
       # stringr equivalents
       str_detect = function(x, match) {
         sprintf("REGEXP_MATCH(%s, %s)", dplyr::escape(x),
