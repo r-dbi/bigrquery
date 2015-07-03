@@ -118,9 +118,95 @@ sql_select.bigquery <- function(con, select, from, where = NULL,
 sql_subquery.bigquery <- function(con, sql, name =  dplyr::unique_name(), ...) {
   if (dplyr::is.ident(sql)) return(sql)
 
-  dplyr::build_sql("(", sql, ") AS ", dplyr::ident(name), con = con)
+  subq <- dplyr::build_sql("(", sql, ") AS ", dplyr::ident(name), con = con)
+
+  # build_sql removes "vars" from SQL but we do need to have them
+  # for subsequent use inside sql_join.bigquery.
+  # so we put them back
+  attr(subq, "vars") <- attr(sql, "vars")
+  (subq)
 }
 
+#' @export
+#' @importFrom dplyr sql_join
+sql_join.bigquery <- function(con, x, y, type = "inner", by = NULL, ...) {
+  join <- switch(type,
+                 left = dplyr::sql("LEFT JOIN EACH"),
+                 inner = dplyr::sql("INNER JOIN EACH"),
+                 right = dplyr::sql("RIGHT JOIN EACH"),
+                 full = dplyr::sql("FULL JOIN EACH"),
+                 cross = dplyr::sql("CROSS JOIN"),
+                 stop("Unknown join type:", type, call. = FALSE)
+  )
+
+  if (type == "cross") {
+    by <- list()
+  } else {
+    by <- dplyr:::common_by(by, x, y)
+  }
+
+  # Ensure tables have unique names
+  x_names <- dplyr:::auto_names(x$select)
+  y_names <- dplyr:::auto_names(y$select)
+  uniques <- dplyr:::unique_names(x_names, y_names, by$x[by$x == by$y], x_suffix="_x", y_suffix="_y")
+
+  if (is.null(uniques)) {
+    sel_vars <- c(x_names, y_names)
+  } else {
+    x <- dplyr:::update.tbl_sql(x, select = setNames(x$select, uniques$x))
+    y <- dplyr:::update.tbl_sql(y, select = setNames(y$select, uniques$y))
+
+    by$x <- unname(uniques$x[by$x])
+    by$y <- unname(uniques$y[by$y])
+
+    sel_vars <- unique(c(uniques$x, uniques$y))
+  }
+
+  name_left <- dplyr:::unique_name()
+  name_right <- dplyr:::unique_name()
+
+  if (type == "cross") {
+    cond <- dplyr::build_sql("", con = con)
+
+    non_join_vars <- sel_vars
+
+    sql_var_list <- dplyr:::sql_vector( c(dplyr::sql_escape_ident(con, non_join_vars)),
+                                        collapse=",", parens = FALSE, con = con )
+    final_sel_vars <- non_join_vars
+  } else {
+    on <- dplyr:::sql_vector(
+            paste0( dplyr::sql_escape_ident(con, paste0(name_left,".",by$x)),
+                    " = ",
+                    dplyr::sql_escape_ident(con, paste0(name_right,".",by$y))
+                  ),
+                  collapse = " AND ", parens = TRUE, con = con )
+
+    cond <- dplyr::build_sql("ON ", on, con = con)
+
+    join_vars <- paste0(name_left,".",by$x)
+    names(join_vars) <- by$x
+
+    non_join_vars <- setdiff(setdiff(sel_vars, by$x), by$y)
+
+    sql_var_list <- dplyr:::sql_vector(
+                              c(sql_escape_ident(con, join_vars),
+                                sql_escape_ident(con, non_join_vars)),
+                              collapse=",", parens = FALSE, con = con )
+
+    final_sel_vars <- union(by$x, non_join_vars)
+  }
+
+  from <- dplyr::build_sql (
+    'SELECT ', sql_var_list,' FROM ',
+    sql_subquery(con, x$query$sql, name=name_left), "\n\n",
+    join, " \n\n" ,
+    sql_subquery(con, y$query$sql, name=name_right), "\n\n",
+    cond, con = con
+  )
+  attr(from, "vars") <- lapply(final_sel_vars, as.name)
+
+  from
+}
 
 #' @export
 #' @importFrom dplyr query
