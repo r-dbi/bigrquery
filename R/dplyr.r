@@ -99,6 +99,20 @@ dim.tbl_bigquery <- function(x) {
   c(NA, p)
 }
 
+#' @export
+#' @importFrom dplyr mutate_
+mutate_.tbl_bigquery <- function(.data, ..., .dots) {
+  dots <- lazyeval::all_dots(.dots, ..., all_named = TRUE)
+  input <- dplyr::partial_eval(dots, .data)
+
+  .data$mutate <- TRUE
+
+  new <- dplyr:::update.tbl_sql(.data, select = c(.data$select, input))
+
+  # BigQuery requires a collapse after any mutate
+  dplyr::collapse(new)
+}
+
 # SQL -------------------------------------------------------------------------
 
 #' @export
