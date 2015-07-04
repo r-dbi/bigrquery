@@ -133,15 +133,20 @@ query.bigquery <- function(con, sql, .vars) {
 #' @export
 #' @importFrom dplyr db_save_query
 db_save_query.bigquery <- function(con, sql, name, temporary=TRUE, ...) {
+  if (temporary) {
+    stop("Named temporary tables are not currently supported in bigrquery. Did you mean temporary=FALSE ?",
+         call. = FALSE)
+  }
+
   table <- parse_table(name)
 
   if (is.null(table$project_id)) table$project_id <- con$project
   if (is.null(table$dataset_id)) table$dataset_id <- con$dataset
 
   if ( table$table_id %in% list_tables(table$project_id, table$dataset_id) ) {
-    delete_table( project = table$project_id,
-                  dataset = table$dataset_id,
-                  table = table$table_id )
+    stop( paste0(" Table ",table$project_id,":",table$dataset_id,".",table$table_id," already exists"),
+                 call. = FALSE)
+
   }
 
   query_exec(query = sql,
