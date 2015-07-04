@@ -101,16 +101,10 @@ dim.tbl_bigquery <- function(x) {
 
 #' @export
 #' @importFrom dplyr mutate_
-mutate_.tbl_bigquery <- function(.data, ..., .dots) {
-  dots <- lazyeval::all_dots(.dots, ..., all_named = TRUE)
-  input <- dplyr::partial_eval(dots, .data)
-
-  .data$mutate <- TRUE
-
-  new <- dplyr:::update.tbl_sql(.data, select = c(.data$select, input))
+mutate_.tbl_bigquery <- function(...) {
 
   # BigQuery requires a collapse after any mutate
-  dplyr::collapse(new)
+  dplyr::collapse( dplyr:::mutate_.tbl_sql(...) )
 }
 
 # SQL -------------------------------------------------------------------------
