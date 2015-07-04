@@ -99,6 +99,14 @@ dim.tbl_bigquery <- function(x) {
   c(NA, p)
 }
 
+#' @export
+#' @importFrom dplyr mutate_
+mutate_.tbl_bigquery <- function(...) {
+
+  # BigQuery requires a collapse after any mutate
+  dplyr::collapse( dplyr:::mutate_.tbl_sql(...) )
+}
+
 # SQL -------------------------------------------------------------------------
 
 #' @export
