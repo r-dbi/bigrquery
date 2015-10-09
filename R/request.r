@@ -1,30 +1,44 @@
 base_url <- "https://www.googleapis.com/bigquery/v2/"
 upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
 
+prepare_bq_query <- function(query) {
+  api_key <- Sys.getenv("BIGRQUERY_API_KEY")
+  if (!nzchar(api_key)) {
+    return(query)
+  }
+  query <- query %||% list()
+  query[["key"]] <- query[["key"]] %||% api_key
+  query
+}
+
 #' @importFrom httr GET config
-bq_get <- function(url, ..., token = get_access_cred()) {
-  req <- GET(paste0(base_url, url), config(token = token), ...)
+bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
+  req <- GET(paste0(base_url, url), config(token = token), ...,
+             query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr DELETE config
-bq_delete <- function(url, ..., token = get_access_cred()) {
-  req <- DELETE(paste0(base_url, url), config(token = token), ...)
+bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
+  req <- DELETE(paste0(base_url, url), config(token = token), ...,
+                query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_post <- function(url, body, ..., token = get_access_cred()) {
+bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   json <- jsonlite::toJSON(body)
   req <- POST(paste0(base_url, url), body = json, config(token = token),
-    add_headers("Content-Type" = "application/json"), ...)
+              add_headers("Content-Type" = "application/json"), ...,
+              query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., token = get_access_cred()) {
+bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) {
   url <- paste0(upload_url, url)
-  req <- POST_multipart_related(url, parts = parts, config(token = token), ...)
+  req <- POST_multipart_related(url, parts = parts, config(token = token), ...,
+                                query = prepare_bq_query(query))
   process_request(req)
 }
 

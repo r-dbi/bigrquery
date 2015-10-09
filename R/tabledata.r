@@ -19,7 +19,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' billing_project <- "341409650721" # put your project number here
 #' natal <- list_tabledata("publicdata", "samples", "natality", max_pages = 2,
 #'   page_size = 10)

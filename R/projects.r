@@ -8,7 +8,7 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/projects/list}
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' list_projects()
 #' }
 list_projects <- function() {

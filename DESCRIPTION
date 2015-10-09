@@ -1,15 +1,19 @@
 Package: bigrquery
-Title: An interface to google's bigquery API
-Description: This package provides a wrapper around the API for Google's
-    bigquery database.
-Version: 0.1
-Authors@R: 'Hadley Wickham <h.wickham@gmail.com> [aut,cre]'
+Title: An Interface to Google's BigQuery API
+Description: Easily talk to Google's BigQuery database from R.
+Version: 0.1.0.9000
+Authors@R: c(
+    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
+    person("RStudio", role = "cph")
+    )
 Depends:
-    R (>= 3.0.0)
+    R (>= 3.1.0)
 Imports:
     httr,
     jsonlite,
-    assertthat
+    assertthat,
+    R6 (>= 2.0.0),
+    dplyr (>= 0.3.0)
 Suggests:
     testthat
 License: GPL-3

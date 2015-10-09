@@ -5,13 +5,14 @@
 #'
 #' @inheritParams get_table
 #' @param table name of table to insert values into
-#' @param value data frame of data to upload
+#' @param values data frame of data to upload
+#' @param billing project ID to use for billing
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' list_datasets("193487687779")
 #' list_tables("193487687779", "houston")
 #' job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
@@ -75,7 +76,7 @@ standard_csv <- function(values) {
 
   # Encode special characters in strings
   is_char <- vapply(values, is.character, logical(1))
-  values[is_char] <- lapply(values[is_char], encodeString, na.encode = FALSE, quote = '"')
+  values[is_char] <- lapply(values[is_char], encodeString, na.encode = FALSE)
 
   # Encode dates and times
   is_time <- vapply(values, function(x) inherits(x, "POSIXct"), logical(1))
@@ -85,8 +86,12 @@ standard_csv <- function(values) {
   values[is_date] <- lapply(values[is_date], function(x) as.numeric(as.POSIXct(x)))
 
   tmp <- tempfile(fileext = ".csv")
-  write.table(values, tmp, sep = ",", quote = FALSE, qmethod = "escape",
-    row.names = FALSE, col.names = FALSE, na = "")
+  on.exit(unlink(tmp))
+
+  conn <- file(tmp, open = "wb")
+  write.table(values, conn, sep = ",", na = "", qmethod = "double",
+              row.names = FALSE, col.names = FALSE, eol = "\12")
+  close(conn)
 
   # Don't read trailing nl
   readChar(tmp, file.info(tmp)$size - 1, useBytes = TRUE)
