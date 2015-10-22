@@ -3,6 +3,10 @@ upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
+  query <- list(
+    query,
+    access_token = get_access_cred(client_secrets)$credentials$access_token
+  )
   if (!nzchar(api_key)) {
     return(query)
   }
@@ -12,32 +16,30 @@ prepare_bq_query <- function(query) {
 }
 
 #' @importFrom httr GET config
-bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- GET(paste0(base_url, url), config(token = token), ...,
-             query = prepare_bq_query(query))
+bq_get <- function(url, ..., query = NULL) {
+  req <- GET(paste0(base_url, url), ..., query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr DELETE config
-bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- DELETE(paste0(base_url, url), config(token = token), ...,
-                query = prepare_bq_query(query))
+bq_delete <- function(url, ..., query = NULL) {
+  req <- DELETE(paste0(base_url, url), ..., query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+bq_post <- function(url, body, ..., query = NULL) {
   json <- jsonlite::toJSON(body)
-  req <- POST(paste0(base_url, url), body = json, config(token = token),
+  req <- POST(paste0(base_url, url), body = json,
               add_headers("Content-Type" = "application/json"), ...,
               query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) {
+bq_upload <- function(url, parts, ..., query = NULL) {
   url <- paste0(upload_url, url)
-  req <- POST_multipart_related(url, parts = parts, config(token = token), ...,
+  req <- POST_multipart_related(url, parts = parts, ...,
                                 query = prepare_bq_query(query))
   process_request(req)
 }
@@ -67,6 +69,7 @@ process_request <- function(req) {
 
 # http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
 POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
+                                   query,
                                    boundary = random_boundary(),
                                    handle = NULL) {
   if (is.null(config)) config <- config()
@@ -80,7 +83,7 @@ POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
   config <- c(config, add_headers("Content-Type" = type))
 
   POST(url, config = config, body = body,
-    query = list(uploadType = "multipart"), ..., handle = handle)
+    query = c(query, uploadType = "multipart"), ..., handle = handle)
 }
 
 part <- function(headers, body) {
