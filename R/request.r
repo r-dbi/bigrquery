@@ -3,9 +3,9 @@ upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
-  query <- list(
+  query <- c(
     query,
-    access_token = get_access_cred(client_secrets)$credentials$access_token
+    list(access_token = get_access_cred(client_secrets)$credentials$access_token)
   )
   if (!nzchar(api_key)) {
     return(query)
