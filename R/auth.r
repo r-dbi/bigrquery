@@ -25,16 +25,16 @@ bq_env <- new.env(parent = emptyenv())
 #' @param value new access credentials, as returned by
 #'  \code{\link[httr]{oauth2.0_token}}
 get_access_cred <- function(client_secrets) {
-  cred <- bq_env$access_cred
-  if (is.null(cred)) {
-    cred <- oauth_service_token(google, client_secrets,
-      scope = paste(
-          "https://www.googleapis.com/auth/bigquery",
-          "https://www.googleapis.com/auth/cloud-platform"))
 
-    # Stop if unsuccessful
-    set_access_cred(cred)
-  }
+  cred <- oauth_service_token(
+    google, client_secrets,
+    scope = paste(
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/cloud-platform")
+  )
+
+  # Stop if unsuccessful
+  set_access_cred(cred)
 
   cred
 }
