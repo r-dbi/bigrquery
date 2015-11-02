@@ -3,15 +3,13 @@ upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
-  query <- list(
-    query,
-    access_token = get_access_cred(client_secrets)$credentials$access_token
-  )
   if (!nzchar(api_key)) {
     return(query)
   }
+  api_key <- jsonlite::fromJSON(api_key)
+  api_key <- get_access_cred(api_key)$credentials$access_token
   query <- query %||% list()
-  query[["key"]] <- query[["key"]] %||% api_key
+  query[["access_token"]] <- query[["access_token"]] %||% api_key
   query
 }
 
