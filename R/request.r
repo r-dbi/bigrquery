@@ -48,7 +48,7 @@ process_request <- function(req) {
   # No content -> success
   if (req$status_code == 204) return(TRUE)
 
-  if (http_status(req)$category == "success") {
+  if (status_code(req) >= 200 && status_code(req) < 300) {
     return(content(req, "parsed", "application/json"))
   }
 
