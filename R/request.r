@@ -49,12 +49,12 @@ process_request <- function(req) {
   if (req$status_code == 204) return(TRUE)
 
   if (http_status(req)$category == "success") {
-    return(content(req, "parsed", "application/json"))
+    return(content(req, "parsed", "application/json", "UTF-8"))
   }
 
   type <- parse_media(req$headers$`Content-type`)
   if (type$complete == "application/json") {
-    out <- content(req, "parsed", "application/json")
+    out <- content(req, "parsed", "application/json", "UTF-8")
     stop(out$err$message, call. = FALSE)
   } else {
     out <- content(req, "text")
