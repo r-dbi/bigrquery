@@ -65,6 +65,8 @@ delete_dataset <- function(project, datasetId, deleteContents = FALSE) {
 #'
 #' @param project The project name, a string
 #' @param datasetId The datasetId to delete, a string
+#' @param description The dataset description, a string
+#' @param friendlyName The dataset's friendly name, a string
 #' @seealso Google API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}
 #' @family datasets
@@ -73,7 +75,7 @@ delete_dataset <- function(project, datasetId, deleteContents = FALSE) {
 #' \dontrun{
 #' insert_dataset("myproject", "new_dataset")
 #' }
-insert_dataset <- function(project, datasetId) {
+insert_dataset <- function(project, datasetId, description = NULL, friendlyName = NULL) {
   assert_that(is.string(project), is.string(datasetId))
 
   url <- sprintf("projects/%s/datasets", project)
@@ -82,7 +84,9 @@ insert_dataset <- function(project, datasetId) {
     datasetReference = list(
       projectId = project,
       datasetId = datasetId
-    )
+    ),
+    description = description,
+    friendlyName = friendlyName
   )
 
   bq_post(url, body)
