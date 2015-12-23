@@ -4,12 +4,12 @@
 \alias{update_dataset}
 \title{Updates an existing dataset in a project}
 \usage{
-update_dataset(project, datasetId, description = NULL, friendlyName = NULL)
+update_dataset(project, dataset, description = NULL, friendlyName = NULL)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{datasetId}{The datasetId to delete, a string}
+\item{dataset}{The dataset to update, a string}
 
 \item{description}{The dataset description, a string}
 

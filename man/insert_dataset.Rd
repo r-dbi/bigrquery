@@ -4,12 +4,12 @@
 \alias{insert_dataset}
 \title{Creates a new dataset in a project}
 \usage{
-insert_dataset(project, datasetId, description = NULL, friendlyName = NULL)
+insert_dataset(project, dataset, description = NULL, friendlyName = NULL)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{datasetId}{The datasetId to delete, a string}
+\item{dataset}{The name of the dataset to create, a string}
 
 \item{description}{The dataset description, a string}
 
@@ -25,7 +25,7 @@ insert_dataset("myproject", "new_dataset")
 }
 \seealso{
 Google API documentation:
-  \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}
+  \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
 
 Other datasets: \code{\link{delete_dataset}},
   \code{\link{get_dataset}}, \code{\link{list_datasets}},

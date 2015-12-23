@@ -4,12 +4,12 @@
 \alias{delete_dataset}
 \title{Deletes an existing dataset in a project}
 \usage{
-delete_dataset(project, datasetId, deleteContents = FALSE)
+delete_dataset(project, dataset, deleteContents = FALSE)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{datasetId}{The datasetId to delete, a string}
+\item{dataset}{The dataset to delete, a string}
 
 \item{deleteContents}{Whether to delete the tables if the dataset is not empty, a boolean}
 }
@@ -18,7 +18,7 @@ Deletes an existing dataset in a project
 }
 \examples{
 \dontrun{
-delete_dataset("publicdata", "shakespeare", TRUE)
+delete_dataset("publicdata", "shakespeare", deleteContents = TRUE)
 delete_dataset("myproject", "emptydataset")
 }
 }

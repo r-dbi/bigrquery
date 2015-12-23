@@ -23,7 +23,7 @@ list_datasets <- function(project) {
 #' Gets an existing dataset in a project
 #'
 #' @param project The project name, a string
-#' @param datasetId The datasetId to get, a string
+#' @param dataset The dataset to get, a string
 #' @return a character vector of dataset names
 #' @seealso Google API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}
@@ -33,17 +33,17 @@ list_datasets <- function(project) {
 #' \dontrun{
 #' get_dataset("publicdata", "shakespeare")
 #' }
-get_dataset <- function(project, datasetId) {
-  assert_that(is.string(project), is.string(datasetId))
+get_dataset <- function(project, dataset) {
+  assert_that(is.string(project), is.string(dataset))
 
-  url <- sprintf("projects/%s/datasets/%s", project, datasetId)
+  url <- sprintf("projects/%s/datasets/%s", project, dataset)
   bq_get(url)
 }
 
 #' Deletes an existing dataset in a project
 #'
 #' @param project The project name, a string
-#' @param datasetId The datasetId to delete, a string
+#' @param dataset The dataset to delete, a string
 #' @param deleteContents Whether to delete the tables if the dataset is not empty, a boolean
 #' @seealso Google API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}
@@ -51,39 +51,39 @@ get_dataset <- function(project, datasetId) {
 #' @export
 #' @examples
 #' \dontrun{
-#' delete_dataset("publicdata", "shakespeare", TRUE)
+#' delete_dataset("publicdata", "shakespeare", deleteContents = TRUE)
 #' delete_dataset("myproject", "emptydataset")
 #' }
-delete_dataset <- function(project, datasetId, deleteContents = FALSE) {
-  assert_that(is.string(project), is.string(datasetId))
+delete_dataset <- function(project, dataset, deleteContents = FALSE) {
+  assert_that(is.string(project), is.string(dataset))
 
-  url <- sprintf("projects/%s/datasets/%s", project, datasetId)
+  url <- sprintf("projects/%s/datasets/%s", project, dataset)
   bq_delete(url, query = list(deleteContents = deleteContents))
 }
 
 #' Creates a new dataset in a project
 #'
 #' @param project The project name, a string
-#' @param datasetId The datasetId to delete, a string
+#' @param dataset The name of the dataset to create, a string
 #' @param description The dataset description, a string
 #' @param friendlyName The dataset's friendly name, a string
 #' @seealso Google API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
 #' @family datasets
 #' @export
 #' @examples
 #' \dontrun{
 #' insert_dataset("myproject", "new_dataset")
 #' }
-insert_dataset <- function(project, datasetId, description = NULL, friendlyName = NULL) {
-  assert_that(is.string(project), is.string(datasetId))
+insert_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
+  assert_that(is.string(project), is.string(dataset))
 
   url <- sprintf("projects/%s/datasets", project)
 
   body = list(
     datasetReference = list(
       projectId = project,
-      datasetId = datasetId
+      datasetId = dataset
     ),
     description = description,
     friendlyName = friendlyName
@@ -95,7 +95,7 @@ insert_dataset <- function(project, datasetId, description = NULL, friendlyName 
 #' Updates an existing dataset in a project
 #'
 #' @param project The project name, a string
-#' @param datasetId The datasetId to delete, a string
+#' @param dataset The dataset to update, a string
 #' @param description The dataset description, a string
 #' @param friendlyName The dataset's friendly name, a string
 #' @seealso Google API documentation:
@@ -106,15 +106,15 @@ insert_dataset <- function(project, datasetId, description = NULL, friendlyName 
 #' \dontrun{
 #' update_dataset("myproject", "existing_dataset", "my description", "friendly name")
 #' }
-update_dataset <- function(project, datasetId, description = NULL, friendlyName = NULL) {
-  assert_that(is.string(project), is.string(datasetId))
+update_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
+  assert_that(is.string(project), is.string(dataset))
 
-  url <- sprintf("projects/%s/datasets/%s", project, datasetId)
+  url <- sprintf("projects/%s/datasets/%s", project, dataset)
 
   body = list(
     datasetReference = list(
       projectId = project,
-      datasetId = datasetId
+      datasetId = dataset
     ),
     description = description,
     friendlyName = friendlyName

@@ -4,12 +4,12 @@
 \alias{get_dataset}
 \title{Gets an existing dataset in a project}
 \usage{
-get_dataset(project, datasetId)
+get_dataset(project, dataset)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{datasetId}{The datasetId to get, a string}
+\item{dataset}{The dataset to get, a string}
 }
 \value{
 a character vector of dataset names
