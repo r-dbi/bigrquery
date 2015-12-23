@@ -43,7 +43,7 @@ bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) 
 }
 
 
-#' @importFrom httr http_status content parse_media
+#' @importFrom httr http_status content parse_media status_code
 process_request <- function(req) {
   # No content -> success
   if (req$status_code == 204) return(TRUE)
