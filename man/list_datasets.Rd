@@ -24,5 +24,9 @@ list_datasets("githubarchive")
 \seealso{
 Google API documentation:
   \url{https://developers.google.com/bigquery/docs/reference/v2/datasets/list}
+
+Other datasets: \code{\link{delete_dataset}},
+  \code{\link{get_dataset}}, \code{\link{insert_dataset}},
+  \code{\link{update_dataset}}
 }
 
