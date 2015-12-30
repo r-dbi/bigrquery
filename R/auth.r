@@ -54,3 +54,31 @@ reset_access_cred <- function() {
 get_sig <- function() {
   stop("Deprecated: use get_access_cred directly", call. = FALSE)
 }
+
+#' Uses a service token to fetch OAuth2.0 creds for use with BigQuery.
+#'
+#' @param token_file The absolute or relative path to the file containing the service token, a string
+#' @seealso Google API documentation:
+#'   \url{https://developers.google.com/identity/protocols/OAuth2ServiceAccount}
+#' @export
+set_service_token <- function(token_file) {
+
+  #' If the file doesn't exist, jsonlite::fromJSON will attempt to parse
+  #' the string literal, which throws a less-than-intuitive error to the
+  #' user of bigrquery::set_service_token
+  if (!file.exists(token_file)) {
+    stop("Invalid service token file; file does not exist")
+  }
+
+  #' This will throw an error if we don't have permissions to read the
+  #' file or if the file contains invalid JSON.
+  service_token <- jsonlite::fromJSON(token_file)
+
+  endpoint <- httr::oauth_endpoints("google")
+
+  scope <- "https://www.googleapis.com/auth/bigquery"
+
+  cred <- httr::oauth_service_token(endpoint, service_token, scope)
+
+  set_access_cred(cred)
+}
