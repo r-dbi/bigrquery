@@ -3,3 +3,4 @@
 ^\.httr-oauth$
 ^\.travis\.yml$
 ^cran-comments\.md$
+^LICENSE$
