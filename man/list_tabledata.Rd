@@ -3,6 +3,7 @@
 \name{list_tabledata}
 \alias{list_tabledata}
 \alias{list_tabledata_callback}
+\alias{list_tabledata_iter}
 \title{Retrieve data from a table.}
 \usage{
 list_tabledata(project, dataset, table, page_size = 10000,
@@ -12,6 +13,8 @@ list_tabledata(project, dataset, table, page_size = 10000,
 list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   quiet = getOption("bigquery.quiet"))
+
+list_tabledata_iter(project, dataset, table, callback, table_info = NULL)
 }
 \arguments{
 \item{project}{project containing this table}
@@ -38,8 +41,13 @@ current page of data}
 }
 \description{
 \code{list_tabledata} returns a single dataframe.
+
 \code{list_tabledata_callback} calls the supplied callback with each page
 of data.
+
+\code{list_tabledata_iter} returns a named list with components \code{next_}
+(a function that fetches rows) and \code{is_complete} (a function that checks
+if all rows have been fetched).
 }
 \examples{
 \dontrun{
