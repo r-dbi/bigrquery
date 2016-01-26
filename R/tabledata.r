@@ -108,26 +108,28 @@ list_tabledata_iter <- function(project, dataset, table, callback,
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
 
-  req <<- NULL
+  last_response <<- NULL
   rows_fetched <- 0L
 
   next_ <- function(n) {
     query <- list(maxResults = n)
-    query$pageToken <- req$pageToken
+    query$pageToken <- last_response$pageToken
 
-    # Record only page token and total number of rows to reduce memory consmption
-    req <- bq_get(url, query = query)
-    req <<- req[c("pageToken", "totalRows")]
+    response <- bq_get(url, query = query)
 
-    data <- extract_data(req$rows, schema)
+    data <- extract_data(response$rows, schema)
     if (!is.null(data)) {
       rows_fetched <<- rows_fetched + nrow(data)
     }
+
+    # Record only page token and total number of rows to reduce memory consumption
+    last_response <<- response[c("pageToken", "totalRows")]
+
     data
   }
 
   is_complete <- function() {
-    !is.null(req) && rows_fetched >= as.integer(req$totalRows)
+    !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
   list(next_ = next_, is_complete = is_complete)
