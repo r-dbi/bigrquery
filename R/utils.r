@@ -66,6 +66,19 @@ parse_dataset <- function(dataset, project_id = NULL) {
   list(project_id = project_id, dataset_id = dataset_id)
 }
 
+#' Format dataset and project ID as a BQ-style identifier
+#'
+#' @param dataset dataset name
+#' @param project_id project ID
+#' @return a character.
+#' @export
+format_dataset <- function(project_id, dataset) {
+  if (!is.null(project_id)) {
+    dataset <- paste0(project_id, ":", dataset)
+  }
+  dataset
+}
+
 #' Parse a BQ-style identifier into project/dataset/table IDs.
 #'
 #' @param table table name
@@ -86,4 +99,18 @@ parse_table <- function(table, project_id = NULL) {
     project_id <- second_split$left %||% project_id
   }
   list(project_id = project_id, dataset_id = dataset_id, table_id = table_id)
+}
+
+#' Format dataset, project and table ID as a BQ-style identifier
+#'
+#' @inheritParams format_dataset
+#' @param table table ID
+#' @return a character.
+#' @export
+format_table <- function(project_id, dataset, table) {
+  if (!is.null(project_id)) {
+    dataset <- paste0(project_id, ":", dataset)
+  }
+  table <- paste0(dataset, table)
+  table
 }
