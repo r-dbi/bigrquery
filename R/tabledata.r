@@ -99,8 +99,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
 #' if all rows have been fetched).
 #' @rdname list_tabledata
 #' @export
-list_tabledata_iter <- function(project, dataset, table, callback,
-                                table_info = NULL) {
+list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
 
   table_info <- table_info %||% get_table(project, dataset, table)
   schema <- table_info$schema
