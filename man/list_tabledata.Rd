@@ -14,7 +14,7 @@ list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   quiet = getOption("bigquery.quiet"))
 
-list_tabledata_iter(project, dataset, table, callback, table_info = NULL)
+list_tabledata_iter(project, dataset, table, table_info = NULL)
 }
 \arguments{
 \item{project}{project containing this table}
