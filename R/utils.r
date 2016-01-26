@@ -57,6 +57,7 @@ rsplit_one <- function(str, sep) {
 #' in \code{dataset}
 #' @return a list with \code{project_id} and \code{dataset_id} components
 #' (either of which may be \code{NULL}).
+#' @family identifier functions
 #' @export
 parse_dataset <- function(dataset, project_id = NULL) {
   assert_that(is.string(dataset), is.null(project_id) || is.string(project_id))
@@ -71,6 +72,7 @@ parse_dataset <- function(dataset, project_id = NULL) {
 #' @param dataset dataset name
 #' @param project_id project ID
 #' @return a character.
+#' @family identifier functions
 #' @export
 format_dataset <- function(project_id, dataset) {
   if (!is.null(project_id)) {
@@ -86,6 +88,7 @@ format_dataset <- function(project_id, dataset) {
 #' in \code{table}
 #' @return a list with \code{project_id}, \code{dataset_id}, and
 #' \code{table_id} components (any of which may be \code{NULL}).
+#' @family identifier functions
 #' @export
 parse_table <- function(table, project_id = NULL) {
   assert_that(is.string(table), is.null(project_id) || is.string(project_id))
@@ -106,6 +109,7 @@ parse_table <- function(table, project_id = NULL) {
 #' @inheritParams format_dataset
 #' @param table table ID
 #' @return a character.
+#' @family identifier functions
 #' @export
 format_table <- function(project_id, dataset, table) {
   if (!is.null(project_id)) {

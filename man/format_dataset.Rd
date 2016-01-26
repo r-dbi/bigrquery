@@ -17,4 +17,8 @@ a character.
 \description{
 Format dataset and project ID as a BQ-style identifier
 }
+\seealso{
+Other identifier functions: \code{\link{format_table}},
+  \code{\link{parse_dataset}}, \code{\link{parse_table}}
+}
 

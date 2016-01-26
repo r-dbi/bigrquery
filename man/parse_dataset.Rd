@@ -19,4 +19,8 @@ a list with \code{project_id} and \code{dataset_id} components
 \description{
 Parse a BQ-style identifier into project/dataset IDs.
 }
+\seealso{
+Other identifier functions: \code{\link{format_dataset}},
+  \code{\link{format_table}}, \code{\link{parse_table}}
+}
 
