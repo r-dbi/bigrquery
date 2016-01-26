@@ -69,9 +69,6 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   cur_page <- 0L
 
   while(cur_page < max_pages && !iter$is_complete()) {
-    if (iter$is_complete())
-      break
-
     if (!is_quiet()) {
       if (cur_page >= 1L) {
         cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
