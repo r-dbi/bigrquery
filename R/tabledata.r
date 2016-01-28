@@ -63,7 +63,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
 
   iter <- list_tabledata_iter(
-    project = project, dataset = dataset, table = table, callback = callback,
+    project = project, dataset = dataset, table = table,
     table_info = table_info)
 
   cur_page <- 0L
