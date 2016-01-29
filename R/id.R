@@ -76,6 +76,6 @@ format_table <- function(project_id, dataset, table) {
   if (!is.null(project_id)) {
     dataset <- paste0(project_id, ":", dataset)
   }
-  table <- paste0(dataset, table)
+  table <- paste0(dataset, ".", table)
   table
 }
