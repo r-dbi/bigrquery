@@ -8,7 +8,8 @@
 #' @family identifier functions
 #' @export
 parse_dataset <- function(dataset, project_id = NULL) {
-  assert_that(is.string(dataset), is.null(project_id) || is.string(project_id))
+  assert_that(is.string(dataset),
+              is.null(project_id) || is.string(project_id))
   first_split <- rsplit_one(dataset, ":")
   dataset_id <- first_split$right
   project_id <- first_split$left %||% project_id
