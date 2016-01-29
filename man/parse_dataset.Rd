@@ -2,7 +2,7 @@
 % Please edit documentation in R/id.R
 \name{parse_dataset}
 \alias{parse_dataset}
-\title{Parse a BQ-style identifier into project/dataset IDs.}
+\title{Parse a BQ-style identifier into project/dataset IDs}
 \usage{
 parse_dataset(dataset, project_id = NULL)
 }
@@ -17,7 +17,8 @@ a list with \code{project_id} and \code{dataset_id} components
 (either of which may be \code{NULL}).
 }
 \description{
-Parse a BQ-style identifier into project/dataset IDs.
+This function splits a dataset identifier (given as character) into its
+components.
 }
 \seealso{
 Other identifier functions: \code{\link{format_dataset}},

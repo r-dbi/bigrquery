@@ -15,7 +15,8 @@ format_dataset(project_id, dataset)
 a character.
 }
 \description{
-Format dataset and project ID as a BQ-style identifier
+This function composes a dataset identifier from its individual
+components.
 }
 \seealso{
 Other identifier functions: \code{\link{format_table}},

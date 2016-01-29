@@ -1,4 +1,7 @@
-#' Parse a BQ-style identifier into project/dataset IDs.
+#' Parse a BQ-style identifier into project/dataset IDs
+#'
+#' This function splits a dataset identifier (given as character) into its
+#' components.
 #'
 #' @param dataset dataset name
 #' @param project_id (optional) project ID to use if none is provided
@@ -18,6 +21,9 @@ parse_dataset <- function(dataset, project_id = NULL) {
 
 #' Format dataset and project ID as a BQ-style identifier
 #'
+#' This function composes a dataset identifier from its individual
+#' components.
+#'
 #' @param dataset dataset name
 #' @param project_id project ID
 #' @return a character.
@@ -30,7 +36,10 @@ format_dataset <- function(project_id, dataset) {
   dataset
 }
 
-#' Parse a BQ-style identifier into project/dataset/table IDs.
+#' Parse a BQ-style identifier into project/dataset/table IDs
+#'
+#' This function splits a table identifier (given as character) into its
+#' components.
 #'
 #' @param table table name
 #' @param project_id (optional) project ID to use if none is provided
@@ -54,6 +63,9 @@ parse_table <- function(table, project_id = NULL) {
 }
 
 #' Format dataset, project and table ID as a BQ-style identifier
+#'
+#' This function composes a table identifier from its individual
+#' components.
 #'
 #' @inheritParams format_dataset
 #' @param table table ID

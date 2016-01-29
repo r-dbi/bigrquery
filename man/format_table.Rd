@@ -17,7 +17,8 @@ format_table(project_id, dataset, table)
 a character.
 }
 \description{
-Format dataset, project and table ID as a BQ-style identifier
+This function composes a table identifier from its individual
+components.
 }
 \seealso{
 Other identifier functions: \code{\link{format_dataset}},
