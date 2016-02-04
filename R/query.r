@@ -33,7 +33,8 @@ query_exec <- function(query, project, destination_table = NULL,
 
   dest <- run_query_job(query = query, project = project,
                         destination_table = destination_table,
-                        default_dataset = default_dataset)
+                        default_dataset = default_dataset,
+                        write_disposition = write_disposition)
 
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
     page_size = page_size, max_pages = max_pages, warn = warn)
