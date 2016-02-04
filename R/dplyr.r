@@ -63,7 +63,7 @@ copy_to.src_bigquery <- function(dest, df, name = deparse(substitute(df)), ...) 
 #' @export
 #' @importFrom dplyr src_desc
 src_desc.src_bigquery <- function(x) {
-  paste0("bigquery [", format_dataset(x$con$project, x$con$dataset), "]")
+  paste0("bigquery [", x$con$project, ":", x$con$dataset, "]")
 }
 
 #' @export
@@ -160,7 +160,7 @@ BigQuery <- R6::R6Class("BigQuery",
 
     fetch = function(n = -1L) {
       job <- insert_query_job(self$sql, self$con$billing,
-        default_dataset = format_dataset(self$con$project, self$con$dataset))
+        default_dataset = paste0(self$con$project, ":", self$con$dataset))
       job <- wait_for(job)
 
       dest <- job$configuration$query$destinationTable
@@ -169,7 +169,7 @@ BigQuery <- R6::R6Class("BigQuery",
 
     fetch_paged = function(chunk_size = 1e4, callback) {
       job <- insert_query_job(self$sql, self$con$billing,
-        default_dataset = format_dataset(self$con$project, self$con$dataset))
+        default_dataset = paste0(self$con$project, ":", self$con$dataset))
       job <- wait_for(job)
 
       dest <- job$configuration$query$destinationTable

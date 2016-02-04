@@ -17,11 +17,6 @@ a list with \code{project_id}, \code{dataset_id}, and
 \code{table_id} components (any of which may be \code{NULL}).
 }
 \description{
-This function splits a table identifier (given as character) into its
-components.
-}
-\seealso{
-Other identifier functions: \code{\link{format_dataset}},
-  \code{\link{format_table}}, \code{\link{parse_dataset}}
+Parse a BQ-style identifier into project/dataset/table IDs.
 }
 

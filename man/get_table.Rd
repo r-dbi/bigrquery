@@ -30,7 +30,7 @@ get_table("githubarchive", "github", "timeline")
 API documentation:
  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
 
-Other tables: \code{\link{delete_table}},
+Other tables: \code{\link{delete_table}};
   \code{\link{list_tables}}
 }
 

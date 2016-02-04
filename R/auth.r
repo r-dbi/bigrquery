@@ -54,18 +54,3 @@ reset_access_cred <- function() {
 get_sig <- function() {
   stop("Deprecated: use get_access_cred directly", call. = FALSE)
 }
-
-# The service_token can be an absolute or relative filename, or JSON text
-set_service_token <- function(service_token) {
-
-  service_token <- jsonlite::fromJSON(service_token)
-
-  endpoint <- httr::oauth_endpoints("google")
-
-  scope <- "https://www.googleapis.com/auth/bigquery"
-
-  cred <- httr::oauth_service_token(endpoint, service_token, scope)
-
-  set_access_cred(cred)
-}
-

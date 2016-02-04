@@ -25,7 +25,7 @@ get_table("publicdata", "samples", "natality")
 API documentation:
  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}
 
-Other tables: \code{\link{get_table}},
+Other tables: \code{\link{get_table}};
   \code{\link{list_tables}}
 }
 
