@@ -32,7 +32,7 @@ finished and then retrieve the results, see \code{\link{query_exec}}
 API documentation for insert method:
   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 
-Other jobs: \code{\link{get_job}};
-  \code{\link{insert_upload_job}}; \code{\link{wait_for}}
+Other jobs: \code{\link{get_job}},
+  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
 

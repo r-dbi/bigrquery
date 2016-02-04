@@ -34,6 +34,15 @@ bq_post <- function(url, body, ..., query = NULL) {
   process_request(req)
 }
 
+#' @importFrom httr PUT add_headers config
+bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+  json <- jsonlite::toJSON(body)
+  req <- PUT(paste0(base_url, url), body = json, config(token = token),
+              add_headers("Content-Type" = "application/json"), ...,
+              query = prepare_bq_query(query))
+  process_request(req)
+}
+
 #' @importFrom httr POST add_headers config
 bq_upload <- function(url, parts, ..., query = NULL) {
   url <- paste0(upload_url, url)
@@ -43,12 +52,12 @@ bq_upload <- function(url, parts, ..., query = NULL) {
 }
 
 
-#' @importFrom httr http_status content parse_media
+#' @importFrom httr http_status content parse_media status_code
 process_request <- function(req) {
   # No content -> success
-  if (req$status_code == 204) return(TRUE)
+  if (status_code(req) == 204) return(TRUE)
 
-  if (http_status(req)$category == "success") {
+  if (status_code(req) >= 200 && status_code(req) < 300) {
     return(content(req, "parsed", "application/json"))
   }
 

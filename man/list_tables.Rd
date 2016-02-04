@@ -31,7 +31,7 @@ list_tables("publicdata", "samples", max_results = 2)
 API documentation:
   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
 
-Other tables: \code{\link{delete_table}};
+Other tables: \code{\link{delete_table}},
   \code{\link{get_table}}
 }
 

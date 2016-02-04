@@ -1,6 +1,6 @@
 # bigrquery
 
-[![Build Status](https://travis-ci.org/hadley/bigrquery.png?branch=master)](https://travis-ci.org/hadley/bigrquery)
+[![Build Status](https://travis-ci.org/rstats-db/bigrquery.svg?branch=master)](https://travis-ci.org/rstats-db/bigrquery)
 
 The bigrquery packages provides an R interface to
 [Google BigQuery](https://developers.google.com/bigquery/). It makes it easy
@@ -19,7 +19,7 @@ The newest development release can be installed from github:
 
 ```R
 # install.packages('devtools')
-devtools::install_github("hadley/bigrquery")
+devtools::install_github("rstats-db/bigrquery")
 ```
 
 ## Authentication
