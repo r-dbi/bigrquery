@@ -36,7 +36,7 @@ delete_table("193487687779", "houston", "mtcars")
 Google API documentation:
 \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 
-Other jobs: \code{\link{get_job}};
-  \code{\link{insert_query_job}}; \code{\link{wait_for}}
+Other jobs: \code{\link{get_job}},
+  \code{\link{insert_query_job}}, \code{\link{wait_for}}
 }
 

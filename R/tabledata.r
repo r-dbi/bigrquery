@@ -1,8 +1,6 @@
 #' Retrieve data from a table.
 #'
 #' \code{list_tabledata} returns a single dataframe.
-#' \code{list_tabledata_callback} calls the supplied callback with each page
-#' of data.
 #'
 #' @inheritParams get_table
 #' @param callback function called with single argument, the data from the
@@ -47,6 +45,9 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   do.call("rbind", rows)
 }
 
+#' @description
+#' \code{list_tabledata_callback} calls the supplied callback with each page
+#' of data.
 #' @rdname list_tabledata
 #' @export
 list_tabledata_callback <- function(project, dataset, table, callback,
@@ -61,48 +62,76 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   elapsed <- timer()
   is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
 
-  if (!is_quiet()) cat("Retrieving data")
+  iter <- list_tabledata_iter(
+    project = project, dataset = dataset, table = table,
+    table_info = table_info)
+
+  cur_page <- 0L
+
+  while(cur_page < max_pages && !iter$is_complete()) {
+    if (!is_quiet()) {
+      if (cur_page >= 1L) {
+        cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
+      } else {
+        cat("Retrieving data")
+      }
+    }
+
+    data <- iter$next_(page_size)
+    callback(data)
+
+    cur_page <- cur_page + 1
+  }
+
+  if (!is_quiet()) cat("\n")
+
+  if (isTRUE(warn) && !iter$is_complete()) {
+    warning("Only first ", max_pages, " pages of size ", page_size,
+            " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
+#' @description
+#' \code{list_tabledata_iter} returns a named list with components \code{next_}
+#' (a function that fetches rows) and \code{is_complete} (a function that checks
+#' if all rows have been fetched).
+#' @rdname list_tabledata
+#' @export
+list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
+
   table_info <- table_info %||% get_table(project, dataset, table)
   schema <- table_info$schema
 
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
-  cur_page <- 1
-  rows_fetched <- 0
 
-  req <- bq_get(url, query = list(maxResults = page_size))
-  data <- extract_data(req$rows, schema)
-  callback(data)
-  if (!is.null(data)) {
-    rows_fetched <- rows_fetched + nrow(data)
-  }
-  is_complete <- function(rows_fetched) rows_fetched >= as.integer(req$totalRows)
+  last_response <<- NULL
+  rows_fetched <- 0L
 
-  while(cur_page < max_pages && !is_complete(rows_fetched)) {
-    if (!is_quiet()) {
-      cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
-    }
+  next_ <- function(n) {
+    query <- list(maxResults = n)
+    query$pageToken <- last_response$pageToken
 
-    req <- bq_get(url, query = list(
-      pageToken = req$pageToken,
-      maxResults = page_size)
-    )
-    data <- extract_data(req$rows, schema)
-    callback(data)
+    response <- bq_get(url, query = query)
+
+    data <- extract_data(response$rows, schema)
     if (!is.null(data)) {
-      rows_fetched <- rows_fetched + nrow(data)
+      rows_fetched <<- rows_fetched + nrow(data)
     }
 
-    cur_page <- cur_page + 1
-  }
-  if (!is_quiet()) cat("\n")
+    # Record only page token and total number of rows to reduce memory consumption
+    last_response <<- response[c("pageToken", "totalRows")]
 
-  if (isTRUE(warn) && !is_complete(rows_fetched)) {
-    warning("Only first ", max_pages, " pages of size ", page_size,
-      " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE)
+    data
   }
 
-  invisible(TRUE)
+  is_complete <- function() {
+    !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
+  }
+
+  list(next_ = next_, is_complete = is_complete)
 }
 
 #Types can be loaded into R, record is not supported yet.
