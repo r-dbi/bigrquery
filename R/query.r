@@ -41,7 +41,7 @@ query_exec <- function(query, project, destination_table = NULL,
 
 # Submits a query job, waits for it, and returns information on the destination
 # table for further consumption by the list_tabledata* functions
-run_query_job <- function(query, project, destination_table, default_dataset) {
+run_query_job <- function(query, project, destination_table, default_dataset, write_disposition) {
   assert_that(is.string(query), is.string(project))
 
   job <- insert_query_job(query, project, destination_table = destination_table,
