@@ -6,58 +6,49 @@ prepare_bq_query <- function(query) {
   if (!nzchar(api_key)) {
     return(query)
   }
+  api_key <- jsonlite::fromJSON(api_key)
+  api_key <- get_access_cred(api_key)$credentials$access_token
   query <- query %||% list()
-  query[["key"]] <- query[["key"]] %||% api_key
+  query[["access_token"]] <- query[["access_token"]] %||% api_key
   query
 }
 
 #' @importFrom httr GET config
-bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- GET(paste0(base_url, url), config(token = token), ...,
-             query = prepare_bq_query(query))
+bq_get <- function(url, ..., query = NULL) {
+  req <- GET(paste0(base_url, url), ..., query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr DELETE config
-bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- DELETE(paste0(base_url, url), config(token = token), ...,
-                query = prepare_bq_query(query))
+bq_delete <- function(url, ..., query = NULL) {
+  req <- DELETE(paste0(base_url, url), ..., query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+bq_post <- function(url, body, ..., query = NULL) {
   json <- jsonlite::toJSON(body)
-  req <- POST(paste0(base_url, url), body = json, config(token = token),
-              add_headers("Content-Type" = "application/json"), ...,
-              query = prepare_bq_query(query))
-  process_request(req)
-}
-
-#' @importFrom httr PUT add_headers config
-bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
-  json <- jsonlite::toJSON(body)
-  req <- PUT(paste0(base_url, url), body = json, config(token = token),
+  req <- POST(paste0(base_url, url), body = json,
               add_headers("Content-Type" = "application/json"), ...,
               query = prepare_bq_query(query))
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) {
+bq_upload <- function(url, parts, ..., query = NULL) {
   url <- paste0(upload_url, url)
-  req <- POST_multipart_related(url, parts = parts, config(token = token), ...,
+  req <- POST_multipart_related(url, parts = parts, ...,
                                 query = prepare_bq_query(query))
   process_request(req)
 }
 
 
-#' @importFrom httr http_status content parse_media status_code
+#' @importFrom httr http_status content parse_media
 process_request <- function(req) {
   # No content -> success
-  if (status_code(req) == 204) return(TRUE)
+  if (req$status_code == 204) return(TRUE)
 
-  if (status_code(req) >= 200 && status_code(req) < 300) {
+  if (http_status(req)$category == "success") {
     return(content(req, "parsed", "application/json"))
   }
 
@@ -76,6 +67,7 @@ process_request <- function(req) {
 
 # http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
 POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
+                                   query,
                                    boundary = random_boundary(),
                                    handle = NULL) {
   if (is.null(config)) config <- config()
@@ -89,7 +81,7 @@ POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
   config <- c(config, add_headers("Content-Type" = type))
 
   POST(url, config = config, body = body,
-    query = list(uploadType = "multipart"), ..., handle = handle)
+    query = c(query, uploadType = "multipart"), ..., handle = handle)
 }
 
 part <- function(headers, body) {
@@ -108,4 +100,3 @@ random_boundary <- function() {
   #  ":", "?")
   paste0(sample(valid, 50, replace = TRUE), collapse = "")
 }
-

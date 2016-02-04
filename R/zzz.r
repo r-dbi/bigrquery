@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) {
+.onAttach <- function(libname, pkgname) {
   op <- options()
   defaults <- list(
     bigquery.quiet = NA

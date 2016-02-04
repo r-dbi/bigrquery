@@ -1,4 +1,4 @@
-#' @importFrom httr oauth_endpoint oauth_app oauth2.0_token
+#' @importFrom httr oauth_endpoint oauth_app oauth_service_token
 google <- oauth_endpoint(NULL, "auth", "token",
   base_url = "https://accounts.google.com/o/oauth2")
 bigqr <- oauth_app("google",
@@ -24,17 +24,17 @@ bq_env <- new.env(parent = emptyenv())
 #' @export
 #' @param value new access credentials, as returned by
 #'  \code{\link[httr]{oauth2.0_token}}
-get_access_cred <- function() {
-  cred <- bq_env$access_cred
-  if (is.null(cred)) {
-    cred <- oauth2.0_token(google, bigqr,
-      scope = c(
-          "https://www.googleapis.com/auth/bigquery",
-          "https://www.googleapis.com/auth/cloud-platform"))
+get_access_cred <- function(client_secrets) {
 
-    # Stop if unsuccessful
-    set_access_cred(cred)
-  }
+  cred <- oauth_service_token(
+    google, client_secrets,
+    scope = paste(
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/cloud-platform")
+  )
+
+  # Stop if unsuccessful
+  set_access_cred(cred)
 
   cred
 }
@@ -54,18 +54,3 @@ reset_access_cred <- function() {
 get_sig <- function() {
   stop("Deprecated: use get_access_cred directly", call. = FALSE)
 }
-
-# The service_token can be an absolute or relative filename, or JSON text
-set_service_token <- function(service_token) {
-
-  service_token <- jsonlite::fromJSON(service_token)
-
-  endpoint <- httr::oauth_endpoints("google")
-
-  scope <- "https://www.googleapis.com/auth/bigquery"
-
-  cred <- httr::oauth_service_token(endpoint, service_token, scope)
-
-  set_access_cred(cred)
-}
-

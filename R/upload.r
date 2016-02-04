@@ -20,7 +20,7 @@
 #' list_tables("193487687779", "houston")
 #' delete_table("193487687779", "houston", "mtcars")
 #' }
-insert_upload_job <- function(project, dataset, table, values, billing = project) {
+insert_upload_job <- function(project, dataset, table, values, billing = project, write_disposition = NULL) {
   assert_that(is.string(project), is.string(dataset), is.string(table),
     is.data.frame(values), is.string(billing))
 
@@ -40,6 +40,7 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
       )
     )
   )
+  config$configuration$load$writeDisposition <- if(is.null(write_disposition)) "WRITE_APPEND" else write_disposition
   config_part <- part(c("Content-type" = "application/json; charset=UTF-8"),
     jsonlite::toJSON(config, pretty = TRUE))
 
