@@ -144,7 +144,11 @@ converter <- list(
 )
 
 extract_data <- function(rows, schema) {
-  if (is.null(rows)) return(NULL)
+  if (is.null(rows)) {
+    # Corner case: Zero rows
+    data <- extract_data(list(NULL), schema)
+    return(data[integer(), , drop = FALSE])
+  }
 
   types <- tolower(vapply(schema$fields, function(x) x$type, character(1)))
 
