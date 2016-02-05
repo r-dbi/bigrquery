@@ -1,5 +1,7 @@
 # Version 0.1.0.9000
 
+* A data frame with full schema information is returned for zero-row results. (#88, @krlmlr)
+
 * New `format_dataset()` and `format_table()`. (#81, @krlmlr)
 
 * New `list_tabledata_iter()` that allows fetching a table in chunks of varying size. (#77, @krlmlr)
