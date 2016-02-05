@@ -45,6 +45,8 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   do.call("rbind", rows)
 }
 
+DEFAULT_PAGE_SIZE <- 1e4
+
 #' @description
 #' \code{list_tabledata_callback} calls the supplied callback with each page
 #' of data.
@@ -52,7 +54,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
 #' @export
 list_tabledata_callback <- function(project, dataset, table, callback,
                                     table_info = NULL,
-                                    page_size = 1e4, max_pages = 10,
+                                    page_size = DEFAULT_PAGE_SIZE, max_pages = 10,
                                     warn = TRUE,
                                     quiet = getOption("bigquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
@@ -131,7 +133,16 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
-  list(next_ = next_, is_complete = is_complete)
+  all <- function(page_size = DEFAULT_PAGE_SIZE) {
+    ret <- list()
+    while (!is_complete()) {
+      chunk <- next_(page_size)
+      ret <- c(ret, list(chunk))
+    }
+    do.call(rbind, ret)
+  }
+
+  list(next_ = next_, all = all, is_complete = is_complete)
 }
 
 #Types can be loaded into R, record is not supported yet.
