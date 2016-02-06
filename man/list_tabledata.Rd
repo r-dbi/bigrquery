@@ -11,7 +11,7 @@ list_tabledata(project, dataset, table, page_size = 10000,
   quiet = getOption("bigquery.quiet"))
 
 list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
-  page_size = DEFAULT_PAGE_SIZE, max_pages = 10, warn = TRUE,
+  page_size = default_page_size(), max_pages = 10, warn = TRUE,
   quiet = getOption("bigquery.quiet"))
 
 list_tabledata_iter(project, dataset, table, table_info = NULL)

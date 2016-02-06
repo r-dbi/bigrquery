@@ -45,7 +45,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   do.call("rbind", rows)
 }
 
-DEFAULT_PAGE_SIZE <- 1e4
+default_page_size() <- function() 1e4
 
 #' @description
 #' \code{list_tabledata_callback} calls the supplied callback with each page
@@ -54,7 +54,8 @@ DEFAULT_PAGE_SIZE <- 1e4
 #' @export
 list_tabledata_callback <- function(project, dataset, table, callback,
                                     table_info = NULL,
-                                    page_size = DEFAULT_PAGE_SIZE, max_pages = 10,
+                                    page_size = default_page_size(),
+                                    max_pages = 10,
                                     warn = TRUE,
                                     quiet = getOption("bigquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
@@ -133,7 +134,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
-  all <- function(page_size = DEFAULT_PAGE_SIZE) {
+  all <- function(page_size = default_page_size()) {
     ret <- list()
     while (!is_complete()) {
       chunk <- next_(page_size)
