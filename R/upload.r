@@ -7,6 +7,7 @@
 #' @param table name of table to insert values into
 #' @param values data frame of data to upload
 #' @param billing project ID to use for billing
+#' @inheritParams copy_table
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
@@ -20,7 +21,10 @@
 #' list_tables("193487687779", "houston")
 #' delete_table("193487687779", "houston", "mtcars")
 #' }
-insert_upload_job <- function(project, dataset, table, values, billing = project) {
+insert_upload_job <- function(project, dataset, table, values,
+                              billing = project,
+                              create_disposition = "CREATE_IF_NEEDED",
+                              write_disposition = "WRITE_APPEND") {
   assert_that(is.string(project), is.string(dataset), is.string(table),
     is.data.frame(values), is.string(billing))
 
@@ -36,7 +40,9 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
           projectId = project,
           datasetId = dataset,
           tableId = table
-        )
+        ),
+        createDisposition = create_disposition,
+        writeDisposition = write_disposition
       )
     )
   )
