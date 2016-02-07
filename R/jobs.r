@@ -89,7 +89,7 @@ get_job <- function(project, job) {
 #' @param pause amount of time to wait between status requests
 #' @family jobs
 #' @export
-wait_for <- function(job, quiet = getOption("bigquery.quiet"), pause = 0.5) {
+wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   elapsed <- timer()
   is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
 
