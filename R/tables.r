@@ -100,12 +100,14 @@ merge_table_references <- function(partial, complete) {
 #' @param project project ID to use for the copy job. defaults to the project of
 #'   the destination table.
 #' @param create_disposition behavior for table creation if the destination
-#'   already exists. defaults to \code{CREATE_IF_NEEDED}; see
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}
+#'   already exists. defaults to \code{"CREATE_IF_NEEDED"},
+#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data if the destination already
-#'   exists. defaults to \code{WRITE_EMPTY}; see
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}
+#'   exists. defaults to \code{"WRITE_EMPTY"}, other possible values are
+#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
 #'   for more information
 #' @seealso API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
