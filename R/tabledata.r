@@ -107,7 +107,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
 
-  last_response <<- NULL
+  last_response <- NULL
   rows_fetched <- 0L
 
   next_ <- function(n) {
