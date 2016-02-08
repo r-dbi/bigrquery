@@ -4,7 +4,9 @@
 \alias{insert_upload_job}
 \title{Upload data.}
 \usage{
-insert_upload_job(project, dataset, table, values, billing = project)
+insert_upload_job(project, dataset, table, values, billing = project,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_APPEND")
 }
 \arguments{
 \item{project}{project containing this table}
@@ -16,6 +18,18 @@ insert_upload_job(project, dataset, table, values, billing = project)
 \item{values}{data frame of data to upload}
 
 \item{billing}{project ID to use for billing}
+
+\item{create_disposition}{behavior for table creation if the destination
+already exists. defaults to \code{"CREATE_IF_NEEDED"},
+the only other supported value is \code{"CREATE_NEVER"}; see
+\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+for more information}
+
+\item{write_disposition}{behavior for writing data if the destination already
+exists. defaults to \code{"WRITE_APPEND"}, other possible values are
+\code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
+\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+for more information}
 }
 \description{
 This sends all of the data inline in the HTTP request so is only suitable
