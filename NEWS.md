@@ -2,6 +2,8 @@
 
 * A data frame with full schema information is returned for zero-row results. (#88, @krlmlr)
 
+* New arguments `create_disposition` and `write_disposition` to `insert_upload_job()`. (#92, @krlmlr)
+
 * Renamed option `bigquery.quiet` to `bigrquery.quiet`. (#89, @krlmlr)
 
 * New `format_dataset()` and `format_table()`. (#81, @krlmlr)
