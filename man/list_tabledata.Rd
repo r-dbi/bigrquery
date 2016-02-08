@@ -8,11 +8,11 @@
 \usage{
 list_tabledata(project, dataset, table, page_size = 10000,
   table_info = NULL, max_pages = 10, warn = TRUE,
-  quiet = getOption("bigquery.quiet"))
+  quiet = getOption("bigrquery.quiet"))
 
 list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
   page_size = default_page_size(), max_pages = 10, warn = TRUE,
-  quiet = getOption("bigquery.quiet"))
+  quiet = getOption("bigrquery.quiet"))
 
 list_tabledata_iter(project, dataset, table, table_info = NULL)
 }
