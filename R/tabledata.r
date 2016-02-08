@@ -25,7 +25,7 @@
 #' }
 list_tabledata <- function(project, dataset, table, page_size = 1e4,
                            table_info = NULL, max_pages = 10, warn = TRUE,
-                           quiet = getOption("bigquery.quiet")) {
+                           quiet = getOption("bigrquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
@@ -54,7 +54,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
                                     table_info = NULL,
                                     page_size = 1e4, max_pages = 10,
                                     warn = TRUE,
-                                    quiet = getOption("bigquery.quiet")) {
+                                    quiet = getOption("bigrquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.function(callback))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
@@ -107,7 +107,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
     table)
 
-  last_response <<- NULL
+  last_response <- NULL
   rows_fetched <- 0L
 
   next_ <- function(n) {
