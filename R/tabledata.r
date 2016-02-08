@@ -146,7 +146,9 @@ converter <- list(
 extract_data <- function(rows, schema) {
   if (is.null(rows)) {
     # Corner case: Zero rows
-    data <- extract_data(list(NULL), schema)
+    dummy_rows <- list(list(f = rep(list(NULL), length(schema$fields))))
+
+    data <- extract_data(dummy_rows, schema)
     return(data[integer(), , drop = FALSE])
   }
 
