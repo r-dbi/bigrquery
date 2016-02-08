@@ -45,7 +45,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   do.call("rbind", rows)
 }
 
-default_page_size() <- function() 1e4
+default_page_size <- function() 1e4
 
 #' @description
 #' \code{list_tabledata_callback} calls the supplied callback with each page
