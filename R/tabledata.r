@@ -134,6 +134,10 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
+  get_rows_fetched <- function() {
+    rows_fetched
+  }
+
   all <- function(page_size = default_page_size()) {
     ret <- list()
     while (!is_complete()) {
@@ -143,7 +147,8 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     do.call(rbind, ret)
   }
 
-  list(next_ = next_, all = all, is_complete = is_complete)
+  list(next_ = next_, is_complete = is_complete,
+       get_rows_fetched = get_rows_fetched, all = all)
 }
 
 #Types can be loaded into R, record is not supported yet.
