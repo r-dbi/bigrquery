@@ -1,5 +1,9 @@
 # Version 0.1.0.9000
 
+* New `exists_table()`. (#91, @krlmlr)
+
+* New arguments `create_disposition` and `write_disposition` to `insert_upload_job()`. (#92, @krlmlr)
+
 * Renamed option `bigquery.quiet` to `bigrquery.quiet`. (#89, @krlmlr)
 
 * New `format_dataset()` and `format_table()`. (#81, @krlmlr)
