@@ -47,11 +47,27 @@ list_tables <- function(project, dataset, max_results = NULL) {
 #' get_table("publicdata", "samples", "natality")
 #' get_table("githubarchive", "github", "timeline")
 #' }
+#'
+#' @description \code{get_table} returns a table's metadata as a nested list.
+#'   In addition to a regular error, the condition \code{bigrquery_notFound}
+#'   (which can be handled via \code{\link[base]{tryCatch}})
+#'   is raised if the table could not be found.
 get_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
 
   url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
   bq_get(url)
+}
+
+#' @rdname get_table
+#' @export
+#' @description \code{exists_table} merely checks if a table exists, and returns
+#'   either \code{TRUE} or \code{FALSE}.
+exists_table <- function(project, dataset, table) {
+  tryCatch(
+    !is.null(get_table(project = project, dataset = dataset, table = table)),
+    bigrquery_notFound = function(e) FALSE
+  )
 }
 
 #' Delete a table.
