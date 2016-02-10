@@ -72,7 +72,7 @@ schema_fields <- function(data) {
 
 data_type <- function(x) {
   if (is.factor(x)) return("STRING")
-  if (inherits(x, "POSIXct")) return("TIMESTAMP")
+  if (inherits(x, "POSIXt")) return("TIMESTAMP")
   if (inherits(x, "Date")) return("TIMESTAMP")
 
   switch(typeof(x),
