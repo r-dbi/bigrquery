@@ -71,15 +71,16 @@ schema_fields <- function(data) {
 }
 
 data_type <- function(x) {
-  switch(class(x)[1],
-    character = "STRING",
-    logical = "BOOLEAN",
-    numeric = "FLOAT",
-    integer = "INTEGER",
-    factor = "STRING",
-    Date = "TIMESTAMP",
-    POSIXct = "TIMESTAMP",
-    stop("Unknown class ", paste0(class(x), collapse = "/"))
+  if (is.factor(x)) return("STRING")
+  if (inherits(x, "POSIXt")) return("TIMESTAMP")
+  if (inherits(x, "Date")) return("TIMESTAMP")
+
+  switch(typeof(x),
+         character = "STRING",
+         logical = "BOOLEAN",
+         double = "FLOAT",
+         integer = "INTEGER",
+         stop("Unsupported type: ", typeof(x), call. = FALSE)
   )
 }
 
