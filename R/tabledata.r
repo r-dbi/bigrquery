@@ -94,10 +94,6 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   invisible(TRUE)
 }
 
-#' @description
-#' \code{list_tabledata_iter} returns a named list with components \code{next_}
-#' (a function that fetches rows) and \code{is_complete} (a function that checks
-#' if all rows have been fetched).
 #' @rdname list_tabledata
 #' @export
 list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
@@ -157,6 +153,12 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     rows_fetched
   }
 
+  #' @description
+  #' \code{list_tabledata_iter} returns a named list with functions \code{next_}
+  #' (fetches one chunk of rows), \code{next_paged} (fetches arbitrarily many
+  #' rows using a specified page size), \code{is_complete} (checks if all rows
+  #' have been fetched), \code{get_schema} (returns the schema of the table),
+  #' and \code{get_rows_fetched} (returns the number of rows already fetched).
   list(next_ = next_, next_paged = next_paged, is_complete = is_complete,
        get_schema = get_schema, get_rows_fetched = get_rows_fetched)
 }
