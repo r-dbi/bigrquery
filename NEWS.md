@@ -1,5 +1,7 @@
 # Version 0.1.0.9000
 
+* Computation of the SQL data type that corresponds to a given R object is now more robust against unknown classes. (#95, @krlmlr)
+
 * A data frame with full schema information is returned for zero-row results. (#88, @krlmlr)
 
 * New `exists_table()`. (#91, @krlmlr)
