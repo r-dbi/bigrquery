@@ -105,7 +105,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     table)
 
   last_response <- NULL
-  rows_fetched <- 0L
+  rows_fetched <- 0
 
   next_ <- function(n) {
     query <- list(maxResults = n)
@@ -123,7 +123,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   }
 
   is_complete <- function() {
-    !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
+    !is.null(last_response) && rows_fetched >= as.numeric(last_response$totalRows)
   }
 
   next_paged <- function(n, page_size = getOption("bigrquery.page.size")) {
