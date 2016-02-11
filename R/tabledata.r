@@ -134,13 +134,17 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     target_rows_fetched <- rows_fetched + n
 
     ret <- list()
-    while (!is_complete() && rows_fetched < target_rows_fetched) {
+    repeat {
       next_n <- min(page_size, target_rows_fetched - rows_fetched)
       chunk <- next_(next_n)
 
       # This has O(n^2) aggregated run time, but fetching large data from
       # BigQuery will be slow for other reasons
       ret <- c(ret, list(chunk))
+
+      if (is_complete() || rows_fetched >= target_rows_fetched) {
+        break
+      }
     }
     do.call(rbind, ret)
   }
