@@ -118,9 +118,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     response <- bq_get(url, query = query)
 
     data <- extract_data(response$rows, schema)
-    if (!is.null(data)) {
-      rows_fetched <<- rows_fetched + nrow(data)
-    }
+    rows_fetched <<- rows_fetched + nrow(data)
 
     # Record only page token and total number of rows to reduce memory consumption
     last_response <<- response[c("pageToken", "totalRows")]
