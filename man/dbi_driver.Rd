@@ -7,12 +7,12 @@
 dbi_driver()
 }
 \description{
-TBD.
+Creates a BigQuery DBI driver for use in \code{\link[DBI]{dbConnect}}.
 }
 \examples{
 \dontrun{
 #' library(DBI)
-bigrquery::dbi_driver()
+dbConnect(dbi_driver(), database = "mydb", project = "myproject")
 }
 }
 

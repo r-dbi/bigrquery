@@ -6,14 +6,14 @@ NULL
 
 #' BigQuery DBI driver
 #'
-#' TBD.
+#' Creates a BigQuery DBI driver for use in \code{\link[DBI]{dbConnect}}.
 #'
 #' @export
 #' @import methods DBI
 #' @examples
 #' \dontrun{
 #' #' library(DBI)
-#' bigrquery::dbi_driver()
+#' dbConnect(dbi_driver(), database = "mydb", project = "myproject")
 #' }
 dbi_driver <- function() {
   new("BigQueryDriver")
