@@ -112,7 +112,7 @@ setMethod(
 #' @export
 setMethod(
   "dbWriteTable", c("BigQueryConnection", "character", "data.frame"),
-  function(conn, name, value, overwrite =FALSE, append = FALSE, ...,
+  function(conn, name, value, overwrite = FALSE, append = FALSE, ...,
            row.names = NA) {
     if (append) {
       create_disposition <- "CREATE_NEVER"
