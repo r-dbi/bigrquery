@@ -53,17 +53,14 @@ withr::with_options(
     res <- DBItest::test_getting_started(c(
       "package_name" # Won't change package name for this
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_driver(c(
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_connection(c(
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_result(c(
       "^command_query$", # Command queries not supported
@@ -76,7 +73,6 @@ withr::with_options(
       "^data_time.*", # Requires modification in DBItest due to nonstandard syntax
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_sql(c(
       "^temporary_table$", # Temporary tables not supported
@@ -87,7 +83,6 @@ withr::with_options(
       "^roundtrip_timestamp$", # #98
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_meta(c(
       "get_info_result", # rstats-db/DBI#55
@@ -95,13 +90,11 @@ withr::with_options(
       "^bind_.*", # Later
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
     res <- DBItest::test_compliance(c(
       "read_only", # No read_only mode
       NULL
     ))
-    dput(glob2rx(names(res))[res])
 
   }
 ) # withr::with_options(
