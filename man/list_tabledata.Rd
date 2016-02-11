@@ -45,9 +45,11 @@ current page of data}
 \code{list_tabledata_callback} calls the supplied callback with each page
 of data.
 
-\code{list_tabledata_iter} returns a named list with components \code{next_}
-(a function that fetches rows) and \code{is_complete} (a function that checks
-if all rows have been fetched).
+\code{list_tabledata_iter} returns a named list with functions \code{next_}
+(fetches one chunk of rows), \code{next_paged} (fetches arbitrarily many
+rows using a specified page size), \code{is_complete} (checks if all rows
+have been fetched), \code{get_schema} (returns the schema of the table),
+and \code{get_rows_fetched} (returns the number of rows already fetched).
 }
 \examples{
 \dontrun{
