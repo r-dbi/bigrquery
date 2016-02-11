@@ -64,11 +64,21 @@ process_request <- function(req) {
   type <- parse_media(req$headers$`Content-type`)
   if (type$complete == "application/json") {
     out <- content(req, "parsed", "application/json")
-    stop(out$err$message, call. = FALSE)
+    signal_reason(out$error$errors[[1L]]$reason, out$error$message)
   } else {
     out <- content(req, "text")
     stop("HTTP error [", req$status, "] ", out, call. = FALSE)
   }
+}
+
+signal_reason <- function(reason, message) {
+  if (!is.null(reason)) {
+    cl <- c(paste0("bigrquery_", reason), "error", "condition")
+    cond <- structure(list(message = message), class = cl)
+    signalCondition(cond)
+  }
+
+  stop(message, call. = FALSE)
 }
 
 # Multipart/related ------------------------------------------------------------

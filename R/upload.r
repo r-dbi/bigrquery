@@ -7,6 +7,16 @@
 #' @param table name of table to insert values into
 #' @param values data frame of data to upload
 #' @param billing project ID to use for billing
+#' @param create_disposition behavior for table creation if the destination
+#'   already exists. defaults to \code{"CREATE_IF_NEEDED"},
+#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+#'   for more information
+#' @param write_disposition behavior for writing data if the destination already
+#'   exists. defaults to \code{"WRITE_APPEND"}, other possible values are
+#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+#'   for more information
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
@@ -20,7 +30,10 @@
 #' list_tables("193487687779", "houston")
 #' delete_table("193487687779", "houston", "mtcars")
 #' }
-insert_upload_job <- function(project, dataset, table, values, billing = project) {
+insert_upload_job <- function(project, dataset, table, values,
+                              billing = project,
+                              create_disposition = "CREATE_IF_NEEDED",
+                              write_disposition = "WRITE_APPEND") {
   assert_that(is.string(project), is.string(dataset), is.string(table),
     is.data.frame(values), is.string(billing))
 
@@ -36,7 +49,9 @@ insert_upload_job <- function(project, dataset, table, values, billing = project
           projectId = project,
           datasetId = dataset,
           tableId = table
-        )
+        ),
+        createDisposition = create_disposition,
+        writeDisposition = write_disposition
       )
     )
   )
@@ -56,15 +71,16 @@ schema_fields <- function(data) {
 }
 
 data_type <- function(x) {
-  switch(class(x)[1],
-    character = "STRING",
-    logical = "BOOLEAN",
-    numeric = "FLOAT",
-    integer = "INTEGER",
-    factor = "STRING",
-    Date = "TIMESTAMP",
-    POSIXct = "TIMESTAMP",
-    stop("Unknown class ", paste0(class(x), collapse = "/"))
+  if (is.factor(x)) return("STRING")
+  if (inherits(x, "POSIXt")) return("TIMESTAMP")
+  if (inherits(x, "Date")) return("TIMESTAMP")
+
+  switch(typeof(x),
+         character = "STRING",
+         logical = "BOOLEAN",
+         double = "FLOAT",
+         integer = "INTEGER",
+         stop("Unsupported type: ", typeof(x), call. = FALSE)
   )
 }
 
