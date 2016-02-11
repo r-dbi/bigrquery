@@ -132,10 +132,13 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
-  all <- function(page_size = getOption("bigrquery.page.size")) {
+  next_paged <- function(n, page_size = getOption("bigrquery.page.size")) {
+    target_rows_fetched <- rows_fetched + n
+
     ret <- list()
-    while (!is_complete()) {
-      chunk <- next_(page_size)
+    while (!is_complete() && rows_fetched < target_rows_fetched) {
+      next_n <- min(page_size, target_rows_fetched - rows_fetched)
+      chunk <- next_(next_n)
 
       # This has O(n^2) aggregated run time, but fetching large data from
       # BigQuery will be slow for other reasons
@@ -152,7 +155,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     rows_fetched
   }
 
-  list(next_ = next_, is_complete = is_complete, all = all,
+  list(next_ = next_, next_paged = next_paged, is_complete = is_complete,
        get_schema = get_schema, get_rows_fetched = get_rows_fetched)
 }
 
