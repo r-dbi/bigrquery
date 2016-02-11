@@ -45,8 +45,6 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
   do.call("rbind", rows)
 }
 
-default_page_size <- function() 1e4
-
 #' @description
 #' \code{list_tabledata_callback} calls the supplied callback with each page
 #' of data.
@@ -54,7 +52,7 @@ default_page_size <- function() 1e4
 #' @export
 list_tabledata_callback <- function(project, dataset, table, callback,
                                     table_info = NULL,
-                                    page_size = default_page_size(),
+                                    page_size = getOption("bigrquery.page.size"),
                                     max_pages = 10,
                                     warn = TRUE,
                                     quiet = getOption("bigrquery.quiet")) {
@@ -134,10 +132,13 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
   }
 
-  all <- function(page_size = default_page_size()) {
+  all <- function(page_size = getOption("bigrquery.page.size")) {
     ret <- list()
     while (!is_complete()) {
       chunk <- next_(page_size)
+
+      # This has O(n^2) aggregated run time, but fetching large data from
+      # BigQuery will be slow for other reasons
       ret <- c(ret, list(chunk))
     }
     do.call(rbind, ret)
