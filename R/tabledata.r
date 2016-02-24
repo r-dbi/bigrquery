@@ -52,7 +52,8 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
 #' @export
 list_tabledata_callback <- function(project, dataset, table, callback,
                                     table_info = NULL,
-                                    page_size = 1e4, max_pages = 10,
+                                    page_size = getOption("bigrquery.page.size"),
+                                    max_pages = 10,
                                     warn = TRUE,
                                     quiet = getOption("bigrquery.quiet")) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
@@ -93,10 +94,6 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   invisible(TRUE)
 }
 
-#' @description
-#' \code{list_tabledata_iter} returns a named list with components \code{next_}
-#' (a function that fetches rows) and \code{is_complete} (a function that checks
-#' if all rows have been fetched).
 #' @rdname list_tabledata
 #' @export
 list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
@@ -108,7 +105,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     table)
 
   last_response <- NULL
-  rows_fetched <- 0L
+  rows_fetched <- 0
 
   next_ <- function(n) {
     query <- list(maxResults = n)
@@ -117,9 +114,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     response <- bq_get(url, query = query)
 
     data <- extract_data(response$rows, schema)
-    if (!is.null(data)) {
-      rows_fetched <<- rows_fetched + nrow(data)
-    }
+    rows_fetched <<- rows_fetched + nrow(data)
 
     # Record only page token and total number of rows to reduce memory consumption
     last_response <<- response[c("pageToken", "totalRows")]
@@ -128,10 +123,44 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   }
 
   is_complete <- function() {
-    !is.null(last_response) && rows_fetched >= as.integer(last_response$totalRows)
+    !is.null(last_response) && rows_fetched >= as.numeric(last_response$totalRows)
   }
 
-  list(next_ = next_, is_complete = is_complete)
+  next_paged <- function(n, page_size = getOption("bigrquery.page.size")) {
+    target_rows_fetched <- rows_fetched + n
+
+    ret <- list()
+    repeat {
+      next_n <- min(page_size, target_rows_fetched - rows_fetched)
+      chunk <- next_(next_n)
+
+      # This has O(n^2) aggregated run time, but fetching large data from
+      # BigQuery will be slow for other reasons
+      ret <- c(ret, list(chunk))
+
+      if (is_complete() || rows_fetched >= target_rows_fetched) {
+        break
+      }
+    }
+    do.call(rbind, ret)
+  }
+
+  get_schema <- function() {
+    schema
+  }
+
+  get_rows_fetched <- function() {
+    rows_fetched
+  }
+
+  #' @description
+  #' \code{list_tabledata_iter} returns a named list with functions \code{next_}
+  #' (fetches one chunk of rows), \code{next_paged} (fetches arbitrarily many
+  #' rows using a specified page size), \code{is_complete} (checks if all rows
+  #' have been fetched), \code{get_schema} (returns the schema of the table),
+  #' and \code{get_rows_fetched} (returns the number of rows already fetched).
+  list(next_ = next_, next_paged = next_paged, is_complete = is_complete,
+       get_schema = get_schema, get_rows_fetched = get_rows_fetched)
 }
 
 #Types can be loaded into R, record is not supported yet.
