@@ -138,6 +138,7 @@ query.bigquery <- function(con, sql, .vars) {
   BigQuery$new(con, sql(sql), .vars)
 }
 
+#' @importFrom R6 R6Class
 BigQuery <- R6::R6Class("BigQuery",
   private = list(
     .nrow = NULL,
