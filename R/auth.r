@@ -18,7 +18,7 @@ bq_env <- new.env(parent = emptyenv())
 #'
 #' @section API console:
 #' To manage your google projects, use the API console:
-#' \url{https://cloud.google.com/console}
+#' \url{https://console.cloud.google.com/}
 #'
 #' @keywords internal
 #' @export

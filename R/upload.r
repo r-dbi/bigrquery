@@ -104,7 +104,7 @@ standard_csv <- function(values) {
   on.exit(unlink(tmp))
 
   conn <- file(tmp, open = "wb")
-  write.table(values, conn, sep = ",", na = "", qmethod = "double",
+  utils::write.table(values, conn, sep = ",", na = "", qmethod = "double",
               row.names = FALSE, col.names = FALSE, eol = "\12")
   close(conn)
 

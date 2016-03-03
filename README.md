@@ -47,7 +47,7 @@ don't even need to provide a credit card).
 
 To create a project:
 
-1. Open https://cloud.google.com/console
+1. Open https://console.cloud.google.com/
 2. Click "Create Project" at the top
 3. Select a name and project ID, and click "Create"
 4. Turn on the BigQuery API by clicking "APIs & Auth" on the left, scrolling
@@ -72,4 +72,4 @@ query_exec(sql, project = project)
 * [SQL reference](https://developers.google.com/bigquery/query-reference)
 * [API reference](https://developers.google.com/bigquery/docs/reference/v2/)
 * [Query/job console](https://bigquery.cloud.google.com/)
-* [Billing console](https://cloud.google.com/console)
+* [Billing console](https://console.cloud.google.com/)

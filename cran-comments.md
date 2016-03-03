@@ -5,7 +5,14 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
+
+* Found the following (possibly) invalid URLs:
+  URL: https://console.cloud.google.com/
+  
+  This appears to because the server is incorrectly configured and returns
+  a 404 for HEAD requests. I've forwarded the problem on to my contact at
+  google and they're going to look into it.
 
 ## Reverse dependencies
 
