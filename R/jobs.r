@@ -8,6 +8,16 @@
 #' @param destination_table (optional) destination table for large queries,
 #'   either as a string in the format used by BigQuery, or as a list with
 #'   \code{project_id}, \code{dataset_id}, and \code{table_id} entries
+#' @param create_disposition behavior for table creation if the destination
+#'   already exists. defaults to \code{"CREATE_IF_NEEDED"},
+#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+#'   for more information
+#' @param write_disposition behavior for writing data if the destination already
+#'   exists. defaults to \code{"WRITE_APPEND"}, other possible values are
+#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+#'   for more information
 #' @param default_dataset (optional) default dataset for any table references in
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
@@ -18,7 +28,9 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
 insert_query_job <- function(query, project, destination_table = NULL,
-                             default_dataset = NULL) {
+                             default_dataset = NULL,
+                             create_disposition = "CREATE_IF_NEEDED",
+                             write_disposition = "WRITE_APPEND") {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
@@ -43,6 +55,8 @@ insert_query_job <- function(query, project, destination_table = NULL,
       datasetId = destination_table$dataset_id,
       tableId = destination_table$table_id
     )
+    body$configuration$query$createDisposition <- create_disposition
+    body$configuration$query$writeDisposition <- write_disposition
   }
 
   if (!is.null(default_dataset)) {
