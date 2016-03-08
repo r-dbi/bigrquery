@@ -14,8 +14,8 @@
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data if the destination already
-#'   exists. defaults to \code{"WRITE_APPEND"}, other possible values are
-#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
+#'   exists. defaults to \code{"WRITE_EMPTY"}, other possible values are
+#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 #'   for more information
 #' @param default_dataset (optional) default dataset for any table references in
@@ -30,7 +30,7 @@
 insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
-                             write_disposition = "WRITE_APPEND") {
+                             write_disposition = "WRITE_EMPTY") {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
