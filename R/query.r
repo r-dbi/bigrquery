@@ -26,10 +26,10 @@
 #' }
 query_exec <- function(query, project, destination_table = NULL,
                        default_dataset = NULL,
-                       create_disposition = "CREATE_IF_NEEDED",
-                       write_disposition = "WRITE_EMPTY",
                        page_size = 1e4, max_pages = 10,
-                       warn = TRUE) {
+                       warn = TRUE,
+                       create_disposition = "CREATE_IF_NEEDED",
+                       write_disposition = "WRITE_EMPTY") {
 
   dest <- run_query_job(query = query, project = project,
                         destination_table = destination_table,
