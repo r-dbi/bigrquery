@@ -6,6 +6,7 @@
 #' @param project project id or name
 #' @param dataset dataset name
 #' @param billing billing project, if different to \code{project}
+#' @param max_pages max pages returned by a query
 #' @export
 #' @examples
 #' \dontrun{
@@ -28,7 +29,7 @@
 #'   collect()
 #' plot(year_weights$year, year_weights$weight, type = "b")
 #' }
-src_bigquery <- function(project, dataset, billing = project) {
+src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   if (!requireNamespace("dplyr", quietly = TRUE)) {
     stop("dplyr is required to use src_bigquery", call. = FALSE)
   }
@@ -40,7 +41,7 @@ src_bigquery <- function(project, dataset, billing = project) {
   }
 
   con <- structure(list(project = project, dataset = dataset,
-    billing = billing), class = "bigquery")
+    billing = billing, max_pages = max_pages), class = "bigquery")
   dplyr::src_sql("bigquery", con)
 }
 
@@ -165,7 +166,8 @@ BigQuery <- R6::R6Class("BigQuery",
       job <- wait_for(job)
 
       dest <- job$configuration$query$destinationTable
-      list_tabledata(dest$projectId, dest$datasetId, dest$tableId)
+      list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
+                     max_pages = self$con$max_pages)
     },
 
     fetch_paged = function(chunk_size = 1e4, callback) {
