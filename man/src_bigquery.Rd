@@ -4,7 +4,7 @@
 \alias{src_bigquery}
 \title{A bigquery data source.}
 \usage{
-src_bigquery(project, dataset, billing = project)
+src_bigquery(project, dataset, billing = project, max_pages = 10)
 }
 \arguments{
 \item{project}{project id or name}
@@ -12,6 +12,8 @@ src_bigquery(project, dataset, billing = project)
 \item{dataset}{dataset name}
 
 \item{billing}{billing project, if different to \code{project}}
+
+\item{max_pages}{max pages returned by a query}
 }
 \description{
 Use \code{src_bigquery} to connect to an existing bigquery dataset,
