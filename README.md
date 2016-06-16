@@ -33,7 +33,7 @@ policy of caching per-working-directory credentials in `.httr-oauth`.
 Note that `bigrquery` requests permission to modify your data; in general, the
 only data created or modified by `bigrquery` are the temporary tables created
 as query results, unless you explicitly modify your own data (say by calling
-`delete_table` or `insert_upload_job`).
+`delete_table()` or `insert_upload_job()`).
 
 ## Sample data and a billing project
 
