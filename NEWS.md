@@ -1,5 +1,7 @@
 # Version 0.2.0.9000
 
+* Provide full DBI compliant interface (@krlmlr).
+  
 # Version 0.2.0.
 
 * Compatiable with latest httr.
