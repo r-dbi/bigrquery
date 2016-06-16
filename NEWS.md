@@ -1,5 +1,7 @@
 # Version 0.2.0.9000
 
+* `^` is correctly translated to `pow()` (#110).
+
 * Provide full DBI compliant interface (@krlmlr).
 
 * Backend now translates `iflese()` to `IF` (@realAkhmed, #53).

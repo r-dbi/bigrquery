@@ -205,6 +205,8 @@ BigQuery <- R6::R6Class("BigQuery",
 src_translate_env.src_bigquery <- function(x) {
   dplyr::sql_variant(
     dplyr::sql_translator(.parent = dplyr::base_scalar,
+      "^" = dplyr::sql_prefix("pow"),
+
       # Casting
       as.logical = dplyr::sql_prefix("boolean"),
       as.numeric = dplyr::sql_prefix("float"),
