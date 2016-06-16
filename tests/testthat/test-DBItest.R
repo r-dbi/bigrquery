@@ -1,5 +1,4 @@
-# Skip on Travis for now
-if (!identical(Sys.getenv("TRAVIS"), "true")) {
+if (FALSE) {
 
 # bigrquery requires the following DBItest tweaks, commented inline:
 tweaks <- DBItest::tweaks(
