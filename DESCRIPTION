@@ -9,13 +9,37 @@ Authors@R: c(
 Depends:
     R (>= 3.1.0)
 Imports:
+    DBI,
+    methods,
     httr,
     jsonlite,
     assertthat,
     R6 (>= 2.0.0),
     dplyr (>= 0.3.0)
 Suggests:
-    testthat
+    testthat,
+    DBItest,
+    withr
+Remotes: rstats-db/DBI,
+    rstats-db/DBItest@production
 License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1
+Collate:
+    'auth.r'
+    'bigrquery.r'
+    'datasets.r'
+    'upload.r'
+    'dbi-driver.r'
+    'dbi-connection.r'
+    'dbi-result.r'
+    'dplyr.r'
+    'id.R'
+    'jobs.r'
+    'projects.r'
+    'query.r'
+    'request.r'
+    'tabledata.r'
+    'tables.r'
+    'utils.r'
+    'zzz.r'
