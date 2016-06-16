@@ -43,3 +43,5 @@ Collate:
     'tables.r'
     'utils.r'
     'zzz.r'
+URL: https://github.com/rstats-db/bigrquery
+BugReports: https://github.com/rstats-db/bigrquery/issues
