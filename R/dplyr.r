@@ -200,9 +200,14 @@ BigQuery <- R6::R6Class("BigQuery",
 
 # SQL translation --------------------------------------------------------------
 
-#' @export
-#' @importFrom dplyr src_translate_env
-src_translate_env.src_bigquery <- function(x) {
+#' @rawNamespace if (utils::packageVersion("dplyr") > "0.4.3") {
+#'   importFrom(dplyr,sql_translate_env)
+#'   S3method(sql_translate_env,src_bigquery,bigquery_translate)
+#' } else {
+#'   importFrom(dplyr,src_translate_env)
+#'   S3method(src_translate_env,src_bigquery,bigquery_translate)
+#' }
+bigquery_translate <- function(x) {
   dplyr::sql_variant(
     dplyr::sql_translator(.parent = dplyr::base_scalar,
       "^" = dplyr::sql_prefix("pow"),
