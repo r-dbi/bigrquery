@@ -1,6 +1,12 @@
 language: r
 cache: packages
 
+
+r:
+  - oldrel
+  - release
+  - devel
+
 notifications:
   email:
     on_success: change
