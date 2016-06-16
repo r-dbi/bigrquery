@@ -52,11 +52,29 @@ tbl.src_bigquery <- function(src, from, ...) {
   dplyr::tbl_sql("bigquery", src = src, from = from, ...)
 }
 
+#' Copy a local data frame to a bigquery src through \code{\link{insert_upload_job}}.
+#'
 #' @export
+#' @param create_disposition behavior for table creation if the destination
+#'   already exists. defaults to \code{"CREATE_IF_NEEDED"},
+#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+#'   for more information
+#' @param write_disposition behavior for writing data if the destination already
+#'   exists. defaults to \code{"WRITE_APPEND"}, other possible values are
+#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+#'   for more information
+#' @seealso \code{\link{insert_upload_job}}
+#' @inheritParams dplyr::copy_to
+#' @return a bigquery \code{\link{tbl}} object
 #' @importFrom dplyr copy_to
-copy_to.src_bigquery <- function(dest, df, name = deparse(substitute(df)), ...) {
+copy_to.src_bigquery <- function(dest, df, name = deparse(substitute(df)),
+                                 create_disposition = "CREATE_IF_NEEDED",
+                                 write_disposition = "WRITE_APPEND") {
   job <- insert_upload_job(dest$con$project, dest$con$dataset, name, df,
-    billing = dest$con$billing)
+    billing = dest$con$billing, create_disposition, write_disposition)
+
   wait_for(job)
 
   tbl(dest, name)
