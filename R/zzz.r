@@ -9,3 +9,6 @@
 
   invisible()
 }
+
+PACKAGE_NAME <- utils::packageName()
+PACKAGE_VERSION <- utils::packageVersion(PACKAGE_NAME)
