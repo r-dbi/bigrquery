@@ -26,6 +26,7 @@
 #' year_weights <- natality %>%
 #'   group_by(year) %>%
 #'   summarise(weight = mean(weight_pounds), n = n()) %>%
+#'   arrange(year) %>%
 #'   collect()
 #' plot(year_weights$year, year_weights$weight, type = "b")
 #' }
