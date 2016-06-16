@@ -25,12 +25,34 @@ list_tables <- function(project, dataset, max_results = NULL) {
   if (!is.null(max_results)) {
     query$maxResults <- max_results
   }
-  data <- bq_get(url, query = query)$tables
-  do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
-  unlist(lapply(data, function(x) x$tableReference$tableId))
+  tables <- list()
+  nextPageToken <- NULL
+
+  while(TRUE) {
+
+    if (!is.null(nextPageToken)) {
+      query$pageToken <- nextPageToken
+      query$maxResults <- max_results - n_results
+    }
+    data <- bq_get(url, query = query)
+    tables <- c(tables, data$tables)
+    n_results <- length(tables)
+
+    if (is.null(data$nextPageToken)) {
+      break
+    } else if (length(tables) >= max_results) {
+      break
+    } else {
+      nextPageToken <- data$nextPageToken
+    }
+
+  }
+
+  do.call("rbind", lapply(tables, as.data.frame, row.names = 1L))
+
+  unlist(lapply(tables, function(x) x$tableReference$tableId))
 }
-
 #' Retrieve table metadata
 #'
 #' @param project project containing this table
