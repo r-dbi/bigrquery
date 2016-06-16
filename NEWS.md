@@ -1,6 +1,8 @@
 # Version 0.2.0.9000
 
 * Provide full DBI compliant interface (@krlmlr).
+
+* Backend now translates `iflese()` to `IF` (@realAkhmed, #53).
   
 # Version 0.2.0.
 
