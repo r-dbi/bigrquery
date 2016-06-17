@@ -119,10 +119,10 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
 
   err <- job$status$errorResult
   if (!is.null(err)) {
-    err_message <- function(x) paste0(x$location, " ", x$reason, ". ", x$message)
-    errors <- vapply(job$status$errors, err_message, character(1))
+    # err_message <- function(x) paste0(x$location, " ", x$reason, ". ", x$message)
+    # errors <- vapply(job$status$errors, err_message, character(1))
 
-    stop(err$message, "\n\n", paste0(errors, collapse = "\n"), call. = FALSE)
+    stop(err$message, call. = FALSE)
   }
 
   if (!is_quiet()) {

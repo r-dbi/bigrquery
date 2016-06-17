@@ -12,9 +12,10 @@ BigQueryResult <- function(connection, statement) {
 
   dest <- run_query_job(
     query = statement,
-    project = connection@project,
+    project = connection@billing,
     destination_table = NULL,
-    default_dataset = connection@dataset)
+    default_dataset = format_dataset(connection@project, connection@dataset)
+  )
 
   res@.envir$iter <- list_tabledata_iter(
     project = dest$projectId, dataset = dest$datasetId, table = dest$tableId)
@@ -83,7 +84,7 @@ setMethod(
 
     data <- res@.envir$iter$next_paged(n)
 
-    columnToRownames(data, row.names = row.names)
+    DBI::sqlColumnToRownames(data, row.names = row.names)
   })
 
 #' @rdname DBI
