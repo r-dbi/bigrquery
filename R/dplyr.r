@@ -37,10 +37,6 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 
   assert_that(is.string(project), is.string(dataset), is.string(billing))
 
-  if (!require("bigrquery")) {
-    stop("bigrquery package required to connect to bigquery db", call. = FALSE)
-  }
-
   con <- DBI::dbConnect(
     dbi_driver(),
     project = project,
