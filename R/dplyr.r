@@ -37,10 +37,6 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 
   assert_that(is.string(project), is.string(dataset), is.string(billing))
 
-  if (!require("bigrquery")) {
-    stop("bigrquery package required to connect to bigquery db", call. = FALSE)
-  }
-
   con <- DBI::dbConnect(
     dbi_driver(),
     project = project,
@@ -72,7 +68,7 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
 # SQL translation -------------------------------------------------------------
 #' @importFrom dplyr sql_translate_env
 #' @export
-sql_translate_env.src_bigquery <- function(x) {
+sql_translate_env.BigQueryConnection <- function(x) {
   dplyr::sql_variant(
     dplyr::sql_translator(.parent = dplyr::base_scalar,
       "^" = dplyr::sql_prefix("pow"),
