@@ -126,7 +126,7 @@ setMethod(
       }
     }
 
-    data <- rownamesToColumn(value, row.names = row.names)
+    data <- DBI::sqlRownamesToColumn(value, row.names = row.names)
 
     job <- insert_upload_job(conn@project, conn@dataset, name, data,
                              conn@billing,
@@ -143,7 +143,7 @@ setMethod(
   "dbReadTable", c("BigQueryConnection", "character"),
   function(conn, name, ..., row.names = NA) {
     data <- dbGetQuery(conn, paste0("SELECT * FROM ", dbQuoteIdentifier(conn, name)))
-    columnToRownames(data, row.names = row.names)
+    DBI::sqlColumnToRownames(data, row.names = row.names)
   })
 
 #' @rdname DBI

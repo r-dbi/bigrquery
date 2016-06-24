@@ -6,7 +6,7 @@
 #' @param project project id or name
 #' @param dataset dataset name
 #' @param billing billing project, if different to \code{project}
-#' @param max_pages max pages returned by a query
+#' @param max_pages (IGNORED) max pages returned by a query
 #' @export
 #' @examples
 #' \dontrun{
@@ -14,7 +14,7 @@
 #'
 #' # To run this example, replace billing with the id of one of your projects
 #' # set up for billing
-#' pd <- src_bigquery("publicdata", "samples", billing = "465736758727")
+#' pd <- src_bigquery("publicdata", "samples", billing = "887175176791")
 #' pd %>% tbl("shakespeare")
 #'
 #' # With bigquery data, it's always a good idea to start by selecting
@@ -37,12 +37,12 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 
   assert_that(is.string(project), is.string(dataset), is.string(billing))
 
-  if (!require("bigrquery")) {
-    stop("bigrquery package required to connect to bigquery db", call. = FALSE)
-  }
-
-  con <- structure(list(project = project, dataset = dataset,
-    billing = billing, max_pages = max_pages), class = "bigquery")
+  con <- DBI::dbConnect(
+    dbi_driver(),
+    project = project,
+    dataset = dataset,
+    billing = billing
+  )
   dplyr::src_sql("bigquery", con)
 }
 
@@ -53,156 +53,22 @@ tbl.src_bigquery <- function(src, from, ...) {
 }
 
 #' @export
-#' @importFrom dplyr copy_to
-copy_to.src_bigquery <- function(dest, df, name = deparse(substitute(df)), ...) {
-  job <- insert_upload_job(dest$con$project, dest$con$dataset, name, df,
-    billing = dest$con$billing)
-  wait_for(job)
-
-  tbl(dest, name)
-}
-
-#' @export
 #' @importFrom dplyr src_desc
 src_desc.src_bigquery <- function(x) {
-  paste0("bigquery [", format_dataset(x$con$project, x$con$dataset), "]")
-}
-
-#' @export
-#' @importFrom dplyr db_list_tables
-db_list_tables.bigquery <- function(con) {
-  list_tables(con$project, con$dataset)
-}
-
-#' @export
-#' @importFrom dplyr db_has_table
-db_has_table.bigquery <- function(con, table) {
-  table %in% list_tables(con$project, con$dataset)
+  paste0("bigquery [", format_dataset(x$con@project, x$con@dataset), "]")
 }
 
 #' @export
 #' @importFrom dplyr db_query_fields
-db_query_fields.bigquery <- function(con, sql) {
-  info <- get_table(con$project, con$dataset, sql)
+db_query_fields.BigQueryConnection <- function(con, sql) {
+  info <- get_table(con@project, con@dataset, sql)
   vapply(info$schema$fields, "[[", "name", FUN.VALUE = character(1))
 }
 
+# SQL translation -------------------------------------------------------------
+#' @importFrom dplyr sql_translate_env
 #' @export
-#' @importFrom dplyr db_query_rows
-db_query_rows.bigquery <- function(con, sql) {
-  browser()
-  info <- get_table(con$project, con$dataset, sql)
-  browser()
-}
-
-#' @export
-dim.tbl_bigquery <- function(x) {
-  p <- x$query$ncol()
-  c(NA, p)
-}
-
-#' @export
-#' @importFrom dplyr mutate_
-mutate_.tbl_bigquery <- function(...) {
-
-  # BigQuery requires a collapse after any mutate
-  dplyr::collapse( dplyr:::mutate_.tbl_sql(...) )
-}
-
-# SQL -------------------------------------------------------------------------
-
-#' @export
-#' @importFrom dplyr sql_select
-sql_select.bigquery <- function(con, select, from, where = NULL,
-                                group_by = NULL, having = NULL,
-                                order_by = NULL, limit = NULL,
-                                offset = NULL, ...) {
-
-  dplyr:::sql_select.DBIConnection(con, select, from, where = where,
-    group_by = group_by, having = having, order_by = order_by,
-    limit = limit, offset = offset, ...)
-}
-
-#' @export
-#' @importFrom dplyr sql_subquery
-sql_subquery.bigquery <- function(con, sql, name =  dplyr::unique_name(), ...) {
-  if (dplyr::is.ident(sql)) return(sql)
-
-  dplyr::build_sql("(", sql, ") AS ", dplyr::ident(name), con = con)
-}
-
-
-#' @export
-#' @importFrom dplyr query
-query.bigquery <- function(con, sql, .vars) {
-  assert_that(is.string(sql))
-
-  BigQuery$new(con, sql(sql), .vars)
-}
-
-#' @importFrom R6 R6Class
-BigQuery <- R6::R6Class("BigQuery",
-  private = list(
-    .nrow = NULL,
-    .vars = NULL
-  ),
-  public = list(
-    con = NULL,
-    sql = NULL,
-
-    initialize = function(con, sql, vars) {
-      self$con <- con
-      self$sql <- sql
-      private$.vars <- vars
-    },
-
-    print = function(...) {
-      cat("<Query> ", self$sql, "\n", sep = "")
-      print(self$con)
-    },
-
-    fetch = function(n = -1L) {
-      job <- insert_query_job(self$sql, self$con$billing,
-        default_dataset = format_dataset(self$con$project, self$con$dataset))
-      job <- wait_for(job)
-
-      dest <- job$configuration$query$destinationTable
-      list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
-                     max_pages = self$con$max_pages)
-    },
-
-    fetch_paged = function(chunk_size = 1e4, callback) {
-      job <- insert_query_job(self$sql, self$con$billing,
-        default_dataset = format_dataset(self$con$project, self$con$dataset))
-      job <- wait_for(job)
-
-      dest <- job$configuration$query$destinationTable
-      list_tabledata_callback(dest$projectId, dest$datasetId, dest$tableId,
-        callback, page_size = chunk_size)
-    },
-
-    vars = function() {
-      private$.vars
-    },
-
-    nrow = function() {
-      if (!is.null(private$.nrow)) return(private$.nrow)
-      private$.nrow <- db_query_rows(self$con, self$sql)
-      private$.nrow
-    },
-
-    ncol = function() {
-      length(self$vars())
-    }
-  )
-)
-
-
-# SQL translation --------------------------------------------------------------
-
-#' @export
-#' @importFrom dplyr src_translate_env
-src_translate_env.src_bigquery <- function(x) {
+sql_translate_env.BigQueryConnection <- function(x) {
   dplyr::sql_variant(
     dplyr::sql_translator(.parent = dplyr::base_scalar,
       "^" = dplyr::sql_prefix("pow"),
@@ -277,13 +143,13 @@ win_bq <- function(f) {
 
 #' @export
 #' @importFrom dplyr sql_escape_string
-sql_escape_string.bigquery <- function(con, x) {
+sql_escape_string.BigQueryConnection <- function(con, x) {
   encodeString(x, na.encode = FALSE, quote = '"')
 }
 
 #' @export
 #' @importFrom dplyr sql_escape_ident
-sql_escape_ident.bigquery <- function(con, x) {
+sql_escape_ident.BigQueryConnection <- function(con, x) {
   y <- paste0("[", x, "]")
   y[is.na(x)] <- "NULL"
   names(y) <- names(x)

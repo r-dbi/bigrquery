@@ -28,7 +28,7 @@ list_tables <- function(project, dataset, max_results = NULL) {
   data <- bq_get(url, query = query)$tables
   do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
-  unlist(lapply(data, function(x) x$tableReference$tableId))
+  vapply(data, function(x) x$tableReference$tableId, character(1L))
 }
 
 #' Retrieve table metadata

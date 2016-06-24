@@ -1,4 +1,4 @@
-if (FALSE) {
+if (has_auth) {
 
 # bigrquery requires the following DBItest tweaks, commented inline:
 tweaks <- DBItest::tweaks(
@@ -40,7 +40,7 @@ tweaks <- DBItest::tweaks(
 # now.)
 
 DBItest::make_context(
-  dbi_driver(), list(project = "bigrquery-1168", dataset = "test"),
+  dbi_driver(), list(project = "bigrquery-examples", dataset = "test"),
   tweaks = tweaks
 )
 
