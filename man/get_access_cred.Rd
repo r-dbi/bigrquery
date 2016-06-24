@@ -4,6 +4,7 @@
 \alias{get_access_cred}
 \alias{reset_access_cred}
 \alias{set_access_cred}
+\alias{set_service_token}
 \title{Get and set access credentials}
 \usage{
 get_access_cred()
@@ -11,17 +12,23 @@ get_access_cred()
 set_access_cred(value)
 
 reset_access_cred()
+
+set_service_token(service_token)
 }
 \arguments{
 \item{value}{new access credentials, as returned by
 \code{\link[httr]{oauth2.0_token}}}
+
+\item{service_token}{A JSON string, URL or file, giving or pointing to
+the service token file.}
 }
 \description{
 Since the majority of bigquery API requests need to be authenticated
 bigrquery maintains package-wide OAuth authentication credentials in a
 private environment. In ordinary operation, you should never need to use
 these functions but they are provided in case you want to switch
-credentials mid-stream.
+credentials mid-stream. You may can use \code{set_service_token}
+for non-interactive authentication.
 }
 \section{API console}{
 

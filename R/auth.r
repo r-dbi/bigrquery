@@ -58,7 +58,7 @@ get_sig <- function() {
 
 
 #' @export
-#' @rdname set_access_create
+#' @rdname get_access_cred
 #' @param service_token A JSON string, URL or file, giving or pointing to
 #'   the service token file.
 set_service_token <- function(service_token) {
