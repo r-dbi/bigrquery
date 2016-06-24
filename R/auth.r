@@ -14,7 +14,8 @@ bq_env <- new.env(parent = emptyenv())
 #' bigrquery maintains package-wide OAuth authentication credentials in a
 #' private environment. In ordinary operation, you should never need to use
 #' these functions but they are provided in case you want to switch
-#' credentials mid-stream.
+#' credentials mid-stream. You may can use \code{set_service_token}
+#' for non-interactive authentication.
 #'
 #' @section API console:
 #' To manage your google projects, use the API console:
@@ -55,7 +56,11 @@ get_sig <- function() {
   stop("Deprecated: use get_access_cred directly", call. = FALSE)
 }
 
-# The service_token can be an absolute or relative filename, or JSON text
+
+#' @export
+#' @rdname set_access_create
+#' @param service_token A JSON string, URL or file, giving or pointing to
+#'   the service token file.
 set_service_token <- function(service_token) {
 
   service_token <- jsonlite::fromJSON(service_token)

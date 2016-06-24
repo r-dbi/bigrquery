@@ -1,5 +1,8 @@
 # Version 0.2.0.9000
 
+* New `set_service_token()` allows you to use OAuth service token instead of
+  interactive authentication.from
+
 * `^` is correctly translated to `pow()` (#110).
 
 * Provide full DBI compliant interface (@krlmlr).
