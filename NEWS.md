@@ -1,3 +1,5 @@
+# bigrquery 0.3.0.9000
+
 # Version 0.3.0
 
 * New `set_service_token()` allows you to use OAuth service token instead of
