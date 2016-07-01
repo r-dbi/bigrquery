@@ -21,6 +21,7 @@
 #' @param default_dataset (optional) default dataset for any table references in
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
+#' @param useLegacySql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -30,14 +31,16 @@
 insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
-                             write_disposition = "WRITE_EMPTY") {
+                             write_disposition = "WRITE_EMPTY",
+                             useLegacySql = TRUE) {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
   body <- list(
     configuration = list(
       query = list(
-        query = query
+        query = query,
+        useLegacySql = useLegacySql
       )
     )
   )
