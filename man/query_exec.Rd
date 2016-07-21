@@ -7,7 +7,8 @@
 query_exec(query, project, destination_table = NULL, default_dataset = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY")
+  write_disposition = "WRITE_EMPTY",
+  useLegacySql = TRUE)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -41,6 +42,8 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 for more information}
+
+\item{useLegacySql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 }
 \description{
 This is a high-level function that inserts a query job
