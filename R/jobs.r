@@ -21,6 +21,7 @@
 #' @param default_dataset (optional) default dataset for any table references in
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
+#' @param maximum_billing_tier (optional) set to integer of billing tier required to overide project default.
 #' @param useLegacySql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
@@ -32,6 +33,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
+                             maximum_billing_tier = NULL,
                              useLegacySql = TRUE) {
   assert_that(is.string(project), is.string(query))
 
@@ -72,6 +74,10 @@ insert_query_job <- function(query, project, destination_table = NULL,
       projectId = default_dataset$project_id,
       datasetId = default_dataset$dataset_id
     )
+  }
+
+  if (!is.null(maximum_billing_tier)) {
+    body$configuration$query$maximumBillingTier <- maximum_billing_tier
   }
 
   bq_post(url, body)
