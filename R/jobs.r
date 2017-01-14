@@ -22,6 +22,7 @@
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
 #' @param useLegacySql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
+#' @param flattenResults (optional) set to \code{TRUE} to prevent BigQuery from automatically flattening nested and repeated data
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -32,7 +33,8 @@ insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
-                             useLegacySql = TRUE) {
+                             useLegacySql = TRUE,
+                             flattenResults = TRUE) {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
@@ -40,7 +42,8 @@ insert_query_job <- function(query, project, destination_table = NULL,
     configuration = list(
       query = list(
         query = query,
-        useLegacySql = useLegacySql
+        useLegacySql = useLegacySql,
+        flattenResults = flattenResults
       )
     )
   )
