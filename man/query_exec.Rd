@@ -7,8 +7,7 @@
 query_exec(query, project, destination_table = NULL, default_dataset = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY",
-  useLegacySql = TRUE)
+  write_disposition = "WRITE_EMPTY", useLegacySql = TRUE)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -70,4 +69,3 @@ Google documentation describing asynchronous queries:
  Google documentation for handling large results:
  \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 }
-

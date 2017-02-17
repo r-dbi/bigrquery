@@ -6,8 +6,7 @@
 \usage{
 insert_query_job(query, project, destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY",
-  useLegacySql = TRUE)
+  write_disposition = "WRITE_EMPTY", useLegacySql = TRUE)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -51,4 +50,3 @@ API documentation for insert method:
 Other jobs: \code{\link{get_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
-

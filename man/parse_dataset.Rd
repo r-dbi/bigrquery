@@ -24,4 +24,3 @@ components.
 Other identifier functions: \code{\link{format_dataset}},
   \code{\link{format_table}}, \code{\link{parse_table}}
 }
-

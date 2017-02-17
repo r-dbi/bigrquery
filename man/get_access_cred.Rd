@@ -2,8 +2,8 @@
 % Please edit documentation in R/auth.r
 \name{get_access_cred}
 \alias{get_access_cred}
-\alias{reset_access_cred}
 \alias{set_access_cred}
+\alias{reset_access_cred}
 \alias{set_service_token}
 \title{Get and set access credentials}
 \usage{
@@ -35,5 +35,5 @@ for non-interactive authentication.
 To manage your google projects, use the API console:
 \url{https://console.cloud.google.com/}
 }
-\keyword{internal}
 
+\keyword{internal}

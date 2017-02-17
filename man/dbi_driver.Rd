@@ -15,4 +15,3 @@ Creates a BigQuery DBI driver for use in \code{\link[DBI]{dbConnect}}.
 dbConnect(dbi_driver(), database = "mydb", project = "myproject")
 }
 }
-

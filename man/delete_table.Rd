@@ -28,4 +28,3 @@ API documentation:
 Other tables: \code{\link{get_table}},
   \code{\link{list_tables}}
 }
-

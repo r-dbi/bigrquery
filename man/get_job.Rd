@@ -27,4 +27,3 @@ API documentation for get method:
 Other jobs: \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
-

@@ -29,4 +29,3 @@ Other datasets: \code{\link{delete_dataset}},
   \code{\link{get_dataset}}, \code{\link{insert_dataset}},
   \code{\link{update_dataset}}
 }
-
