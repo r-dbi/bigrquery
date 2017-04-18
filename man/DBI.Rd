@@ -105,8 +105,8 @@
 \arguments{
 \item{object}{Any R object}
 
-\item{drv}{an object that inherits from \code{\linkS4class{DBIDriver}},
-or an existing \code{\linkS4class{DBIConnection}}
+\item{drv}{an object that inherits from \linkS4class{DBIDriver},
+or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
 \item{project}{project containing this table}
@@ -115,24 +115,25 @@ object (in order to clone an existing connection).}
 
 \item{billing}{project ID to use for billing}
 
-\item{...}{authorization arguments needed by the DBMS instance; these
-typically include \code{user}, \code{password}, \code{dbname}, \code{host},
-\code{port}, etc.  For details see the appropriate \code{DBIDriver}.}
+\item{...}{authentication arguments needed by the DBMS instance; these
+typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.
+For details see the appropriate \code{DBIDriver}.}
 
-\item{dbObj}{An object inheriting from \code{\linkS4class{DBIObject}},
-i.e. \code{\linkS4class{DBIDriver}}, \code{\linkS4class{DBIConnection}},
-or a \code{\linkS4class{DBIResult}}}
+\item{dbObj}{An object inheriting from \linkS4class{DBIObject},
+i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
+or a \linkS4class{DBIResult}}
 
-\item{conn}{A \code{\linkS4class{DBIConnection}} object, as produced by
-\code{\link{dbConnect}}.}
+\item{conn}{A \linkS4class{DBIConnection} object, as returned by
+\code{\link[=dbConnect]{dbConnect()}}.}
 
-\item{statement}{a character vector of length 1 containing SQL.}
+\item{statement}{a character string containing SQL.}
 
-\item{x}{A character vector to label as being escaped SQL.}
+\item{x}{A character vector to quote as string.}
 
-\item{name}{A character string specifying a DBMS table name.}
+\item{name}{A character string specifying the unquoted DBMS table name,
+or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
 
-\item{value}{a data.frame (or coercible to data.frame).}
+\item{value}{a \link{data.frame} (or coercible to data.frame).}
 
 \item{overwrite}{a logical specifying whether to overwrite an existing table
 or not. Its default is \code{FALSE}.}
@@ -146,13 +147,14 @@ will be whatever the R identifier \code{"row.names"} maps to the DBMS (see
 \code{\link[DBI]{make.db.names}}). If \code{NA} will add rows names if
 they are characters, otherwise will ignore.}
 
-\item{res}{An object inheriting from \code{\linkS4class{DBIResult}}.}
+\item{res}{An object inheriting from \linkS4class{DBIResult}.}
 
 \item{n}{maximum number of records to retrieve per fetch. Use \code{n = -1}
+or \code{n = Inf}
 to retrieve all pending records.  Some implementations may recognize other
 special values.}
 
-\item{params}{A list of bindings}
+\item{params}{A list of bindings, named or unnamed.}
 }
 \description{
 Implementations of pure virtual functions defined in the \code{DBI} package.
