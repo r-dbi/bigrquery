@@ -26,9 +26,14 @@ list_tables <- function(project, dataset, max_results = NULL) {
     query$maxResults <- max_results
   }
   data <- bq_get(url, query = query)$tables
-  do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
-
-  vapply(data, function(x) x$tableReference$tableId, character(1L))
+  tables = tryCatch({
+    do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
+    
+    vapply(data, function(x) x$tableReference$tableId, character(1L))
+  }, error = function(e){
+    unlist(lapply(data, function(x) x$tableReference$tableId))
+  })
+  tables
 }
 
 #' Retrieve table metadata
