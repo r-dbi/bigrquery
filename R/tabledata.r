@@ -217,7 +217,6 @@ extract_data <- function(rows, schema) {
   data_m <- matrix(data, nrow = length(types))
 
   out <- vector("list", length(types))
-  browser()
   for(i in seq_along(types)) {
     type <- types[[i]]
     if (!(type %in% names(converter))) {

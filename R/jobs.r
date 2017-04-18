@@ -127,7 +127,6 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   err <- job$status$errorResult
   if (!is.null(err)) {
     # error message is sufficient for now, could also pull more detailed reason
-    browser()
     stop(err$message, call. = FALSE)
   }
 
