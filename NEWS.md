@@ -1,4 +1,6 @@
-# bigrquery 0.3.0.9000
+# Version 0.3.0.9000
+
+* fixed for dplyr 0.6.0 compatibility
 
 # Version 0.3.0
 
