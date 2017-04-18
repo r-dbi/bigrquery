@@ -26,7 +26,6 @@ list_tables <- function(project, dataset, max_results = NULL) {
     query$maxResults <- max_results
   }
   data <- bq_get(url, query = query)$tables
-  do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
   vapply(data, function(x) x$tableReference$tableId, character(1L))
 }
