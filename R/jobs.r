@@ -21,7 +21,7 @@
 #' @param default_dataset (optional) default dataset for any table references in
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
-#' @param useLegacySql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
+#' @param use_legacy_sql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -32,7 +32,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
-                             useLegacySql = TRUE) {
+                             use_legacy_sql = TRUE) {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
@@ -40,7 +40,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
     configuration = list(
       query = list(
         query = query,
-        useLegacySql = useLegacySql
+        use_legacy_sql = use_legacy_sql
       )
     )
   )
@@ -123,6 +123,7 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   err <- job$status$errorResult
   if (!is.null(err)) {
     # error message is sufficient for now, could also pull more detailed reason
+    browser()
     stop(err$message, call. = FALSE)
   }
 

@@ -11,7 +11,7 @@ test_that("can convert all date time types", {
     FROM (SELECT DATETIME '2000-01-02 03:04:05.67' as datetime)
   "
 
-  df <- query_exec(sql, project = "bigrquery-examples", useLegacySql = FALSE)
+  df <- query_exec(sql, project = "bigrquery-examples", use_legacy_sql = FALSE)
 
   base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
   expect_equal(df$datetime, base)
