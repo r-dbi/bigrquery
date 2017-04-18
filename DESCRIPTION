@@ -14,7 +14,6 @@ Imports:
     httr,
     jsonlite,
     assertthat,
-    R6 (>= 2.0.0),
     dplyr (>= 0.5.0)
 Suggests:
     testthat,
