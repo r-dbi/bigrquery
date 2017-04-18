@@ -37,9 +37,16 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
     rows <<- c(rows, list(new_rows))
   }
 
-  list_tabledata_callback(project, dataset, table, append_rows,
-    table_info = table_info, page_size = page_size, max_pages = max_pages,
-    warn = warn, quiet = quiet
+  list_tabledata_callback(
+    project,
+    dataset,
+    table,
+    append_rows,
+    table_info = table_info,
+    page_size = page_size,
+    max_pages = max_pages,
+    warn = warn,
+    quiet = quiet
   )
 
   do.call("rbind", rows)
@@ -159,8 +166,13 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   #' rows using a specified page size), \code{is_complete} (checks if all rows
   #' have been fetched), \code{get_schema} (returns the schema of the table),
   #' and \code{get_rows_fetched} (returns the number of rows already fetched).
-  list(next_ = next_, next_paged = next_paged, is_complete = is_complete,
-       get_schema = get_schema, get_rows_fetched = get_rows_fetched)
+  list(
+    next_ = next_,
+    next_paged = next_paged,
+    is_complete = is_complete,
+    get_schema = get_schema,
+    get_rows_fetched = get_rows_fetched
+  )
 }
 
 #Types can be loaded into R, record is not supported yet.
