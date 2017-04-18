@@ -30,6 +30,7 @@ query_exec <- function(query, project, destination_table = NULL,
                        warn = TRUE,
                        create_disposition = "CREATE_IF_NEEDED",
                        write_disposition = "WRITE_EMPTY",
+                       maximum_billing_tier = NULL,
                        useLegacySql = TRUE) {
 
   dest <- run_query_job(query = query, project = project,
@@ -37,6 +38,7 @@ query_exec <- function(query, project, destination_table = NULL,
                         default_dataset = default_dataset,
                         create_disposition = create_disposition,
                         write_disposition = write_disposition,
+                        maximum_billing_tier = maximum_billing_tier,
                         useLegacySql = useLegacySql)
 
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
@@ -48,6 +50,7 @@ query_exec <- function(query, project, destination_table = NULL,
 run_query_job <- function(query, project, destination_table, default_dataset,
                           create_disposition = "CREATE_IF_NEEDED",
                           write_disposition = "WRITE_EMPTY",
+                          maximum_billing_tier,
                           useLegacySql = TRUE) {
   assert_that(is.string(query), is.string(project))
 
@@ -55,6 +58,7 @@ run_query_job <- function(query, project, destination_table, default_dataset,
                           default_dataset = default_dataset,
                           create_disposition = create_disposition,
                           write_disposition = write_disposition,
+                          maximum_billing_tier = maximum_billing_tier,
                           useLegacySql = useLegacySql)
   job <- wait_for(job)
 
