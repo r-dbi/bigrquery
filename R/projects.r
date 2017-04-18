@@ -15,6 +15,6 @@ list_projects <- function() {
   data <- bq_get("projects")$projects
 
   id <- unlist(lapply(data, function(x) x$id))
-  names(id) <- unlist(lapply(data, function(x) x$friendlyName))
+  names(id) <- vapply(data, function(x) x$friendlyName, character(1))
   c(id, "sampledata" = "sampledata")
 }

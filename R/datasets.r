@@ -17,7 +17,7 @@ list_datasets <- function(project) {
   url <- sprintf("projects/%s/datasets", project)
   data <- bq_get(url)$datasets
 
-  unlist(lapply(data, function(x) x$datasetReference$datasetId))
+  vapply(data, function(x) x$datasetReference$datasetId, character(1))
 }
 
 #' Gets an existing dataset in a project
