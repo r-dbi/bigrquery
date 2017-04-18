@@ -169,7 +169,18 @@ converter <- list(
   float = as.double,
   boolean = as.logical,
   string = identity,
-  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
+  timestamp = function(x) {
+    as.POSIXct(as.numeric(x), origin = "1970-01-01", tz = "UTC")
+  },
+  time = function(x) {
+    readr::parse_time(x, "%H:%M:%OS")
+  },
+  date = function(x) {
+    readr::parse_date(x, format = "%Y-%m-%d")
+  },
+  datetime = function(x) {
+    readr::parse_datetime(x)
+  }
 )
 
 extract_data <- function(rows, schema) {

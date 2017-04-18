@@ -1,5 +1,7 @@
 # Version 0.3.0.9000
 
+* Now supports DATE, TIME, and DATETIME types (#128(de. 
+
 * fixed for dplyr 0.6.0 compatibility
 
 # Version 0.3.0
