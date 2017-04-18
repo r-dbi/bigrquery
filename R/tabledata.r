@@ -169,7 +169,9 @@ converter <- list(
   float = as.double,
   boolean = as.logical,
   string = identity,
-  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC")
+  timestamp = function(x) as.POSIXct(as.integer(x), origin = "1970-01-01", tz = "UTC"),
+  date = as.Date,
+  bytes = as.raw
 )
 
 extract_data <- function(rows, schema) {
