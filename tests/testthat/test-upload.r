@@ -1,9 +1,18 @@
 context("upload")
 
-test_that("ints and strings are correctly encoded as CSV", {
-  df <- data.frame(ints = c(1, NA, 3, 11), strs = c('a"b', '', NA, 'abc'))
-  df_csv <- standard_csv(df)
-  expected_csv <- '1,"a""b"\n,""\n3,\n11,"abc"'
+test_that("date/times can be round-tripped", {
+  skip_if_no_auth()
 
-  expect_equal(df_csv, expected_csv)
+  df1 <- data.frame(
+    x = Sys.Date(),
+    y = Sys.time()
+  )
+  df1$z <- as.POSIXlt(df1$y)
+
+  job <- insert_upload_job("bigrquery-examples", "test", "x", df1)
+  wait_for(job)
+  on.exit(delete_table("bigrquery-examples", "test", "x"))
+
+  df2 <- list_tabledata("bigrquery-examples", "test", "x")
+  expect_equal(df1, df2)
 })

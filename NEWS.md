@@ -1,5 +1,10 @@
 # Version 0.3.0.9000
 
+* `insert_upload_job()` now sends data in newline-delimited JSON instead
+  of csv (#97). This should be considerably faster and avoids character
+  encoding issues (#45). `POSIXlt` columns are now also correctly 
+  coerced to TIMESTAMPS (#98).
+
 * `list_tabledata()` and `query_exec()` now give a nicer progress bar, 
   including estimated time remaining (#100).
 
