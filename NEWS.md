@@ -1,5 +1,7 @@
 # Version 0.3.0.9000
 
+* `insert_table()` allows you to insert empty tables.
+
 * `insert_query_job()` and `query_exec()` gain a `use_legacy_sql` option
   so you can opt-in to the legacy SQL system (#124, @backlin)
 

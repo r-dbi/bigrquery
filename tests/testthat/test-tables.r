@@ -1,5 +1,22 @@
 context("tables")
 
+test_that("can create and list tables", {
+  skip_if_no_auth()
+
+  project <- "bigrquery-examples"
+  dataset <- "tables_test"
+
+  insert_dataset(project, dataset)
+  on.exit(delete_dataset(project, dataset, deleteContents = TRUE))
+
+  tables <- paste0("table", 1:4)
+  for (table in tables) {
+    insert_table(project, dataset, table)
+  }
+
+  expect_equal(list_tables(project, dataset), tables)
+})
+
 test_that("table references are validated correctly", {
   valid <- list(project_id = "a", dataset_id = "b", table_id = "c")
   expect_that(validate_table_reference(valid), is_true())
