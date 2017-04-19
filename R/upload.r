@@ -66,7 +66,7 @@ insert_upload_job <- function(project, dataset, table, values,
   csv <- standard_csv(values)
   csv_part <- part(c("Content-type" = "application/octet-stream"), csv)
 
-  url <- sprintf("projects/%s/jobs", billing)
+  url <- bq_path(billing, jobs = "")
   bq_upload(url, c(config_part, csv_part))
 }
 

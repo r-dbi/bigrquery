@@ -15,10 +15,11 @@
 #' list_tables("publicdata", "samples", max_results = 2)
 #' }
 list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
-  assert_that(is.string(project), is.string(dataset))
-
-  url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
-  data <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)
+  data <- bq_get_paginated(
+    bq_path(project, dataset, ""),
+    page_size = page_size,
+    max_pages = max_pages
+  )
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
   vapply(tables, function(x) x$tableReference$tableId, character(1L))
@@ -33,10 +34,6 @@ list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}
 insert_table <- function(project, dataset, table, body = list()) {
-  assert_that(is.string(project), is.string(dataset), is.string(table))
-
-  url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
-
   table <- list(
     tableReference = list(
       projectId = project,
@@ -46,7 +43,7 @@ insert_table <- function(project, dataset, table, body = list()) {
   )
   table <- utils::modifyList(table, body)
 
-  bq_post(url, body = table)
+  bq_post(bq_path(project, dataset, ""), body = table)
 }
 
 #' Retrieve table metadata
@@ -100,10 +97,7 @@ exists_table <- function(project, dataset, table) {
 #' get_table("publicdata", "samples", "natality")
 #' }
 delete_table <- function(project, dataset, table) {
-  assert_that(is.string(project), is.string(dataset), is.string(table))
-
-  url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
-  bq_delete(url)
+  bq_delete(bq_path(project, dataset, table))
 }
 
 validate_table_reference <- function(reference) {
@@ -173,7 +167,7 @@ copy_table <- function(src, dest,
     stop("dest must be a table reference")
   }
   project <- project %||% dest$project_id
-  url <- sprintf("projects/%s/jobs", project)
+  url <- bq_path(project, jobs = "")
   body <- list(
     projectId = project,
     configuration = list(

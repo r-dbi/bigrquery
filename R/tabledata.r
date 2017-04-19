@@ -108,8 +108,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   table_info <- table_info %||% get_table(project, dataset, table)
   schema <- table_info$schema
 
-  url <- sprintf("projects/%s/datasets/%s/tables/%s/data", project, dataset,
-    table)
+  url <- bq_path(project, dataset, table, data = "")
 
   last_response <- NULL
   rows_fetched <- 0

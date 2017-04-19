@@ -35,7 +35,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
                              use_legacy_sql = TRUE) {
   assert_that(is.string(project), is.string(query))
 
-  url <- sprintf("projects/%s/jobs", project)
+  url <- bq_path(project, jobs = "")
   body <- list(
     configuration = list(
       query = list(
@@ -95,8 +95,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
 get_job <- function(project, job) {
   assert_that(is.string(project), is.string(job))
 
-  url <- sprintf("projects/%s/jobs/%s", project, job)
-  bq_get(url)
+  bq_get(bq_path(project, jobs = job))
 }
 
 

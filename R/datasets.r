@@ -14,8 +14,11 @@
 list_datasets <- function(project, page_size = 50, max_pages = Inf) {
   assert_that(is.string(project))
 
-  url <- sprintf("projects/%s/datasets", project)
-  pages <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)
+  pages <- bq_get_paginated(
+    bq_path(project, ""),
+    page_size = page_size,
+    max_pages = max_pages
+  )
 
   datasets <- unlist(lapply(pages, function(x) x$datasets), recursive = FALSE)
   vapply(datasets, function(x) x$datasetReference$datasetId, character(1))
@@ -35,10 +38,7 @@ list_datasets <- function(project, page_size = 50, max_pages = Inf) {
 #' get_dataset("publicdata", "shakespeare")
 #' }
 get_dataset <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
-
-  url <- sprintf("projects/%s/datasets/%s", project, dataset)
-  bq_get(url)
+  bq_get(bq_path(project, dataset))
 }
 
 #' @rdname get_dataset
@@ -90,7 +90,7 @@ delete_dataset <- function(project, dataset, deleteContents = FALSE) {
 insert_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
   assert_that(is.string(project), is.string(dataset))
 
-  url <- sprintf("projects/%s/datasets", project)
+  url <- bq_path(project, "")
 
   body = list(
     datasetReference = list(
@@ -119,9 +119,7 @@ insert_dataset <- function(project, dataset, description = NULL, friendlyName = 
 #' update_dataset("myproject", "existing_dataset", "my description", "friendly name")
 #' }
 update_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
-  assert_that(is.string(project), is.string(dataset))
-
-  url <- sprintf("projects/%s/datasets/%s", project, dataset)
+  url <- bq_path(project, dataset)
 
   body = list(
     datasetReference = list(

@@ -11,6 +11,22 @@ prepare_bq_query <- function(query) {
   query
 }
 
+bq_path <- function(project, dataset = NULL, table = NULL, ...) {
+  assert_that(is.null(project) || is.string(project))
+  assert_that(is.null(table) || is.string(table))
+  assert_that(is.null(dataset) || is.string(dataset))
+
+  components <- c(
+    projects = project,
+    datasets = dataset,
+    tables = table,
+    ...
+  )
+
+  paste0(names(components), "/", components, collapse = "/")
+}
+
+
 #' @importFrom httr GET config
 bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- GET(
