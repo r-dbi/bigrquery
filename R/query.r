@@ -30,7 +30,8 @@ query_exec <- function(query, project, destination_table = NULL,
                        warn = TRUE,
                        create_disposition = "CREATE_IF_NEEDED",
                        write_disposition = "WRITE_EMPTY",
-                       use_legacy_sql = TRUE) {
+                       use_legacy_sql = TRUE,
+                       ...) {
 
   dest <- run_query_job(
     query = query,
@@ -39,7 +40,8 @@ query_exec <- function(query, project, destination_table = NULL,
     default_dataset = default_dataset,
     create_disposition = create_disposition,
     write_disposition = write_disposition,
-    use_legacy_sql = use_legacy_sql
+    use_legacy_sql = use_legacy_sql,
+    ...
   )
 
   list_tabledata(dest$projectId, dest$datasetId, dest$tableId,
@@ -54,7 +56,8 @@ run_query_job <- function(query,
                           default_dataset,
                           create_disposition = "CREATE_IF_NEEDED",
                           write_disposition = "WRITE_EMPTY",
-                          use_legacy_sql = TRUE) {
+                          use_legacy_sql = TRUE,
+                          ...) {
   assert_that(is.string(query), is.string(project))
 
   job <- insert_query_job(
@@ -64,7 +67,8 @@ run_query_job <- function(query,
     default_dataset = default_dataset,
     create_disposition = create_disposition,
     write_disposition = write_disposition,
-    use_legacy_sql = use_legacy_sql
+    use_legacy_sql = use_legacy_sql,
+    ...
   )
   job <- wait_for(job)
 

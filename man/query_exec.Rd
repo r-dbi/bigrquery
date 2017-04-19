@@ -7,7 +7,7 @@
 query_exec(query, project, destination_table = NULL, default_dataset = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -43,6 +43,10 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
+
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \description{
 This is a high-level function that inserts a query job

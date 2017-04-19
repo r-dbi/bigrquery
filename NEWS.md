@@ -1,10 +1,11 @@
 # Version 0.3.0.9000
 
-* All POST requests (inserts, updates and copies) now take `...`. This
-  allows you to add arbitrary additional data to the body to take
-  advantage of bigquery API features that are otherwise not exposed (#149).
-  `snake_case` argument names are automatically converted to `camelCase`
-  so you can stick consistently to snake case in your R code.
+* All POST requests (inserts, updates, copies and `query_exec`) now 
+  take `...`. This allows you to add arbitrary additional data to the 
+  request body making it possible to use parts of the BigQuery API 
+  that are otherwise not exposed (#149). `snake_case` argument names are
+  automatically converted to `camelCase` so you can stick consistently 
+  to snake case in your R code.
 
 * `list_tables()` (#108) and `list_datasets()` (#141) are now paginated.
   By default they retrieve 50 items per page, and will iterate until they
