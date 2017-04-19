@@ -1,9 +1,9 @@
 #' Run a asynchronous query and retrieve results.
 #'
 #' This is a high-level function that inserts a query job
-#' (with \code{\link{insert_query_job}}), repeatedly checks the status (with
-#' \code{\link{get_job}}) until it is complete, then retrieves the results
-#' (with \code{\link{list_tabledata}})
+#' (with [insert_query_job()]), repeatedly checks the status (with
+#' [get_job()]) until it is complete, then retrieves the results
+#' (with [list_tabledata()])
 #'
 #' @inheritParams insert_query_job
 #' @inheritParams list_tabledata

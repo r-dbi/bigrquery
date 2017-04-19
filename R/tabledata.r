@@ -1,17 +1,17 @@
 #' Retrieve data from a table.
 #'
-#' \code{list_tabledata} returns a single dataframe.
+#' `list_tabledata` returns a single dataframe.
 #'
 #' @inheritParams get_table
 #' @param callback function called with single argument, the data from the
 #'   current page of data
-#' @param quiet if \code{FALSE}, prints informative status messages.
+#' @param quiet if `FALSE`, prints informative status messages.
 #' @param table_info if known, the table information retrieved with
-#'   \code{\link{get_table}}
+#'   [get_table()]
 #' @param page_size Number of items per page.
-#' @param warn If \code{TRUE}, warn when there are rows remaining to
+#' @param warn If `TRUE`, warn when there are rows remaining to
 #'   be pulled down from database.
-#' @param max_pages maximum number of pages to retrieve. Use \code{Inf}
+#' @param max_pages maximum number of pages to retrieve. Use `Inf`
 #'  to retrieve the complete dataset.
 #' @seealso API documentation at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
@@ -53,7 +53,7 @@ list_tabledata <- function(project, dataset, table, page_size = 1e4,
 }
 
 #' @description
-#' \code{list_tabledata_callback} calls the supplied callback with each page
+#' `list_tabledata_callback` calls the supplied callback with each page
 #' of data.
 #' @rdname list_tabledata
 #' @export
@@ -161,11 +161,11 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   }
 
   #' @description
-  #' \code{list_tabledata_iter} returns a named list with functions \code{next_}
-  #' (fetches one chunk of rows), \code{next_paged} (fetches arbitrarily many
-  #' rows using a specified page size), \code{is_complete} (checks if all rows
-  #' have been fetched), \code{get_schema} (returns the schema of the table),
-  #' and \code{get_rows_fetched} (returns the number of rows already fetched).
+  #' `list_tabledata_iter` returns a named list with functions `next_`
+  #' (fetches one chunk of rows), `next_paged` (fetches arbitrarily many
+  #' rows using a specified page size), `is_complete` (checks if all rows
+  #' have been fetched), `get_schema` (returns the schema of the table),
+  #' and `get_rows_fetched` (returns the number of rows already fetched).
   list(
     next_ = next_,
     next_paged = next_paged,

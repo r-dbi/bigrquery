@@ -25,7 +25,7 @@ insert_dataset("myproject", "new_dataset")
 }
 \seealso{
 Google API documentation:
-  \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
+\url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
 
 Other datasets: \code{\link{delete_dataset}},
   \code{\link{get_dataset}}, \code{\link{list_datasets}},

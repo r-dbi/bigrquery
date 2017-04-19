@@ -12,7 +12,7 @@ list_tables(project, dataset, max_results = NULL)
 \item{dataset}{dataset containing this table}
 
 \item{max_results}{(optional) Maximum number of results to
-retrieve.}
+retrieve. If NULL, the default, will retrieve all results.}
 }
 \value{
 a character vector of table names
@@ -29,7 +29,7 @@ list_tables("publicdata", "samples", max_results = 2)
 }
 \seealso{
 API documentation:
-  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
+\url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
 
 Other tables: \code{\link{delete_table}},
   \code{\link{get_table}}

@@ -144,7 +144,7 @@ in the DBMS.  Its default is \code{FALSE}.}
 \item{row.names}{A logical specifying whether the \code{row.names} should be
 output to the output DBMS table; if \code{TRUE}, an extra field whose name
 will be whatever the R identifier \code{"row.names"} maps to the DBMS (see
-\code{\link[DBI]{make.db.names}}). If \code{NA} will add rows names if
+\code{\link[DBI:make.db.names]{DBI::make.db.names()}}). If \code{NA} will add rows names if
 they are characters, otherwise will ignore.}
 
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}

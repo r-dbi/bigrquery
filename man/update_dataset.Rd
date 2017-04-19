@@ -25,7 +25,7 @@ update_dataset("myproject", "existing_dataset", "my description", "friendly name
 }
 \seealso{
 Google API documentation:
-  \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/update}
+\url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/update}
 
 Other datasets: \code{\link{delete_dataset}},
   \code{\link{get_dataset}}, \code{\link{insert_dataset}},

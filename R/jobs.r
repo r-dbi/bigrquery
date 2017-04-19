@@ -1,27 +1,27 @@
 #' Create a new query job.
 #'
 #' This is a low-level function that creates a query job. To wait until it is
-#' finished and then retrieve the results, see \code{\link{query_exec}}
+#' finished and then retrieve the results, see [query_exec()]
 #'
 #' @param query SQL query string
 #' @param project project name
 #' @param destination_table (optional) destination table for large queries,
 #'   either as a string in the format used by BigQuery, or as a list with
-#'   \code{project_id}, \code{dataset_id}, and \code{table_id} entries
+#'   `project_id`, `dataset_id`, and `table_id` entries
 #' @param create_disposition behavior for table creation.
-#'   defaults to \code{"CREATE_IF_NEEDED"},
-#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   defaults to `"CREATE_IF_NEEDED"`,
+#'   the only other supported value is `"CREATE_NEVER"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data.
-#'   defaults to \code{"WRITE_EMPTY"}, other possible values are
-#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
+#'   defaults to `"WRITE_EMPTY"`, other possible values are
+#'   `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 #'   for more information
 #' @param default_dataset (optional) default dataset for any table references in
-#'   \code{query}, either as a string in the format used by BigQuery or as a
-#'   list with \code{project_id} and \code{dataset_id} entries
-#' @param use_legacy_sql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
+#'   `query`, either as a string in the format used by BigQuery or as a
+#'   list with `project_id` and `dataset_id` entries
+#' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -89,7 +89,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 #' @seealso API documentation for get method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
-#' @seealso \code{\link{wait_for}} to wait for a job to complete
+#' @seealso [wait_for()] to wait for a job to complete
 #' @family jobs
 #' @export
 get_job <- function(project, job) {
@@ -102,10 +102,10 @@ get_job <- function(project, job) {
 
 #' Wait for a job to complete, optionally printing updates
 #'
-#' @param job job to wait for. Probably result of \code{\link{insert_query_job}}
-#'   or \code{\link{insert_upload_job}}
-#' @param quiet if \code{FALSE} print informative progress messages, if
-#'   \code{TRUE} is silent, if \code{NA} displays messages for long-running
+#' @param job job to wait for. Probably result of [insert_query_job()]
+#'   or [insert_upload_job()]
+#' @param quiet if `FALSE` print informative progress messages, if
+#'   `TRUE` is silent, if `NA` displays messages for long-running
 #'   jobs.
 #' @param pause amount of time to wait between status requests
 #' @family jobs

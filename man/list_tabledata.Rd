@@ -26,7 +26,7 @@ list_tabledata_iter(project, dataset, table, table_info = NULL)
 \item{page_size}{Number of items per page.}
 
 \item{table_info}{if known, the table information retrieved with
-\code{\link{get_table}}}
+\code{\link[=get_table]{get_table()}}}
 
 \item{max_pages}{maximum number of pages to retrieve. Use \code{Inf}
 to retrieve the complete dataset.}
@@ -61,5 +61,5 @@ dim(natal)
 }
 \seealso{
 API documentation at
-  \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
+\url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 }

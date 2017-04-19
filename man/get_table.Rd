@@ -18,16 +18,16 @@ exists_table(project, dataset, table)
 }
 \value{
 A table resource list, as described by
- \url{https://developers.google.com/bigquery/docs/reference/v2/tables}
+\url{https://developers.google.com/bigquery/docs/reference/v2/tables}
 }
 \description{
 \code{get_table} returns a table's metadata as a nested list.
-  In addition to a regular error, the condition \code{bigrquery_notFound}
-  (which can be handled via \code{\link[base]{tryCatch}})
-  is raised if the table could not be found.
+In addition to a regular error, the condition \code{bigrquery_notFound}
+(which can be handled via \code{\link[base:tryCatch]{base::tryCatch()}})
+is raised if the table could not be found.
 
 \code{exists_table} merely checks if a table exists, and returns
-  either \code{TRUE} or \code{FALSE}.
+either \code{TRUE} or \code{FALSE}.
 }
 \examples{
 \dontrun{
@@ -38,7 +38,7 @@ get_table("githubarchive", "github", "timeline")
 }
 \seealso{
 API documentation:
- \url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
+\url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
 
 Other tables: \code{\link{delete_table}},
   \code{\link{list_tables}}

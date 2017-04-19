@@ -44,5 +44,5 @@ copy_table(list(src, dest), doubled)
 }
 \seealso{
 API documentation:
-  \url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
+\url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
 }

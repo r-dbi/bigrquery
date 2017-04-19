@@ -46,9 +46,9 @@ for more information}
 }
 \description{
 This is a high-level function that inserts a query job
-(with \code{\link{insert_query_job}}), repeatedly checks the status (with
-\code{\link{get_job}}) until it is complete, then retrieves the results
-(with \code{\link{list_tabledata}})
+(with \code{\link[=insert_query_job]{insert_query_job()}}), repeatedly checks the status (with
+\code{\link[=get_job]{get_job()}}) until it is complete, then retrieves the results
+(with \code{\link[=list_tabledata]{list_tabledata()}})
 }
 \examples{
 \dontrun{
@@ -64,8 +64,8 @@ query_exec(sql, project = project, default_dataset = "publicdata:samples")
 }
 \seealso{
 Google documentation describing asynchronous queries:
- \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+\url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
 
- Google documentation for handling large results:
- \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
+Google documentation for handling large results:
+\url{https://developers.google.com/bigquery/querying-data#largequeryresults}
 }

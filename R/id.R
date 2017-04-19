@@ -5,9 +5,9 @@
 #'
 #' @param dataset dataset name
 #' @param project_id (optional) project ID to use if none is provided
-#' in \code{dataset}
-#' @return a list with \code{project_id} and \code{dataset_id} components
-#' (either of which may be \code{NULL}).
+#' in `dataset`
+#' @return a list with `project_id` and `dataset_id` components
+#' (either of which may be `NULL`).
 #' @family identifier functions
 #' @export
 parse_dataset <- function(dataset, project_id = NULL) {
@@ -43,9 +43,9 @@ format_dataset <- function(project_id, dataset) {
 #'
 #' @param table table name
 #' @param project_id (optional) project ID to use if none is provided
-#' in \code{table}
-#' @return a list with \code{project_id}, \code{dataset_id}, and
-#' \code{table_id} components (any of which may be \code{NULL}).
+#' in `table`
+#' @return a list with `project_id`, `dataset_id`, and
+#' `table_id` components (any of which may be `NULL`).
 #' @family identifier functions
 #' @export
 parse_table <- function(table, project_id = NULL) {

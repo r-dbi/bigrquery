@@ -1,12 +1,12 @@
 #' DBI methods
 #'
-#' Implementations of pure virtual functions defined in the \code{DBI} package.
+#' Implementations of pure virtual functions defined in the `DBI` package.
 #' @name DBI
 NULL
 
 #' BigQuery DBI driver
 #'
-#' Creates a BigQuery DBI driver for use in \code{\link[DBI]{dbConnect}}.
+#' Creates a BigQuery DBI driver for use in [DBI::dbConnect()].
 #'
 #' @export
 #' @import methods DBI

@@ -13,16 +13,16 @@ get_job(project, job)
 }
 \value{
 a job resource list, as documented at
-  \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+\url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 }
 \description{
 Check status of a job.
 }
 \seealso{
 API documentation for get method:
-  \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
+\url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
 
-\code{\link{wait_for}} to wait for a job to complete
+\code{\link[=wait_for]{wait_for()}} to wait for a job to complete
 
 Other jobs: \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}

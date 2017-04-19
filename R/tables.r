@@ -2,7 +2,7 @@
 #'
 #' @inheritParams get_table
 #' @param max_results (optional) Maximum number of results to
-#'   retrieve.
+#'   retrieve. If NULL, the default, will retrieve all results.
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -47,9 +47,9 @@ list_tables <- function(project, dataset, max_results = NULL) {
 #' get_table("githubarchive", "github", "timeline")
 #' }
 #'
-#' @description \code{get_table} returns a table's metadata as a nested list.
-#'   In addition to a regular error, the condition \code{bigrquery_notFound}
-#'   (which can be handled via \code{\link[base]{tryCatch}})
+#' @description `get_table` returns a table's metadata as a nested list.
+#'   In addition to a regular error, the condition `bigrquery_notFound`
+#'   (which can be handled via [base::tryCatch()])
 #'   is raised if the table could not be found.
 get_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
@@ -60,8 +60,8 @@ get_table <- function(project, dataset, table) {
 
 #' @rdname get_table
 #' @export
-#' @description \code{exists_table} merely checks if a table exists, and returns
-#'   either \code{TRUE} or \code{FALSE}.
+#' @description `exists_table` merely checks if a table exists, and returns
+#'   either `TRUE` or `FALSE`.
 exists_table <- function(project, dataset, table) {
   tryCatch(
     !is.null(get_table(project = project, dataset = dataset, table = table)),
@@ -111,21 +111,21 @@ merge_table_references <- function(partial, complete) {
 #' Copy one or more source tables to a destination table.
 #'
 #' Each source table and the destination table should be table references, that
-#' is, lists with exactly three entries: \code{project_id}, \code{dataset_id},
-#' and \code{table_id}.
+#' is, lists with exactly three entries: `project_id`, `dataset_id`,
+#' and `table_id`.
 #'
 #' @param src either a single table reference, or a list of table references
 #' @param dest destination table
 #' @param project project ID to use for the copy job. defaults to the project of
 #'   the destination table.
 #' @param create_disposition behavior for table creation if the destination
-#'   already exists. defaults to \code{"CREATE_IF_NEEDED"},
-#'   the only other supported value is \code{"CREATE_NEVER"}; see
+#'   already exists. defaults to `"CREATE_IF_NEEDED"`,
+#'   the only other supported value is `"CREATE_NEVER"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data if the destination already
-#'   exists. defaults to \code{"WRITE_EMPTY"}, other possible values are
-#'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
+#'   exists. defaults to `"WRITE_EMPTY"`, other possible values are
+#'   `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
 #'   for more information
 #' @seealso API documentation:

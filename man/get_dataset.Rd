@@ -24,7 +24,7 @@ get_dataset("publicdata", "shakespeare")
 }
 \seealso{
 Google API documentation:
-  \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}
+\url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}
 
 Other datasets: \code{\link{delete_dataset}},
   \code{\link{insert_dataset}},

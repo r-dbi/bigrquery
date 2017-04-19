@@ -100,15 +100,15 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbWriteTable
-#' @param row.names A logical specifying whether the \code{row.names} should be
-#'   output to the output DBMS table; if \code{TRUE}, an extra field whose name
-#'   will be whatever the R identifier \code{"row.names"} maps to the DBMS (see
-#'   \code{\link[DBI]{make.db.names}}). If \code{NA} will add rows names if
+#' @param row.names A logical specifying whether the `row.names` should be
+#'   output to the output DBMS table; if `TRUE`, an extra field whose name
+#'   will be whatever the R identifier `"row.names"` maps to the DBMS (see
+#'   [DBI::make.db.names()]). If `NA` will add rows names if
 #'   they are characters, otherwise will ignore.
 #' @param overwrite a logical specifying whether to overwrite an existing table
-#'   or not. Its default is \code{FALSE}.
+#'   or not. Its default is `FALSE`.
 #' @param append a logical specifying whether to append to an existing table
-#'   in the DBMS.  Its default is \code{FALSE}.
+#'   in the DBMS.  Its default is `FALSE`.
 #' @export
 setMethod(
   "dbWriteTable", c("BigQueryConnection", "character", "data.frame"),

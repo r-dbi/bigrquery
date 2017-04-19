@@ -37,15 +37,15 @@ for more information}
 }
 \value{
 a job resource list, as documented at
-  \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+\url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 }
 \description{
 This is a low-level function that creates a query job. To wait until it is
-finished and then retrieve the results, see \code{\link{query_exec}}
+finished and then retrieve the results, see \code{\link[=query_exec]{query_exec()}}
 }
 \seealso{
 API documentation for insert method:
-  \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
+\url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 
 Other jobs: \code{\link{get_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}

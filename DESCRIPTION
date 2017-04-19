@@ -44,3 +44,4 @@ Collate:
     'zzz.r'
 URL: https://github.com/rstats-db/bigrquery
 BugReports: https://github.com/rstats-db/bigrquery/issues
+Roxygen: list(markdown = TRUE)

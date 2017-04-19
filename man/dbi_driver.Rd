@@ -7,7 +7,7 @@
 dbi_driver()
 }
 \description{
-Creates a BigQuery DBI driver for use in \code{\link[DBI]{dbConnect}}.
+Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.
 }
 \examples{
 \dontrun{

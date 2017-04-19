@@ -23,7 +23,7 @@ set_service_token(service_token)
 \code{\link[httr]{oauth_app}}}
 
 \item{value}{new access credentials, as returned by
-\code{\link[httr]{oauth2.0_token}}}
+\code{\link[httr:oauth2.0_token]{httr::oauth2.0_token()}}}
 
 \item{service_token}{A JSON string, URL or file, giving or pointing to
 the service token file.}

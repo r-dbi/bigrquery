@@ -1,11 +1,11 @@
 #' A bigquery data source.
 #'
-#' Use \code{src_bigquery} to connect to an existing bigquery dataset,
-#' and \code{tbl} to connect to tables within that database.
+#' Use `src_bigquery` to connect to an existing bigquery dataset,
+#' and `tbl` to connect to tables within that database.
 #'
 #' @param project project id or name
 #' @param dataset dataset name
-#' @param billing billing project, if different to \code{project}
+#' @param billing billing project, if different to `project`
 #' @param max_pages (IGNORED) max pages returned by a query
 #' @export
 #' @examples
