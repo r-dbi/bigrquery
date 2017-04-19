@@ -35,8 +35,14 @@ get_access_cred <- function() {
 }
 
 #' @rdname get_access_cred
+#' @param app A Google OAuth application created using
+#'  \code{\link[httr]{oauth_app}}
 #' @export
-set_oauth2.0_cred <- function(app = bigqr) {
+set_oauth2.0_cred <- function(app = NULL) {
+  if (is.null(app)) {
+    app <- bigqr
+  }
+
   cred <- oauth2.0_token(google, app,
     scope = c(
         "https://www.googleapis.com/auth/bigquery",
