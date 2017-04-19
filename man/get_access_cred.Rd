@@ -2,12 +2,15 @@
 % Please edit documentation in R/auth.r
 \name{get_access_cred}
 \alias{get_access_cred}
+\alias{set_oauth2.0_cred}
 \alias{set_access_cred}
 \alias{reset_access_cred}
 \alias{set_service_token}
 \title{Get and set access credentials}
 \usage{
 get_access_cred()
+
+set_oauth2.0_cred(app = NULL)
 
 set_access_cred(value)
 
@@ -16,6 +19,9 @@ reset_access_cred()
 set_service_token(service_token)
 }
 \arguments{
+\item{app}{A Google OAuth application created using
+\code{\link[httr]{oauth_app}}}
+
 \item{value}{new access credentials, as returned by
 \code{\link[httr]{oauth2.0_token}}}
 

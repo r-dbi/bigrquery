@@ -28,16 +28,27 @@ bq_env <- new.env(parent = emptyenv())
 get_access_cred <- function() {
   cred <- bq_env$access_cred
   if (is.null(cred)) {
-    cred <- oauth2.0_token(google, bigqr,
-      scope = c(
-          "https://www.googleapis.com/auth/bigquery",
-          "https://www.googleapis.com/auth/cloud-platform"))
-
-    # Stop if unsuccessful
-    set_access_cred(cred)
+    set_oauth2.0_cred()
   }
 
-  cred
+  bq_env$access_cred
+}
+
+#' @rdname get_access_cred
+#' @param app A Google OAuth application created using
+#'  \code{\link[httr]{oauth_app}}
+#' @export
+set_oauth2.0_cred <- function(app = NULL) {
+  if (is.null(app)) {
+    app <- bigqr
+  }
+
+  cred <- oauth2.0_token(google, app,
+    scope = c(
+        "https://www.googleapis.com/auth/bigquery",
+        "https://www.googleapis.com/auth/cloud-platform"))
+
+  set_access_cred(cred)
 }
 
 #' @rdname get_access_cred
