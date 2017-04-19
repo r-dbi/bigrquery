@@ -63,4 +63,3 @@ dim(natal)
 API documentation at
   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 }
-

@@ -1,4 +1,11 @@
-# bigrquery 0.3.0.9000
+# Version 0.3.0.9000
+
+* `insert_query_job()` and `query_exec()` gain a `use_legacy_sql` option
+  so you can opt-in to the legacy SQL system (#124, @backlin)
+
+* Now supports DATE, TIME, and DATETIME types (#128). 
+
+* fixed for dplyr 0.6.0 compatibility
 
 # Version 0.3.0
 

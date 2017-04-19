@@ -52,11 +52,9 @@ tbl.src_bigquery <- function(src, from, ...) {
   dplyr::tbl_sql("bigquery", src = src, from = from, ...)
 }
 
-#' @export
-#' @importFrom dplyr src_desc
-src_desc.src_bigquery <- function(x) {
-  paste0("bigquery [", format_dataset(x$con@project, x$con@dataset), "]")
-}
+# src_desc.src_bigquery <- function(x) {
+#   paste0("bigquery [", format_dataset(x$con@project, x$con@dataset), "]")
+# }
 
 #' @export
 #' @importFrom dplyr db_query_fields

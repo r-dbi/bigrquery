@@ -46,4 +46,3 @@ copy_table(list(src, dest), doubled)
 API documentation:
   \url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
 }
-

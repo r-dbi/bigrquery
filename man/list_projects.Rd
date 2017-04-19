@@ -22,4 +22,3 @@ list_projects()
 API documentation at
   \url{https://developers.google.com/bigquery/docs/reference/v2/projects/list}
 }
-

@@ -38,5 +38,5 @@ for non-interactive authentication.
 To manage your google projects, use the API console:
 \url{https://console.cloud.google.com/}
 }
-\keyword{internal}
 
+\keyword{internal}

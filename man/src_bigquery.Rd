@@ -42,4 +42,3 @@ year_weights <- natality \%>\%
 plot(year_weights$year, year_weights$weight, type = "b")
 }
 }
-

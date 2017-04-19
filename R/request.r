@@ -13,41 +13,64 @@ prepare_bq_query <- function(query) {
 
 #' @importFrom httr GET config
 bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- GET(paste0(base_url, url), config(token = token), ...,
-             query = prepare_bq_query(query))
+  req <- GET(
+    paste0(base_url, url),
+    config(token = token),
+    ...,
+    query = prepare_bq_query(query)
+  )
   process_request(req)
 }
 
 #' @importFrom httr DELETE config
 bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
-  req <- DELETE(paste0(base_url, url), config(token = token), ...,
-                query = prepare_bq_query(query))
+  req <- DELETE(
+    paste0(base_url, url),
+    config(token = token),
+    ...,
+    query = prepare_bq_query(query)
+  )
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
 bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   json <- jsonlite::toJSON(body)
-  req <- POST(paste0(base_url, url), body = json, config(token = token),
-              add_headers("Content-Type" = "application/json"), ...,
-              query = prepare_bq_query(query))
+  req <- POST(
+    paste0(base_url, url),
+    body = json,
+    config(token = token),
+    add_headers("Content-Type" = "application/json"),
+    ...,
+    query = prepare_bq_query(query)
+  )
   process_request(req)
 }
 
 #' @importFrom httr PUT add_headers config
 bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   json <- jsonlite::toJSON(body)
-  req <- PUT(paste0(base_url, url), body = json, config(token = token),
-              add_headers("Content-Type" = "application/json"), ...,
-              query = prepare_bq_query(query))
+  req <- PUT(
+    paste0(base_url, url),
+    body = json,
+    config(token = token),
+    add_headers("Content-Type" = "application/json"),
+    ...,
+    query = prepare_bq_query(query)
+  )
   process_request(req)
 }
 
 #' @importFrom httr POST add_headers config
 bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) {
   url <- paste0(upload_url, url)
-  req <- POST_multipart_related(url, parts = parts, config(token = token), ...,
-                                query = prepare_bq_query(query))
+  req <- POST_multipart_related(
+    url,
+    parts = parts,
+    config(token = token),
+    ...,
+    query = prepare_bq_query(query)
+  )
   process_request(req)
 }
 

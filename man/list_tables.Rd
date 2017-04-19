@@ -34,4 +34,3 @@ API documentation:
 Other tables: \code{\link{delete_table}},
   \code{\link{get_table}}
 }
-

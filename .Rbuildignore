@@ -3,6 +3,5 @@
 ^\.httr-oauth$
 ^\.travis\.yml$
 ^cran-comments\.md$
-^LICENSE$
 ^revdep$
 ^tests/testthat/service-token\.json$

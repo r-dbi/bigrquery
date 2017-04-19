@@ -4,22 +4,7 @@ language: R
 sudo: false
 cache: packages
 
-
 r:
-  - oldrel
-  - release
-  - devel
-
-warnings_are_errors: false
-env:
-  global:
-    - _R_CHECK_FORCE_SUGGESTS_=false
-    - MAKEFLAGS="-j 2"
-
-r_github_packages:
-  - hadley/devtools
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+- oldrel
+- release
+- devel

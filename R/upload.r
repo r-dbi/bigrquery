@@ -34,8 +34,13 @@ insert_upload_job <- function(project, dataset, table, values,
                               billing = project,
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_APPEND") {
-  assert_that(is.string(project), is.string(dataset), is.string(table),
-    is.data.frame(values), is.string(billing))
+  assert_that(
+    is.string(project),
+    is.string(dataset),
+    is.string(table),
+    is.data.frame(values),
+    is.string(billing)
+  )
 
   # https://developers.google.com/bigquery/docs/reference/v2/jobs#resource
   config <- list(
@@ -72,15 +77,17 @@ schema_fields <- function(data) {
 
 data_type <- function(x) {
   if (is.factor(x)) return("STRING")
-  if (inherits(x, "POSIXt")) return("TIMESTAMP")
-  if (inherits(x, "Date")) return("TIMESTAMP")
+  if (inherits(x, "POSIXt")) return("DATETIME")
+  if (inherits(x, "hms")) return("TIME")
+  if (inherits(x, "Date")) return("DATE")
 
-  switch(typeof(x),
-         character = "STRING",
-         logical = "BOOLEAN",
-         double = "FLOAT",
-         integer = "INTEGER",
-         stop("Unsupported type: ", typeof(x), call. = FALSE)
+  switch(
+    typeof(x),
+    character = "STRING",
+    logical = "BOOLEAN",
+    double = "FLOAT",
+    integer = "INTEGER",
+    stop("Unsupported type: ", typeof(x), call. = FALSE)
   )
 }
 

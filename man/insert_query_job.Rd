@@ -6,8 +6,7 @@
 \usage{
 insert_query_job(query, project, destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY",
-  useLegacySql = TRUE)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -34,7 +33,7 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 for more information}
 
-\item{useLegacySql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
+\item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 }
 \value{
 a job resource list, as documented at
@@ -51,4 +50,3 @@ API documentation for insert method:
 Other jobs: \code{\link{get_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
-

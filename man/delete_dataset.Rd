@@ -30,4 +30,3 @@ Other datasets: \code{\link{get_dataset}},
   \code{\link{insert_dataset}},
   \code{\link{list_datasets}}, \code{\link{update_dataset}}
 }
-

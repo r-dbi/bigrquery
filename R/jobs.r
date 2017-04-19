@@ -21,7 +21,7 @@
 #' @param default_dataset (optional) default dataset for any table references in
 #'   \code{query}, either as a string in the format used by BigQuery or as a
 #'   list with \code{project_id} and \code{dataset_id} entries
-#' @param useLegacySql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
+#' @param use_legacy_sql (optional) set to \code{FALSE} to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -32,7 +32,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
-                             useLegacySql = TRUE) {
+                             use_legacy_sql = TRUE) {
   assert_that(is.string(project), is.string(query))
 
   url <- sprintf("projects/%s/jobs", project)
@@ -40,7 +40,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
     configuration = list(
       query = list(
         query = query,
-        useLegacySql = useLegacySql
+        use_legacy_sql = use_legacy_sql
       )
     )
   )
@@ -49,9 +49,11 @@ insert_query_job <- function(query, project, destination_table = NULL,
     if (is.character(destination_table)) {
       destination_table <- parse_table(destination_table, project_id = project)
     }
-    assert_that(is.string(destination_table$project_id),
-                is.string(destination_table$dataset_id),
-                is.string(destination_table$table_id))
+    assert_that(
+      is.string(destination_table$project_id),
+      is.string(destination_table$dataset_id),
+      is.string(destination_table$table_id)
+    )
     body$configuration$query$allowLargeResults <- TRUE
     body$configuration$query$destinationTable <- list(
       projectId = destination_table$project_id,
@@ -66,8 +68,10 @@ insert_query_job <- function(query, project, destination_table = NULL,
     if (is.character(default_dataset)) {
       default_dataset <- parse_dataset(default_dataset, project_id = project)
     }
-    assert_that(is.string(default_dataset$project_id),
-                is.string(default_dataset$dataset_id))
+    assert_that(
+      is.string(default_dataset$project_id),
+      is.string(default_dataset$dataset_id)
+    )
     body$configuration$query$defaultDataset <- list(
       projectId = default_dataset$project_id,
       datasetId = default_dataset$dataset_id
@@ -108,9 +112,9 @@ get_job <- function(project, job) {
 #' @export
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   elapsed <- timer()
-  is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
+  is_quiet <- function() isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
 
-  while(job$status$state != "DONE") {
+  while (job$status$state != "DONE") {
     if (!is_quiet()) {
       cat("\rRunning query:   ", job$status$state, " ",
         sprintf("%4.1f", elapsed()), "s", sep = "")

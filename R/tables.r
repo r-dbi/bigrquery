@@ -26,7 +26,6 @@ list_tables <- function(project, dataset, max_results = NULL) {
     query$maxResults <- max_results
   }
   data <- bq_get(url, query = query)$tables
-  do.call("rbind", lapply(data, as.data.frame, row.names = 1L))
 
   vapply(data, function(x) x$tableReference$tableId, character(1L))
 }
@@ -94,15 +93,19 @@ validate_table_reference <- function(reference) {
 }
 
 as_bigquery_table_reference <- function(reference) {
-  list(projectId = reference$project_id,
-       datasetId = reference$dataset_id,
-       tableId = reference$table_id)
+  list(
+    projectId = reference$project_id,
+    datasetId = reference$dataset_id,
+    tableId = reference$table_id
+  )
 }
 
 merge_table_references <- function(partial, complete) {
-  list(project_id = partial$project_id %||% complete$project_id,
-       dataset_id = partial$dataset_id %||% complete$dataset_id,
-       table_id = partial$table_id)
+  list(
+    project_id = partial$project_id %||% complete$project_id,
+    dataset_id = partial$dataset_id %||% complete$dataset_id,
+    table_id = partial$table_id
+  )
 }
 
 #' Copy one or more source tables to a destination table.
@@ -153,14 +156,16 @@ copy_table <- function(src, dest,
   project <- project %||% dest$project_id
   url <- sprintf("projects/%s/jobs", project)
   body <- list(
-      projectId = project,
-      configuration = list(
-          copy = list(
-              sourceTables = lapply(src, as_bigquery_table_reference),
-              destinationTable = as_bigquery_table_reference(dest),
-              createDisposition = create_disposition,
-              writeDisposition = write_disposition
-          )))
+    projectId = project,
+    configuration = list(
+      copy = list(
+        sourceTables = lapply(src, as_bigquery_table_reference),
+        destinationTable = as_bigquery_table_reference(dest),
+        createDisposition = create_disposition,
+        writeDisposition = write_disposition
+      )
+    )
+  )
 
   bq_post(url, body)
 }
