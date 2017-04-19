@@ -7,6 +7,8 @@
 
 * fixed for dplyr 0.6.0 compatibility
 
+* `set_oauth2.0_cred()` allows user to supply their own Google OAuth application when setting credentials (#130, @jarodmeng)
+
 # Version 0.3.0
 
 * New `set_service_token()` allows you to use OAuth service token instead of
