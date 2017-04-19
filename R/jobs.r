@@ -40,7 +40,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
     configuration = list(
       query = list(
         query = query,
-        use_legacy_sql = use_legacy_sql
+        useLegacySql = use_legacy_sql
       )
     )
   )
