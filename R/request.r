@@ -26,6 +26,11 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
   paste0(names(components), "/", components, collapse = "/")
 }
 
+bq_body <- function(body, ...) {
+  user <- toCamel(list(...))
+  utils::modifyList(body, user)
+}
+
 
 #' @importFrom httr GET config
 bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {

@@ -4,16 +4,16 @@
 \alias{update_dataset}
 \title{Updates an existing dataset in a project}
 \usage{
-update_dataset(project, dataset, description = NULL, friendlyName = NULL)
+update_dataset(project, dataset, ...)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{dataset}{The dataset to update, a string}
+\item{dataset}{The name of the dataset to create, a string}
 
-\item{description}{The dataset description, a string}
-
-\item{friendlyName}{The dataset's friendly name, a string}
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \description{
 Updates an existing dataset in a project

@@ -17,9 +17,9 @@ list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
 list_tabledata_iter(project, dataset, table, table_info = NULL)
 }
 \arguments{
-\item{project}{project containing this table}
+\item{project}{The project name, a string}
 
-\item{dataset}{dataset containing this table}
+\item{dataset}{The name of the dataset to create, a string}
 
 \item{table}{name of the table}
 

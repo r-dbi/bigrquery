@@ -9,9 +9,9 @@ insert_upload_job(project, dataset, table, values, billing = project,
   write_disposition = "WRITE_APPEND")
 }
 \arguments{
-\item{project}{project containing this table}
+\item{project}{The project name, a string}
 
-\item{dataset}{dataset containing this table}
+\item{dataset}{The name of the dataset to create, a string}
 
 \item{table}{name of table to insert values into}
 

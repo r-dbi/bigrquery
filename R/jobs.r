@@ -3,8 +3,8 @@
 #' This is a low-level function that creates a query job. To wait until it is
 #' finished and then retrieve the results, see [query_exec()]
 #'
+#' @inheritParams insert_dataset
 #' @param query SQL query string
-#' @param project project name
 #' @param destination_table (optional) destination table for large queries,
 #'   either as a string in the format used by BigQuery, or as a list with
 #'   `project_id`, `dataset_id`, and `table_id` entries
@@ -28,11 +28,13 @@
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
-insert_query_job <- function(query, project, destination_table = NULL,
+insert_query_job <- function(query, project,
+                             destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
-                             use_legacy_sql = TRUE) {
+                             use_legacy_sql = TRUE,
+                             ...) {
   assert_that(is.string(project), is.string(query))
 
   url <- bq_path(project, jobs = "")
@@ -78,7 +80,7 @@ insert_query_job <- function(query, project, destination_table = NULL,
     )
   }
 
-  bq_post(url, body)
+  bq_post(url, body = bq_body(body, ...))
 }
 
 #' Check status of a job.

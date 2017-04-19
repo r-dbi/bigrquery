@@ -109,9 +109,9 @@
 or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
-\item{project}{project containing this table}
+\item{project}{The project name, a string}
 
-\item{dataset}{dataset containing this table}
+\item{dataset}{The name of the dataset to create, a string}
 
 \item{billing}{project ID to use for billing}
 

@@ -24,9 +24,10 @@ Suggests:
 License: GPL-3 | file LICENSE
 LazyData: true
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
     'auth.r'
     'bigrquery.r'
+    'camelCase.R'
     'datasets.r'
     'upload.r'
     'dbi-driver.r'

@@ -7,7 +7,7 @@
 list_datasets(project, page_size = 50, max_pages = Inf)
 }
 \arguments{
-\item{project}{project containing this table}
+\item{project}{The project name, a string}
 
 \item{page_size}{Number of items per page}
 

@@ -12,7 +12,7 @@ query_exec(query, project, destination_table = NULL, default_dataset = NULL,
 \arguments{
 \item{query}{SQL query string}
 
-\item{project}{project name}
+\item{project}{The project name, a string}
 
 \item{destination_table}{(optional) destination table for large queries,
 either as a string in the format used by BigQuery, or as a list with

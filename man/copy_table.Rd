@@ -5,7 +5,7 @@
 \title{Copy one or more source tables to a destination table.}
 \usage{
 copy_table(src, dest, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", project = NULL)
+  write_disposition = "WRITE_EMPTY", project = NULL, ...)
 }
 \arguments{
 \item{src}{either a single table reference, or a list of table references}
@@ -26,6 +26,10 @@ for more information}
 
 \item{project}{project ID to use for the copy job. defaults to the project of
 the destination table.}
+
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \description{
 Each source table and the destination table should be table references, that

@@ -77,8 +77,9 @@ delete_dataset <- function(project, dataset, deleteContents = FALSE) {
 #'
 #' @param project The project name, a string
 #' @param dataset The name of the dataset to create, a string
-#' @param description The dataset description, a string
-#' @param friendlyName The dataset's friendly name, a string
+#' @param ... Additional arguments merged into the body of the
+#'   request. `snake_case` will automatically be converted into
+#'   `camelCase` so you can use consistent argument names.
 #' @seealso Google API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
 #' @family datasets
@@ -87,29 +88,23 @@ delete_dataset <- function(project, dataset, deleteContents = FALSE) {
 #' \dontrun{
 #' insert_dataset("myproject", "new_dataset")
 #' }
-insert_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
+insert_dataset <- function(project, dataset, ...) {
   assert_that(is.string(project), is.string(dataset))
 
   url <- bq_path(project, "")
-
-  body = list(
+  body <- list(
     datasetReference = list(
       projectId = project,
       datasetId = dataset
-    ),
-    description = description,
-    friendlyName = friendlyName
+    )
   )
 
-  bq_post(url, body)
+  bq_post(url, body = bq_body(body, ...))
 }
 
 #' Updates an existing dataset in a project
 #'
-#' @param project The project name, a string
-#' @param dataset The dataset to update, a string
-#' @param description The dataset description, a string
-#' @param friendlyName The dataset's friendly name, a string
+#' @inheritParams insert_dataset
 #' @seealso Google API documentation:
 #'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/update}
 #' @family datasets
@@ -118,17 +113,14 @@ insert_dataset <- function(project, dataset, description = NULL, friendlyName = 
 #' \dontrun{
 #' update_dataset("myproject", "existing_dataset", "my description", "friendly name")
 #' }
-update_dataset <- function(project, dataset, description = NULL, friendlyName = NULL) {
+update_dataset <- function(project, dataset, ...) {
   url <- bq_path(project, dataset)
-
-  body = list(
+  body <- list(
     datasetReference = list(
       projectId = project,
       datasetId = dataset
-    ),
-    description = description,
-    friendlyName = friendlyName
+    )
   )
 
-  bq_put(url, body)
+  bq_put(url, body = bq_body(body, ...))
 }
