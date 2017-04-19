@@ -1,7 +1,5 @@
 #' Retrieve data from a table.
 #'
-#' `list_tabledata` returns a single dataframe.
-#'
 #' @inheritParams get_table
 #' @param callback function called with single argument, the data from the
 #'   current page of data
@@ -15,6 +13,7 @@
 #'  to retrieve the complete dataset.
 #' @seealso API documentation at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
+#' @return `list_tabledata` returns a single dataframe.
 #' @export
 #' @examples
 #' \dontrun{
@@ -72,15 +71,18 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
   elapsed <- timer()
-  is_quiet <- function(x) isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
+  is_quiet <- function() isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
 
   iter <- list_tabledata_iter(
-    project = project, dataset = dataset, table = table,
-    table_info = table_info)
+    project = project,
+    dataset = dataset,
+    table = table,
+    table_info = table_info
+  )
 
   cur_page <- 0L
 
-  while(cur_page < max_pages && !iter$is_complete()) {
+  while (cur_page < max_pages && !iter$is_complete()) {
     if (!is_quiet()) {
       if (cur_page >= 1L) {
         cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
@@ -163,7 +165,7 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     rows_fetched
   }
 
-  #' @description
+  #' @return
   #' `list_tabledata_iter` returns a named list with functions `next_`
   #' (fetches one chunk of rows), `next_paged` (fetches arbitrarily many
   #' rows using a specified page size), `is_complete` (checks if all rows

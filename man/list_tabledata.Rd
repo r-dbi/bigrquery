@@ -39,17 +39,20 @@ be pulled down from database.}
 \item{callback}{function called with single argument, the data from the
 current page of data}
 }
-\description{
+\value{
 \code{list_tabledata} returns a single dataframe.
-
-\code{list_tabledata_callback} calls the supplied callback with each page
-of data.
 
 \code{list_tabledata_iter} returns a named list with functions \code{next_}
 (fetches one chunk of rows), \code{next_paged} (fetches arbitrarily many
 rows using a specified page size), \code{is_complete} (checks if all rows
 have been fetched), \code{get_schema} (returns the schema of the table),
 and \code{get_rows_fetched} (returns the number of rows already fetched).
+}
+\description{
+Retrieve data from a table.
+
+\code{list_tabledata_callback} calls the supplied callback with each page
+of data.
 }
 \examples{
 \dontrun{
