@@ -23,9 +23,13 @@
 #'   page_size = 10)
 #' dim(natal)
 #' }
-list_tabledata <- function(project, dataset, table, page_size = 1e4,
-                           table_info = NULL, max_pages = 10, warn = TRUE,
-                           quiet = getOption("bigrquery.quiet")) {
+list_tabledata <- function(project, dataset, table,
+                           page_size = 1e4,
+                           table_info = NULL,
+                           max_pages = 10,
+                           warn = TRUE,
+                           quiet = getOption("bigrquery.quiet")
+                           ) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
