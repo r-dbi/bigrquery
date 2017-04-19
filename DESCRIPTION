@@ -16,7 +16,8 @@ Imports:
     assertthat,
     dplyr (>= 0.5.0),
     readr,
-    hms
+    hms,
+    progress
 Suggests:
     testthat,
     DBItest,

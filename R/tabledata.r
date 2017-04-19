@@ -70,9 +70,6 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   assert_that(is.function(callback))
   assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
 
-  elapsed <- timer()
-  is_quiet <- function() isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
-
   iter <- list_tabledata_iter(
     project = project,
     dataset = dataset,
@@ -80,24 +77,29 @@ list_tabledata_callback <- function(project, dataset, table, callback,
     table_info = table_info
   )
 
+  delay <- if (identical(quiet, FALSE)) 0 else 2
+  quiet <- isTRUE(quiet)
+  pages <- min(ceiling(iter$get_rows() / page_size), max_pages)
+  if (!quiet) {
+    progress <- progress::progress_bar$new(
+      "Retrieving data [:bar] :percent eta: :eta",
+      total = pages,
+      show_after = delay
+    )
+    progress$tick(0)
+  }
+
   cur_page <- 0L
 
   while (cur_page < max_pages && !iter$is_complete()) {
-    if (!is_quiet()) {
-      if (cur_page >= 1L) {
-        cat("\rRetrieving data: ", sprintf("%4.1f", elapsed()), "s", sep = "")
-      } else {
-        cat("Retrieving data")
-      }
-    }
-
     data <- iter$next_(page_size)
     callback(data)
 
+    if (!quiet) {
+      progress$tick()
+    }
     cur_page <- cur_page + 1
   }
-
-  if (!is_quiet()) cat("\n")
 
   if (isTRUE(warn) && !iter$is_complete()) {
     warning("Only first ", max_pages, " pages of size ", page_size,
@@ -165,17 +167,24 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
     rows_fetched
   }
 
+  get_rows <- function() {
+    as.numeric(table_info$numRows)
+  }
+
   #' @return
-  #' `list_tabledata_iter` returns a named list with functions `next_`
-  #' (fetches one chunk of rows), `next_paged` (fetches arbitrarily many
-  #' rows using a specified page size), `is_complete` (checks if all rows
-  #' have been fetched), `get_schema` (returns the schema of the table),
-  #' and `get_rows_fetched` (returns the number of rows already fetched).
+  #' `list_tabledata_iter` returns a named list with functions
+  #' * `next_` (fetches one chunk of rows)
+  #' * `next_paged` (fetches arbitrarily many rows using a specified page size)
+  #' * `is_complete` (checks if all rows have been fetched)
+  #' * `get_schema` (returns the schema of the table),
+  #' * `get_rows_fetched` (returns the number of rows already fetched).
+  #' * `get_rows` (returns total number of rows)
   list(
     next_ = next_,
     next_paged = next_paged,
     is_complete = is_complete,
     get_schema = get_schema,
+    get_rows = get_rows,
     get_rows_fetched = get_rows_fetched
   )
 }

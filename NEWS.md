@@ -1,5 +1,8 @@
 # Version 0.3.0.9000
 
+* `list_tabledata()` and `query_exec()` now give a nicer progress bar, 
+  including estimated time remaining (#100).
+
 * All POST requests (inserts, updates, copies and `query_exec`) now 
   take `...`. This allows you to add arbitrary additional data to the 
   request body making it possible to use parts of the BigQuery API 
