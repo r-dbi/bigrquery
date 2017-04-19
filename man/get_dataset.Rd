@@ -2,9 +2,12 @@
 % Please edit documentation in R/datasets.r
 \name{get_dataset}
 \alias{get_dataset}
+\alias{exists_dataset}
 \title{Gets an existing dataset in a project}
 \usage{
 get_dataset(project, dataset)
+
+exists_dataset(project, dataset)
 }
 \arguments{
 \item{project}{The project name, a string}
@@ -16,6 +19,9 @@ a character vector of dataset names
 }
 \description{
 Gets an existing dataset in a project
+
+\code{exists_dataset} merely checks if a table exists, and returns
+either \code{TRUE} or \code{FALSE}.
 }
 \examples{
 \dontrun{

@@ -1,7 +1,8 @@
 # Version 0.3.0.9000
 
-* `list_tables()` is now paginated, defaulting to returning a list of all
-  tables in 50 table chunks (#108).
+* `list_tables()` (#108) and `list_datasets()` (#141) are now paginated.
+  By default they retrieve 50 items per page, and will iterate until they
+  get everything.
 
 * New `insert_table()` allows you to insert empty tables into a dataset.
 

@@ -26,7 +26,10 @@ bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
 bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
                              page_size = 50, max_pages = Inf) {
 
-  query <- modifyList(list(maxResults = page_size), query %||% list())
+  assert_that(is.numeric(max_pages), length(max_pages) == 1)
+  assert_that(is.numeric(page_size), length(page_size) == 1)
+
+  query <- utils::modifyList(list(maxResults = page_size), query %||% list())
   pages <- list()
 
   page <- bq_get(url, ..., query = query, token = token)

@@ -1,8 +1,8 @@
 #' List available tables in dataset.
 #'
 #' @inheritParams get_table
-#' @param page_size,max_pages For large lists these two options allow you to
-#'   control the maximum number of results to retrieve.
+#' @param page_size Number of items per page
+#' @param max_pages Maximum number of pages to retrieve
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -16,8 +16,6 @@
 #' }
 list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
   assert_that(is.string(project), is.string(dataset))
-  assert_that(is.numeric(max_pages), length(max_pages) == 1)
-  assert_that(is.numeric(page_size), length(page_size) == 1)
 
   url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
   data <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)

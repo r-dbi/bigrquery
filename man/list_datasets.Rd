@@ -4,10 +4,14 @@
 \alias{list_datasets}
 \title{List the datasets in a project}
 \usage{
-list_datasets(project)
+list_datasets(project, page_size = 50, max_pages = Inf)
 }
 \arguments{
-\item{project}{The project name, a string}
+\item{project}{project containing this table}
+
+\item{page_size}{Number of items per page}
+
+\item{max_pages}{Maximum number of pages to retrieve}
 }
 \value{
 a character vector of dataset names

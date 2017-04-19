@@ -11,8 +11,9 @@ list_tables(project, dataset, page_size = 50, max_pages = Inf)
 
 \item{dataset}{dataset containing this table}
 
-\item{max_results}{(optional) Maximum number of results to
-retrieve. If NULL, the default, will retrieve all results.}
+\item{page_size}{Number of items per page}
+
+\item{max_pages}{Maximum number of pages to retrieve}
 }
 \value{
 a character vector of table names

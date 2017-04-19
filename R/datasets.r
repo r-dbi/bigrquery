@@ -1,7 +1,7 @@
 #' List the datasets in a project
 #'
-#' @param project The project name, a string
 #' @return a character vector of dataset names
+#' @inheritParams list_tables
 #' @seealso Google API documentation:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/datasets/list}
 #' @family datasets
@@ -11,13 +11,14 @@
 #' list_datasets("publicdata")
 #' list_datasets("githubarchive")
 #' }
-list_datasets <- function(project) {
+list_datasets <- function(project, page_size = 50, max_pages = Inf) {
   assert_that(is.string(project))
 
   url <- sprintf("projects/%s/datasets", project)
-  data <- bq_get(url)$datasets
+  pages <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)
 
-  vapply(data, function(x) x$datasetReference$datasetId, character(1))
+  datasets <- unlist(lapply(pages, function(x) x$datasets), recursive = FALSE)
+  vapply(datasets, function(x) x$datasetReference$datasetId, character(1))
 }
 
 #' Gets an existing dataset in a project
@@ -40,9 +41,9 @@ get_dataset <- function(project, dataset) {
   bq_get(url)
 }
 
-#' @rdname exists_table
+#' @rdname get_dataset
 #' @export
-#' @description `exists_table` merely checks if a table exists, and returns
+#' @description `exists_dataset` merely checks if a table exists, and returns
 #'   either `TRUE` or `FALSE`.
 exists_dataset <- function(project, dataset) {
   tryCatch(
