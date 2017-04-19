@@ -22,6 +22,31 @@ bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
   process_request(req)
 }
 
+#' @importFrom httr GET config
+bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
+                             page_size = 50, max_pages = Inf) {
+
+  query <- modifyList(list(maxResults = page_size), query %||% list())
+  pages <- list()
+
+  page <- bq_get(url, ..., query = query, token = token)
+  i <- 1
+  pages[[i]] <- page
+  page_token <- page$nextPageToken
+
+  while (!is.null(page_token) && i < max_pages) {
+    query$pageToken <- page_token
+    page <- bq_get(url, ..., query = query, token = token)
+
+    i <- i + 1
+    pages[[i]] <- page
+    page_token <- page$nextPageToken
+  }
+
+  pages
+}
+
+
 #' @importFrom httr DELETE config
 bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- DELETE(
@@ -44,7 +69,7 @@ bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
     ...,
     query = prepare_bq_query(query)
   )
-  process_request(req)
+  invisible(process_request(req))
 }
 
 #' @importFrom httr PUT add_headers config

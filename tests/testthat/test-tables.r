@@ -1,20 +1,31 @@
 context("tables")
 
+
+
 test_that("can create and list tables", {
-  skip_if_no_auth()
+  ds <- dataset_10_tables()
+  expect_equal(
+    list_tables(ds$project, ds$dataset),
+    sort(paste0("table", 1:10))
+  )
+})
 
-  project <- "bigrquery-examples"
-  dataset <- "tables_test"
+test_that("can control pagination of list_tables", {
+  tables <- sort(paste0("table", 1:10))
+  ds <- dataset_10_tables()
 
-  insert_dataset(project, dataset)
-  on.exit(delete_dataset(project, dataset, deleteContents = TRUE))
+  expect_equal(list_tables(ds$project, ds$dataset, page_size = 5), tables)
+  expect_equal(list_tables(ds$project, ds$dataset, page_size = 10), tables)
 
-  tables <- paste0("table", 1:4)
-  for (table in tables) {
-    insert_table(project, dataset, table)
-  }
+  expect_equal(
+    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 1),
+    tables[1]
+  )
+  expect_equal(
+    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 2),
+    tables[1:2]
+  )
 
-  expect_equal(list_tables(project, dataset), tables)
 })
 
 test_that("table references are validated correctly", {

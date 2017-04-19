@@ -4,7 +4,7 @@
 \alias{list_tables}
 \title{List available tables in dataset.}
 \usage{
-list_tables(project, dataset, max_results = NULL)
+list_tables(project, dataset, page_size = 50, max_pages = Inf)
 }
 \arguments{
 \item{project}{project containing this table}

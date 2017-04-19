@@ -1,6 +1,9 @@
 # Version 0.3.0.9000
 
-* `insert_table()` allows you to insert empty tables.
+* `list_tables()` is now paginated, defaulting to returning a list of all
+  tables in 50 table chunks (#108).
+
+* New `insert_table()` allows you to insert empty tables into a dataset.
 
 * `insert_query_job()` and `query_exec()` gain a `use_legacy_sql` option
   so you can opt-in to the legacy SQL system (#124, @backlin)

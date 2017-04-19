@@ -40,6 +40,17 @@ get_dataset <- function(project, dataset) {
   bq_get(url)
 }
 
+#' @rdname exists_table
+#' @export
+#' @description `exists_table` merely checks if a table exists, and returns
+#'   either `TRUE` or `FALSE`.
+exists_dataset <- function(project, dataset) {
+  tryCatch(
+    !is.null(get_dataset(project = project, dataset = dataset)),
+    bigrquery_notFound = function(e) FALSE
+  )
+}
+
 #' Deletes an existing dataset in a project
 #'
 #' @param project The project name, a string

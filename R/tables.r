@@ -1,8 +1,8 @@
 #' List available tables in dataset.
 #'
 #' @inheritParams get_table
-#' @param max_results (optional) Maximum number of results to
-#'   retrieve. If NULL, the default, will retrieve all results.
+#' @param page_size,max_pages For large lists these two options allow you to
+#'   control the maximum number of results to retrieve.
 #' @return a character vector of table names
 #' @family tables
 #' @seealso API documentation:
@@ -14,18 +14,18 @@
 #' list_tables("githubarchive", "github")
 #' list_tables("publicdata", "samples", max_results = 2)
 #' }
-list_tables <- function(project, dataset, max_results = NULL) {
+list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
   assert_that(is.string(project), is.string(dataset))
-  if (!is.null(max_results)) {
-    assert_that(is.numeric(max_results), length(max_results) == 1)
-  }
+  assert_that(is.numeric(max_pages), length(max_pages) == 1)
+  assert_that(is.numeric(page_size), length(page_size) == 1)
 
   url <- sprintf("projects/%s/datasets/%s/tables", project, dataset)
-  query <- list()
-  if (!is.null(max_results)) {
-    query$maxResults <- max_results
-  }
-  data <- bq_get(url, query = query)$tables
+  data <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)
+
+  tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
+  vapply(tables, function(x) x$tableReference$tableId, character(1L))
+}
+
 #' Insert empty table
 #'
 #' @inheritParams get_table
@@ -46,7 +46,7 @@ insert_table <- function(project, dataset, table, body = list()) {
       tableId = table
     )
   )
-  table <- modifyList(table, body)
+  table <- utils::modifyList(table, body)
 
   bq_post(url, body = table)
 }
