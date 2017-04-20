@@ -71,19 +71,20 @@ sql_translate_env.BigQueryConnection <- function(x) {
     dbplyr::sql_translator(
       .parent = dbplyr::base_scalar,
 
-      "^" = sql_prefix("pow"),
+      `^` = sql_prefix("POW"),
+      `%%` = sql_prefix("MOD"),
 
       # Coercion
-      as.integer = function(x) dbplyr::build_sql("CAST(", x, " AS INT64)"),
-      as.logical = function(x) dbplyr::build_sql("CAST(", x, " AS BOOLEAN)"),
-      as.numeric = function(x) dbplyr::build_sql("CAST(", x, " AS FLOAT64)"),
+      as.integer = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS INT64)"),
+      as.logical = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS BOOLEAN)"),
+      as.numeric = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS FLOAT64)"),
 
       # Date/time
       Sys.date = sql_prefix("current_date"),
       Sys.time = sql_prefix("current_time"),
 
       # Regular expressions
-      grepl = sql_prefix("REGEXP_MATCH", 2),
+      grepl = sql_prefix("REGEXP_CONTAINS", 2),
       gsub = function(match, replace, x) {
         dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
       },
@@ -99,7 +100,11 @@ sql_translate_env.BigQueryConnection <- function(x) {
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
       "%||%" = sql_prefix("concat"),
-      sd =  sql_prefix("stddev")
+      sd =  sql_prefix("STDDEV_SAMP"),
+      var = sql_prefix("VAR_SAMP"),
+      any = sql_prefix("LOGICAL_OR", 1),
+      all = sql_prefix("LOGICAL_ANY", 1)
+
     ),
     dbplyr::base_win
   )
