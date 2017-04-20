@@ -118,6 +118,8 @@ object (in order to clone an existing connection).}
 
 \item{billing}{project ID to use for billing}
 
+\item{use_legacy_sql}{If \code{TRUE}, uses BigQuery legacy SQL.}
+
 \item{...}{authentication arguments needed by the DBMS instance; these
 typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.
 For details see the appropriate \code{DBIDriver}.}
