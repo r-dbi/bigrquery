@@ -112,18 +112,21 @@ get_job <- function(project, job) {
 #' @family jobs
 #' @export
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
-  elapsed <- timer()
-  is_quiet <- function() isTRUE(quiet) || (is.na(quiet) && elapsed() < 2)
+  progress <- bq_progress(
+    "Running query :spin: :elapsed:",
+    total = 1e7,
+    quiet = quiet
+  )
+
+  job <- get_job(job$jobReference$projectId, job$jobReference$jobId)
+  browser()
 
   while (job$status$state != "DONE") {
-    if (!is_quiet()) {
-      cat("\rRunning query:   ", job$status$state, " ",
-        sprintf("%4.1f", elapsed()), "s", sep = "")
-    }
     Sys.sleep(pause)
+    progress$tick()
     job <- get_job(job$jobReference$projectId, job$jobReference$jobId)
+    progress$tick()
   }
-  if (!is_quiet()) cat("\n")
 
   err <- job$status$errorResult
   if (!is.null(err)) {
@@ -131,19 +134,20 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     stop(err$message, call. = FALSE)
   }
 
-  if (!is_quiet()) {
-    if ("load" %in% names(job$config)) {
+  if (!isFALSE(quiet)) {
+    if ("load" %in% names(job$configuration)) {
       in_bytes <- as.numeric(job$statistics$load$inputFileBytes)
       out_bytes <- as.numeric(job$statistics$load$outputBytes)
       message(format(size_units(in_bytes)), " input bytes")
       message(format(size_units(out_bytes)), " output bytes")
-    } else if ("query" %in% names(job$config)) {
+    } else if ("query" %in% names(job$configuration)) {
       bytes <- as.numeric(job$statistics$totalBytesProcessed)
       message(format(size_units(bytes)), " processed")
     }
   }
+  progress$update(1)
 
-  job
+  invisible(job)
 }
 
 size_units <- function(x) {

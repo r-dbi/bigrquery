@@ -77,17 +77,12 @@ list_tabledata_callback <- function(project, dataset, table, callback,
     table_info = table_info
   )
 
-  delay <- if (identical(quiet, FALSE)) 0 else 2
-  quiet <- isTRUE(quiet)
   pages <- min(ceiling(iter$get_rows() / page_size), max_pages)
-  if (!quiet) {
-    progress <- progress::progress_bar$new(
-      "Retrieving data [:bar] :percent eta: :eta",
-      total = pages,
-      show_after = delay
-    )
-    progress$tick(0)
-  }
+  progress <- bq_progress(
+    "Retrieving data [:bar] :percent eta: :eta",
+    total = pages,
+    quiet = quiet
+  )
 
   cur_page <- 0L
 
@@ -95,9 +90,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
     data <- iter$next_(page_size)
     callback(data)
 
-    if (!quiet) {
-      progress$tick()
-    }
+    progress$tick()
     cur_page <- cur_page + 1
   }
 

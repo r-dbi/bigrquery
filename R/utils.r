@@ -49,3 +49,21 @@ rsplit_one <- function(str, sep) {
   }
   list(left = left, right = right)
 }
+
+bq_progress <- function(..., quiet = NA) {
+  delay <- if (isFALSE(quiet)) 0 else 2
+  quiet <- isTRUE(quiet)
+
+  if (quiet) {
+    list(
+      tick = function(...) {},
+      update = function(...) {}
+    )
+  } else {
+    progress <- progress::progress_bar$new(..., show_after = delay)
+    progress$tick(0)
+    progress
+  }
+
+}
+isFALSE <- function(x) identical(x, FALSE)
