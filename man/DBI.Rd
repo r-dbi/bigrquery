@@ -9,6 +9,7 @@
 \alias{dbConnect,BigQueryDriver-method}
 \alias{dbIsValid,BigQueryDriver-method}
 \alias{dbGetInfo,BigQueryDriver-method}
+\alias{dbDataType,BigQueryDriver-method}
 \alias{BigQueryConnection-class}
 \alias{show,BigQueryConnection-method}
 \alias{dbIsValid,BigQueryConnection-method}
@@ -42,11 +43,13 @@
 \S4method{show}{BigQueryDriver}(object)
 
 \S4method{dbConnect}{BigQueryDriver}(drv, project, dataset, billing = project,
-  ...)
+  use_legacy_sql = TRUE, ...)
 
 \S4method{dbIsValid}{BigQueryDriver}(dbObj, ...)
 
 \S4method{dbGetInfo}{BigQueryDriver}(dbObj, ...)
+
+\S4method{dbDataType}{BigQueryDriver}(dbObj, obj, ...)
 
 \S4method{show}{BigQueryConnection}(object)
 
@@ -122,6 +125,8 @@ For details see the appropriate \code{DBIDriver}.}
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},
 i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
 or a \linkS4class{DBIResult}}
+
+\item{obj}{An R object whose SQL type we want to determine.}
 
 \item{conn}{A \linkS4class{DBIConnection} object, as returned by
 \code{\link[=dbConnect]{dbConnect()}}.}

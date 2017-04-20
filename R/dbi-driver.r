@@ -35,7 +35,7 @@ setMethod(
 #' @rdname DBI
 #' @inheritParams DBI::dbConnect
 #' @inheritParams insert_upload_job
-#' @params use_legacy_sql If `TRUE`, uses BigQuery legacy SQL.
+#' @param use_legacy_sql If `TRUE`, uses BigQuery legacy SQL.
 #' @export
 setMethod(
   "dbConnect", "BigQueryDriver",
@@ -70,3 +70,14 @@ setMethod(
       max.connections = NA
     )
   })
+
+
+#' @rdname DBI
+#' @inheritParams DBI::dbDataType
+#' @export
+setMethod(
+  "dbDataType", "BigQueryDriver",
+  function(dbObj, obj, ...) {
+    data_type(obj)
+  }
+)
