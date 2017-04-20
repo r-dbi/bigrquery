@@ -34,7 +34,6 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   )
 
   job <- get_job(job$jobReference$projectId, job$jobReference$jobId)
-  browser()
 
   while (job$status$state != "DONE") {
     Sys.sleep(pause)
