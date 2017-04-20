@@ -1,5 +1,14 @@
 # Version 0.3.0.9000
 
+* dplyr support has been updated to require dplyr 0.6.0 and use dbplyr. This
+  means that you can now more naturally work directly with DBI connections.
+  dplyr now also uses modern BigQuery SQL which supports a broader set of
+  translations. Along the way I've also fixed some SQL generation bugs (#48).
+  
+    bigrquery will pass R CMD check with dplyr 0.5.0 but if you want to
+    take advantage of the dplyr interface, you'll need dplyr 0.6.0.
+
+
 * `wait_for()` uses now reports the query total bytes billed, which is
   more accurate because it takes into account caching and other factors.
 

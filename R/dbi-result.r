@@ -6,7 +6,8 @@ BigQueryResult <- function(connection, statement) {
     "BigQueryResult",
     connection = connection,
     statement = statement,
-    .envir = new.env(parent = emptyenv()))
+    .envir = new.env(parent = emptyenv())
+  )
 
   res@.envir$open <- TRUE
 
@@ -14,11 +15,15 @@ BigQueryResult <- function(connection, statement) {
     query = statement,
     project = connection@billing,
     destination_table = NULL,
-    default_dataset = format_dataset(connection@project, connection@dataset)
+    default_dataset = format_dataset(connection@project, connection@dataset),
+    use_legacy_sql = FALSE
   )
 
   res@.envir$iter <- list_tabledata_iter(
-    project = dest$projectId, dataset = dest$datasetId, table = dest$tableId)
+    project = dest$projectId,
+    dataset = dest$datasetId,
+    table = dest$tableId
+  )
 
   res
 }
@@ -66,6 +71,7 @@ setMethod(
     if (!dbIsValid(res)) {
       warning("Result already closed.", call. = FALSE)
     }
+
     res@.envir$open <- FALSE
     set_result(res@connection, NULL)
 

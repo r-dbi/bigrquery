@@ -25,7 +25,7 @@ List available tables in dataset.
 \dontrun{
 list_tables("publicdata", "samples")
 list_tables("githubarchive", "github")
-list_tables("publicdata", "samples", max_results = 2)
+list_tables("publicdata", "samples", max_pages = 2, page_size = 2)
 }
 }
 \seealso{

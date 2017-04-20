@@ -14,13 +14,14 @@ Imports:
     httr,
     jsonlite,
     assertthat,
-    dplyr (>= 0.5.0),
     readr,
     hms,
     progress
 Suggests:
     testthat,
     DBItest,
+    dplyr,
+    dbplyr,
     withr
 License: GPL-3 | file LICENSE
 LazyData: true
@@ -36,6 +37,7 @@ Collate:
     'dbi-driver.r'
     'dbi-connection.r'
     'dbi-result.r'
+    'dplyr-compat.R'
     'dplyr.r'
     'id.R'
     'job-extract.R'

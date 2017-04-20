@@ -81,11 +81,8 @@ setMethod(
 setMethod(
   "dbQuoteString", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    x_na <- is.na(x)
-    x <- gsub("\\", "\\\\", x, fixed = TRUE)
-    x <- gsub("'", "\\'", x, fixed = TRUE)
-    x <- paste0("'", x, "'")
-    x[x_na] <- "NULL"
+    x <- encodeString(x, na.encode = FALSE, quote = "'")
+    x[is.na(x)] <- "NULL"
     SQL(x)
   })
 
@@ -95,7 +92,7 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    SQL(paste0("[", x, "]", collapse = "."))
+    SQL(paste0("`", x, "`"))
   })
 
 #' @rdname DBI

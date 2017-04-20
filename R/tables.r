@@ -12,7 +12,7 @@
 #' \dontrun{
 #' list_tables("publicdata", "samples")
 #' list_tables("githubarchive", "github")
-#' list_tables("publicdata", "samples", max_results = 2)
+#' list_tables("publicdata", "samples", max_pages = 2, page_size = 2)
 #' }
 list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
   data <- bq_get_paginated(
@@ -57,8 +57,9 @@ insert_table <- function(project, dataset, table, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' get_table("publicdata", "samples", "natality")
-#' get_table("githubarchive", "github", "timeline")
+#' str(get_table("publicdata", "samples", "natality"))
+#' str(get_table("publicdata", "samples", "gsod"))
+#' str(get_table("githubarchive", "github", "timeline"))
 #' }
 #'
 #' @description `get_table` returns a table's metadata as a nested list.

@@ -25,20 +25,21 @@ library(dplyr)
 
 # To run this example, replace billing with the id of one of your projects
 # set up for billing
-pd <- src_bigquery("publicdata", "samples", billing = "887175176791")
-pd \%>\% tbl("shakespeare")
+con <- DBI::dbConnect(dbi_driver(),
+  project = "publicdata",
+  dataset = "samples",
+  billing = "887175176791"
+)
 
-# With bigquery data, it's always a good idea to start by selecting
-# only the variables you're interested in - this reduces the amount of
-# data that needs to be scanned and hence decreases costs
-natality <- pd \%>\%
-  tbl("natality") \%>\%
-  select(year:day, state, child_race, weight_pounds)
-year_weights <- natality \%>\%
-  group_by(year) \%>\%
-  summarise(weight = mean(weight_pounds), n = n()) \%>\%
-  arrange(year) \%>\%
-  collect()
-plot(year_weights$year, year_weights$weight, type = "b")
+DBI::dbListTables(con)
+DBI::dbGetQuery(con, "SELECT * FROM gsod LIMIT 5")
+
+# You can also use the dplyr interface
+shakespeare <- con \%>\% tbl("shakespeare")
+shakespeare
+shakespeare \%>\%
+  group_by(word) \%>\%
+  summarise(n = sum(word_count)) \%>\%
+  arrange(desc(n))
 }
 }

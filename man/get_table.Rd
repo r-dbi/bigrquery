@@ -31,8 +31,9 @@ either \code{TRUE} or \code{FALSE}.
 }
 \examples{
 \dontrun{
-get_table("publicdata", "samples", "natality")
-get_table("githubarchive", "github", "timeline")
+str(get_table("publicdata", "samples", "natality"))
+str(get_table("publicdata", "samples", "gsod"))
+str(get_table("githubarchive", "github", "timeline"))
 }
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/projects.r
 \name{list_projects}
 \alias{list_projects}
-\title{List projects that you have access to}
+\title{List all projects to which you have been granted any project role.}
 \usage{
 list_projects()
 }
@@ -10,7 +10,7 @@ list_projects()
 a character vector of project ids named with their friendly names.
 }
 \description{
-List projects that you have access to
+List all projects to which you have been granted any project role.
 }
 \examples{
 \dontrun{
