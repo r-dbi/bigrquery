@@ -35,6 +35,7 @@ Collate:
     'dbi-connection.r'
     'dbi-result.r'
     'dplyr.r'
+    'extract.r'
     'id.R'
     'jobs.r'
     'projects.r'
