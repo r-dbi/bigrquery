@@ -1,5 +1,8 @@
 # Version 0.3.0.9000
 
+* `wait_for()` uses now reports the query total bytes billed, which is
+  more accurate because it takes into account caching and other factors.
+
 * New `insert_extract_job()` make it possible to extract data and save in 
   google storage (@realAkhmed, #119).
 

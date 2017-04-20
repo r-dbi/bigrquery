@@ -55,7 +55,7 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
       message(format(size_units(in_bytes)), " input bytes")
       message(format(size_units(out_bytes)), " output bytes")
     } else if ("query" %in% names(job$configuration)) {
-      bytes <- as.numeric(job$statistics$totalBytesProcessed)
+      bytes <- as.numeric(job$statistics$query$totalBytesBilled)
       message(format(size_units(bytes)), " processed")
     }
   }
