@@ -1,9 +1,8 @@
 # https://developers.google.com/bigquery/docs/reference/v2/projects
 
-#' List projects that you have access to
+#' List all projects to which you have been granted any project role.
 #'
-#' @return a character vector of project ids named with their friendly names
-#'   Always includes publicly available sampledata project.
+#' @return a character vector of project ids named with their friendly names.
 #' @seealso API documentation at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/projects/list}
 #' @export
@@ -16,5 +15,6 @@ list_projects <- function() {
 
   id <- unlist(lapply(data, function(x) x$id))
   names(id) <- vapply(data, function(x) x$friendlyName, character(1))
-  c(id, "sampledata" = "sampledata")
+
+  id
 }

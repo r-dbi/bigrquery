@@ -7,8 +7,7 @@
 list_projects()
 }
 \value{
-a character vector of project ids named with their friendly names
-Always includes publicly available sampledata project.
+a character vector of project ids named with their friendly names.
 }
 \description{
 List projects that you have access to
