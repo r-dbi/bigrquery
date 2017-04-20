@@ -12,10 +12,6 @@ tweaks <- DBItest::tweaks(
   # BigQuery doesn't have a BLOB data type.
   omit_blob_tests = TRUE,
 
-  # The SQL functions current_date(), current_time() and current_timestamp()
-  # need parentheses.
-  current_needs_paren = TRUE,
-
   # UNION is very special in BigQuery; needs subqueries for "inline" queries
   # and uses the comma operator instead of the UNION keyword.  Constructed by
   # this function.

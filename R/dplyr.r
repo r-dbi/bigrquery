@@ -43,7 +43,8 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
     dbi_driver(),
     project = project,
     dataset = dataset,
-    billing = billing
+    billing = billing,
+    use_legacy_sql = FALSE
   )
 
   dbplyr::src_dbi("bigquery", con)
@@ -51,6 +52,9 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 
 # registered onLoad
 tbl.src_bigquery <- function(src, from, ...) {
+  if (src@use_legacy_sql) {
+    stop("dplyr backend must have use_legacy_sql = FALSE", call. = FALSE)
+  }
   dbplyr::tbl_sql("bigquery", src = src, from = from, ...)
 }
 
@@ -114,9 +118,12 @@ sql_translate_env.BigQueryConnection <- function(x) {
 # }
 
 
-simulate_bigrquery <- function() {
-  structure(
-    list(),
-    class = c("BigQueryConnection", "DBIConnection")
+simulate_bigrquery <- function(use_legacy_sql = FALSE) {
+  new("BigQueryConnection",
+    project = "test",
+    dataset = "test",
+    billing = "test",
+    use_legacy_sql = use_legacy_sql,
+    .envir = new.env(parent = emptyenv())
   )
 }

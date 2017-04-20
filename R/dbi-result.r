@@ -1,7 +1,7 @@
 #' @include dbi-connection.r
 NULL
 
-BigQueryResult <- function(connection, statement) {
+BigQueryResult <- function(connection, statement, use_legacy_sql = TRUE) {
   res <- new(
     "BigQueryResult",
     connection = connection,
@@ -16,7 +16,7 @@ BigQueryResult <- function(connection, statement) {
     project = connection@billing,
     destination_table = NULL,
     default_dataset = format_dataset(connection@project, connection@dataset),
-    use_legacy_sql = FALSE
+    use_legacy_sql = use_legacy_sql
   )
 
   res@.envir$iter <- list_tabledata_iter(

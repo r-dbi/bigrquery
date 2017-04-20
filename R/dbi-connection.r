@@ -1,13 +1,14 @@
 #' @include dbi-driver.r
 NULL
 
-BigQueryConnection <- function(project, dataset, billing) {
-  ret <- new(
-    "BigQueryConnection",
+BigQueryConnection <- function(project, dataset, billing, use_legacy_sql = TRUE) {
+  ret <- new("BigQueryConnection",
     project = project,
     dataset = dataset,
     billing = billing,
-    .envir = new.env(parent = emptyenv()))
+    use_legacy_sql = use_legacy_sql,
+    .envir = new.env(parent = emptyenv())
+  )
   ret@.envir$valid <- TRUE
   ret
 }
@@ -21,6 +22,7 @@ setClass(
     project = "character",
     dataset = "character",
     billing = "character",
+    use_legacy_sql = "logical",
     .envir = "environment"
   )
 )
@@ -70,7 +72,11 @@ setMethod(
     assert_connection_valid(conn)
 
     unset_result(conn)
-    res <- BigQueryResult(connection = conn, statement = statement)
+    res <- BigQueryResult(
+      connection = conn,
+      statement = statement,
+      use_legacy_sql = conn@use_legacy_sql
+    )
     set_result(conn, res)
     res
   })
@@ -92,7 +98,11 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    SQL(paste0("`", x, "`"))
+    if (conn@use_legacy_sql) {
+      SQL(paste0("[", x, "]"))
+    } else {
+      SQL(encodeString(x, quote = "`"))
+    }
   })
 
 #' @rdname DBI
