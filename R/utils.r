@@ -67,3 +67,18 @@ bq_progress <- function(..., quiet = NA) {
 
 }
 isFALSE <- function(x) identical(x, FALSE)
+
+
+size_units <- function(x) {
+  i <- floor(log2(x) / 10)
+  unit <- c("", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta")[i + 1]
+
+  structure(x, i = i, unit = unit, class = "size")
+}
+#' @export
+format.size <- function(x, ...) {
+  if (x == 0) return("0 bytes")
+
+  y <- x * 1024 ^ -attr(x, "i")
+  sprintf("%.1f %sbytes", y, attr(x, "unit"))
+}

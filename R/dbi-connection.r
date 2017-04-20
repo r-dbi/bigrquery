@@ -1,4 +1,4 @@
-#' @include dbi-driver.r upload.r
+#' @include dbi-driver.r
 NULL
 
 BigQueryConnection <- function(project, dataset, billing) {
