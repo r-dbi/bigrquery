@@ -52,7 +52,7 @@ rsplit_one <- function(str, sep) {
 
 bq_progress <- function(..., quiet = NA) {
   delay <- if (isFALSE(quiet)) 0 else 1
-  quiet <- isTRUE(quiet)
+  quiet <- if (is.na(quiet)) !interactive() else FALSE
 
   if (quiet) {
     list(
