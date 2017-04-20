@@ -183,24 +183,27 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
 }
 
 #Types can be loaded into R, record is not supported yet.
-converter <- list(
-  integer = as.integer,
-  float = as.double,
-  boolean = as.logical,
-  string = identity,
-  timestamp = function(x) {
-    as.POSIXct(as.numeric(x), origin = "1970-01-01", tz = "UTC")
-  },
-  time = function(x) {
-    readr::parse_time(x, "%H:%M:%OS")
-  },
-  date = function(x) {
-    readr::parse_date(x, format = "%Y-%m-%d")
-  },
-  datetime = function(x) {
-    readr::parse_datetime(x)
-  }
-)
+converters <- function() {
+  list(
+    integer = as.integer,
+    float = as.double,
+    boolean = as.logical,
+    string = identity,
+    timestamp = function(x) {
+      as.POSIXct(as.numeric(x), origin = "1970-01-01", tz = "UTC")
+    },
+    time = function(x) {
+      readr::parse_time(x, "%H:%M:%OS")
+    },
+    date = function(x) {
+      readr::parse_date(x, format = "%Y-%m-%d")
+    },
+    datetime = function(x) {
+      readr::parse_datetime(x)
+    }
+  )
+}
+
 
 extract_data <- function(rows, schema) {
   if (is.null(rows) || length(rows) == 0L) {
@@ -224,6 +227,7 @@ extract_data <- function(rows, schema) {
   data_m <- matrix(data, nrow = length(types))
 
   out <- vector("list", length(types))
+  converter <- converters()
   for(i in seq_along(types)) {
     type <- types[[i]]
     if (!(type %in% names(converter))) {
