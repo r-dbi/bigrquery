@@ -1,5 +1,8 @@
 # Version 0.3.0.9000
 
+* All bigrquery requests now have a custom user agent that specifies the
+  versions of bigrquery and httr that are used (#151).
+
 * `dbConnect()` gains a new `use_legacy_sql` argument so you can control 
   whether or not to use the legacy sql at the database level.
 

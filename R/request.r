@@ -26,6 +26,13 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
   paste0(names(components), "/", components, collapse = "/")
 }
 
+bq_ua <- function() {
+  httr::user_agent(paste0(
+    "bigrquery/", utils::packageVersion("bigrquery"), " ",
+    "httr/", utils::packageVersion("httr")
+  ))
+}
+
 bq_body <- function(body, ...) {
   user <- toCamel(list(...))
   utils::modifyList(body, user)
@@ -37,6 +44,7 @@ bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- GET(
     paste0(base_url, url),
     config(token = token),
+    bq_ua(),
     ...,
     query = prepare_bq_query(query)
   )
@@ -76,6 +84,7 @@ bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- DELETE(
     paste0(base_url, url),
     config(token = token),
+    bq_ua(),
     ...,
     query = prepare_bq_query(query)
   )
@@ -88,6 +97,7 @@ bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   req <- POST(
     paste0(base_url, url),
     body = json,
+    bq_ua(),
     config(token = token),
     add_headers("Content-Type" = "application/json"),
     ...,
@@ -102,6 +112,7 @@ bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   req <- PUT(
     paste0(base_url, url),
     body = json,
+    bq_ua(),
     config(token = token),
     add_headers("Content-Type" = "application/json"),
     ...,
@@ -117,6 +128,7 @@ bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) 
     url,
     parts = parts,
     config(token = token),
+    bq_ua(),
     ...,
     query = prepare_bq_query(query)
   )
