@@ -17,6 +17,7 @@
 #'   `"WRITE_TRUNCATE"` and `"WRITE_EMPTY"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 #'   for more information
+#' @inheritParams insert_dataset
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
@@ -33,7 +34,8 @@
 insert_upload_job <- function(project, dataset, table, values,
                               billing = project,
                               create_disposition = "CREATE_IF_NEEDED",
-                              write_disposition = "WRITE_APPEND") {
+                              write_disposition = "WRITE_APPEND",
+                              ...) {
   assert_that(
     is.string(project),
     is.string(dataset),
@@ -60,6 +62,7 @@ insert_upload_job <- function(project, dataset, table, values,
       )
     )
   )
+  config <- bq_body(config, ...)
   config_part <- part(
     c("Content-type" = "application/json; charset=UTF-8"),
     jsonlite::toJSON(config, auto_unbox = TRUE)

@@ -21,6 +21,7 @@ Wait for a job to complete, optionally printing updates
 }
 \seealso{
 Other jobs: \code{\link{get_job}},
+  \code{\link{insert_extract_job}},
   \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}
 }

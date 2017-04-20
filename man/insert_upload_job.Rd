@@ -6,7 +6,7 @@
 \usage{
 insert_upload_job(project, dataset, table, values, billing = project,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_APPEND")
+  write_disposition = "WRITE_APPEND", ...)
 }
 \arguments{
 \item{project}{The project name, a string}
@@ -30,6 +30,10 @@ exists. defaults to \code{"WRITE_APPEND"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 for more information}
+
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \description{
 This sends all of the data inline in the HTTP request so is only suitable
@@ -50,5 +54,6 @@ Google API documentation:
 \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 
 Other jobs: \code{\link{get_job}},
+  \code{\link{insert_extract_job}},
   \code{\link{insert_query_job}}, \code{\link{wait_for}}
 }
