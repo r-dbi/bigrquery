@@ -141,10 +141,12 @@ setMethod(
 
     data <- DBI::sqlRownamesToColumn(value, row.names = row.names)
 
-    job <- insert_upload_job(conn@project, conn@dataset, name, data,
-                             conn@billing,
-                             create_disposition = create_disposition,
-                             write_disposition = write_disposition)
+    job <- insert_upload_job(
+      conn@project, conn@dataset, name, data,
+      conn@billing,
+      create_disposition = create_disposition,
+      write_disposition = write_disposition
+    )
     job <- wait_for(job, conn@quiet)
     invisible(TRUE)
   })
