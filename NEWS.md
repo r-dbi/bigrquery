@@ -1,5 +1,9 @@
 # Version 0.3.0.9000
 
+* Profiling revealed that ~40% of the time taken by `query_exec()` was
+  a single line inside a function that helps parse BigQuery's json into an R 
+  data frame. I replaced that with a C function that is much much faster.
+
 * All bigrquery requests now have a custom user agent that specifies the
   versions of bigrquery and httr that are used (#151).
 

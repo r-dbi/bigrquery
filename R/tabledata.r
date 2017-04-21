@@ -217,18 +217,13 @@ extract_data <- function(rows, schema) {
   types <- tolower(vapply(schema$fields, function(x) x$type, character(1)))
 
   # Convert NULLs into NAs
-  out <- character(length(rows) * length(types))
-  for(i in seq_along(rows)) {
-    for(j in seq_along(types)) {
-      if (is.null(rows[[i]]$f[[j]]$v)) rows[[i]]$f[[j]]$v <- NA_character_
-    }
-  }
+  rows <- null_to_na(rows)
   data <- unlist(rows, use.names = FALSE)
   data_m <- matrix(data, nrow = length(types))
 
   out <- vector("list", length(types))
   converter <- converters()
-  for(i in seq_along(types)) {
+  for (i in seq_along(types)) {
     type <- types[[i]]
     if (!(type %in% names(converter))) {
       stop("Don't know how to convert type ", type, call. = FALSE)
@@ -239,3 +234,11 @@ extract_data <- function(rows, schema) {
   names(out) <- vapply(schema$fields, function(x) x$name, character(1))
   as_df(out)
 }
+
+
+#' @useDynLib bigrquery null_to_na_
+null_to_na <- function(x) {
+  .Call(null_to_na_, x)
+}
+
+
