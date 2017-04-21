@@ -37,6 +37,7 @@ DBItest::test_sql(c(
   "^roundtrip_null$", # #97
   "^roundtrip_date$", # No distinction between date, time, and timestamp data types
   "^roundtrip_timestamp$", # #98
+  "^roundtrip_numeric_special$", # no way to send literal Inf/-Inf
   "^quote_identifier_not_vectorized$", # bug in CRAN version
   NULL
 ))
