@@ -145,7 +145,7 @@ setMethod(
                              conn@billing,
                              create_disposition = create_disposition,
                              write_disposition = write_disposition)
-    job <- wait_for(job)
+    job <- wait_for(job, conn@quiet)
     invisible(TRUE)
   })
 
