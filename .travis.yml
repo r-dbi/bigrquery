@@ -10,8 +10,8 @@ r:
 - devel
 
 before_install:
-- openssl aes-256-cbc \
-    -K $encrypted_95be9bef5db7_key -iv $encrypted_95be9bef5db7_iv  \
+- openssl aes-256-cbc
+    -K $encrypted_95be9bef5db7_key -iv $encrypted_95be9bef5db7_iv
     -in tests/testthat/service-token.json.enc -out tests/testthat/service-token.json -d
 
 env:
