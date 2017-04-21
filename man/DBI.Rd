@@ -43,7 +43,7 @@
 \S4method{show}{BigQueryDriver}(object)
 
 \S4method{dbConnect}{BigQueryDriver}(drv, project, dataset, billing = project,
-  use_legacy_sql = TRUE, ...)
+  page_size = 10000, quiet = NA, use_legacy_sql = TRUE, ...)
 
 \S4method{dbIsValid}{BigQueryDriver}(dbObj, ...)
 
@@ -118,7 +118,11 @@ object (in order to clone an existing connection).}
 
 \item{billing}{project ID to use for billing}
 
-\item{use_legacy_sql}{If \code{TRUE}, uses BigQuery legacy SQL.}
+\item{page_size}{Number of items per page.}
+
+\item{quiet}{if \code{FALSE}, prints informative status messages.}
+
+\item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
 \item{...}{authentication arguments needed by the DBMS instance; these
 typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.

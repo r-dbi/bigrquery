@@ -35,16 +35,22 @@ setMethod(
 #' @rdname DBI
 #' @inheritParams DBI::dbConnect
 #' @inheritParams insert_upload_job
-#' @param use_legacy_sql If `TRUE`, uses BigQuery legacy SQL.
+#' @inheritParams query_exec
 #' @export
 setMethod(
   "dbConnect", "BigQueryDriver",
-  function(drv, project, dataset, billing = project, use_legacy_sql = TRUE, ...) {
+  function(drv, project, dataset, billing = project,
+           page_size = 1e4,
+           quiet = NA,
+           use_legacy_sql = TRUE,
+           ...) {
     BigQueryConnection(
       project = project,
       dataset = dataset,
       billing = billing,
-      use_legacy_sql = TRUE
+      page_size = page_size,
+      quiet = quiet,
+      use_legacy_sql = use_legacy_sql
     )
   }
 )

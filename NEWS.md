@@ -1,5 +1,8 @@
 # Version 0.3.0.9000
 
+* `query_exec()` and `insert_query_job()` gain `quiet` arguments so you can
+  supppress the progress bars if needed.
+  
 * Profiling revealed that ~40% of the time taken by `query_exec()` was
   a single line inside a function that helps parse BigQuery's json into an R 
   data frame. I replaced that with a C function that is much much faster.
@@ -7,8 +10,9 @@
 * All bigrquery requests now have a custom user agent that specifies the
   versions of bigrquery and httr that are used (#151).
 
-* `dbConnect()` gains a new `use_legacy_sql` argument so you can control 
-  whether or not to use the legacy sql at the database level.
+* `dbConnect()` gains a new `use_legacy_sql`, `page_size`, and `quiet` 
+  arguments that are passed onto `query_exec()`. These allow you to control
+  query options at the connection level.
 
 * dplyr support has been updated to require dplyr 0.6.0 and use dbplyr. This
   means that you can now more naturally work directly with DBI connections.
