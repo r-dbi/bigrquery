@@ -33,6 +33,7 @@ Collate:
     'auth.r'
     'bigrquery.r'
     'camelCase.R'
+    'cs.r'
     'datasets.r'
     'dbi-driver.r'
     'dbi-connection.r'

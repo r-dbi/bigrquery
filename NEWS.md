@@ -1,5 +1,8 @@
 # Version 0.3.0.9000
 
+* Add `insert_load_csv_from_cs_job()` and `load_csv_from_cs()` functions to help
+  load CSV files stored in Google Cloud Storage into BigQuery table.
+
 * `query_exec()` and `insert_query_job()` gain `quiet` arguments so you can
   supppress the progress bars if needed.
   
