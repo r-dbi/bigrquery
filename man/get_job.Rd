@@ -25,6 +25,7 @@ API documentation for get method:
 \code{\link[=wait_for]{wait_for()}} to wait for a job to complete
 
 Other jobs: \code{\link{insert_extract_job}},
+  \code{\link{insert_load_csv_from_cs_job}},
   \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
