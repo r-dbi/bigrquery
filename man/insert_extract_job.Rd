@@ -41,6 +41,7 @@ it is finished, see \code{\link{wait_for}}.
 }
 \seealso{
 Other jobs: \code{\link{get_job}},
+  \code{\link{insert_load_csv_from_cs_job}},
   \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
