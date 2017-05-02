@@ -19,4 +19,5 @@
 #' @aliases bigquery
 #' @docType package
 #' @import assertthat
+#' @useDynLib bigrquery, .registration = TRUE
 NULL

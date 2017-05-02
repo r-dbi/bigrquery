@@ -236,7 +236,6 @@ extract_data <- function(rows, schema) {
 }
 
 
-#' @useDynLib bigrquery null_to_na_
 null_to_na <- function(x) {
   .Call(null_to_na_, x)
 }
