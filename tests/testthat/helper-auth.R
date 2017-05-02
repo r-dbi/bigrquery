@@ -1,4 +1,4 @@
-path <- "service-token.json"
+path <- "~/.bigrquery-token.json"
 has_auth <- file.exists(path)
 
 skip_if_no_auth <- function() {
