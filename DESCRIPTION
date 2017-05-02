@@ -23,7 +23,6 @@ Suggests:
     dbplyr,
     withr,
     hms
-Remotes: tidyverse/dbplyr
 License: GPL-3 | file LICENSE
 LazyData: true
 RoxygenNote: 6.0.1
