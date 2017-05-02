@@ -26,11 +26,23 @@ tweaks <- DBItest::tweaks(
   }
 )
 
+
+
+# Make temporary dataset --------------------------------------------------
+
+env <- new.env()
+env$project <- "bigrquery-examples"
+env$dataset <- paste0("test", sample(10000, 1))
+insert_dataset(env$project, env$dataset)
+reg.finalizer(env, function(env) {
+  delete_dataset(env$project, env$dataset, deleteContents = TRUE)
+}, onexit = TRUE)
+
 DBItest::make_context(
   dbi_driver(),
   connect_args = list(
-    project = "bigrquery-examples",
-    dataset = "test",
+    project = env$project,
+    dataset = env$dataset,
     quiet = TRUE
   ),
   tweaks = tweaks
