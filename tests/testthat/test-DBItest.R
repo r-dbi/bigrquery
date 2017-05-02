@@ -1,4 +1,16 @@
 if (has_auth) {
+env <- temporary_dataset()
+
+DBItest::make_context(
+  dbi_driver(),
+  connect_args = list(
+    project = env$project,
+    dataset = env$dataset,
+    quiet = TRUE
+  ),
+  tweaks = tweaks
+)
+
 
 # In addition, specific tests are omitted, also commented inline. If the comment
 # refers to an issue number, the problem should be resolved by fixing the
