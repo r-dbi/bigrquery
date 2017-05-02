@@ -5,8 +5,7 @@
   register_s3_method("dplyr", "sql_translate_env", "BigQueryConnection")
   register_s3_method("dplyr", "tbl", "src_bigquery")
 
-  # Default optioins --------------------------------------------------------
-
+  # Default options --------------------------------------------------------
   op <- options()
   defaults <- list(
     bigrquery.quiet = NA,
