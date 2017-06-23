@@ -12,8 +12,7 @@ NULL
 #' @import methods DBI
 #' @examples
 #' \dontrun{
-#' #' library(DBI)
-#' dbConnect(dbi_driver(), database = "mydb", project = "myproject")
+#' DBI::dbConnect(bigquery(), dataset = "mydb", project = "myproject")
 #' }
 dbi_driver <- function() {
   new("BigQueryDriver")

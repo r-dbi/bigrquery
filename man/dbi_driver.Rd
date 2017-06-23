@@ -14,7 +14,6 @@ Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConne
 }
 \examples{
 \dontrun{
-#' library(DBI)
-dbConnect(dbi_driver(), database = "mydb", project = "myproject")
+DBI::dbConnect(bigquery(), dataset = "mydb", project = "myproject")
 }
 }
