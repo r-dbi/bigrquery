@@ -2,13 +2,10 @@
 
 ## New features
 
-* dplyr support has been updated to require dplyr 0.6.0 and use dbplyr. This
+* dplyr support has been updated to require dplyr 0.7.0 and use dbplyr. This
   means that you can now more naturally work directly with DBI connections.
   dplyr now also uses modern BigQuery SQL which supports a broader set of
   translations. Along the way I've also fixed some SQL generation bugs (#48).
-  
-    bigrquery will pass R CMD check with dplyr 0.5.0 but if you want to
-    take advantage of the dplyr interface, you'll need dplyr 0.6.0.
 
 * The DBI driver gets a new name: `bigquery()`.
 

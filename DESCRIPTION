@@ -19,7 +19,7 @@ Imports:
 Suggests:
     testthat,
     DBItest,
-    dplyr,
+    dplyr (>= 0.7.0),
     dbplyr,
     withr,
     hms
