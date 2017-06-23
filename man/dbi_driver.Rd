@@ -2,9 +2,12 @@
 % Please edit documentation in R/dbi-driver.r
 \name{dbi_driver}
 \alias{dbi_driver}
+\alias{bigquery}
 \title{BigQuery DBI driver}
 \usage{
 dbi_driver()
+
+bigquery()
 }
 \description{
 Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.

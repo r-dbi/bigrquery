@@ -19,6 +19,10 @@ dbi_driver <- function() {
   new("BigQueryDriver")
 }
 
+#' @export
+#' @rdname dbi_driver
+bigquery <- dbi_driver
+
 #' @rdname DBI
 #' @export
 setClass("BigQueryDriver", contains = "DBIDriver")

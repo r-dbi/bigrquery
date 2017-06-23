@@ -10,6 +10,8 @@
     bigrquery will pass R CMD check with dplyr 0.5.0 but if you want to
     take advantage of the dplyr interface, you'll need dplyr 0.6.0.
 
+* The DBI driver gets a new name: `bigquery()`.
+
 * New `insert_extract_job()` make it possible to extract data and save in 
   google storage (@realAkhmed, #119).
 
