@@ -47,7 +47,7 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
     use_legacy_sql = FALSE
   )
 
-  dbplyr::src_dbi("bigquery", con)
+  dbplyr::src_dbi(con)
 }
 
 # registered onLoad
