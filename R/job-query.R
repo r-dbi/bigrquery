@@ -22,6 +22,7 @@
 #'   `query`, either as a string in the format used by BigQuery or as a
 #'   list with `project_id` and `dataset_id` entries
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
+#' @param dry_run (optional) set to `TRUE` to enable dry run in BigQuery.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -34,6 +35,7 @@ insert_query_job <- function(query, project,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
+                             dry_run = FALSE,
                              ...) {
   assert_that(is.string(project), is.string(query))
 
@@ -43,7 +45,8 @@ insert_query_job <- function(query, project,
       query = list(
         query = query,
         useLegacySql = use_legacy_sql
-      )
+      ),
+      dryRun = dry_run
     )
   )
 
