@@ -1,3 +1,7 @@
+# Version 0.4.1
+
+* Fix SQL translation omissions discovered by dbplyr 1.1.0
+
 # Version 0.4.0
 
 ## New features

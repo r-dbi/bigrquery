@@ -104,9 +104,14 @@ sql_translate_env.BigQueryConnection <- function(x) {
       var = sql_prefix("VAR_SAMP"),
       any = sql_prefix("LOGICAL_OR", 1),
       all = sql_prefix("LOGICAL_ANY", 1)
-
     ),
-    dbplyr::base_win
+    dbplyr::sql_translator(
+      .parent = dbplyr::base_win,
+      sd = dbplyr::win_recycled("sd"),
+      all = dbplyr::win_recycled("all"),
+      any = dbplyr::win_recycled("any"),
+      n_distinct = dbplyr::win_absent("n_distinct")
+    )
   )
 }
 

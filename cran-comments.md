@@ -5,7 +5,11 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
+
+* There was one note: there have only been 3 days since the last automated
+  release. Unfortunately I just discovered a bug thanks to stricter
+  checks in dbplyr 1.1.0.
 
 ## Reverse dependencies
 
