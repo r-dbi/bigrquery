@@ -103,7 +103,7 @@ sql_translate_env.BigQueryConnection <- function(x) {
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       any = sql_prefix("LOGICAL_OR", 1),
-      all = sql_prefix("LOGICAL_ANY", 1)
+      all = sql_prefix("LOGICAL_AND", 1)
     ),
     dbplyr::sql_translator(
       .parent = dbplyr::base_win,
