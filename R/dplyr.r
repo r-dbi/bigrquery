@@ -95,7 +95,11 @@ sql_translate_env.BigQueryConnection <- function(x) {
       # stringr equivalents
       str_detect = sql_prefix("REGEXP_MATCH", 2),
       str_extract = sql_prefix("REGEXP_EXTRACT", 2),
-      str_replace = sql_prefix("REGEXP_REPLACE", 3)
+      str_replace = sql_prefix("REGEXP_REPLACE", 3),
+
+      # Parallel min and max
+      pmax = sql_prefix("GREATEST"),
+      pmin = sql_prefix("LEAST")
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
