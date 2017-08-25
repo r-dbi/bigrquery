@@ -48,15 +48,17 @@ query_exec <- function(query, project,
     ...
   )
 
-  list_tabledata(
-    dest$projectId,
-    dest$datasetId,
-    dest$tableId,
-    page_size = page_size,
-    max_pages = max_pages,
-    warn = warn,
-    quiet = quiet
-  )
+  if(page_size*max_pages>0){
+    list_tabledata(
+      dest$projectId,
+      dest$datasetId,
+      dest$tableId,
+      page_size = page_size,
+      max_pages = max_pages,
+      warn = warn,
+      quiet = quiet
+    )
+  }
 }
 
 # Submits a query job, waits for it, and returns information on the destination
