@@ -22,6 +22,8 @@ test_that("can convert all date time types", {
 })
 
 test_that("query with no results returns empty dataset with field names", {
+  skip_if_no_auth()
+
   sql <- "SELECT * FROM (SELECT 1 AS test) WHERE FALSE"
   df <- query_exec(sql, project = "bigrquery-examples", use_legacy_sql = FALSE)
   expect_identical(nrow(df), 0L)
