@@ -38,6 +38,10 @@ exists. defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{quiet}{if \code{FALSE}, prints informative status messages.}
+
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \description{
 Submit an insert job, waits for it, and invisibly returns information on the

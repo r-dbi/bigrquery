@@ -35,6 +35,10 @@ exists. defaults to \code{"WRITE_EMPTY"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 for more information}
+
+\item{...}{Additional arguments merged into the body of the
+request. \code{snake_case} will automatically be converted into
+\code{camelCase} so you can use consistent argument names.}
 }
 \value{
 a job resource list, as documented at
@@ -42,7 +46,7 @@ a job resource list, as documented at
 }
 \description{
 This is a low-level function that creates an insert job. To wait until it is
-finished and retrive the new table, see \link[=load_csv_from_cs]{load_csv_from_cs()}
+finished and retrive the new table, see \code{\link[=load_csv_from_cs]{load_csv_from_cs()}}
 }
 \seealso{
 API documentation for insert method:
