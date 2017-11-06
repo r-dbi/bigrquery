@@ -4,16 +4,15 @@
 \alias{load_csv_from_cs}
 \title{Load a CSV file from Google Cloud Storage into a table}
 \usage{
-load_csv_from_cs(project, dataset, table, source_uris, skip_leading_rows = 1,
-  create_disposition = "CREATE_IF_NEEDED",
+load_csv_from_cs(project, dataset, table, source_uris, autodetect = TRUE,
+  skip_leading_rows = 1, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", quiet = getOption("bigrquery.quiet"),
   ...)
 }
 \arguments{
 \item{project}{The project name, a string}
 
-\item{dataset}{The name of the dataset that contains the destination table,
-a string}
+\item{dataset}{The name of the dataset to create, a string}
 
 \item{table}{The name of the table to load data into}
 
@@ -21,6 +20,8 @@ a string}
 Google Cloud Storage; see
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.sourceUris}{the API documentation}
 for more information}
+
+\item{autodetect}{boolean, default to \code{TRUE} to tell BigQuery to autodetect table schema}
 
 \item{skip_leading_rows}{The number of rows at the top of a CSV file that
 BigQuery will skip when loading the data, default to 1}

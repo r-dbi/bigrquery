@@ -3,14 +3,13 @@
 #' This is a low-level function that creates an insert job. To wait until it is
 #' finished and retrive the new table, see [load_csv_from_cs()]
 #'
-#' @param project The project name, a string
-#' @param dataset The name of the dataset that contains the destination table,
-#'   a string
+#' @inheritParams insert_dataset
 #' @param table The name of the table to load data into
 #' @param source_uris The fully-qualified URIs that point to a CSV file in
 #'   Google Cloud Storage; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.sourceUris}{the API documentation}
 #'   for more information
+#' @param autodetect boolean, default to `TRUE` to tell BigQuery to autodetect table schema
 #' @param skip_leading_rows The number of rows at the top of a CSV file that
 #'   BigQuery will skip when loading the data, default to 1
 #' @param create_disposition Behavior for table creation if the destination
@@ -23,9 +22,6 @@
 #'   \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 #'   for more information
-#' @param ... Additional arguments merged into the body of the
-#'   request. `snake_case` will automatically be converted into
-#'   `camelCase` so you can use consistent argument names.
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -33,7 +29,9 @@
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
 insert_load_csv_from_cs_job <- function(project, dataset, table,
-                                        source_uris, skip_leading_rows = 1,
+                                        source_uris,
+                                        autodetect = TRUE,
+                                        skip_leading_rows = 1,
                                         create_disposition = "CREATE_IF_NEEDED",
                                         write_disposition = "WRITE_EMPTY",
                                         ...) {
@@ -46,7 +44,7 @@ insert_load_csv_from_cs_job <- function(project, dataset, table,
       load = list(
         sourceFormat = "CSV",
         sourceUris = source_uris,
-        autodetect = TRUE,
+        autodetect = autodetect,
         skipLeadingRows = skip_leading_rows,
         destinationTable = list(
           projectId = project,
@@ -77,7 +75,7 @@ insert_load_csv_from_cs_job <- function(project, dataset, table,
 #' load_csv_from_cs(project = project, dataset = ds, table = "shakespeare",
 #'                  source_uris = "gs://bigrquery_test/shakespeare.csv")
 #' }
-load_csv_from_cs <- function(project, dataset, table, source_uris,
+load_csv_from_cs <- function(project, dataset, table, source_uris, autodetect = TRUE,
                              skip_leading_rows = 1,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
@@ -85,6 +83,7 @@ load_csv_from_cs <- function(project, dataset, table, source_uris,
                              ...) {
   job <- insert_load_csv_from_cs_job(project, dataset, table,
                                      source_uris = source_uris,
+                                     autodetect = autodetect,
                                      skip_leading_rows = skip_leading_rows,
                                      create_disposition = create_disposition,
                                      write_disposition = write_disposition,
