@@ -4,6 +4,7 @@ google <- oauth_endpoint(NULL, "auth", "token",
 bigqr <- oauth_app("google",
   "465736758727.apps.googleusercontent.com",
   "fJbIIyoIag0oA6p114lwsV2r")
+metadata <- "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token"
 
 bq_env <- new.env(parent = emptyenv())
 
@@ -34,6 +35,27 @@ get_access_cred <- function() {
   bq_env$access_cred
 }
 
+cred_from_metadata <- function(appname, scopes) {
+  req <- try(httr::GET(metadata,
+                       httr::add_headers("Metadata-Flavor" = "Google")), silent = TRUE)
+  if(is.error(req)){ # probably not running inside GCP
+    return(NULL)
+  }
+
+  token <- httr::content(req, type = "application/json")
+  token_formatted <-
+    httr::Token2.0$new(app = bigqr,
+                       endpoint = httr::oauth_endpoints("google"),
+                       credentials = list(access_token = token$access_token,
+                                          token_type = token$token_type,
+                                          expires_in = token$expires_in,
+                                          refresh_token = NULL),
+                       params = list(scope = scopes, type = NULL,
+                                     use_oob = FALSE, as_header = TRUE))
+
+  return(token_formatted)
+}
+
 #' @rdname get_access_cred
 #' @param app A Google OAuth application created using
 #'  \code{\link[httr]{oauth_app}}
@@ -43,10 +65,17 @@ set_oauth2.0_cred <- function(app = NULL) {
     app <- bigqr
   }
 
-  cred <- oauth2.0_token(google, app,
-    scope = c(
-        "https://www.googleapis.com/auth/bigquery",
-        "https://www.googleapis.com/auth/cloud-platform"))
+  scopes <- c(
+    "https://www.googleapis.com/auth/bigquery",
+    "https://www.googleapis.com/auth/cloud-platform")
+
+  # fetch from metadata (works when running inside GCP)
+  cred <- cred_from_metadata(app, scopes)
+
+  if (is.null(cred)) {
+    # last resort - do an interactive authentication
+    cred <- oauth2.0_token(google, app, scope = scopes)
+  }
 
   set_access_cred(cred)
 }
