@@ -70,7 +70,21 @@ get_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
 
   url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
-  bq_get(url)
+  if (!is.null(metadata$schema)) {
+    metadata$schema <- name_recursively(metadata$schema)
+  }
+  metadata
+}
+
+name_recursively <- function(schema) {
+  if (!is.null(schema$fields)) {
+    name_recursively(schema$fields)
+  } else if (!is.null(schema[["name"]])) {
+    schema
+  } else {
+    nms <- vapply(schema, function(ls) ls[["name"]], character(1))
+    setNames(lapply(schema, name_recursively), nms)
+  }
 }
 
 #' @rdname get_table
