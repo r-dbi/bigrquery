@@ -1,5 +1,9 @@
 # bigrquery 0.4.1.9000
 
+* Adds support for `paste0()`(@edgararuiz)
+
+* Adds aggregate and window support for `cor()` and `cov()`(@edgararuiz)
+
 # Version 0.4.1
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
