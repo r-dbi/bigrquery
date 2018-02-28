@@ -1,0 +1,10 @@
+[
+  {
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "name": "first_name",
+    "type": "STRING"
+  }
+]

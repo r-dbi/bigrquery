@@ -4,7 +4,7 @@
 \alias{insert_table}
 \title{Insert empty table}
 \usage{
-insert_table(project, dataset, table, ...)
+insert_table(project, dataset, table, schema = list(), ...)
 }
 \arguments{
 \item{project}{The project name, a string}
@@ -12,6 +12,8 @@ insert_table(project, dataset, table, ...)
 \item{dataset}{The name of the dataset to create, a string}
 
 \item{table}{name of the table}
+
+\item{schema}{schema of the table to be created}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
