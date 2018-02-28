@@ -32,22 +32,18 @@ list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
 #' @export
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}
-insert_table <- function(project, dataset, table, schema = list(), ...) {
+insert_table <- function(project, dataset, table, ...) {
   url <- bq_path(project, dataset, "")
-  if (length(schema) > 0) {
-    schema = list(fields = schema)
-  }
   body <- list(
     tableReference = list(
       projectId = project,
       datasetId = dataset,
       tableId = table
-    ),
-    schema = schema
+    )
   )
+
   bq_post(url, body = bq_body(body, ...))
 }
-
 
 #' Retrieve table metadata
 #'

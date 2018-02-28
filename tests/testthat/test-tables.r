@@ -59,14 +59,3 @@ test_that("copy_table validates its arguments", {
                "src must be a table reference or a nonempty list of table references")
   expect_error(copy_table(complete, partial), "dest must be a table reference")
 })
-
-test_that("insert table creates table with a given schema", {
-  ds <- dataset_10_tables()
-  table <- "from_sample_schema"
-  schema.source <- jsonlite::read_json("sample-schema.json")
-  insert_table(ds$project, ds$dataset, table, schema.source)
-  meta <- get_table(ds$project, ds$dataset, table)
-  schema.meta <- meta$schema$fields
-  expect_equal(length(schema.meta), 2)
-  expect_equal(schema.meta, schema.source)
-})
