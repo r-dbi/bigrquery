@@ -73,6 +73,7 @@ sql_translate_env.BigQueryConnection <- function(x) {
 
       `^` = sql_prefix("POW"),
       `%%` = sql_prefix("MOD"),
+      "%||%" = sql_prefix("IFNULL"),
 
       # Coercion
       as.integer = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS INT64)"),
@@ -99,7 +100,6 @@ sql_translate_env.BigQueryConnection <- function(x) {
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
-      "%||%" = sql_prefix("concat"),
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       any = sql_prefix("LOGICAL_OR", 1),
