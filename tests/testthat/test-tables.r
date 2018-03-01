@@ -61,12 +61,40 @@ test_that("copy_table validates its arguments", {
 })
 
 test_that("insert table creates table with a given schema", {
-  ds <- dataset_10_tables()
-  table <- "from_sample_schema"
+  project <- "bigrquery-examples"
+  dataset <- "test_insert_tables"
+  table <- "table_from_sample_schema"
+
+  if (!exists_dataset(project, dataset)) {
+    insert_dataset(project, dataset)
+  }
+
   schema.source <- jsonlite::read_json("sample-schema.json")
-  insert_table(ds$project, ds$dataset, table, schema.source)
-  meta <- get_table(ds$project, ds$dataset, table)
+  insert_table(project, dataset, table, schema.source)
+  meta <- get_table(project, dataset, table)
   schema.meta <- meta$schema$fields
-  expect_equal(length(schema.meta), 2)
+  expect_equal(length(schema.meta), 2, label = "Two fields were added per schema definition.")
+  expect_equal(schema.meta, schema.source, label = "Table's schema matches definition.")
+})
+
+test_that("insert table creates table with time partitioning", {
+  project <- "bigrquery-examples"
+  dataset <- "test_insert_tables"
+  table <- "table_with_time_partitioning"
+
+  if (!exists_dataset(project, dataset)) {
+    insert_dataset(project, dataset)
+  }
+
+  insert_table(project, dataset, table, partition = TRUE)
+  meta <- get_table(project, dataset, table)
+  partitioning <- meta$timePartitioning$type
+  expect_equal(partitioning, "DAY", label = "Daily partitioning was added to the table.")
   expect_equal(schema.meta, schema.source)
+})
+
+teardown({
+  project <- "bigrquery-examples"
+  dataset <- "test_insert_tables"
+  delete_dataset(project, dataset, deleteContents = TRUE)
 })
