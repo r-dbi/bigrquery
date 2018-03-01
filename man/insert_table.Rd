@@ -4,7 +4,8 @@
 \alias{insert_table}
 \title{Insert empty table}
 \usage{
-insert_table(project, dataset, table, schema = list(), ...)
+insert_table(project, dataset, table, schema = list(), partition = FALSE,
+  ...)
 }
 \arguments{
 \item{project}{The project name, a string}
@@ -14,6 +15,8 @@ insert_table(project, dataset, table, schema = list(), ...)
 \item{table}{name of the table}
 
 \item{schema}{schema of the table to be created}
+
+\item{partition}{adds time partitioning by DAY to the table with default column name (_PARTITIONTIME) if set to TRUE}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into

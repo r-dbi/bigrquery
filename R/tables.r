@@ -30,22 +30,29 @@ list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
 #' @inheritParams insert_dataset
 #' @inheritParams get_table
 #' @param schema schema of the table to be created
+#' @param partition adds time partitioning by DAY to the table with default column name (_PARTITIONTIME) if set to TRUE
 #' @export
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}
-insert_table <- function(project, dataset, table, schema = list(), ...) {
+insert_table <- function(project, dataset, table, schema = list(), partition = FALSE, ...) {
   url <- bq_path(project, dataset, "")
-  if (length(schema) > 0) {
-    schema = list(fields = schema)
-  }
+
   body <- list(
     tableReference = list(
       projectId = project,
       datasetId = dataset,
       tableId = table
-    ),
-    schema = schema
+    )
   )
+
+  if (length(schema) > 0) {
+    body$schema = list(fields = schema)
+  }
+
+  if (partition) {
+    body$timePartitioning <- list(type = "DAY")
+  }
+
   bq_post(url, body = bq_body(body, ...))
 }
 
