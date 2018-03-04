@@ -30,7 +30,6 @@ test_that("Dot-dot-dot parameter list is added to configuration params", {
                  useLegacySql = TRUE)
   ))
   res <- bq_body(body, dry_run = TRUE)
-  print(res)
   expect_equal(res$configuration$dryRun, TRUE, "Camel Case attribute is added to the body of the request.")
 })
 
@@ -39,6 +38,5 @@ test_that("Dot-dot-dot parameter list is added to body without configuration", {
                useLegacySql = TRUE)
 
   res <- bq_body(body, dry_run = TRUE)
-  print(res)
   expect_equal(res$dryRun, TRUE, "Camel Case attribute is added to the body of the request.")
 })
