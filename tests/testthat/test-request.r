@@ -22,3 +22,23 @@ test_that("explicit api keys override env vars", {
     Sys.unsetenv("BIGRQUERY_API_KEY")
   })
 })
+
+
+test_that("Dot-dot-dot parameter list is added to configuration params", {
+  body <- list(configuration = list(
+    query = list(query = "SELECT COUNT(*), 2 FROM crm.customers",
+                 useLegacySql = TRUE)
+  ))
+  res <- bq_body(body, dry_run = TRUE)
+  print(res)
+  expect_equal(res$configuration$dryRun, TRUE, "Camel Case attribute is added to the body of the request.")
+})
+
+test_that("Dot-dot-dot parameter list is added to body without configuration", {
+  body <- list(query = "SELECT COUNT(*), 2 FROM crm.customers",
+               useLegacySql = TRUE)
+
+  res <- bq_body(body, dry_run = TRUE)
+  print(res)
+  expect_equal(res$dryRun, TRUE, "Camel Case attribute is added to the body of the request.")
+})
