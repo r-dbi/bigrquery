@@ -34,7 +34,7 @@ query_exec <- function(query, project,
                        write_disposition = "WRITE_EMPTY",
                        use_legacy_sql = TRUE,
                        quiet = getOption("bigrquery.quiet"),
-                       parameters,
+                       parameters = NULL,
                        ...) {
 
   dest <- run_query_job(
