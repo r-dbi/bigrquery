@@ -34,6 +34,7 @@ insert_query_job <- function(query, project,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
+                             parameters = NULL,
                              ...) {
   assert_that(is.string(project), is.string(query))
 
@@ -46,6 +47,11 @@ insert_query_job <- function(query, project,
       )
     )
   )
+
+  if (!is.null(parameters)) {
+    body$configuration$query$queryParameters <- bq_parameters(parameters)
+    body$configuration$query$parameterMode = "NAMED"
+  }
 
   if (!is.null(destination_table)) {
     if (is.character(destination_table)) {
@@ -81,4 +87,16 @@ insert_query_job <- function(query, project,
   }
 
   bq_post(url, body = bq_body(body, ...))
+}
+
+
+bq_parameters <- function(parameters) {
+  res <- lapply(names(parameters), function(name) {
+    list(
+      parameterType = list(type = data_type(parameters[[name]])),
+      parameterValue = list(value = parameters[[name]]),
+      name = name
+    )
+  })
+  unname(res)
 }
