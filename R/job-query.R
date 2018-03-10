@@ -22,6 +22,8 @@
 #'   `query`, either as a string in the format used by BigQuery or as a
 #'   list with `project_id` and `dataset_id` entries
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
+#' @param parameters list of named parameters that will be used with parameterised SQL:
+#'   https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}

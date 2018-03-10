@@ -6,7 +6,8 @@
 \usage{
 insert_query_job(query, project, destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE,
+  parameters = NULL, ...)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -34,6 +35,9 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
+
+\item{parameters}{list of named parameters that will be used with parameterised SQL:
+https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
