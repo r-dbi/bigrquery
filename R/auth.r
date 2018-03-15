@@ -26,12 +26,20 @@ bq_env <- new.env(parent = emptyenv())
 #' @param value new access credentials, as returned by
 #'  [httr::oauth2.0_token()]
 get_access_cred <- function() {
-  cred <- bq_env$access_cred
-  if (is.null(cred)) {
+  if (!is_set_access_cred()) {
     set_oauth2.0_cred()
   }
 
   bq_env$access_cred
+}
+
+#' Checks if access credentials are set
+#'
+#' @export
+#' @return TRUE if credentials are set
+is_set_access_cred <- function() {
+  cred <- bq_env$access_cred
+  !is.null(cred)
 }
 
 #' @rdname get_access_cred
