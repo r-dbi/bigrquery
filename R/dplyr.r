@@ -107,9 +107,9 @@ sql_translate_env.BigQueryConnection <- function(x) {
     ),
     dbplyr::sql_translator(
       .parent = dbplyr::base_win,
-      sd = dbplyr::win_recycled("sd"),
-      all = dbplyr::win_recycled("all"),
-      any = dbplyr::win_recycled("any"),
+      sd = dbplyr::win_recycled("STDDEV_SAMP"),
+      all = dbplyr::win_absent("LOGICAL_AND"),
+      any = dbplyr::win_absent("LOGICAL_OR"),
       n_distinct = dbplyr::win_absent("n_distinct")
     )
   )
