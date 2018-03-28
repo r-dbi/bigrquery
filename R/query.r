@@ -59,6 +59,22 @@ query_exec <- function(query, project,
   )
 }
 
+#' Submits a dry run query job, waits for it, and returns statistics of the dry run
+#' @export
+query_dry_run <- function(query, project, destination_table = NULL, default_dataset = NULL,
+                          create_disposition = "CREATE_IF_NEEDED",
+                          write_disposition = "WRITE_EMPTY",
+                          use_legacy_sql = TRUE) {
+  job <- insert_query_job(query = query, project = project, destination_table = destination_table,
+                          default_dataset = default_dataset,
+                          write_disposition = write_disposition,
+                          create_disposition = create_disposition,
+                          use_legacy_sql = use_legacy_sql,
+                          dry_run = TRUE)
+  job$statistics
+}
+
+
 # Submits a query job, waits for it, and returns information on the destination
 # table for further consumption by the list_tabledata* functions
 run_query_job <- function(query,
@@ -86,3 +102,4 @@ run_query_job <- function(query,
 
   job$configuration$query$destinationTable
 }
+
