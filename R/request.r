@@ -162,7 +162,7 @@ signal_reason <- function(reason, message) {
     signalCondition(cond)
   }
 
-  stop(message, call. = FALSE)
+  stop(paste(message, reason), call. = FALSE)
 }
 
 # Multipart/related ------------------------------------------------------------
