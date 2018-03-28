@@ -1,6 +1,16 @@
 # bigrquery 0.4.1.9000
 
+* Add `insert_load_csv_from_cs_job()` and `load_csv_from_cs()` functions to help
+  load CSV files stored in Google Cloud Storage into BigQuery table.
+
 # Version 0.4.1
+
+* `query_exec()` and `insert_query_job()` gain `quiet` arguments so you can
+  supppress the progress bars if needed.
+  
+* Profiling revealed that ~40% of the time taken by `query_exec()` was
+  a single line inside a function that helps parse BigQuery's json into an R 
+  data frame. I replaced that with a C function that is much much faster.
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
 
