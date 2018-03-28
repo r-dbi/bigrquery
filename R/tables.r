@@ -70,7 +70,22 @@ get_table <- function(project, dataset, table) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
 
   url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
-  bq_get(url)
+  metadata <- bq_get(url)
+  if (!is.null(metadata$schema)) {
+    metadata$schema <- name_recursively(metadata$schema)
+  }
+  metadata
+}
+
+name_recursively <- function(schema) {
+  if (!is.null(schema$fields)) {
+    name_recursively(schema$fields)
+  } else if (!is.null(schema[["name"]])) {
+    schema
+  } else {
+    nms <- vapply(schema, function(ls) ls[["name"]], character(1))
+    setNames(lapply(schema, name_recursively), nms)
+  }
 }
 
 #' @rdname get_table
@@ -133,12 +148,14 @@ merge_table_references <- function(partial, complete) {
 #' @param create_disposition behavior for table creation if the destination
 #'   already exists. defaults to `"CREATE_IF_NEEDED"`,
 #'   the only other supported value is `"CREATE_NEVER"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}{the
+#'   API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data if the destination already
 #'   exists. defaults to `"WRITE_EMPTY"`, other possible values are
 #'   `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the
+#'   API documentation}
 #'   for more information
 #' @inheritParams insert_dataset
 #' @seealso API documentation:
@@ -146,8 +163,10 @@ merge_table_references <- function(partial, complete) {
 #' @export
 #' @examples
 #' \dontrun{
-#' src <- list(project_id = "publicdata", dataset_id = "samples", table_id = "shakespeare")
-#' dest <- list(project_id = "myproject", dataset_id = "mydata", table_id = "shakespeare")
+#' src <- list(project_id = "publicdata", dataset_id = "samples", table_id =
+#' "shakespeare")
+#' dest <- list(project_id = "myproject", dataset_id = "mydata", table_id =
+#' "shakespeare")
 #' doubled <- dest
 #' doubled$table_id <- "double_shakespeare"
 #' copy_table(src, dest)
