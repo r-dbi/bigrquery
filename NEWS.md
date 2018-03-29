@@ -1,6 +1,7 @@
 # bigrquery 0.4.1.9000
 
-* Fixed error caused by progress bar for queries with empty result (@byapparov, #206)
+* `query_exec()` fixed error caused by progress bar for queries with empty result 
+   (@byapparov, #206)
 
 # Version 0.4.1
 
