@@ -68,7 +68,7 @@ insert_query_job <- function(query, project,
 
   if (!is.null(parameters)) {
     body$configuration$query$queryParameters <- bq_parameters(parameters)
-    body$configuration$query$parameterMode = "NAMED"
+    body$configuration$query$parameterMode <- "NAMED"
   }
 
   if (!is.null(destination_table)) {
