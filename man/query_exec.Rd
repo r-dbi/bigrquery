@@ -47,7 +47,8 @@ for more information}
 
 \item{quiet}{if \code{FALSE}, prints informative status messages.}
 
-\item{parameters}{list of named parameters that will be used with parameterised SQL:
+\item{parameters}{list of named parameters that will be matched to parameters in the query,
+for example, \code{a} parameter will be matched to \code{@a} placeholder in the query.
 \url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}}
 
 \item{...}{Additional arguments merged into the body of the

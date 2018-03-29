@@ -36,7 +36,8 @@ for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
-\item{parameters}{list of named parameters that will be used with parameterised SQL:
+\item{parameters}{list of named parameters that will be matched to parameters in the query,
+for example, \code{a} parameter will be matched to \code{@a} placeholder in the query.
 \url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}}
 
 \item{...}{Additional arguments merged into the body of the
@@ -53,6 +54,7 @@ finished and then retrieve the results, see \code{\link[=query_exec]{query_exec(
 }
 \examples{
 \dontrun {
+# execute parameterised query
 sql <- "SELECT *
         FROM `my_dataset.my_table`
         WHERE
