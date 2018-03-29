@@ -169,13 +169,15 @@ process_request <- function(req) {
 }
 
 signal_reason <- function(reason, message) {
-  if (!is.null(reason)) {
+  if (is.null(reason)) {
+    stop(message, call. = FALSE)
+  } else {
     cl <- c(paste0("bigrquery_", reason), "error", "condition")
-    cond <- structure(list(message = message), class = cl)
-    signalCondition(cond)
-  }
+    message <- paste0(message, " [", reason, "]")
 
-  stop(message, call. = FALSE)
+    cond <- structure(list(message = message), class = cl)
+    stop(cond)
+  }
 }
 
 # Multipart/related ------------------------------------------------------------

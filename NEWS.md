@@ -2,6 +2,8 @@
 
 ## New features
 
+* Request error messages will now contain the "reason", which can contain 
+  useful information for debugging (#209).
 
 ## Big fixes and minor improvements
 

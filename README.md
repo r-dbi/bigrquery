@@ -1,6 +1,7 @@
 # bigrquery
 
-[![Build Status](https://travis-ci.org/rstats-db/bigrquery.svg?branch=master)](https://travis-ci.org/rstats-db/bigrquery)
+[![Build Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](http://cran.r-project.org/package=bigrquery)
 
 The bigrquery packages provides an R interface to
 [Google BigQuery](https://developers.google.com/bigquery/). It makes it easy
@@ -65,6 +66,31 @@ library(bigrquery)
 project <- "fantastic-voyage-389" # put your project ID here
 sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
 query_exec(sql, project = project)
+```
+
+## Using `DBI` and `dplyr`
+
+For a more traditional database connection using `dbConnect()`, the driver to use is `bigrquery::dbi_driver()`.
+
+The arguments passed to Big Query connections differ a bit from others, there are 3 specific arguments:
+
+- dataset 
+- project
+- billing
+
+If you plan to access a Public Dataset, then very specific information will have to be passed to the connection.  For example, the examples in the NOAA GSOD Weather page, found here: https://cloud.google.com/bigquery/public-data/noaa-gsod, the code snippets address the tables in a very specific way.  To access the list of Weather Stations, the code calls this table: `[bigquery-public-data:noaa_gsod.stations]`.  These values can be parsed to create the correct `dbConnect()` call:
+
+```r
+con <- DBI::dbConnect(bigrquery::dbi_driver(),
+                       dataset = "noaa_gsod",
+                       project = "bigquery-public-data",
+                       billing = project)
+```
+
+The `stations` table can then be referred to using `tbl()`
+
+```r
+tbl(con, "stations")
 ```
 
 ## Useful links
