@@ -215,5 +215,5 @@ copy_table <- function(src, dest,
     )
   )
 
-  bq_post(url, body = bq_body(...))
+  bq_post(url, body = bq_body(body, ...))
 }
