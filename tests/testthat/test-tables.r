@@ -86,7 +86,7 @@ test_that("insert table creates table with time partitioning", {
     insert_dataset(project, dataset)
   }
 
-  insert_table(project, dataset, table, partition = TRUE)
+  insert_table(project, dataset, table, partition = "DAY")
   meta <- get_table(project, dataset, table)
   partitioning <- meta$timePartitioning$type
   expect_equal(partitioning, "DAY", label = "Daily partitioning was added to the table.")
