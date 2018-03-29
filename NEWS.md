@@ -1,5 +1,12 @@
 # bigrquery 0.4.1.9000
 
+## New features
+
+
+## Big fixes and minor improvements
+
+* Additional parameters can be passed to the `query_exec()` (#205, @byapparov)
+
 # Version 0.4.1
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
