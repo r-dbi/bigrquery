@@ -110,7 +110,7 @@ insert_query_job <- function(query, project,
 
 #' Converts named list to parameters data structure
 #' @noRd
-#' @param parameters named list of parameters for pamameterised query
+#' @param parameters named list of parameters for parameterised query
 bq_parameters <- function(parameters) {
   res <- lapply(names(parameters), function(name) {
     list(
