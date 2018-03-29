@@ -67,6 +67,8 @@
 * `wait_for()` uses now reports the query total bytes billed, which is
   more accurate because it takes into account caching and other factors.
 
+* `list_tabledata` returns empty table on max_pages=0 (#184, @ras44 @byapparov)
+
 # Version 0.3.0
 
 * New `set_service_token()` allows you to use OAuth service token instead of
