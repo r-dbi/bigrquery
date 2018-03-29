@@ -33,10 +33,15 @@ bq_ua <- function() {
   ))
 }
 
+#' udpated body argument with additional parameters
+#' @noRd
+#' @seealso
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query}
 bq_body <- function(body, ...) {
   user <- toCamel(list(...))
 
   if ("configuration" %in% names(body)) {
+    # job attributes can be defined within configuration record
     configuration <- utils::modifyList(body$configuration, user)
     body$configuration <- configuration
     return(body)
