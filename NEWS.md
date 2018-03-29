@@ -3,8 +3,6 @@
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 
-* Fixed error caused by progress bar for queries with empty result (@byapparov, #206)
-
 * Request error messages will now contain the "reason", which can contain 
   useful information for debugging (#209).
 
