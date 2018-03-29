@@ -8,7 +8,7 @@ query_exec(query, project, destination_table = NULL, default_dataset = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE,
-  quiet = getOption("bigrquery.quiet"), parameters, ...)
+  quiet = getOption("bigrquery.quiet"), parameters = NULL, ...)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -48,7 +48,7 @@ for more information}
 \item{quiet}{if \code{FALSE}, prints informative status messages.}
 
 \item{parameters}{list of named parameters that will be used with parameterised SQL:
-https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}
+\url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into

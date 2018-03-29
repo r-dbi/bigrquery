@@ -37,7 +37,7 @@ for more information}
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
 \item{parameters}{list of named parameters that will be used with parameterised SQL:
-https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}
+\url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
