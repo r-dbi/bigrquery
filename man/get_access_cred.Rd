@@ -32,9 +32,9 @@ set_service_token(service_token)
 the service token file.}
 }
 \value{
-get_access_cred returns oauth2 credentials token
+\code{get_access_cred()} oauth2 credentials token
 
-has_access_cred returns TRUE if credentials are set
+\code{has_access_cred()} TRUE if credentials are set
 }
 \description{
 Since the majority of bigquery API requests need to be authenticated
@@ -43,8 +43,6 @@ private environment. In ordinary operation, you should never need to use
 these functions but they are provided in case you want to switch
 credentials mid-stream. You may can use \code{set_service_token}
 for non-interactive authentication.
-
-Checks if access credentials are set
 }
 \section{API console}{
 
