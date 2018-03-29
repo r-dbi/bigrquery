@@ -36,6 +36,7 @@ get_access_cred <- function() {
 #'
 #' @export
 #' @return TRUE if credentials are set
+#' @rdname get_access_cred
 has_access_cred <- function() {
   !is.null(bq_env$access_cred)
 }
