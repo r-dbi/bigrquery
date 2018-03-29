@@ -32,9 +32,9 @@ set_service_token(service_token)
 the service token file.}
 }
 \value{
-oauth2 credentials token
+get_access_cred returns oauth2 credentials token
 
-TRUE if credentials are set
+has_access_cred returns TRUE if credentials are set
 }
 \description{
 Since the majority of bigquery API requests need to be authenticated
