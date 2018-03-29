@@ -20,3 +20,12 @@ test_that("can convert all date time types", {
   expect_equal(df$date, as.Date(base))
   expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
 })
+
+test_that("query with no results returns empty dataset with field names", {
+  skip_if_no_auth()
+
+  sql <- "SELECT * FROM (SELECT 1 AS test) WHERE FALSE"
+  df <- query_exec(sql, project = "bigrquery-examples", use_legacy_sql = FALSE)
+  expect_identical(nrow(df), 0L)
+  expect_identical(colnames(df), "test")
+})
