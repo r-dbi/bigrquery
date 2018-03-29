@@ -51,21 +51,22 @@ test_that("table references can be merged", {
   expect_that(merge_table_references(alternate, complete), equals(alternate))
 })
 
-describe("copy_table", {
-  it("creates a copy of a table", {
-    ds <- dataset_10_tables()
-    src <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1")
-    dest <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1_copy")
 
-    copy_table(src, dest)
-    res <- exists_table(ds$project, ds$dataset, "table1_copy")
-  })
-  it("validates arguments", {
+test_that("copy_table creates a copy of a table", {
+  ds <- dataset_10_tables()
+  src <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1")
+  dest <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1_copy")
+
+  copy_table(src, dest)
+  res <- exists_table(ds$project, ds$dataset, "table1_copy")
+})
+
+test_that("copy_table validates arguments", {
     partial <- list(project_id = "a", dataset_id = "b")
     complete <- list(project_id = "x", dataset_id = "y", table_id = "z")
 
     expect_error(copy_table(list(), complete),
                  "src must be a table reference or a nonempty list of table references")
     expect_error(copy_table(complete, partial), "dest must be a table reference")
-  })
 })
+
