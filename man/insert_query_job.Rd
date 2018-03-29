@@ -51,6 +51,22 @@ a job resource list, as documented at
 This is a low-level function that creates a query job. To wait until it is
 finished and then retrieve the results, see \code{\link[=query_exec]{query_exec()}}
 }
+\examples{
+\dontrun {
+sql <- "SELECT *
+        FROM `my_dataset.my_table`
+        WHERE
+          x = @x AND
+          date = @d"
+params <- list(x = 2L, d = as.Date("2012-10-15"))
+query_exec(
+  sql,
+  project = 'my-project-name',
+  use_legacy_sql = FALSE,
+  parameters = params
+)
+}
+}
 \seealso{
 API documentation for insert method:
 \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}

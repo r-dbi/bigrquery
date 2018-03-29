@@ -30,6 +30,22 @@
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
+#' @examples
+#' \dontrun {
+#' # execute parameterised query
+#' sql <- "SELECT *
+#'         FROM `my_dataset.my_table`
+#'         WHERE
+#'           x = @x AND
+#'           date = @d"
+#' params <- list(x = 2L, d = as.Date("2012-10-15"))
+#' query_exec(
+#'   sql,
+#'   project = 'my-project-name',
+#'   use_legacy_sql = FALSE,
+#'   parameters = params
+#' )
+#' }
 insert_query_job <- function(query, project,
                              destination_table = NULL,
                              default_dataset = NULL,
@@ -91,7 +107,9 @@ insert_query_job <- function(query, project,
   bq_post(url, body = bq_body(body, ...))
 }
 
-
+#' Converts named list to parameters data structure
+#' @noRd
+#' @param parameters named list of parameters for pamameterised query
 bq_parameters <- function(parameters) {
   res <- lapply(names(parameters), function(name) {
     list(

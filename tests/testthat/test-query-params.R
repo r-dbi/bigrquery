@@ -54,5 +54,5 @@ test_that("parameters are converted to correct data structure", {
       name = "d"
     )
   )
-  expect_equal(params.list, expected, label = "Parameters datastructure is correct.")
+  expect_equal(params.list, expected, label = "parameters data structure is correct.")
 })
