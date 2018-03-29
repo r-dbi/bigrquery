@@ -32,6 +32,8 @@ set_service_token(service_token)
 the service token file.}
 }
 \value{
+oauth2 credentials token
+
 TRUE if credentials are set
 }
 \description{
