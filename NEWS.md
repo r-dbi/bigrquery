@@ -1,6 +1,10 @@
 # bigrquery 0.4.1.9000
 
+
 * Fixed error caused by progress bar for queries with empty result (@byapparov, #206)
+
+* Request error messages will now contain the "reason", which can contain 
+  useful information for debugging (#209).
 
 # Version 0.4.1
 

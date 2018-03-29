@@ -10,7 +10,7 @@ r:
 - devel
 
 before_install:
-- openssl aes-256-cbc
+- test $encrypted_95be9bef5db7_key && openssl aes-256-cbc
     -K $encrypted_95be9bef5db7_key -iv $encrypted_95be9bef5db7_iv
     -in tests/testthat/service-token.json.enc -out ~/.bigrquery-token.json -d
 
