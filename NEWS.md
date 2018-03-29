@@ -1,5 +1,7 @@
 # bigrquery 0.4.1.9000
 
+* Fixed error caused by progress bar for queries with empty result (@byapparov, #206)
+
 # Version 0.4.1
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
