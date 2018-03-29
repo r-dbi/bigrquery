@@ -1,37 +1,43 @@
 context("query_exec parameters")
 
-
-test_that("named parameters can be used", {
+test_that("named parameters can be used with standard sql", {
   skip_if_no_auth()
 
   sql <- "SELECT *
           FROM
             (SELECT 1 x
-             UNION ALL
-             SELECT 2 x)
+            UNION ALL
+            SELECT 2 x)
           WHERE x = @x"
   params <- list(x = 2)
 
   df <- query_exec(
+    sql,
+    project = Sys.getenv("BIGQUERY_PROJECT"),
+    use_legacy_sql = FALSE,
+    parameters = params
+  )
+
+  expect_equal(
+    object = df$x,
+    expected = c(2),
+    label = "Only value matching the filter was selected"
+  )
+
+  params <- list(y = 2)
+
+  expect_error(
+    query_exec(
       sql,
       project = Sys.getenv("BIGQUERY_PROJECT"),
       use_legacy_sql = FALSE,
       parameters = params
-    )
-
-  expect_equal(df$x, c(2), label = "Only value matching the filter was selected")
-
-  params <- list(y = 2)
-
-  expect_error(query_exec(sql,
-                   project = Sys.getenv("BIGQUERY_PROJECT"),
-                   use_legacy_sql = FALSE,
-                   parameters = params),
-               regexp = "Query parameter.*not found at",
-               label = "Error is thrown if wrong parameter name is given")
+    ),
+    regexp = "Query parameter.*not found at",
+    label = "Error is thrown if wrong parameter name is given"
+  )
 
 })
-
 
 test_that("parameters are converted to correct data structure", {
   params <- list(x = 2L, d = as.Date("2012-10-15"))
