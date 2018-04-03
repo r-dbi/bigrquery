@@ -1,7 +1,7 @@
 dataset_10_tables <- function() {
   skip_if_no_auth()
 
-  project <- "bigrquery-examples"
+  project <- bq_test_project()
   dataset <- "test_10_tables"
 
   if (!exists_dataset(project, dataset)) {

@@ -28,9 +28,9 @@ tweaks <- DBItest::tweaks(
 
 # Make temporary dataset --------------------------------------------------
 
-temporary_dataset <- function(project = "bigrquery-examples") {
+temporary_dataset <- function() {
   env <- new.env()
-  env$project <- project
+  env$project <- bq_test_project()
   env$dataset <- paste0("test", sample(10000, 1))
   insert_dataset(env$project, env$dataset)
   reg.finalizer(env, function(env) {

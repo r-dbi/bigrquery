@@ -59,7 +59,7 @@ This is a high-level function that inserts a query job
 }
 \examples{
 \dontrun{
-project <- "fantastic-voyage-389" # put your project ID here
+project <- bq_test_project() # put your project ID here
 sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
 query_exec(sql, project = project)
 # Put the results in a table you own (which uses project by default)

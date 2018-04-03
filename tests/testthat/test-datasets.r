@@ -3,13 +3,13 @@ context("datasets")
 test_that("extra arguments passed onto request", {
   skip_if_no_auth()
 
-  insert_dataset("bigrquery-examples", "test_temp",
+  insert_dataset(bq_test_project(), "test_temp",
     friendlyName = "xxx",
     description = "yyy"
   )
-  on.exit(delete_dataset("bigrquery-examples", "test_temp"))
+  on.exit(delete_dataset(bq_test_project(), "test_temp"))
 
-  ds <- get_dataset("bigrquery-examples", "test_temp")
+  ds <- get_dataset(bq_test_project(), "test_temp")
   expect_equal(ds$friendlyName, "xxx")
   expect_equal(ds$description, "yyy")
 })
