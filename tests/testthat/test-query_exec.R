@@ -23,9 +23,20 @@ test_that("can convert all date time types", {
 
 
 test_that("data is not returned if max_pages is set to zero", {
+  skip_if_no_auth()
+  
   sql <- "SELECT 1 x, 2 y"
   res <- query_exec(sql, "bigrquery-examples", max_pages = 0)
   expect_equal(nrow(res), 0, label = "No rows returned")
   expect_equal(res, data.frame(x = numeric(), y = numeric()), label = "Column names and types match the query")
   expect_equal(class(res), "data.frame", label = "Class is set to data.frame")
+})
+
+test_that("query with no results returns empty dataset with field names", {
+  skip_if_no_auth()
+
+  sql <- "SELECT * FROM (SELECT 1 AS test) WHERE FALSE"
+  df <- query_exec(sql, project = "bigrquery-examples", use_legacy_sql = FALSE)
+  expect_identical(nrow(df), 0L)
+  expect_identical(colnames(df), "test")
 })

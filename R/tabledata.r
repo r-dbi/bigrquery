@@ -86,7 +86,7 @@ list_tabledata_callback <- function(project, dataset, table, callback,
   pages <- min(ceiling(iter$get_rows() / page_size), max_pages)
   progress <- bq_progress(
     "Retrieving data [:bar] :percent eta: :eta",
-    total = pages,
+    total = max(pages, 1),
     quiet = quiet
   )
 

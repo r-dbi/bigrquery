@@ -2,6 +2,7 @@
 % Please edit documentation in R/auth.r
 \name{get_access_cred}
 \alias{get_access_cred}
+\alias{has_access_cred}
 \alias{set_oauth2.0_cred}
 \alias{set_access_cred}
 \alias{reset_access_cred}
@@ -9,6 +10,8 @@
 \title{Get and set access credentials}
 \usage{
 get_access_cred()
+
+has_access_cred()
 
 set_oauth2.0_cred(app = NULL)
 
@@ -27,6 +30,11 @@ set_service_token(service_token)
 
 \item{service_token}{A JSON string, URL or file, giving or pointing to
 the service token file.}
+}
+\value{
+\code{get_access_cred()} oauth2 credentials token
+
+\code{has_access_cred()} TRUE if credentials are set
 }
 \description{
 Since the majority of bigquery API requests need to be authenticated
