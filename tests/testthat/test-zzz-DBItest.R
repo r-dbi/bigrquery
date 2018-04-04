@@ -113,17 +113,21 @@ if (has_auth) {
     "^list_objects.*$", # no schema support
     NULL
   ))
-  #
-  # DBItest::test_meta(c(
-  #   "get_info_result", # rstats-db/DBI#55
-  #   "rows_affected", # Command queries not supported
-  #   "^bind_.*", # Later
-  #   NULL
-  # ))
-  #
-  # DBItest::test_compliance(c(
-  #   "read_only", # No read_only mode
-  #   NULL
-  # ))
+
+  DBItest::test_meta(c(
+    "get_info_result", # rstats-db/DBI#55
+    "rows_affected", # Command queries not supported
+    "^bind_.*", # Later
+    "^is_valid_.*$",
+    "^.*_statement$",
+    "^get_rows_affected_error$",
+    NULL
+  ))
+
+  DBItest::test_compliance(c(
+    "read_only", # No read_only mode
+    "reexport",
+    NULL
+  ))
 
 }
