@@ -67,7 +67,7 @@ setMethod(
     unset_result(conn)
     conn@.envir$valid <- FALSE
 
-    TRUE
+    invisible(TRUE)
   })
 
 #' @rdname DBI

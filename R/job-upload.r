@@ -82,6 +82,10 @@ schema_fields <- function(data) {
 }
 
 data_type <- function(x) {
+  if (is.data.frame(x)) {
+    return(vapply(x, data_type, character(1)))
+  }
+
   if (is.factor(x)) return("STRING")
   if (inherits(x, "POSIXt")) return("TIMESTAMP")
   if (inherits(x, "hms")) return("TIME")

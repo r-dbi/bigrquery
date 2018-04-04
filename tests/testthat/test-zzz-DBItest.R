@@ -60,6 +60,7 @@ if (has_auth) {
   ))
 
   DBItest::test_connection(c(
+    "^disconnect_invalid_connection$", # DBItest::with_invalid_connection doesn't generate invalid BigQuery connection
     NULL
   ))
 
