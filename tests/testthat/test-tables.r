@@ -62,7 +62,7 @@ test_that("copy_table creates a copy of a table", {
   dest <- list(project_id = bq_test_project(), dataset_id = "test", table_id = "dest")
 
   copy_table(src, dest)
-  on.exit(delete_table(bq_test_project(), "test", "src"))
+  on.exit(delete_table(bq_test_project(), "test", "dest"))
 
   expect_true(exists_table(dest$project_id, dest$dataset_id, dest$table_id))
 })
