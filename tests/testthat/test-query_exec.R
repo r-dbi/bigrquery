@@ -21,6 +21,15 @@ test_that("can convert all date time types", {
   expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
 })
 
+
+test_that("data is not returned if max_pages is set to zero", {
+  skip_if_no_auth()
+  
+  sql <- "SELECT 1 x, 2 y"
+  res <- query_exec(sql, "bigrquery-examples", max_pages = 0)
+  expect_equal(res, data.frame(x = numeric(), y = numeric()))
+})
+
 test_that("query with no results returns empty dataset with field names", {
   skip_if_no_auth()
 

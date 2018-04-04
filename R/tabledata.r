@@ -30,7 +30,13 @@ list_tabledata <- function(project, dataset, table,
                            quiet = getOption("bigrquery.quiet")
                            ) {
   assert_that(is.string(project), is.string(dataset), is.string(table))
-  assert_that(is.numeric(max_pages), length(max_pages) == 1, max_pages >= 1)
+  assert_that(is.numeric(max_pages), length(max_pages) == 1)
+
+  if (max_pages < 1) {
+    table_info <- table_info %||% get_table(project, dataset, table)
+    rows <- extract_data(NULL, table_info$schema)
+    return(rows)
+  }
 
   # This is a rather inefficient implementation - better strategy would be
   # preallocate list when max_pages is finite, and use doubling strategy
