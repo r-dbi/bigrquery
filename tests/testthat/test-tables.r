@@ -52,14 +52,17 @@ test_that("table references can be merged", {
 
 test_that("copy_table creates a copy of a table", {
   skip_if_no_auth()
-  skip("Table copies currently failing")
 
-  ds <- dataset_10_tables()
-  src <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1")
-  dest <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1_copy")
+  df <- data.frame(x = runif(100))
+  job <- insert_upload_job(bq_test_project(), "test", "src", df)
+  on.exit(delete_table(bq_test_project(), "test", "src"))
+  wait_for(job, quiet = TRUE)
+
+  src <- list(project_id = bq_test_project(), dataset_id = "test", table_id = "src")
+  dest <- list(project_id = bq_test_project(), dataset_id = "test", table_id = "dest")
 
   copy_table(src, dest)
-  on.exit(delete_table(dest$project_id, dest$dataset_id, dest$table_id))
+  on.exit(delete_table(bq_test_project(), "test", "src"))
 
   expect_true(exists_table(dest$project_id, dest$dataset_id, dest$table_id))
 })
