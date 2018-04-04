@@ -84,10 +84,13 @@ setMethod(
 #' @export
 setMethod(
   "dbFetch", "BigQueryResult",
-  function(res, n = -1, ..., row.names = NA) {
+  function(res, n = -1, ..., row.names = FALSE) {
     assert_result_valid(res)
 
-    if (n < 0) n <- Inf
+    stopifnot(length(n) == 1, is.numeric(n))
+    stopifnot(n == round(n), !is.na(n), n >= -1)
+
+    if (n == -1) n <- Inf
 
     data <- res@.envir$iter$next_paged(n, page_size = res@connection@page_size)
 

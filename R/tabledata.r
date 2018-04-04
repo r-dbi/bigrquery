@@ -140,6 +140,10 @@ list_tabledata_iter <- function(project, dataset, table, table_info = NULL) {
   }
 
   next_paged <- function(n, page_size = getOption("bigrquery.page.size")) {
+    if (is_complete()) {
+      return(extract_data(NULL, schema))
+    }
+
     target_rows_fetched <- rows_fetched + n
 
     ret <- list()

@@ -1,15 +1,15 @@
 if (has_auth) {
 
   tweaks <- DBItest::tweaks(
-    # The function that constructs the driver is called "dbi_driver". Using the
-    # default "bigrquery" would be awkward.
-    constructor_name = "dbi_driver",
+    constructor_name = "bigquery",
 
     # BigQuery has very strict rules for identifiers, even if quoted.
     strict_identifier = TRUE,
 
     # BigQuery doesn't have a BLOB data type.
     omit_blob_tests = TRUE,
+    # Or a time type
+    time_typed = FALSE,
 
     # UNION is very special in BigQuery; needs subqueries for "inline" queries
     # and uses the comma operator instead of the UNION keyword.  Constructed by
@@ -36,7 +36,7 @@ if (has_auth) {
   teardown({delete_dataset(bq_test_project(), test_dataset, deleteContents = TRUE)})
 
   DBItest::make_context(
-    dbi_driver(),
+    bigquery(),
     connect_args = list(
       project = bq_test_project(),
       dataset = test_dataset,
@@ -52,7 +52,8 @@ if (has_auth) {
   # now.)
 
   DBItest::test_getting_started(c(
-    "package_name" # Won't change package name for this
+    "package_name",
+    NULL
   ))
 
   DBItest::test_driver(c(
@@ -65,43 +66,64 @@ if (has_auth) {
   ))
 
   DBItest::test_result(c(
-    "^command_query$", # Command queries not supported
-    "^fetch_no_return_value$", # Command queries not supported
-    "^data_logical_int.*", # No error: Support for logical values available
-    "^data_character_null_(above|below)$", # Error: Cannot union tables : Incompatible types. 'a' : TYPE_STRING 'a' : TYPE_BOOL
+    "^.*invalid_connection$", # see above
     "^data_type_connection$", # dbDataType() not implemented, no DDL in BigQuery
     "^data_64_bit.*", # #94
     "^data_date.*", # Requires modification in DBItest due to nonstandard syntax
-    "^data_time.*", # Requires modification in DBItest due to nonstandard syntax
+    "^data_time.*", # Requires modification in DBItest due to nonstandard syntax,
+
+    "^fetch_no_return_value$", # can't create in traditional sql
+    "^clear_result_return_statement$",
+    "^cannot_clear_result_twice_statement$",
+    "^send_statement_trivial$",
+    "^send_statement_result_valid$",
+    "^send_statement_only_one_result_set$",
+    "^execute_atomic$",
+    "^data_type_create_table$",
+    "^data_character$", # Error: Cannot union tables : Incompatible types. 'a' : BOOL 'a' : STRING
     NULL
   ))
 
   DBItest::test_sql(c(
     "^temporary_table$", # Temporary tables not supported
-    "^roundtrip_logical_int$", # Not an error: Full support for logical
-    "^roundtrip_64_bit$", # #94
     "^roundtrip_null$", # #97
     "^roundtrip_date$", # No distinction between date, time, and timestamp data types
     "^roundtrip_timestamp$", # #98
     "^roundtrip_integer$", # https://github.com/r-dbi/DBItest/issues/164
     "^roundtrip_numeric$",
     "^roundtrip_logical$",
-    "^roundtrip_character$",
-    "^roundtrip_numeric_special$", # no way to send literal Inf/-Inf
-    "^quote_identifier_not_vectorized$", # bug in CRAN version
+    "^roundtrip_character.*$",
+    "^roundtrip_64_bit.*$", # #94
+    "^unquote_identifier.*$", # no support for unquoting yet,
+    "^read_table_.*$", # https://github.com/r-dbi/DBItest/issues/168
+    "^write_table_.*$",
+    "^overwrite_table.*$",
+    "^append_table.*$",
+    "^table_visible_in_other_connection$",
+    "^roundtrip_factor$",
+    "^roundtrip_quotes$",
+    "^roundtrip_mixed$",
+    "^roundtrip_keywords$",
+    "^roundtrip_field_types$",
+    "^remove_table.*$",
+    "^list_fields.*$",
+    "^list_tables$",
+    "^exists_table.*$",
+    "^.*invalid_connection$", # see above
+    "^list_objects.*$", # no schema support
     NULL
   ))
-
-  DBItest::test_meta(c(
-    "get_info_result", # rstats-db/DBI#55
-    "rows_affected", # Command queries not supported
-    "^bind_.*", # Later
-    NULL
-  ))
-
-  DBItest::test_compliance(c(
-    "read_only", # No read_only mode
-    NULL
-  ))
+  #
+  # DBItest::test_meta(c(
+  #   "get_info_result", # rstats-db/DBI#55
+  #   "rows_affected", # Command queries not supported
+  #   "^bind_.*", # Later
+  #   NULL
+  # ))
+  #
+  # DBItest::test_compliance(c(
+  #   "read_only", # No read_only mode
+  #   NULL
+  # ))
 
 }

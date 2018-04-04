@@ -93,9 +93,21 @@ setMethod(
 setMethod(
   "dbQuoteString", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    x <- encodeString(x, na.encode = FALSE, quote = "'")
-    x[is.na(x)] <- "NULL"
-    SQL(x)
+    if (length(x) == 0) {
+      return(SQL(character()))
+    }
+
+    out <- encodeString(x, na.encode = FALSE, quote = "'")
+    out[is.na(x)] <- "NULL"
+    SQL(out, names = names(x))
+  })
+
+#' @rdname DBI
+#' @export
+setMethod(
+  "dbQuoteString", c("BigQueryConnection", "SQL"),
+  function(conn, x, ...) {
+    x
   })
 
 #' @rdname DBI
@@ -104,12 +116,41 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    if (conn@use_legacy_sql) {
-      SQL(paste0("[", x, "]"))
-    } else {
-      SQL(encodeString(x, quote = "`"))
+    if (length(x) == 0) {
+      return(SQL(character()))
     }
+
+    if (any(is.na(x))) {
+      stop("Identifiers must not be missing", call. = FALSE)
+    }
+
+    if (conn@use_legacy_sql) {
+      out <- paste0("[", x, "]")
+    } else {
+      out <- encodeString(x, quote = "`")
+    }
+    SQL(out, names = names(x))
   })
+
+#' @rdname DBI
+#' @export
+setMethod(
+  "dbQuoteIdentifier", c("BigQueryConnection", "SQL"),
+  function(conn, x, ...) {
+    x
+  }
+)
+
+
+#' @rdname DBI
+#' @inheritParams DBI::dbDataType
+#' @export
+setMethod(
+  "dbDataType", "BigQueryConnection",
+  function(dbObj, obj, ...) {
+    data_type(obj)
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbWriteTable
@@ -125,8 +166,22 @@ setMethod(
 #' @export
 setMethod(
   "dbWriteTable", c("BigQueryConnection", "character", "data.frame"),
-  function(conn, name, value, overwrite = FALSE, append = FALSE, ...,
+  function(conn, name, value,
+           overwrite = FALSE,
+           append = FALSE,
+           ...,
+           field.types = NULL,
+           temporary = FALSE,
            row.names = NA) {
+    assert_that(is.flag(overwrite), is.flag(append))
+
+    if (!is.null(field.types)) {
+      stop("`field.types` not supported by bigrquery", call. = FALSE)
+    }
+    if (!identical(temporary, FALSE)) {
+      stop("Temporary tables not supported by bigrquery", call. = FALSE)
+    }
+
     if (append) {
       create_disposition <- "CREATE_NEVER"
       write_disposition <- "WRITE_APPEND"
@@ -167,6 +222,7 @@ setMethod(
 setMethod(
   "dbListTables", "BigQueryConnection",
   function(conn, ...) {
+    assert_connection_valid(conn)
     list_tables(conn@project, conn@dataset)
   })
 
@@ -176,6 +232,7 @@ setMethod(
 setMethod(
   "dbExistsTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
+    assert_connection_valid(conn)
     exists_table(conn@project, conn@dataset, name)
   })
 
@@ -194,6 +251,7 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
+    assert_connection_valid(conn)
     delete_table(conn@project, conn@dataset, name)
     invisible(TRUE)
   })
@@ -204,6 +262,7 @@ setMethod(
 setMethod(
   "dbGetInfo", "BigQueryConnection",
   function(dbObj, ...) {
+    assert_connection_valid(dbObj)
     list(
       db.version = NA,
       dbname = format_dataset(dbObj@project, dbObj@dataset),
