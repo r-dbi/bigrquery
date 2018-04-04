@@ -106,9 +106,9 @@ validate_table_reference <- function(reference) {
 
 as_bigquery_table_reference <- function(reference) {
   list(
-    projectId = reference$project_id,
-    datasetId = reference$dataset_id,
-    tableId = reference$table_id
+    projectId = unbox(reference$project_id),
+    datasetId = unbox(reference$dataset_id),
+    tableId = unbox(reference$table_id)
   )
 }
 
@@ -172,13 +172,12 @@ copy_table <- function(src, dest,
   project <- project %||% dest$project_id
   url <- bq_path(project, jobs = "")
   body <- list(
-    projectId = project,
     configuration = list(
       copy = list(
-        sourceTables = lapply(src, as_bigquery_table_reference),
+        sourceTable = as_bigquery_table_reference(src[[1]]),
         destinationTable = as_bigquery_table_reference(dest),
-        createDisposition = create_disposition,
-        writeDisposition = write_disposition
+        createDisposition = unbox(create_disposition),
+        writeDisposition = unbox(write_disposition)
       )
     )
   )

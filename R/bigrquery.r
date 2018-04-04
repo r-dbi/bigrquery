@@ -10,5 +10,6 @@
 #' }
 #'
 #' @import assertthat
+#' @importFrom jsonlite unbox
 #' @useDynLib bigrquery, .registration = TRUE
 "_PACKAGE"
