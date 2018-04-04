@@ -1,4 +1,4 @@
-dddddddcontext("query_exec")
+context("query_exec")
 
 test_that("can convert all date time types", {
   skip_if_no_auth()
