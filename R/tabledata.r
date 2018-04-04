@@ -29,6 +29,8 @@ list_tabledata <- function(project, dataset, table,
                            warn = TRUE,
                            quiet = getOption("bigrquery.quiet")
                            ) {
+
+
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
 

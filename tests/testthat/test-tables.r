@@ -38,17 +38,6 @@ test_that("table references are validated correctly", {
   expect_that(validate_table_reference(extra), is_false())
 })
 
-test_that("table references can be merged", {
-  minimal <- list(table_id = "c")
-  partial <- list(dataset_id = "b", table_id = "c")
-  complete <- list(project_id = "a", dataset_id = "b", table_id = "c")
-  alternate <- list(project_id = "x", dataset_id = "y", table_id = "z")
-
-  expect_that(merge_table_references(minimal, complete), equals(complete))
-  expect_that(merge_table_references(partial, complete), equals(complete))
-  expect_that(merge_table_references(alternate, complete), equals(alternate))
-})
-
 
 test_that("copy_table creates a copy of a table", {
   skip_if_no_auth()

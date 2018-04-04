@@ -17,12 +17,6 @@ list_tabledata_callback(project, dataset, table, callback, table_info = NULL,
 list_tabledata_iter(project, dataset, table, table_info = NULL)
 }
 \arguments{
-\item{project}{The project name, a string}
-
-\item{dataset}{The name of the dataset to create, a string}
-
-\item{table}{name of the table}
-
 \item{page_size}{Number of items per page.}
 
 \item{table_info}{if known, the table information retrieved with

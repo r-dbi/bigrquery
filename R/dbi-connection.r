@@ -163,6 +163,8 @@ setMethod(
 #'   or not. Its default is `FALSE`.
 #' @param append a logical specifying whether to append to an existing table
 #'   in the DBMS.  Its default is `FALSE`.
+#' @param field.types,temporary Ignored. Included for compatibility with
+#'   generic.
 #' @export
 setMethod(
   "dbWriteTable", c("BigQueryConnection", "character", "data.frame"),

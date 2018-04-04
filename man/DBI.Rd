@@ -16,7 +16,10 @@
 \alias{dbDisconnect,BigQueryConnection-method}
 \alias{dbSendQuery,BigQueryConnection,character-method}
 \alias{dbQuoteString,BigQueryConnection,character-method}
+\alias{dbQuoteString,BigQueryConnection,SQL-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,character-method}
+\alias{dbQuoteIdentifier,BigQueryConnection,SQL-method}
+\alias{dbDataType,BigQueryConnection-method}
 \alias{dbWriteTable,BigQueryConnection,character,data.frame-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
 \alias{dbListTables,BigQueryConnection-method}
@@ -61,10 +64,17 @@
 
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
+\S4method{dbQuoteString}{BigQueryConnection,SQL}(conn, x, ...)
+
 \S4method{dbQuoteIdentifier}{BigQueryConnection,character}(conn, x, ...)
 
+\S4method{dbQuoteIdentifier}{BigQueryConnection,SQL}(conn, x, ...)
+
+\S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
+
 \S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(conn, name,
-  value, overwrite = FALSE, append = FALSE, ..., row.names = NA)
+  value, overwrite = FALSE, append = FALSE, ..., field.types = NULL,
+  temporary = FALSE, row.names = NA)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...,
   row.names = NA)
@@ -91,7 +101,7 @@
 
 \S4method{dbClearResult}{BigQueryResult}(res, ...)
 
-\S4method{dbFetch}{BigQueryResult}(res, n = -1, ..., row.names = NA)
+\S4method{dbFetch}{BigQueryResult}(res, n = -1, ..., row.names = FALSE)
 
 \S4method{dbHasCompleted}{BigQueryResult}(res, ...)
 
@@ -151,6 +161,9 @@ or not. Its default is \code{FALSE}.}
 
 \item{append}{a logical specifying whether to append to an existing table
 in the DBMS.  Its default is \code{FALSE}.}
+
+\item{field.types, temporary}{Ignored. Included for compatibility with
+generic.}
 
 \item{row.names}{A logical specifying whether the \code{row.names} should be
 output to the output DBMS table; if \code{TRUE}, an extra field whose name

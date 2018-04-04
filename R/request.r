@@ -51,6 +51,18 @@ bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
   process_request(req)
 }
 
+bq_exists <- function(url, ..., query = NULL, token = get_access_cred()) {
+  req <- GET(
+    paste0(base_url, url),
+    config(token = token),
+    bq_ua(),
+    ...,
+    query = prepare_bq_query(query)
+  )
+  status_code(req) >= 200 && status_code(req) < 300
+}
+
+
 #' @importFrom httr GET config
 bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
                              page_size = 50, max_pages = Inf) {

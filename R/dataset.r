@@ -1,29 +1,3 @@
-#' List the datasets in a project
-#'
-#' @return a character vector of dataset names
-#' @inheritParams list_tables
-#' @seealso Google API documentation:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/datasets/list}
-#' @family datasets
-#' @export
-#' @examples
-#' \dontrun{
-#' list_datasets("publicdata")
-#' list_datasets("githubarchive")
-#' }
-list_datasets <- function(project, page_size = 50, max_pages = Inf) {
-  assert_that(is.string(project))
-
-  pages <- bq_get_paginated(
-    bq_path(project, ""),
-    page_size = page_size,
-    max_pages = max_pages
-  )
-
-  datasets <- unlist(lapply(pages, function(x) x$datasets), recursive = FALSE)
-  vapply(datasets, function(x) x$datasetReference$datasetId, character(1))
-}
-
 #' Gets an existing dataset in a project
 #'
 #' @param project The project name, a string
@@ -123,4 +97,31 @@ update_dataset <- function(project, dataset, ...) {
   )
 
   bq_put(url, body = bq_body(body, ...))
+}
+
+#' List available tables in dataset.
+#'
+#' @inheritParams get_table
+#' @param page_size Number of items per page
+#' @param max_pages Maximum number of pages to retrieve
+#' @return a character vector of table names
+#' @family tables
+#' @seealso API documentation:
+#'   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
+#' @export
+#' @examples
+#' \dontrun{
+#' list_tables("publicdata", "samples")
+#' list_tables("githubarchive", "github")
+#' list_tables("publicdata", "samples", max_pages = 2, page_size = 2)
+#' }
+list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
+  data <- bq_get_paginated(
+    bq_path(project, dataset, ""),
+    page_size = page_size,
+    max_pages = max_pages
+  )
+
+  tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
+  vapply(tables, function(x) x$tableReference$tableId, character(1L))
 }

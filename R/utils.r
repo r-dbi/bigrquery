@@ -82,3 +82,7 @@ format.size <- function(x, ...) {
   y <- x * 1024 ^ -attr(x, "i")
   sprintf("%.1f %sbytes", y, attr(x, "unit"))
 }
+
+cat_line <- function(...) {
+  cat(paste0(..., "\n", collapse = ""))
+}

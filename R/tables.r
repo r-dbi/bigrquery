@@ -1,181 +1,101 @@
-#' List available tables in dataset.
+#' Manipulate tables
 #'
-#' @inheritParams get_table
-#' @param page_size Number of items per page
-#' @param max_pages Maximum number of pages to retrieve
-#' @return a character vector of table names
-#' @family tables
-#' @seealso API documentation:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
-#' @export
+#' @param x A [bq_table]
+#' @param src,dest Source and desintation [bq_table]s.
+#' @param billing Project to bill. Defaults to the `dest` project.
+#' @param create_disposition Behavior if the destination table does not already
+#'   exist. Default will create table on demand; set to `"CREATE_NEVER"` to
+#'   never create (and only copy into existing table).
+#' @param write_disposition Behavior if the destination already exists.
+#'   The default, `"WRITE_EMPTY"`, will error if the table already contains
+#'   data. Other possible values are `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`.
+#' @section API documentation
+#' * [create](https://developers.google.com/bigquery/docs/reference/v2/tables/insert)
+#' * [get](https://developers.google.com/bigquery/docs/reference/v2/tables/get)
+#' * [delete](https://developers.google.com/bigquery/docs/reference/v2/tables/delete)
+#' * [copy](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.copy)
+#' @return
+#' * `bq_table_get()`: a [table resource list](https://developers.google.com/bigquery/docs/reference/v2/tables)
+#' * `bq_table_get()`: either `TRUE` or `FALSE`
+#' * `bq_table_copy()`: a table reference to the new table
+#'
 #' @examples
 #' \dontrun{
-#' list_tables("publicdata", "samples")
-#' list_tables("githubarchive", "github")
-#' list_tables("publicdata", "samples", max_pages = 2, page_size = 2)
-#' }
-list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
-  data <- bq_get_paginated(
-    bq_path(project, dataset, ""),
-    page_size = page_size,
-    max_pages = max_pages
-  )
-
-  tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
-  vapply(tables, function(x) x$tableReference$tableId, character(1L))
-}
-
-#' Insert empty table
+#' insert_dataset(bq_test_project(), "table_api")
 #'
-#' @inheritParams insert_dataset
-#' @inheritParams get_table
-#' @export
-#' @seealso API documentation:
-#'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}
-insert_table <- function(project, dataset, table, ...) {
-  url <- bq_path(project, dataset, "")
-  body <- list(
-    tableReference = list(
-      projectId = project,
-      datasetId = dataset,
-      tableId = table
-    )
-  )
+#' bq_mtcars <- bq_table(bq_test_project(), "table_api", "mtcars")
+#' bq_table_exists(bq_mtcars)
+#'
+#' bq_table_upload(bq_mtcars, mtcars)
+#' bq_table_exists(bq_mtcars)
+#'
+#' bq_table_delete(bq_mtcars)
+#' bq_table_exists(bq_mtcars)
+#'
+#' my_natality <- bq_table(bq_test_project(), "table_api", "mynatality")
+#' bq_table_copy("publicdata:samples:natality", my_natality)
+#'
+#' delete_dataset(bq_test_project(), "table_api", deleteContents = TRUE)
+#' }
+#' @name table-API
+NULL
 
+#' @export
+#' @rdname table-API
+bq_table_create <- function(x, ...) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, x$dataset, "")
+  body <- list(
+    tableReference = tableReference(x)
+  )
   bq_post(url, body = bq_body(body, ...))
 }
 
-#' Retrieve table metadata
-#'
-#' @inheritParams insert_dataset
-#' @param table name of the table
-#' @seealso API documentation:
-#'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/get}
-#' @family tables
-#' @return A table resource list, as described by
-#'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables}
 #' @export
-#' @examples
-#' \dontrun{
-#' str(get_table("publicdata", "samples", "natality"))
-#' str(get_table("publicdata", "samples", "gsod"))
-#' str(get_table("githubarchive", "github", "timeline"))
-#' }
-#'
-#' @description `get_table` returns a table's metadata as a nested list.
-#'   In addition to a regular error, the condition `bigrquery_notFound`
-#'   (which can be handled via [base::tryCatch()])
-#'   is raised if the table could not be found.
-get_table <- function(project, dataset, table) {
-  assert_that(is.string(project), is.string(dataset), is.string(table))
-
-  url <- sprintf("projects/%s/datasets/%s/tables/%s", project, dataset, table)
+#' @rdname table-API
+bq_table_get <- function(x) {
+  x <- as_bq_table(x)
+  url <- bq_path(x$project, x$dataset, x$table)
   bq_get(url)
 }
 
-#' @rdname get_table
 #' @export
-#' @description `exists_table` merely checks if a table exists, and returns
-#'   either `TRUE` or `FALSE`.
-exists_table <- function(project, dataset, table) {
-  tryCatch(
-    !is.null(get_table(project = project, dataset = dataset, table = table)),
-    bigrquery_notFound = function(e) FALSE
-  )
+#' @rdname table-API
+bq_table_exists <- function(x) {
+  x <- as_bq_table(x)
+  url <- bq_path(x$project, x$dataset, x$table)
+  bq_exists(url)
 }
 
-#' Delete a table.
-#'
-#' @inheritParams get_table
-#' @seealso API documentation:
-#'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}
-#' @family tables
 #' @export
-#' @examples
-#' \dontrun{
-#' get_table("publicdata", "samples", "natality")
-#' }
-delete_table <- function(project, dataset, table) {
-  bq_delete(bq_path(project, dataset, table))
+#' @rdname table-API
+bq_table_delete <- function(x) {
+  x <- as_bq_table(x)
+  url <- bq_path(x$project, x$dataset, x$table)
+  invisible(bq_delete(url))
 }
 
-validate_table_reference <- function(reference) {
-  required_keys <- c('project_id', 'dataset_id', 'table_id')
-  is.list(reference) && setequal(required_keys, names(reference))
-}
-
-as_bigquery_table_reference <- function(reference) {
-  list(
-    projectId = unbox(reference$project_id),
-    datasetId = unbox(reference$dataset_id),
-    tableId = unbox(reference$table_id)
-  )
-}
-
-merge_table_references <- function(partial, complete) {
-  list(
-    project_id = partial$project_id %||% complete$project_id,
-    dataset_id = partial$dataset_id %||% complete$dataset_id,
-    table_id = partial$table_id
-  )
-}
-
-#' Copy one or more source tables to a destination table.
-#'
-#' Each source table and the destination table should be table references, that
-#' is, lists with exactly three entries: `project_id`, `dataset_id`,
-#' and `table_id`.
-#'
-#' @param src either a single table reference, or a list of table references
-#' @param dest destination table
-#' @param project project ID to use for the copy job. defaults to the project of
-#'   the destination table.
-#' @param create_disposition behavior for table creation if the destination
-#'   already exists. defaults to `"CREATE_IF_NEEDED"`,
-#'   the only other supported value is `"CREATE_NEVER"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.createDisposition}{the API documentation}
-#'   for more information
-#' @param write_disposition behavior for writing data if the destination already
-#'   exists. defaults to `"WRITE_EMPTY"`, other possible values are
-#'   `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
-#'   for more information
-#' @inheritParams insert_dataset
-#' @inheritParams wait_for
-#' @seealso API documentation:
-#'   <https://cloud.google.com/bigquery/docs/managing-tables#copy-table>
 #' @export
-#' @examples
-#' \dontrun{
-#' src <- list(project_id = "publicdata", dataset_id = "samples", table_id = "shakespeare")
-#' dest <- list(project_id = "myproject", dataset_id = "mydata", table_id = "shakespeare")
-#' doubled <- dest
-#' doubled$table_id <- "double_shakespeare"
-#' copy_table(src, dest)
-#' copy_table(list(src, dest), doubled)
-#' }
-copy_table <- function(src, dest,
-                       create_disposition = "CREATE_IF_NEEDED",
-                       write_disposition = "WRITE_EMPTY",
-                       project = NULL,
-                       quiet = NA,
-                       ...) {
-  if (validate_table_reference(src)) {
-    src <- list(src)
-  } else if (!all(vapply(src, validate_table_reference, TRUE)) ||
-             (length(src) == 0)) {
-    stop("src must be a table reference or a nonempty list of table references")
-  }
-  if (!validate_table_reference(dest)) {
-    stop("dest must be a table reference")
-  }
-  project <- project %||% dest$project_id
-  url <- bq_path(project, jobs = "")
+#' @rdname table-API
+bq_table_copy <- function(src, dest,
+                          create_disposition = "CREATE_IF_NEEDED",
+                          write_disposition = "WRITE_EMPTY",
+                          billing = NULL,
+                          quiet = NA,
+                          ...) {
+
+  src <- as_bq_table(src)
+  dest <- as_bq_table(dest)
+
+  billing <- billing %||% dest$project
+  url <- bq_path(billing, jobs = "")
+
   body <- list(
     configuration = list(
       copy = list(
-        sourceTable = as_bigquery_table_reference(src[[1]]),
-        destinationTable = as_bigquery_table_reference(dest),
+        sourceTable = tableReference(src),
+        destinationTable = tableReference(dest),
         createDisposition = unbox(create_disposition),
         writeDisposition = unbox(write_disposition)
       )
@@ -185,5 +105,67 @@ copy_table <- function(src, dest,
   job <- bq_post(url, body = bq_body(body, ...))
   job <- wait_for(job, quiet = quiet)
 
-  job$configuration$query$destinationTable
+  dest
+}
+
+#' @export
+#' @rdname table-API
+bq_table_upload <- function(x, values,
+                            billing = NULL,
+                            create_disposition = "CREATE_IF_NEEDED",
+                            write_disposition = "WRITE_APPEND",
+                            quiet = NA,
+                            ...) {
+  x <- as_bq_table(x)
+
+  job <- insert_upload_job(x$project, x$dataset, x$table, values,
+    billing = billing %||% x$project,
+    create_disposition = create_disposition,
+    write_disposition = write_disposition,
+    ...
+  )
+
+  job <- wait_for(job, quiet = quiet)
+  dest <- job$configuration$load$destinationTable
+
+  bq_table(dest$projectId, dest$datasetId, dest$tableId)
+}
+
+
+
+# Older API ---------------------------------------------------------------
+
+#' Deprecated table API
+#'
+#' See [table-API] for recommended API.
+#' @keywords internal
+#' @name table-dep
+NULL
+
+#' @rdname table-dep
+#' @export
+insert_table <- function(project, dataset, table, ...) {
+  x <- bq_table(project, dataset, table)
+  bq_table_insert(x, ...)
+}
+
+#' @rdname table-dep
+#' @export
+get_table <- function(project, dataset, table) {
+  x <- bq_table(project, dataset, table)
+  bq_table_get(x)
+}
+
+#' @rdname table-dep
+#' @export
+exists_table <- function(project, dataset, table) {
+  x <- bq_table(project, dataset, table)
+  bq_table_exists(x)
+}
+
+#' @rdname table-dep
+#' @export
+delete_table <- function(project, dataset, table) {
+  x <- bq_table(project, dataset, table)
+  bq_table_delete(x)
 }
