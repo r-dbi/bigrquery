@@ -5,7 +5,7 @@
 \title{Copy one or more source tables to a destination table.}
 \usage{
 copy_table(src, dest, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", project = NULL, ...)
+  write_disposition = "WRITE_EMPTY", project = NULL, quiet = NA, ...)
 }
 \arguments{
 \item{src}{either a single table reference, or a list of table references}
@@ -26,6 +26,10 @@ for more information}
 
 \item{project}{project ID to use for the copy job. defaults to the project of
 the destination table.}
+
+\item{quiet}{if \code{FALSE} print informative progress messages, if
+\code{TRUE} is silent, if \code{NA} displays messages for long-running
+jobs.}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
@@ -48,5 +52,5 @@ copy_table(list(src, dest), doubled)
 }
 \seealso{
 API documentation:
-\url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
+\url{https://cloud.google.com/bigquery/docs/managing-tables#copy-table}
 }

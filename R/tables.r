@@ -141,8 +141,9 @@ merge_table_references <- function(partial, complete) {
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
 #'   for more information
 #' @inheritParams insert_dataset
+#' @inheritParams wait_for
 #' @seealso API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
+#'   <https://cloud.google.com/bigquery/docs/managing-tables#copy-table>
 #' @export
 #' @examples
 #' \dontrun{
@@ -157,6 +158,7 @@ copy_table <- function(src, dest,
                        create_disposition = "CREATE_IF_NEEDED",
                        write_disposition = "WRITE_EMPTY",
                        project = NULL,
+                       quiet = NA,
                        ...) {
   if (validate_table_reference(src)) {
     src <- list(src)
@@ -181,5 +183,8 @@ copy_table <- function(src, dest,
     )
   )
 
-  bq_post(url, body = bq_body(body, ...))
+  job <- bq_post(url, body = bq_body(body, ...))
+  job <- wait_for(job, quiet = quiet)
+
+  job$configuration$query$destinationTable
 }
