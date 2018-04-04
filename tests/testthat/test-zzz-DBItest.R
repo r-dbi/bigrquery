@@ -1,4 +1,4 @@
-if (has_auth) {
+if (has_auth && !identical(Sys.getenv("SKIP_DBITEST"), "true")) {
 
   tweaks <- DBItest::tweaks(
     constructor_name = "bigquery",
