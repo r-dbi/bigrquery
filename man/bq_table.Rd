@@ -3,28 +3,27 @@
 \name{bq_table}
 \alias{bq_table}
 \alias{as_bq_table}
-\title{Create a table reference}
+\title{Referencd to a BigQuery table}
 \usage{
 bq_table(project, dataset, table)
 
 as_bq_table(x)
 }
 \description{
-\code{bq_table()} creates from the individual components; \code{as_bq_table()}
-will create from a character vector or a list.
+\code{bq_table()} creates from individual \code{project}, \code{dataset}, and \code{table}
+components; \code{as_bq_table()} will create from a character vector or a list.
+See \link{table-API} for operations that work with the remote table.
 }
 \examples{
 natality <- bq_table("publicdata", "samples", "natality")
 natality
-get_table(natality)
 
-as_bq_table("publicdata:samples:natality")
 as_bq_table("publicdata.samples.natality")
 
 # Included primarily for backward compatbility
 as_bq_table(list(
   project_id = "publicdata",
-  dataset_id = "sameples",
+  dataset_id = "samples",
   table_id = "natality"
 ))
 }
