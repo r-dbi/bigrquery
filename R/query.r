@@ -6,7 +6,6 @@
 #' (with [list_tabledata()])
 #'
 #' @inheritParams insert_query_job
-#' @inheritParams list_tabledata
 #' @seealso Google documentation describing asynchronous queries:
 #'  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
 #'

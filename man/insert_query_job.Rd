@@ -11,8 +11,6 @@ insert_query_job(query, project, destination_table = NULL,
 \arguments{
 \item{query}{SQL query string}
 
-\item{project}{The project name, a string}
-
 \item{destination_table}{(optional) destination table for large queries,
 either as a string in the format used by BigQuery, or as a list with
 \code{project_id}, \code{dataset_id}, and \code{table_id} entries}
@@ -34,10 +32,6 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
-
-\item{...}{Additional arguments merged into the body of the
-request. \code{snake_case} will automatically be converted into
-\code{camelCase} so you can use consistent argument names.}
 }
 \value{
 a job resource list, as documented at

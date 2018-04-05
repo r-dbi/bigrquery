@@ -30,7 +30,6 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Collate: 
-    'auth-test.R'
     'auth.r'
     'bigrquery.r'
     'camelCase.R'
@@ -38,9 +37,12 @@ Collate:
     'dbi-driver.r'
     'dbi-connection.r'
     'dbi-result.r'
+    'dep-dataset.R'
+    'dep-id.R'
+    'dep-projects.R'
+    'dep-table.R'
     'dplyr-compat.R'
     'dplyr.r'
-    'id.R'
     'job-extract.R'
     'job-query.R'
     'job-upload.r'
@@ -51,6 +53,6 @@ Collate:
     'request.r'
     'table.R'
     'tabledata.r'
-    'tables.r'
+    'test.R'
     'utils.r'
     'zzz.r'

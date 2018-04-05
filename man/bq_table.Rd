@@ -3,20 +3,31 @@
 \name{bq_table}
 \alias{bq_table}
 \alias{as_bq_table}
-\title{Referencd to a BigQuery table}
+\title{Reference to a BigQuery table}
 \usage{
-bq_table(project, dataset, table)
+bq_table(project, dataset, table = NULL)
 
 as_bq_table(x)
 }
+\arguments{
+\item{project, dataset, table}{Path of identifier to a table.
+If \code{project} is a \link{bq_dataset}, then \code{dataset} will be taken
+as the table name.}
+
+\item{x}{An object to coerce to a \code{bq_table}.}
+}
 \description{
-\code{bq_table()} creates from individual \code{project}, \code{dataset}, and \code{table}
-components; \code{as_bq_table()} will create from a character vector or a list.
-See \link{table-API} for operations that work with the remote table.
+\code{bq_table()} creates a reference from individual \code{project}, \code{dataset}, and
+\code{table} identifiers; \code{as_bq_table()} will create from a character vector or
+a list. See \link{table-API} for operations that work with the remote table.
 }
 \examples{
 natality <- bq_table("publicdata", "samples", "natality")
 natality
+
+# If you already have a dataset
+ds <- bq_dataset("publicdata", "samples")
+bq_table(ds, "natality")
 
 as_bq_table("publicdata.samples.natality")
 

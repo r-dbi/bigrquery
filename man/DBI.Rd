@@ -122,15 +122,13 @@
 or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
-\item{project}{The project name, a string}
+\item{project}{Project and dataset identifiers}
 
-\item{dataset}{The name of the dataset to create, a string}
+\item{dataset}{Project and dataset identifiers}
 
 \item{billing}{project ID to use for billing}
 
-\item{page_size}{Number of items per page.}
-
-\item{quiet}{if \code{FALSE}, prints informative status messages.}
+\item{page_size}{Number of items per page}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 

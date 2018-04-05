@@ -1,127 +1,167 @@
-#' Gets an existing dataset in a project
+#' Reference to a BigQuery dataset
 #'
-#' @param project The project name, a string
-#' @param dataset The dataset to get, a string
-#' @return a character vector of dataset names
-#' @seealso Google API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}
-#' @family datasets
+#' `bq_dataset()` will create a dataset from the `project` and `dataset`
+#' identifiers; `as_bq_dataset()` will create a dataset from a string.
+#' See [dataset-API] for the things you can do with a dataset.
+#'
+#' @param project,dataset Project and dataset identifiers.
+#' @param x An object to coerce to a `bq_dataset`
 #' @export
 #' @examples
-#' \dontrun{
-#' get_dataset("publicdata", "shakespeare")
-#' }
-get_dataset <- function(project, dataset) {
-  bq_get(bq_path(project, dataset))
-}
+#' bq_dataset("publicdata", "shakespeare")
+#' as_bq_dataset("publicdata.shakespeare")
+bq_dataset <- function(project, dataset) {
+  assert_that(is.string(project), is.string(dataset))
 
-#' @rdname get_dataset
-#' @export
-#' @description `exists_dataset` merely checks if a table exists, and returns
-#'   either `TRUE` or `FALSE`.
-exists_dataset <- function(project, dataset) {
-  tryCatch(
-    !is.null(get_dataset(project = project, dataset = dataset)),
-    bigrquery_notFound = function(e) FALSE
+  structure(
+    list(
+      project = project,
+      dataset = dataset
+    ),
+    class = "bq_dataset"
   )
 }
 
-#' Deletes an existing dataset in a project
-#'
-#' @param project The project name, a string
-#' @param dataset The dataset to delete, a string
-#' @param deleteContents Whether to delete the tables if the dataset is not empty, a boolean
-#' @seealso Google API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}
-#' @family datasets
 #' @export
-#' @examples
-#' \dontrun{
-#' delete_dataset("publicdata", "shakespeare", deleteContents = TRUE)
-#' delete_dataset("myproject", "emptydataset")
-#' }
-delete_dataset <- function(project, dataset, deleteContents = FALSE) {
-  assert_that(is.string(project), is.string(dataset))
-
-  url <- sprintf("projects/%s/datasets/%s", project, dataset)
-  bq_delete(url, query = list(deleteContents = deleteContents))
+print.bq_dataset <- function(x, ...) {
+  cat_line("<bq_dataset> ", x$project, ":", x$dataset)
 }
 
-#' Creates a new dataset in a project
+#' @export
+#' @rdname bq_dataset
+as_bq_dataset <- function(x) UseMethod("as_bq_dataset")
+
+#' @export
+as_bq_dataset.bq_dataset <- function(x) x
+
+#' @export
+as_bq_dataset.character <- function(x) {
+  assert_that(length(x) == 1)
+
+  pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
+  if (length(pieces) != 2) {
+    stop(
+      "Character `bq_dataset` must contain two components when split by `.`",
+      call. = FALSE
+    )
+  }
+
+  bq_dataset(pieces[[1]], pieces[[2]])
+}
+
+datasetReference <- function(x) {
+  x <- as_bq_dataset(x)
+  list(
+    projectId = unbox(x$project),
+    datasetId = unbox(x$dataset)
+  )
+}
+
+# API methods -------------------------------------------------------------
+
+#' Manipulate BigQuery datasets
 #'
-#' @param project The project name, a string
-#' @param dataset The name of the dataset to create, a string
+#' @param x A [bq_dataset]
+#' @param recursive If `TRUE`, will recursively delete all contents of the dataset.
 #' @param ... Additional arguments merged into the body of the
 #'   request. `snake_case` will automatically be converted into
 #'   `camelCase` so you can use consistent argument names.
-#' @seealso Google API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}
-#' @family datasets
-#' @export
-#' @examples
-#' \dontrun{
-#' insert_dataset("myproject", "new_dataset")
-#' }
-insert_dataset <- function(project, dataset, ...) {
-  assert_that(is.string(project), is.string(dataset))
-
-  url <- bq_path(project, "")
-  body <- list(
-    datasetReference = list(
-      projectId = project,
-      datasetId = dataset
-    )
-  )
-
-  bq_post(url, body = bq_body(body, ...))
-}
-
-#' Updates an existing dataset in a project
-#'
-#' @inheritParams insert_dataset
-#' @seealso Google API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/datasets/update}
-#' @family datasets
-#' @export
-#' @examples
-#' \dontrun{
-#' update_dataset("myproject", "existing_dataset", "my description", "friendly name")
-#' }
-update_dataset <- function(project, dataset, ...) {
-  url <- bq_path(project, dataset)
-  body <- list(
-    datasetReference = list(
-      projectId = project,
-      datasetId = dataset
-    )
-  )
-
-  bq_put(url, body = bq_body(body, ...))
-}
-
-#' List available tables in dataset.
-#'
-#' @inheritParams get_table
 #' @param page_size Number of items per page
 #' @param max_pages Maximum number of pages to retrieve
-#' @return a character vector of table names
-#' @family tables
-#' @seealso API documentation:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/tables/list}
-#' @export
+#'
+#' @section API documentation:
+#' * [get](https://cloud.google.com/bigquery/docs/reference/v2/datasets/get)
+#' * [insert](https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert)
+#' * [update](https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert)
+#' * [delete](https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete)
+#' * [tables](https://cloud.google.com/bigquery/docs/reference/v2/tables/list)
 #' @examples
-#' \dontrun{
-#' list_tables("publicdata", "samples")
-#' list_tables("githubarchive", "github")
-#' list_tables("publicdata", "samples", max_pages = 2, page_size = 2)
+#' if (bq_testable()) {
+#' ds <- bq_dataset(bq_test_project(), "dataset_api")
+#' bq_dataset_exists(ds)
+#'
+#' bq_dataset_create(ds)
+#' bq_dataset_exists(ds)
+#' str(bq_dataset_meta(ds))
+#'
+#' bq_dataset_delete(ds)
+#' bq_dataset_exists(ds)
+#'
+#' # Use bq_test_dataset() to create a temporary dataset that will
+#' # be automatically deleted
+#' ds <- bq_test_dataset()
+#' bq_table_create(bq_table(ds, "x1"))
+#' bq_table_create(bq_table(ds, "x2"))
+#' bq_table_create(bq_table(ds, "x3"))
+#' bq_dataset_tables(ds)
 #' }
-list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
-  data <- bq_get_paginated(
-    bq_path(project, dataset, ""),
-    page_size = page_size,
-    max_pages = max_pages
-  )
+#' @name dataset-API
+NULL
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_meta <- function(x) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  bq_get(url)
+}
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_exists <- function(x) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  bq_exists(url)
+}
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_delete <- function(x, recursive = FALSE) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  query <- list(deleteContents = recursive)
+  bq_delete(url, query = query)
+}
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_create <- function(x, ...) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, "")
+  body <- list(datasetReference = datasetReference(x))
+  bq_post(url, body = bq_body(body, ...))
+
+  x
+}
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_udpate <- function(x, ...) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  body <- list(datasetReference = datasetReference(x))
+  bq_put(url, body = bq_body(body, ...))
+
+  invisible(x)
+}
+
+#' @export
+#' @rdname dataset-API
+bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, ...) {
+  x <- as_bq_dataset(x)
+  url <- bq_path(x$project, x$dataset, "")
+
+  data <- bq_get_paginated(url, page_size = page_size, max_pages = max_pages)
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
-  vapply(tables, function(x) x$tableReference$tableId, character(1L))
+
+  lapply(tables, function(x) {
+    ref <- x$tableReference
+    bq_table(ref$projectId, ref$datasetId, ref$tableId)
+  })
 }

@@ -1,4 +1,4 @@
-context("upload")
+context("job-upload.R")
 
 test_that("date/times can be round-tripped", {
   skip_if_no_auth()

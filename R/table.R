@@ -1,13 +1,21 @@
 #' Reference to a BigQuery table
 #'
-#' `bq_table()` creates from individual `project`, `dataset`, and `table`
-#' components; `as_bq_table()` will create from a character vector or a list.
-#' See [table-API] for operations that work with the remote table.
+#' `bq_table()` creates a reference from individual `project`, `dataset`, and
+#' `table` identifiers; `as_bq_table()` will create from a character vector or
+#' a list. See [table-API] for operations that work with the remote table.
 #'
 #' @export
+#' @param project,dataset,table Path of identifier to a table.
+#'   If `project` is a [bq_dataset], then `dataset` will be taken
+#'   as the table name.
+#' @param x An object to coerce to a `bq_table`.
 #' @examples
 #' natality <- bq_table("publicdata", "samples", "natality")
 #' natality
+#'
+#' # If you already have a dataset
+#' ds <- bq_dataset("publicdata", "samples")
+#' bq_table(ds, "natality")
 #'
 #' as_bq_table("publicdata.samples.natality")
 #'
@@ -17,7 +25,11 @@
 #'   dataset_id = "samples",
 #'   table_id = "natality"
 #' ))
-bq_table <- function(project, dataset, table) {
+bq_table <- function(project, dataset, table = NULL) {
+  if (inherits(project, "bq_dataset") && is.null(table)) {
+    return(bq_table(project$project, project$dataset, dataset))
+  }
+
   assert_that(is.string(project), is.string(dataset), is.string(table))
 
   structure(
@@ -72,9 +84,9 @@ as_bq_table.list <- function(x) {
 
 # API ---------------------------------------------------------------------
 
-#' Manipulate tables
+#' Manipulate BigQuery tables
 #'
-#' @param x A [bq_table]
+#' @param x A [bq_table], or an object coercible to a `bq_table`.
 #' @param src,dest Source and desintation [bq_table]s.
 #' @param billing Project to bill. Defaults to the `dest` project.
 #' @param create_disposition Behavior if the destination table does not already
@@ -83,22 +95,25 @@ as_bq_table.list <- function(x) {
 #' @param write_disposition Behavior if the destination already exists.
 #'   The default, `"WRITE_EMPTY"`, will error if the table already contains
 #'   data. Other possible values are `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`.
-#' @section API documentation
+#' @section API documentation:
 #' * [create](https://developers.google.com/bigquery/docs/reference/v2/tables/insert)
 #' * [get](https://developers.google.com/bigquery/docs/reference/v2/tables/get)
 #' * [delete](https://developers.google.com/bigquery/docs/reference/v2/tables/delete)
 #' * [copy](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.copy)
+#' @inheritParams wait_for
+#' @inheritParams bq_datasets
 #' @return
 #' * `bq_table_get()`: a [table resource list](https://developers.google.com/bigquery/docs/reference/v2/tables)
 #' * `bq_table_get()`: either `TRUE` or `FALSE`
 #' * `bq_table_copy()`: a table reference to the new table
 #'
 #' @examples
-#' \dontrun{
-#' insert_dataset(bq_test_project(), "table_api")
+#' if (bq_testable()) {
+#' ds <- bq_test_dataset()
 #'
-#' bq_mtcars <- bq_table(bq_test_project(), "table_api", "mtcars")
+#' bq_mtcars <- bq_table(ds, "mtcars")
 #' bq_table_exists(bq_mtcars)
+#' str(bq_table_meta(bq_mtcars))
 #'
 #' bq_table_upload(bq_mtcars, mtcars)
 #' bq_table_exists(bq_mtcars)
@@ -106,10 +121,8 @@ as_bq_table.list <- function(x) {
 #' bq_table_delete(bq_mtcars)
 #' bq_table_exists(bq_mtcars)
 #'
-#' my_natality <- bq_table(bq_test_project(), "table_api", "mynatality")
-#' bq_table_copy("publicdata:samples:natality", my_natality)
-#'
-#' delete_dataset(bq_test_project(), "table_api", deleteContents = TRUE)
+#' my_natality <- bq_table(ds, "mynatality")
+#' bq_table_copy("publicdata.samples.natality", my_natality)
 #' }
 #' @name table-API
 NULL
@@ -124,11 +137,13 @@ bq_table_create <- function(x, ...) {
     tableReference = tableReference(x)
   )
   bq_post(url, body = bq_body(body, ...))
+
+  x
 }
 
 #' @export
 #' @rdname table-API
-bq_table_get <- function(x) {
+bq_table_meta <- function(x) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)
   bq_get(url)
@@ -212,41 +227,3 @@ tableReference <- function(x) {
     tableId = unbox(x$table)
   )
 }
-
-# Older API ---------------------------------------------------------------
-
-#' Deprecated table API
-#'
-#' See [table-API] for recommended API.
-#' @keywords internal
-#' @name table-dep
-NULL
-
-#' @rdname table-dep
-#' @export
-insert_table <- function(project, dataset, table, ...) {
-  x <- bq_table(project, dataset, table)
-  bq_table_insert(x, ...)
-}
-
-#' @rdname table-dep
-#' @export
-get_table <- function(project, dataset, table) {
-  x <- bq_table(project, dataset, table)
-  bq_table_get(x)
-}
-
-#' @rdname table-dep
-#' @export
-exists_table <- function(project, dataset, table) {
-  x <- bq_table(project, dataset, table)
-  bq_table_exists(x)
-}
-
-#' @rdname table-dep
-#' @export
-delete_table <- function(project, dataset, table) {
-  x <- bq_table(project, dataset, table)
-  bq_table_delete(x)
-}
-

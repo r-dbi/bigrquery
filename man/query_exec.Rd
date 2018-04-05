@@ -13,8 +13,6 @@ query_exec(query, project, destination_table = NULL, default_dataset = NULL,
 \arguments{
 \item{query}{SQL query string}
 
-\item{project}{The project name, a string}
-
 \item{destination_table}{(optional) destination table for large queries,
 either as a string in the format used by BigQuery, or as a list with
 \code{project_id}, \code{dataset_id}, and \code{table_id} entries}
@@ -23,13 +21,9 @@ either as a string in the format used by BigQuery, or as a list with
 \code{query}, either as a string in the format used by BigQuery or as a
 list with \code{project_id} and \code{dataset_id} entries}
 
-\item{page_size}{Number of items per page.}
+\item{page_size}{Number of items per page}
 
-\item{max_pages}{maximum number of pages to retrieve. Use \code{Inf}
-to retrieve the complete dataset.}
-
-\item{warn}{If \code{TRUE}, warn when there are rows remaining to
-be pulled down from database.}
+\item{max_pages}{Maximum number of pages to retrieve}
 
 \item{create_disposition}{behavior for table creation.
 defaults to \code{"CREATE_IF_NEEDED"},
@@ -44,8 +38,6 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
-
-\item{quiet}{if \code{FALSE}, prints informative status messages.}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into

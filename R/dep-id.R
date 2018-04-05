@@ -1,0 +1,52 @@
+#' Deprecated table/dataset objects
+#'
+#' Please see [bq_table] and [bq_dataset] instead.
+#'
+#' @keywords internal
+#' @name id-dep
+NULL
+
+#' @export
+#' @rdname id-dep
+parse_dataset <- function(dataset, project_id = NULL) {
+  assert_that(is.string(dataset), is.null(project_id) || is.string(project_id))
+  first_split <- rsplit_one(dataset, ":")
+  dataset_id <- first_split$right
+  project_id <- first_split$left %||% project_id
+  list(project_id = project_id, dataset_id = dataset_id)
+}
+
+#' @export
+#' @rdname id-dep
+format_dataset <- function(project_id, dataset) {
+  if (!is.null(project_id)) {
+    dataset <- paste0(project_id, ":", dataset)
+  }
+  dataset
+}
+
+#' @export
+#' @rdname id-dep
+parse_table <- function(table, project_id = NULL) {
+  assert_that(is.string(table), is.null(project_id) || is.string(project_id))
+  dataset_id <- NULL
+  first_split <- rsplit_one(table, ".")
+  table_id <- first_split$right
+  project_and_dataset <- first_split$left
+  if (!is.null(project_and_dataset)) {
+    second_split <- rsplit_one(project_and_dataset, ":")
+    dataset_id <- second_split$right
+    project_id <- second_split$left %||% project_id
+  }
+  list(project_id = project_id, dataset_id = dataset_id, table_id = table_id)
+}
+
+#' @export
+#' @rdname id-dep
+format_table <- function(project_id, dataset, table) {
+  if (!is.null(project_id)) {
+    dataset <- paste0(project_id, ":", dataset)
+  }
+  table <- paste0(dataset, ".", table)
+  table
+}

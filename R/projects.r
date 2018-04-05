@@ -2,15 +2,18 @@
 
 #' List all projects to which you have been granted any project role.
 #'
-#' @return a character vector of project ids named with their friendly names.
-#' @seealso API documentation at
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/projects/list}
+#' You can also work with [public datasets](https://cloud.google.com/bigquery/public-data/)
+#' but you will need to provide a `billing` project whenever you perform
+#' any non-free operation.
+#'
+#' @return A character vector of project ids named with their friendly names.
+#' @seealso [API documentation](https://cloud.google.com/bigquery/docs/reference/v2/projects/list)
 #' @export
 #' @examples
-#' \dontrun{
-#' list_projects()
+#' if (bq_authable()) {
+#' bq_projects()
 #' }
-list_projects <- function() {
+bq_projects <- function() {
   data <- bq_get("projects")$projects
 
   id <- unlist(lapply(data, function(x) x$id))

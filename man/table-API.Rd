@@ -3,16 +3,16 @@
 \name{table-API}
 \alias{table-API}
 \alias{bq_table_create}
-\alias{bq_table_get}
+\alias{bq_table_meta}
 \alias{bq_table_exists}
 \alias{bq_table_delete}
 \alias{bq_table_copy}
 \alias{bq_table_upload}
-\title{Manipulate tables}
+\title{Manipulate BigQuery tables}
 \usage{
 bq_table_create(x, ...)
 
-bq_table_get(x)
+bq_table_meta(x)
 
 bq_table_exists(x)
 
@@ -26,7 +26,7 @@ bq_table_upload(x, values, billing = NULL,
   write_disposition = "WRITE_APPEND", quiet = NA, ...)
 }
 \arguments{
-\item{x}{A \link{bq_table}}
+\item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
 
 \item{src, dest}{Source and desintation \link{bq_table}s.}
 
@@ -48,14 +48,25 @@ data. Other possible values are \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"
 }
 }
 \description{
-Manipulate tables
+Manipulate BigQuery tables
 }
-\examples{
-\dontrun{
-insert_dataset(bq_test_project(), "table_api")
+\section{API documentation}{
 
-bq_mtcars <- bq_table(bq_test_project(), "table_api", "mtcars")
+\itemize{
+\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}{create}
+\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/get}{get}
+\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.copy}{copy}
+}
+}
+
+\examples{
+if (bq_testable()) {
+ds <- bq_test_dataset()
+
+bq_mtcars <- bq_table(ds, "mtcars")
 bq_table_exists(bq_mtcars)
+str(bq_table_meta(bq_mtcars))
 
 bq_table_upload(bq_mtcars, mtcars)
 bq_table_exists(bq_mtcars)
@@ -63,9 +74,7 @@ bq_table_exists(bq_mtcars)
 bq_table_delete(bq_mtcars)
 bq_table_exists(bq_mtcars)
 
-my_natality <- bq_table(bq_test_project(), "table_api", "mynatality")
-bq_table_copy("publicdata:samples:natality", my_natality)
-
-delete_dataset(bq_test_project(), "table_api", deleteContents = TRUE)
+my_natality <- bq_table(ds, "mynatality")
+bq_table_copy("publicdata.samples.natality", my_natality)
 }
 }

@@ -25,3 +25,4 @@ Other jobs: \code{\link{get_job}},
   \code{\link{insert_query_job}},
   \code{\link{insert_upload_job}}
 }
+\keyword{internal}

@@ -1,4 +1,4 @@
-context("sql")
+context("dplyr.R")
 
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")

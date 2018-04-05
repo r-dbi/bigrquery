@@ -9,9 +9,9 @@ insert_extract_job(project, dataset, table, destination_uris,
   print_header = TRUE, billing = project)
 }
 \arguments{
-\item{project}{The project name, a string}
+\item{project}{Project and dataset identifiers}
 
-\item{dataset}{The name of the dataset to create, a string}
+\item{dataset}{Project and dataset identifiers}
 
 \item{table}{name of table to insert values into}
 

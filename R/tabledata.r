@@ -1,6 +1,5 @@
 #' Retrieve data from a table.
 #'
-#' @inheritParams get_table
 #' @param callback function called with single argument, the data from the
 #'   current page of data
 #' @param quiet if `FALSE`, prints informative status messages.

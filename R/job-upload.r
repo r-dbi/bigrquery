@@ -4,6 +4,7 @@
 #' for relatively small datasets.
 #'
 #' @inheritParams get_table
+#' @param project,dataset Project and dataset identifiers
 #' @param table name of table to insert values into
 #' @param values data frame of data to upload
 #' @param billing project ID to use for billing
@@ -17,7 +18,7 @@
 #'   `"WRITE_TRUNCATE"` and `"WRITE_EMPTY"`; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 #'   for more information
-#' @inheritParams insert_dataset
+#' @inheritParams bq_dataset_create
 #' @seealso Google API documentation:
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs

@@ -1,4 +1,4 @@
-context("utils")
+context("dep-id.R")
 
 test_that("basic table name parsing and composition works", {
   project_id <- "myproject"

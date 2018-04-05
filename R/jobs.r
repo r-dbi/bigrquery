@@ -1,3 +1,5 @@
+
+
 #' Check status of a job.
 #'
 #' @param project project name
@@ -24,6 +26,7 @@ get_job <- function(project, job) {
 #'   `TRUE` is silent, if `NA` displays messages for long-running
 #'   jobs.
 #' @param pause amount of time to wait between status requests
+#' @keywords internal
 #' @family jobs
 #' @export
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
@@ -47,18 +50,18 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     signal_reason(err$reason, err$message)
   }
 
+  progress$update(1)
   if (!isFALSE(quiet)) {
     if ("load" %in% names(job$configuration)) {
       in_bytes <- as.numeric(job$statistics$load$inputFileBytes)
       out_bytes <- as.numeric(job$statistics$load$outputBytes)
-      message(format(size_units(in_bytes)), " input bytes")
-      message(format(size_units(out_bytes)), " output bytes")
+      message(format(size_units(in_bytes)), " input")
+      message(format(size_units(out_bytes)), " output")
     } else if ("query" %in% names(job$configuration)) {
       bytes <- as.numeric(job$statistics$query$totalBytesBilled)
       message(format(size_units(bytes)), " processed")
     }
   }
-  progress$update(1)
 
   invisible(job)
 }
