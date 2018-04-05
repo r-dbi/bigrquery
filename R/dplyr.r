@@ -80,6 +80,9 @@ sql_translate_env.BigQueryConnection <- function(x) {
       as.logical = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS BOOLEAN)"),
       as.numeric = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS FLOAT64)"),
 
+      # String
+      paste0   = sql_prefix("CONCAT"),
+
       # Date/time
       Sys.date = sql_prefix("current_date"),
       Sys.time = sql_prefix("current_time"),
@@ -103,18 +106,23 @@ sql_translate_env.BigQueryConnection <- function(x) {
       pmin = sql_prefix("LEAST")
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
-      n = function() dplyr::sql("count(*)"),
-      sd =  sql_prefix("STDDEV_SAMP"),
+      n   = function() dplyr::sql("count(*)"),
+      sd  = sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       any = sql_prefix("LOGICAL_OR", 1),
-      all = sql_prefix("LOGICAL_AND", 1)
+      all = sql_prefix("LOGICAL_AND", 1),
+      cor = dbplyr::sql_aggregate_2("corr"),
+      cov = dbplyr::sql_aggregate_2("covar_samp")
     ),
     dbplyr::sql_translator(
-      .parent = dbplyr::base_win,
-      sd = dbplyr::win_recycled("STDDEV_SAMP"),
-      all = dbplyr::win_absent("LOGICAL_AND"),
-      any = dbplyr::win_absent("LOGICAL_OR"),
-      n_distinct = dbplyr::win_absent("n_distinct")
+      .parent    = dbplyr::base_win,
+      sd         = dbplyr::win_recycled("STDDEV_SAMP"),
+      all        = dbplyr::win_absent("LOGICAL_AND"),
+      any        = dbplyr::win_absent("LOGICAL_OR"),
+      n_distinct = dbplyr::win_absent("n_distinct"),
+      cor        = dbplyr::win_aggregate_2("corr"),
+      cov        = dbplyr::win_aggregate_2("covar_samp"),
+      var        = dbplyr::win_aggregate("var_samp")
     )
   )
 }

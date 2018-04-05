@@ -1,5 +1,8 @@
 # bigrquery 0.4.1.9000
 
+* Adds support for `paste0()`(@edgararuiz)
+
+* Adds aggregate and window support for `cor()` and `cov()`(@edgararuiz)
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 
