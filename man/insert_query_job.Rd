@@ -6,7 +6,8 @@
 \usage{
 insert_query_job(query, project, destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE,
+  parameters = NULL, ...)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -35,6 +36,10 @@ for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
+\item{parameters}{list of named parameters that will be matched to parameters in the query,
+for example, \code{a} parameter will be matched to \code{@a} placeholder in the query.
+\url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}}
+
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
 \code{camelCase} so you can use consistent argument names.}
@@ -46,6 +51,23 @@ a job resource list, as documented at
 \description{
 This is a low-level function that creates a query job. To wait until it is
 finished and then retrieve the results, see \code{\link[=query_exec]{query_exec()}}
+}
+\examples{
+\dontrun {
+# execute parameterised query
+sql <- "SELECT *
+        FROM `my_dataset.my_table`
+        WHERE
+          x = @x AND
+          date = @d"
+params <- list(x = 2L, d = as.Date("2012-10-15"))
+query_exec(
+  sql,
+  project = 'my-project-name',
+  use_legacy_sql = FALSE,
+  parameters = params
+)
+}
 }
 \seealso{
 API documentation for insert method:

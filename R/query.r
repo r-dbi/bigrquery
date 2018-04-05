@@ -34,6 +34,7 @@ query_exec <- function(query, project,
                        write_disposition = "WRITE_EMPTY",
                        use_legacy_sql = TRUE,
                        quiet = getOption("bigrquery.quiet"),
+                       parameters = NULL,
                        ...) {
 
   dest <- run_query_job(
@@ -45,6 +46,7 @@ query_exec <- function(query, project,
     write_disposition = write_disposition,
     use_legacy_sql = use_legacy_sql,
     quiet = quiet,
+    parameters,
     ...
   )
 
@@ -69,6 +71,7 @@ run_query_job <- function(query,
                           write_disposition = "WRITE_EMPTY",
                           use_legacy_sql = TRUE,
                           quiet = getOption("bigrquery.quiet"),
+                          parameters,
                           ...) {
   assert_that(is.string(query), is.string(project))
 
@@ -80,6 +83,7 @@ run_query_job <- function(query,
     create_disposition = create_disposition,
     write_disposition = write_disposition,
     use_legacy_sql = use_legacy_sql,
+    parameters,
     ...
   )
   job <- wait_for(job, quiet = quiet)

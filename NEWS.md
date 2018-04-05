@@ -1,10 +1,20 @@
 # bigrquery 0.4.1.9000
 
+## New features
+ 
+* Parameterised queries are supported with explicit parameter names. 
+  For example, @date will be substituted with date parameter passed to `query_exec()` call.
+  (@byapparov, #211)
+ 
+* New table with a given schema can be created with `insert_table()`. 
+  Table can be partitioned if `partition` parameter is set to "DAY" (@byapparov, #203)
+
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 
 * Request error messages will now contain the "reason", which can contain 
   useful information for debugging (#209).
+
 
 # Version 0.4.1
 

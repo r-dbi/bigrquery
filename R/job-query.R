@@ -22,18 +22,38 @@
 #'   `query`, either as a string in the format used by BigQuery or as a
 #'   list with `project_id` and `dataset_id` entries
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
+#' @param parameters list of named parameters that will be matched to parameters in the query,
+#'    for example, `a` parameter will be matched to `@a` placeholder in the query.
+#'   \url{https://cloud.google.com/bigquery/docs/parameterized-queries#bigquery-query-params-api}
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
+#' @examples
+#' \dontrun {
+#' # execute parameterised query
+#' sql <- "SELECT *
+#'         FROM `my_dataset.my_table`
+#'         WHERE
+#'           x = @x AND
+#'           date = @d"
+#' params <- list(x = 2L, d = as.Date("2012-10-15"))
+#' query_exec(
+#'   sql,
+#'   project = 'my-project-name',
+#'   use_legacy_sql = FALSE,
+#'   parameters = params
+#' )
+#' }
 insert_query_job <- function(query, project,
                              destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
+                             parameters = NULL,
                              ...) {
   assert_that(is.string(project), is.string(query))
 
@@ -46,6 +66,11 @@ insert_query_job <- function(query, project,
       )
     )
   )
+
+  if (!is.null(parameters)) {
+    body$configuration$query$queryParameters <- bq_parameters(parameters)
+    body$configuration$query$parameterMode <- "NAMED"
+  }
 
   if (!is.null(destination_table)) {
     if (is.character(destination_table)) {
@@ -81,4 +106,18 @@ insert_query_job <- function(query, project,
   }
 
   bq_post(url, body = bq_body(body, ...))
+}
+
+#' Converts named list to parameters data structure
+#' @noRd
+#' @param parameters named list of parameters for parameterised query
+bq_parameters <- function(parameters) {
+  res <- lapply(names(parameters), function(name) {
+    list(
+      parameterType = list(type = data_type(parameters[[name]])),
+      parameterValue = list(value = parameters[[name]]),
+      name = name
+    )
+  })
+  unname(res)
 }
