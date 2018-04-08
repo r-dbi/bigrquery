@@ -1,15 +1,10 @@
 # bigrquery 0.4.1.9000
 
-
-## New features
-
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 
 * Request error messages will now contain the "reason", which can contain 
   useful information for debugging (#209).
-
-## Big fixes and minor improvements
 
 * Additional parameters can be passed to the `query_exec()` (#205, @byapparov)
 
