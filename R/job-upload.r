@@ -24,7 +24,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' list_datasets("193487687779")
+#' list_datasets(bq_test_project)
 #' list_tables("193487687779", "houston")
 #' job <- insert_upload_job("193487687779", "houston", "mtcars", mtcars)
 #' wait_for(job)
@@ -82,6 +82,10 @@ schema_fields <- function(data) {
 }
 
 data_type <- function(x) {
+  if (is.data.frame(x)) {
+    return(vapply(x, data_type, character(1)))
+  }
+
   if (is.factor(x)) return("STRING")
   if (inherits(x, "POSIXt")) return("TIMESTAMP")
   if (inherits(x, "hms")) return("TIME")

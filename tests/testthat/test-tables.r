@@ -1,7 +1,5 @@
 context("tables")
 
-
-
 test_that("can create and list tables", {
   ds <- dataset_10_tables()
   expect_equal(
@@ -53,21 +51,31 @@ test_that("table references can be merged", {
 
 
 test_that("copy_table creates a copy of a table", {
-  ds <- dataset_10_tables()
-  src <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1")
-  dest <- list(project_id = ds$project, dataset_id = ds$dataset, table_id = "table1_copy")
+  skip_if_no_auth()
+
+  df <- data.frame(x = runif(100))
+  job <- insert_upload_job(bq_test_project(), "test", "src", df)
+  on.exit(delete_table(bq_test_project(), "test", "src"))
+  wait_for(job, quiet = TRUE)
+
+  src <- list(project_id = bq_test_project(), dataset_id = "test", table_id = "src")
+  dest <- list(project_id = bq_test_project(), dataset_id = "test", table_id = "dest")
 
   copy_table(src, dest)
-  res <- exists_table(ds$project, ds$dataset, "table1_copy")
+  on.exit(delete_table(bq_test_project(), "test", "dest"))
+
+  expect_true(exists_table(dest$project_id, dest$dataset_id, dest$table_id))
 })
 
 test_that("copy_table validates arguments", {
-    partial <- list(project_id = "a", dataset_id = "b")
-    complete <- list(project_id = "x", dataset_id = "y", table_id = "z")
+  partial <- list(project_id = "a", dataset_id = "b")
+  complete <- list(project_id = "x", dataset_id = "y", table_id = "z")
 
-    expect_error(copy_table(list(), complete),
-                 "src must be a table reference or a nonempty list of table references")
-    expect_error(copy_table(complete, partial), "dest must be a table reference")
+  expect_error(
+    copy_table(list(), complete),
+    "src must be a table reference or a nonempty list of table references"
+  )
+  expect_error(copy_table(complete, partial), "dest must be a table reference")
 })
 
 test_that("insert table creates table with a given schema", {

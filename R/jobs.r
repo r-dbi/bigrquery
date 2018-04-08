@@ -44,8 +44,7 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
 
   err <- job$status$errorResult
   if (!is.null(err)) {
-    # error message is sufficient for now, could also pull more detailed reason
-    stop(err$message, call. = FALSE)
+    signal_reason(err$reason, err$message)
   }
 
   if (!isFALSE(quiet)) {

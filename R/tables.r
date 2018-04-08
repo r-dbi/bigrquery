@@ -140,9 +140,9 @@ validate_table_reference <- function(reference) {
 
 as_bigquery_table_reference <- function(reference) {
   list(
-    projectId = reference$project_id,
-    datasetId = reference$dataset_id,
-    tableId = reference$table_id
+    projectId = unbox(reference$project_id),
+    datasetId = unbox(reference$dataset_id),
+    tableId = unbox(reference$table_id)
   )
 }
 
@@ -175,8 +175,9 @@ merge_table_references <- function(partial, complete) {
 #'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.copy.writeDisposition}{the API documentation}
 #'   for more information
 #' @inheritParams insert_dataset
+#' @inheritParams wait_for
 #' @seealso API documentation:
-#'   \url{https://cloud.google.com/bigquery/docs/tables#copyingtable}
+#'   <https://cloud.google.com/bigquery/docs/managing-tables#copy-table>
 #' @export
 #' @examples
 #' \dontrun{
@@ -191,6 +192,7 @@ copy_table <- function(src, dest,
                        create_disposition = "CREATE_IF_NEEDED",
                        write_disposition = "WRITE_EMPTY",
                        project = NULL,
+                       quiet = NA,
                        ...) {
   if (validate_table_reference(src)) {
     src <- list(src)
@@ -204,16 +206,18 @@ copy_table <- function(src, dest,
   project <- project %||% dest$project_id
   url <- bq_path(project, jobs = "")
   body <- list(
-    projectId = project,
     configuration = list(
       copy = list(
-        sourceTables = lapply(src, as_bigquery_table_reference),
+        sourceTable = as_bigquery_table_reference(src[[1]]),
         destinationTable = as_bigquery_table_reference(dest),
-        createDisposition = create_disposition,
-        writeDisposition = write_disposition
+        createDisposition = unbox(create_disposition),
+        writeDisposition = unbox(write_disposition)
       )
     )
   )
 
-  bq_post(url, body = bq_body(body, ...))
+  job <- bq_post(url, body = bq_body(body, ...))
+  job <- wait_for(job, quiet = quiet)
+
+  job$configuration$query$destinationTable
 }

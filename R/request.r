@@ -93,7 +93,7 @@ bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
 
 #' @importFrom httr POST add_headers config
 bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
-  json <- jsonlite::toJSON(body)
+  json <- jsonlite::toJSON(body, pretty = TRUE)
   req <- POST(
     paste0(base_url, url),
     body = json,
@@ -108,7 +108,7 @@ bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
 
 #' @importFrom httr PUT add_headers config
 bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
-  json <- jsonlite::toJSON(body)
+  json <- jsonlite::toJSON(body, pretty = TRUE)
   req <- PUT(
     paste0(base_url, url),
     body = json,

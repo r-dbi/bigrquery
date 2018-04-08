@@ -29,7 +29,8 @@ Suggests:
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
+    'auth-test.R'
     'auth.r'
     'bigrquery.r'
     'camelCase.R'
