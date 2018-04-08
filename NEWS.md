@@ -1,9 +1,5 @@
 # bigrquery 0.4.1.9000
 
-
-
-## New features
-
 * New table with a given schema can be created with `insert_table()`. 
   Table can be partitioned if `partition` parameter is set to "DAY" (@byapparov, #203)
 
