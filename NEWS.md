@@ -6,6 +6,8 @@
 * Request error messages will now contain the "reason", which can contain 
   useful information for debugging (#209).
 
+* Additional parameters can be passed to the `query_exec()` (#205, @byapparov)
+
 # Version 0.4.1
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
