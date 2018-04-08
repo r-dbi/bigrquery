@@ -29,12 +29,14 @@ test_that("explicit api keys override env vars", {
 
 
 test_that("ellipsis parameter list is added to configuration params", {
-  body <- list(configuration = list(
-    query = list(
-      query = "SELECT 1",
-      useLegacySql = TRUE
+  body <- list(
+    configuration = list(
+      query = list(
+        query = "SELECT 1",
+        useLegacySql = TRUE
+      )
     )
-  ))
+  )
   res <- bq_body(body, dry_run = TRUE)
   expect_equal(res$configuration$dryRun, TRUE)
 })
