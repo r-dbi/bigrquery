@@ -29,11 +29,36 @@ list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
 #'
 #' @inheritParams insert_dataset
 #' @inheritParams get_table
+#' @param schema list structure that defines schema of the table to be created
+#' @param partition adds partitioning to the table,
+#'   currenly only `DAY` option is supported which will add daily partitioning via _PARTITIONTIME column
 #' @export
 #' @seealso API documentation:
 #'  \url{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}
-insert_table <- function(project, dataset, table, ...) {
+#' @examples
+#' \dontrun{
+#' # create DAY partitioned table with a given schema:
+#'   schema <- list(
+#'     list(
+#'      name = "id",
+#'      type = "INTEGER"
+#'     )
+#'     list(
+#'       name = "name",
+#'       type = "STRING"
+#'     )
+#'   )
+#'   insert_table(
+#'     project = "my-project-name",
+#'     dataset = "my_dataset", ]
+#'     table = "new_table",
+#'     schema = schema,
+#'     partition = "DAY"
+#'   )
+#' }
+insert_table <- function(project, dataset, table, schema = list(), partition = NULL, ...) {
   url <- bq_path(project, dataset, "")
+
   body <- list(
     tableReference = list(
       projectId = project,
@@ -42,8 +67,17 @@ insert_table <- function(project, dataset, table, ...) {
     )
   )
 
+  if (length(schema) > 0) {
+    body$schema = list(fields = schema)
+  }
+
+  if (!is.null(partition)) {
+    body$timePartitioning <- list(type = partition)
+  }
+
   bq_post(url, body = bq_body(body, ...))
 }
+
 
 #' Retrieve table metadata
 #'

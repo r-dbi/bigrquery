@@ -4,7 +4,8 @@
 \alias{insert_table}
 \title{Insert empty table}
 \usage{
-insert_table(project, dataset, table, ...)
+insert_table(project, dataset, table, schema = list(), partition = NULL,
+  ...)
 }
 \arguments{
 \item{project}{The project name, a string}
@@ -13,12 +14,39 @@ insert_table(project, dataset, table, ...)
 
 \item{table}{name of the table}
 
+\item{schema}{list structure that defines schema of the table to be created}
+
+\item{partition}{adds partitioning to the table,
+currenly only \code{DAY} option is supported which will add daily partitioning via _PARTITIONTIME column}
+
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
 \code{camelCase} so you can use consistent argument names.}
 }
 \description{
 Insert empty table
+}
+\examples{
+\dontrun{
+# create DAY partitioned table with a given schema:
+  schema <- list(
+    list(
+     name = "id",
+     type = "INTEGER"
+    )
+    list(
+      name = "name",
+      type = "STRING"
+    )
+  )
+  insert_table(
+    project = "my-project-name",
+    dataset = "my_dataset", ]
+    table = "new_table",
+    schema = schema,
+    partition = "DAY"
+  )
+}
 }
 \seealso{
 API documentation:

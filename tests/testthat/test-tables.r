@@ -23,7 +23,6 @@ test_that("can control pagination of list_tables", {
     list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 2),
     tables[1:2]
   )
-
 })
 
 test_that("table references are validated correctly", {
@@ -76,4 +75,43 @@ test_that("copy_table validates arguments", {
     "src must be a table reference or a nonempty list of table references"
   )
   expect_error(copy_table(complete, partial), "dest must be a table reference")
+})
+
+test_that("insert_table creates table with two fields from a given schema", {
+  project <- bq_test_project()
+  dataset <- "test_insert_tables"
+  table <- "table_from_sample_schema"
+
+  if (!exists_dataset(project, dataset)) {
+    insert_dataset(project, dataset)
+  }
+
+  schema.source <- jsonlite::read_json("sample-schema.json")
+  insert_table(project, dataset, table, schema.source)
+  meta <- get_table(project, dataset, table)
+  schema.meta <- meta$schema$fields
+  expect_equal(length(schema.meta), 2)
+  expect_equal(schema.meta, schema.source)
+})
+
+test_that("insert_table creates table with time partitioning", {
+  project <- bq_test_project()
+  dataset <- "test_insert_tables"
+  table <- "table_with_time_partitioning"
+
+  if (!exists_dataset(project, dataset)) {
+    insert_dataset(project, dataset)
+  }
+
+  insert_table(project, dataset, table, partition = "DAY")
+  meta <- get_table(project, dataset, table)
+  partitioning <- meta$timePartitioning$type
+  expect_equal(partitioning, "DAY")
+  expect_equal(schema.meta, schema.source)
+})
+
+teardown({
+  project <- bq_test_project()
+  dataset <- "test_insert_tables"
+  delete_dataset(project, dataset, deleteContents = TRUE)
 })
