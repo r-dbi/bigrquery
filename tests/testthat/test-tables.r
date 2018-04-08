@@ -23,7 +23,6 @@ test_that("can control pagination of list_tables", {
     list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 2),
     tables[1:2]
   )
-
 })
 
 test_that("table references are validated correctly", {
@@ -79,7 +78,7 @@ test_that("copy_table validates arguments", {
 })
 
 test_that("insert table creates table with a given schema", {
-  project <- "bigrquery-examples"
+  project <- bq_test_project()
   dataset <- "test_insert_tables"
   table <- "table_from_sample_schema"
 
@@ -96,7 +95,7 @@ test_that("insert table creates table with a given schema", {
 })
 
 test_that("insert table creates table with time partitioning", {
-  project <- "bigrquery-examples"
+  project <- bq_test_project()
   dataset <- "test_insert_tables"
   table <- "table_with_time_partitioning"
 
@@ -107,12 +106,12 @@ test_that("insert table creates table with time partitioning", {
   insert_table(project, dataset, table, partition = "DAY")
   meta <- get_table(project, dataset, table)
   partitioning <- meta$timePartitioning$type
-  expect_equal(partitioning, "DAY", label = "Daily partitioning was added to the table.")
+  expect_equal(partitioning, "DAY")
   expect_equal(schema.meta, schema.source)
 })
 
 teardown({
-  project <- "bigrquery-examples"
+  project <- bq_test_project()
   dataset <- "test_insert_tables"
   delete_dataset(project, dataset, deleteContents = TRUE)
 })
