@@ -36,8 +36,8 @@ for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
-\item{priority}{(optional) Specifies a priority for the query.
-Possible values include INTERACTIVE and BATCH. The default value is INTERACTIVE.; see
+\item{priority}{(optional) specifies execution priority of the query. Defaults to "INTERACTIVE",
+other supported value is "BATCH".; see
 \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.priority}{the API documentation}
 for more information}
 

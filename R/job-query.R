@@ -22,8 +22,8 @@
 #'   `query`, either as a string in the format used by BigQuery or as a
 #'   list with `project_id` and `dataset_id` entries
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
-#' @param priority (optional) Specifies a priority for the query.
-#'   Possible values include INTERACTIVE and BATCH. The default value is INTERACTIVE.; see
+#' @param priority (optional) specifies execution priority of the query. Defaults to "INTERACTIVE",
+#'   other supported value is "BATCH".; see
 #'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.priority}{the API documentation}
 #'   for more information
 #' @family jobs
