@@ -6,6 +6,10 @@
 * Request error messages will now contain the "reason", which can contain 
   useful information for debugging (#209).
 
+* `insert_query_job()` added `priority` argument that allows to execute 
+  queries in the batch mode. Batch queries don't count towards your concurrent
+  rate limit, which can make it easier to start many queries at once (#212, @byapparov).
+
 # Version 0.4.1
 
 * Fix SQL translation omissions discovered by dbplyr 1.1.0
