@@ -77,7 +77,7 @@ test_that("copy_table validates arguments", {
   expect_error(copy_table(complete, partial), "dest must be a table reference")
 })
 
-test_that("insert table creates table with a given schema", {
+test_that("insert_table creates table with two fields from a given schema", {
   project <- bq_test_project()
   dataset <- "test_insert_tables"
   table <- "table_from_sample_schema"
@@ -90,11 +90,11 @@ test_that("insert table creates table with a given schema", {
   insert_table(project, dataset, table, schema.source)
   meta <- get_table(project, dataset, table)
   schema.meta <- meta$schema$fields
-  expect_equal(length(schema.meta), 2, label = "Two fields were added per schema definition.")
-  expect_equal(schema.meta, schema.source, label = "Table's schema matches definition.")
+  expect_equal(length(schema.meta), 2)
+  expect_equal(schema.meta, schema.source)
 })
 
-test_that("insert table creates table with time partitioning", {
+test_that("insert_table creates table with time partitioning", {
   project <- bq_test_project()
   dataset <- "test_insert_tables"
   table <- "table_with_time_partitioning"
