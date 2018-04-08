@@ -33,8 +33,7 @@ bq_ua <- function() {
   ))
 }
 
-#' udpates body argument with additional parameters
-#' @noRd
+
 #' @seealso
 #'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query}
 bq_body <- function(body, ...) {
@@ -42,11 +41,9 @@ bq_body <- function(body, ...) {
 
   if ("configuration" %in% names(body)) {
     # job attributes can be defined within configuration record
-    configuration <- utils::modifyList(body$configuration, user)
-    body$configuration <- configuration
-    return(body)
-  }
-  else {
+    body$configuration <- utils::modifyList(body$configuration, user)
+    body
+  } else {
     utils::modifyList(body, user)
   }
 }
