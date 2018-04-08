@@ -22,6 +22,10 @@
 #'   `query`, either as a string in the format used by BigQuery or as a
 #'   list with `project_id` and `dataset_id` entries
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
+#' @param priority (optional) Specifies a priority for the query.
+#'   Possible values include INTERACTIVE and BATCH. The default value is INTERACTIVE.; see
+#'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.priority}{the API documentation}
+#'   for more information
 #' @family jobs
 #' @return a job resource list, as documented at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
@@ -34,6 +38,7 @@ insert_query_job <- function(query, project,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
+                             priority = "INTERACTIVE",
                              ...) {
   assert_that(is.string(project), is.string(query))
 
@@ -42,7 +47,8 @@ insert_query_job <- function(query, project,
     configuration = list(
       query = list(
         query = query,
-        useLegacySql = use_legacy_sql
+        useLegacySql = use_legacy_sql,
+        priority = priority
       )
     )
   )

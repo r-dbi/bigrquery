@@ -6,7 +6,8 @@
 \usage{
 insert_query_job(query, project, destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE,
+  priority = "INTERACTIVE", ...)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -34,6 +35,11 @@ defaults to \code{"WRITE_EMPTY"}, other possible values are
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
+
+\item{priority}{(optional) Specifies a priority for the query.
+Possible values include INTERACTIVE and BATCH. The default value is INTERACTIVE.; see
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.priority}{the API documentation}
+for more information}
 
 \item{...}{Additional arguments merged into the body of the
 request. \code{snake_case} will automatically be converted into
