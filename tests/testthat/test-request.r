@@ -36,10 +36,7 @@ test_that("ellipsis parameter list is added to configuration params", {
     )
   ))
   res <- bq_body(body, dry_run = TRUE)
-  expect_equal(
-    res$configuration$dryRun, TRUE,
-    label = "camel case attribute is added to the body of the request"
-  )
+  expect_equal(res$configuration$dryRun, TRUE)
 })
 
 test_that("ellipsis parameter list is added to body without configuration", {
