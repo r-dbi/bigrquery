@@ -50,3 +50,17 @@ format_table <- function(project_id, dataset, table) {
   table <- paste0(dataset, ".", table)
   table
 }
+
+# Given a string and a separator, split the string at the rightmost
+# occurrence of the separator and return the two parts.
+rsplit_one <- function(str, sep) {
+  assert_that(is.string(str), is.string(sep))
+  parts <- strsplit(str, sep, fixed = TRUE)[[1]]
+  right <- parts[length(parts)]
+  if (length(parts) > 1) {
+    left <- paste0(parts[-length(parts)], collapse = sep)
+  } else {
+    left <- NULL
+  }
+  list(left = left, right = right)
+}

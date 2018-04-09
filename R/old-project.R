@@ -1,0 +1,15 @@
+#' @rdname project-API
+#' @export
+#' @usage NULL
+list_datasets <- function(project, page_size = 50, max_pages = Inf) {
+  assert_that(is.string(project))
+
+  pages <- bq_get_paginated(
+    bq_path(project, ""),
+    page_size = page_size,
+    max_pages = max_pages
+  )
+
+  datasets <- unlist(lapply(pages, function(x) x$datasets), recursive = FALSE)
+  vapply(datasets, function(x) x$datasetReference$datasetId, character(1))
+}

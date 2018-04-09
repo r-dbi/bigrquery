@@ -16,6 +16,8 @@
   set up billing, and then make sure the project name is set in the 
   `BIGQUERY_TEST_PROJECT` environment variable.
 
+* The new API uses standard SQL. To use `legacy_sql` set `use_legacy_sql = TRUE`
+
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 

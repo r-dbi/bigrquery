@@ -73,7 +73,7 @@ bq_authable <- function() {
 }
 
 random_name <- function(n = 10) {
-  paste0("TEMP_", sample(letters, n, replace = TRUE), collapse = "")
+  paste0("TEMP_", paste(sample(letters, n, replace = TRUE), collapse = ""))
 }
 
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")

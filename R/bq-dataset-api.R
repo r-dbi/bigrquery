@@ -1,64 +1,3 @@
-#' Reference to a BigQuery dataset
-#'
-#' `bq_dataset()` will create a dataset from the `project` and `dataset`
-#' identifiers; `as_bq_dataset()` will create a dataset from a string.
-#' See [dataset-API] for the things you can do with a dataset.
-#'
-#' @param project,dataset Project and dataset identifiers.
-#' @param x An object to coerce to a `bq_dataset`
-#' @export
-#' @examples
-#' bq_dataset("publicdata", "shakespeare")
-#' as_bq_dataset("publicdata.shakespeare")
-bq_dataset <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
-
-  structure(
-    list(
-      project = project,
-      dataset = dataset
-    ),
-    class = "bq_dataset"
-  )
-}
-
-#' @export
-print.bq_dataset <- function(x, ...) {
-  cat_line("<bq_dataset> ", x$project, ":", x$dataset)
-}
-
-#' @export
-#' @rdname bq_dataset
-as_bq_dataset <- function(x) UseMethod("as_bq_dataset")
-
-#' @export
-as_bq_dataset.bq_dataset <- function(x) x
-
-#' @export
-as_bq_dataset.character <- function(x) {
-  assert_that(length(x) == 1)
-
-  pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
-  if (length(pieces) != 2) {
-    stop(
-      "Character `bq_dataset` must contain two components when split by `.`",
-      call. = FALSE
-    )
-  }
-
-  bq_dataset(pieces[[1]], pieces[[2]])
-}
-
-datasetReference <- function(x) {
-  x <- as_bq_dataset(x)
-  list(
-    projectId = unbox(x$project),
-    datasetId = unbox(x$dataset)
-  )
-}
-
-# API methods -------------------------------------------------------------
-
 #' Manipulate BigQuery datasets
 #'
 #' @param x A [bq_dataset]
@@ -72,9 +11,8 @@ datasetReference <- function(x) {
 #' @section API documentation:
 #' * [get](https://cloud.google.com/bigquery/docs/reference/v2/datasets/get)
 #' * [insert](https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert)
-#' * [update](https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert)
 #' * [delete](https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete)
-#' * [tables](https://cloud.google.com/bigquery/docs/reference/v2/tables/list)
+#' * [list](https://cloud.google.com/bigquery/docs/reference/v2/tables/list)
 #' @examples
 #' if (bq_testable()) {
 #' ds <- bq_dataset(bq_test_project(), "dataset_api")

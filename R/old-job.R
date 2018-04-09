@@ -1,5 +1,4 @@
 
-
 #' Check status of a job.
 #'
 #' @param project project name
@@ -11,10 +10,10 @@
 #' @seealso [wait_for()] to wait for a job to complete
 #' @family jobs
 #' @export
+#' @keywords internal
 get_job <- function(project, job) {
   assert_that(is.string(project), is.string(job))
-
-  bq_get(bq_path(project, jobs = job))
+  bq_get(bq_path(x$project, jobs = x$job))
 }
 
 
@@ -29,6 +28,7 @@ get_job <- function(project, job) {
 #' @keywords internal
 #' @family jobs
 #' @export
+#' @keywords internal
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   progress <- bq_progress(
     "Running job :spin: :elapsed:",
@@ -64,5 +64,20 @@ wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   }
 
   invisible(job)
+}
+
+
+size_units <- function(x) {
+  i <- floor(log2(x) / 10)
+  unit <- c("", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta")[i + 1]
+
+  structure(x, i = i, unit = unit, class = "size")
+}
+#' @export
+format.size <- function(x, ...) {
+  if (x == 0) return("0 bytes")
+
+  y <- x * 1024 ^ -attr(x, "i")
+  sprintf("%.1f %sbytes", y, attr(x, "unit"))
 }
 

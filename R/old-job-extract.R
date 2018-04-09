@@ -48,4 +48,3 @@ insert_extract_job <- function(project, dataset, table,
 
   bq_post(url, body = bq_body(body, ...))
 }
-

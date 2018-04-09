@@ -183,7 +183,8 @@ signal_reason <- function(reason, message) {
 
 
 # http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
-POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
+POST_multipart_related <- function(url, config = NULL, parts = NULL,
+                                   query = NULL, ...,
                                    boundary = random_boundary(),
                                    handle = NULL) {
   if (is.null(config)) config <- config()
@@ -196,8 +197,9 @@ POST_multipart_related <- function(url, config = NULL, parts = NULL, ...,
   type <- paste0("multipart/related; boundary=", boundary)
   config <- c(config, add_headers("Content-Type" = type))
 
-  POST(url, config = config, body = body,
-    query = list(uploadType = "multipart"), ..., handle = handle)
+  query <- utils::modifyList(list(uploadType = "multipart"), query)
+
+  POST(url, config = config, body = body, query = query, ..., handle = handle)
 }
 
 part <- function(headers, body) {

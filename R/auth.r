@@ -1,10 +1,12 @@
 #' @importFrom httr oauth_endpoint oauth_app oauth2.0_token
 google <- oauth_endpoint(NULL, "auth", "token",
-  base_url = "https://accounts.google.com/o/oauth2")
-bigqr <- oauth_app("google",
+  base_url = "https://accounts.google.com/o/oauth2"
+)
+bigqr <- oauth_app(
+  "google",
   "465736758727.apps.googleusercontent.com",
-  "fJbIIyoIag0oA6p114lwsV2r")
-
+  "fJbIIyoIag0oA6p114lwsV2r"
+)
 bq_env <- new.env(parent = emptyenv())
 
 
@@ -33,29 +35,11 @@ get_access_cred <- function() {
   bq_env$access_cred
 }
 
-
 #' @export
 #' @return `has_access_cred()` TRUE if credentials are set
 #' @rdname get_access_cred
 has_access_cred <- function() {
   !is.null(bq_env$access_cred)
-}
-
-#' @rdname get_access_cred
-#' @param app A Google OAuth application created using
-#'  \code{\link[httr]{oauth_app}}
-#' @export
-set_oauth2.0_cred <- function(app = NULL) {
-  if (is.null(app)) {
-    app <- bigqr
-  }
-
-  cred <- oauth2.0_token(google, app,
-    scope = c(
-        "https://www.googleapis.com/auth/bigquery",
-        "https://www.googleapis.com/auth/cloud-platform"))
-
-  set_access_cred(cred)
 }
 
 #' @rdname get_access_cred
@@ -70,25 +54,34 @@ reset_access_cred <- function() {
   set_access_cred(NULL)
 }
 
-get_sig <- function() {
-  stop("Deprecated: use get_access_cred directly", call. = FALSE)
-}
+#' @rdname get_access_cred
+#' @param app A Google OAuth application created using
+#'  \code{\link[httr]{oauth_app}}
+#' @export
+set_oauth2.0_cred <- function(app = NULL) {
+  if (is.null(app)) {
+    app <- bigqr
+  }
 
+  cred <- oauth2.0_token(google, app,
+    scope = c(
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/cloud-platform"
+    )
+  )
+
+  set_access_cred(cred)
+}
 
 #' @export
 #' @rdname get_access_cred
 #' @param service_token A JSON string, URL or file, giving or pointing to
 #'   the service token file.
 set_service_token <- function(service_token) {
-
   service_token <- jsonlite::fromJSON(service_token)
-
   endpoint <- httr::oauth_endpoints("google")
-
   scope <- "https://www.googleapis.com/auth/bigquery"
 
   cred <- httr::oauth_service_token(endpoint, service_token, scope)
-
   set_access_cred(cred)
 }
-
