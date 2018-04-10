@@ -14,6 +14,7 @@ Depends:
 Imports: 
     assertthat,
     DBI,
+    glue,
     httr,
     jsonlite,
     methods,

@@ -74,12 +74,7 @@ as_bq_table.character <- function(x) {
 
 #' @export
 as_bq_table.list <- function(x) {
-  if (!setequal(names(x), c("project_id", "dataset_id", "table_id"))) {
-    stop(
-      "List <bq_table> must have components 'project_id', 'dataset_id', and 'table_id'",
-      call. = FALSE
-    )
-  }
+  x <- setnames(x, camelCase(names(x)))
   bq_table(x$project_id, x$dataset_id, x$table_id)
 }
 

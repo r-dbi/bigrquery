@@ -3,7 +3,8 @@
 #' You'll need to set up the `BIGQUERY_TEST_PROJECT` env var if you want to
 #' run bigquery tests locally. I recommend creating a new project because
 #' the tests involve both reading and writing. You will also need to
-#' have billing billing enabled for the project.
+#' have billing billing enabled for the project, and to run `bq_test_init()`
+#' once.
 #'
 #' @section Testing:
 #' In tests, `bq_test_project()` (and hence `bq_test_dataset()`) will
@@ -41,6 +42,20 @@ bq_test_project <- function() {
     "right access",
     call. = FALSE
   )
+}
+
+#' @export
+bq_test_init <- function() {
+  proj <- bq_test_project()
+
+  basedata <- bq_dataset(proj, "basedata")
+  if (!bq_dataset_exists(basedata))
+    bq_dataset_create(basedata)
+
+  bq_mtcars <- bq_table(basedata, "mtcars")
+  if (!bq_table_exists(bq_mtcars)) {
+    bq_table_upload(bq_mtcars, "mtcars", mtcars)
+  }
 }
 
 #' @export

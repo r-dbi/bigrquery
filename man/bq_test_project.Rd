@@ -24,7 +24,8 @@ who's lifetime is tied to the lifetime of the object that it returns.
 You'll need to set up the \code{BIGQUERY_TEST_PROJECT} env var if you want to
 run bigquery tests locally. I recommend creating a new project because
 the tests involve both reading and writing. You will also need to
-have billing billing enabled for the project.
+have billing billing enabled for the project, and to run \code{bq_test_init()}
+once.
 }
 \section{Testing}{
 

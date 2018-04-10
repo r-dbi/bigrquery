@@ -5,13 +5,15 @@
 \alias{bq_project_datasets}
 \alias{bq_project_jobs}
 \alias{list_datasets}
-\title{Project operations}
+\title{BigQuery project methods}
 \usage{
-bq_project_datasets(project, page_size = 100, max_pages = 1, warn = TRUE)
+bq_project_datasets(x, page_size = 100, max_pages = 1, warn = TRUE)
 
-bq_project_jobs(project, page_size = 100, max_pages = 1, warn = TRUE)
+bq_project_jobs(x, page_size = 100, max_pages = 1, warn = TRUE)
 }
 \arguments{
+\item{x}{A string giving a project name.}
+
 \item{page_size}{Number of items per page.}
 
 \item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} to retrieve
@@ -20,15 +22,15 @@ all pages (this may take a long time!)}
 \item{warn}{If \code{TRUE}, warn when there are unretrieved pages.}
 }
 \value{
-:
 \itemize{
 \item \code{bq_project_datasets()}: a list of \link{bq_dataset}s
 \item \code{bq_project_jobs()}: a list of \link{bq_job}s.
 }
 }
 \description{
-There is no accompanying \code{bq_project} object because a project is a simple
-string.
+Projects have two primary components: datasets and jobs. Unlike other
+BigQuery objects, is no accompanying \code{bq_project} S3 class because a project
+is a simple string.
 }
 \section{API documentation}{
 
@@ -44,5 +46,9 @@ One day we might also expose the general \href{https://cloud.google.com/resource
 if (bq_authable()) {
 bq_project_datasets("bigquery-public-data")
 bq_project_datasets("githubarchive")
+}
+
+if (bq_testable()) {
+bq_project_jobs(bq_test_project(), page_size = 10)
 }
 }

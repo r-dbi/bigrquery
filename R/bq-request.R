@@ -70,6 +70,8 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
   assert_that(is.numeric(page_size), length(page_size) == 1)
 
+
+  query$fields <- paste0(query$fields, ",nextPageToken")
   query <- utils::modifyList(list(maxResults = page_size), query %||% list())
   pages <- list()
 
@@ -87,11 +89,11 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
     page_token <- page$nextPageToken
   }
 
-  browser()
   if (isTRUE(warn) && !is.null(page_token)) {
     warning(
-      "Only first ", max_pages, " pages of size ", page_size,
-      " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE
+      "Only first ", big_mark(max_pages * page_size), " results retrieved. ",
+      "Adjust with `max_pages` and `page_size` parameters.",
+      call. = FALSE
     )
   }
 
