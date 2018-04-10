@@ -68,7 +68,8 @@ list_tables <- function(project, dataset, page_size = 50, max_pages = Inf) {
   data <- bq_get_paginated(
     bq_path(project, dataset, ""),
     page_size = page_size,
-    max_pages = max_pages
+    max_pages = max_pages,
+    warn = FALSE
   )
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)

@@ -145,7 +145,7 @@ bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = NULL, token = get_access_cred()) {
+bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()) {
   url <- paste0(upload_url, url)
   req <- POST_multipart_related(
     url,
@@ -195,7 +195,7 @@ signal_reason <- function(reason, message) {
 
 # http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
 POST_multipart_related <- function(url, config = NULL, parts = NULL,
-                                   query = NULL, ...,
+                                   query = list(), ...,
                                    boundary = random_boundary(),
                                    handle = NULL) {
   if (is.null(config)) config <- config()

@@ -36,11 +36,11 @@ test_that("can control pagination of list_tables", {
   expect_equal(list_tables(ds$project, ds$dataset, page_size = 10), tables)
 
   expect_equal(
-    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 1, warn = FALSE),
+    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 1),
     tables[1]
   )
   expect_equal(
-    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 2, warn = FALSE),
+    list_tables(ds$project, ds$dataset, page_size = 1, max_pages = 2),
     tables[1:2]
   )
 })
