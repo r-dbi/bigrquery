@@ -42,6 +42,9 @@ bq_table_extract(x, urls, ..., quiet = NA)
 API function. \code{snake_case} arguments are automatically converted to
 \code{camelCase()}.}
 
+\item{fields}{An optional field specification for
+\href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
+
 \item{src, dest}{Source and desintation \link{bq_table}s.}
 
 \item{quiet}{if \code{FALSE} print informative progress messages, if

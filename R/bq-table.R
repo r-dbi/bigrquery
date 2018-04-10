@@ -59,7 +59,7 @@ bq_table_create <- function(x, ...) {
 
 #' @export
 #' @rdname table-API
-#' @inheritParams bq_job_meta
+#' @inheritParams api-job
 bq_table_meta <- function(x, fields = NULL) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)
@@ -105,7 +105,7 @@ bq_table_copy <- function(src, dest, ..., quiet = NA) {
 
 #' @export
 #' @rdname table-API
-#' @inheritParams bq_perform_upload
+#' @inheritParams api-perform
 bq_table_upload <- function(x, values, ..., quiet = NA) {
   x <- as_bq_table(x)
 

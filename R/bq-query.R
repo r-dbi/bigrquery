@@ -48,8 +48,7 @@ bq_project_query <- function(x, query,
   bq_job_wait(job, quiet = quiet)
 
   meta <- bq_job_meta(job, "configuration(query(destinationTable))")
-  dest <- meta$configuration$query$destinationTable
-  bq_table(dest$projectId, dest$datasetId, dest$tableId)
+  as_bq_table(meta$configuration$query$destinationTable)
 }
 
 #' @export
@@ -69,9 +68,8 @@ bq_dataset_query <- function(x, query,
   )
   bq_job_wait(job, quiet = quiet)
 
-  meta <- bq_job_meta(job, "configuration/query/destinationTable")
-  dest <- meta$configuration$query$destinationTable
-  bq_table(dest$projectId, dest$datasetId, dest$tableId)
+  meta <- bq_job_meta(job, "configuration(query(destinationTable))")
+  as_bq_table(meta$configuration$query$destinationTable)
 }
 
 # Similar to bq_perform_query: except uses dryRun, and hence result

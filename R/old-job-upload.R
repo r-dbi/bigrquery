@@ -51,7 +51,7 @@ insert_upload_job <- function(project, dataset, table, values,
       load = list(
         sourceFormat = "NEWLINE_DELIMITED_JSON",
         schema = list(
-          fields = schema_fields(values)
+          fields = as_bq_fields(values)
         ),
         destinationTable = list(
           projectId = project,
@@ -77,30 +77,6 @@ insert_upload_job <- function(project, dataset, table, values,
   bq_upload(url, c(config_part, data_part))
 }
 
-schema_fields <- function(data) {
-  types <- vapply(data, data_type, character(1))
-  unname(Map(function(type, name) list(name = name, type = type), types, names(data)))
-}
-
-data_type <- function(x) {
-  if (is.data.frame(x)) {
-    return(vapply(x, data_type, character(1)))
-  }
-
-  if (is.factor(x)) return("STRING")
-  if (inherits(x, "POSIXt")) return("TIMESTAMP")
-  if (inherits(x, "hms")) return("TIME")
-  if (inherits(x, "Date")) return("DATE")
-
-  switch(
-    typeof(x),
-    character = "STRING",
-    logical = "BOOLEAN",
-    double = "FLOAT",
-    integer = "INTEGER",
-    stop("Unsupported type: ", typeof(x), call. = FALSE)
-  )
-}
 
 export_json <- function(values) {
   # Eliminate row names

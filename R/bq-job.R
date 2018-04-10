@@ -1,6 +1,6 @@
-#' Work with BigQuery jobs
+#' BigQuery job: retrieve metadata
 #'
-#' To perform a job, see [bq_perform]. These functions all retrieve metadata
+#' To perform a job, see [api-perform]. These functions all retrieve metadata
 #' (in various forms) about an existing job.
 #'
 #' @section API documentation:

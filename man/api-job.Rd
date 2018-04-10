@@ -10,7 +10,7 @@
 \alias{bq_job_show_statistics}
 \alias{api-job}
 \alias{bq_job_wait}
-\title{Work with BigQuery jobs}
+\title{BigQuery job: retrieve metadata}
 \usage{
 bq_job_meta(x, fields = NULL)
 
@@ -26,14 +26,13 @@ bq_job_wait(x, quiet = getOption("bigrquery.quiet"), pause = 0.5)
 \item{fields}{An optional field specification for
 \href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
 
-\item{quiet}{if \code{FALSE} print informative progress messages, if
-\code{TRUE} is silent, if \code{NA} displays messages only for long-running
-jobs.}
+\item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
+if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{pause}{amount of time to wait between status requests}
 }
 \description{
-To perform a job, see \link{bq_perform}. These functions all retrieve metadata
+To perform a job, see \link{api-perform}. These functions all retrieve metadata
 (in various forms) about an existing job.
 }
 \section{API documentation}{

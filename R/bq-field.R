@@ -64,3 +64,24 @@ format.bq_field <- function(x, ...) {
 print.bq_field <- function(x, ...) {
   cat_line("<bq_field> ", format(x, ...))
 }
+
+as_bq_fields <- function(data) {
+  types <- vapply(data, data_type, character(1))
+  unname(Map(function(type, name) list(name = name, type = type), types, names(data)))
+}
+
+data_type <- function(x) {
+  if (is.factor(x)) return("STRING")
+  if (inherits(x, "POSIXt")) return("TIMESTAMP")
+  if (inherits(x, "hms")) return("TIME")
+  if (inherits(x, "Date")) return("DATE")
+
+  switch(
+    typeof(x),
+    character = "STRING",
+    logical = "BOOLEAN",
+    double = "FLOAT",
+    integer = "INTEGER",
+    stop("Unsupported type: ", typeof(x), call. = FALSE)
+  )
+}
