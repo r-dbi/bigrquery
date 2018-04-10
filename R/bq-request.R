@@ -70,8 +70,9 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
   assert_that(is.numeric(page_size), length(page_size) == 1)
 
+  if (!is.null(query$fields))
+    query$fields <- paste0(query$fields, ",nextPageToken")
 
-  query$fields <- paste0(query$fields, ",nextPageToken")
   query <- utils::modifyList(list(maxResults = page_size), query %||% list())
   pages <- list()
 
