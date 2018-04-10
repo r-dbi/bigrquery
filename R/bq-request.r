@@ -65,7 +65,7 @@ bq_exists <- function(url, ..., query = NULL, token = get_access_cred()) {
 
 #' @importFrom httr GET config
 bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
-                             page_size = 50, max_pages = Inf) {
+                             page_size = 50, max_pages = Inf, warn = TRUE) {
 
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
   assert_that(is.numeric(page_size), length(page_size) == 1)
@@ -85,6 +85,13 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
     i <- i + 1
     pages[[i]] <- page
     page_token <- page$nextPageToken
+  }
+
+  if (isTRUE(warn) && !is.null(page_token)) {
+    warning(
+      "Only first ", max_pages, " pages of size ", page_size,
+      " retrieved. Use max_pages = Inf to retrieve all.", call. = FALSE
+    )
   }
 
   pages

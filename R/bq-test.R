@@ -23,7 +23,7 @@
 #' }
 bq_test_project <- function() {
   if (is_testing() && !bq_authable()) {
-    testthat::skip("No BigQuery access credentials availabe")
+    testthat::skip("No BigQuery access credentials available")
   }
 
   env <- Sys.getenv("BIGQUERY_TEST_PROJECT")

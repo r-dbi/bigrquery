@@ -23,7 +23,8 @@ bq_project_jobs(project, page_size = 50, max_pages = 1)
 }
 }
 \description{
-Project operations
+There is no accompanying \code{bq_project} object because a project is a simple
+string.
 }
 \section{API documentation}{
 

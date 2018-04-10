@@ -3,32 +3,36 @@
 \name{bq_projects}
 \alias{bq_projects}
 \alias{list_projects}
-\title{Projects API}
+\title{List available projects}
 \usage{
-bq_projects()
+bq_projects(page_size = 100, max_pages = 10, warn = TRUE)
+}
+\arguments{
+\item{page_size}{Number of items per page.}
 
-list_projects()
+\item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} to retrieve
+all pages (this may take a long time!)}
+
+\item{warn}{If \code{TRUE}, warn when there are unretrieved pages.}
 }
 \value{
-A character vector of project ids named with their friendly name
-(if set).
+A character vector.
 }
 \description{
-There is currently only one project method which returns all projects to
-which you have been granted access. You can also work with
+List all project which you have been granted access. You can also work with
 \href{https://cloud.google.com/bigquery/public-data/}{public datasets},
 but you will need to provide a \code{billing} project whenever you perform
 any non-free operation.
 }
-\details{
-There is no accompanying \code{bq_project} object because a project is a simple
-string.
+\section{API methods}{
+
+\itemize{
+\item \href{https://cloud.google.com/bigquery/docs/reference/v2/projects/list}{list}
 }
+}
+
 \examples{
 if (bq_authable()) {
 bq_projects()
 }
-}
-\seealso{
-\href{https://cloud.google.com/bigquery/docs/reference/v2/projects/list}{API documentation}
 }

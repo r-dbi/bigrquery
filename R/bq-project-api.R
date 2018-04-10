@@ -1,5 +1,8 @@
 #' Project operations
 #'
+#' There is no accompanying `bq_project` object because a project is a simple
+#' string.
+#'
 #' @section API documentation:
 #' * [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
