@@ -45,6 +45,7 @@ bq_test_project <- function() {
 }
 
 #' @export
+#' @rdname bq_test_project
 bq_test_init <- function() {
   proj <- bq_test_project()
 
@@ -54,7 +55,7 @@ bq_test_init <- function() {
 
   bq_mtcars <- bq_table(basedata, "mtcars")
   if (!bq_table_exists(bq_mtcars)) {
-    bq_table_upload(bq_mtcars, "mtcars", mtcars)
+    bq_table_upload(bq_mtcars, "mtcars", datasets::mtcars)
   }
 }
 

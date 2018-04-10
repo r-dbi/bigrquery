@@ -2,12 +2,15 @@
 % Please edit documentation in R/bq-test.R
 \name{bq_test_project}
 \alias{bq_test_project}
+\alias{bq_test_init}
 \alias{bq_test_dataset}
 \alias{bq_testable}
 \alias{bq_authable}
 \title{Project to use for testing bigquery}
 \usage{
 bq_test_project()
+
+bq_test_init()
 
 bq_test_dataset()
 
