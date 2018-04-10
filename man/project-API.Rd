@@ -7,19 +7,23 @@
 \alias{list_datasets}
 \title{Project operations}
 \usage{
-bq_project_datasets(project, page_size = 50, max_pages = 1)
+bq_project_datasets(project, page_size = 100, max_pages = 1, warn = TRUE)
 
-bq_project_jobs(project, page_size = 50, max_pages = 1)
+bq_project_jobs(project, page_size = 100, max_pages = 1, warn = TRUE)
 }
 \arguments{
-\item{page_size, max_pages}{Pagination parameters.}
+\item{page_size}{Number of items per page.}
+
+\item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} to retrieve
+all pages (this may take a long time!)}
+
+\item{warn}{If \code{TRUE}, warn when there are unretrieved pages.}
 }
 \value{
 :
 \itemize{
-\item \code{bq_project_dataset()}: a list of \link{bq_dataset}s
+\item \code{bq_project_datasets()}: a list of \link{bq_dataset}s
 \item \code{bq_project_jobs()}: a list of \link{bq_job}s.
-\item \code{bq_project_query()}: a \link{bq_table}.
 }
 }
 \description{

@@ -87,6 +87,7 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
     page_token <- page$nextPageToken
   }
 
+  browser()
   if (isTRUE(warn) && !is.null(page_token)) {
     warning(
       "Only first ", max_pages, " pages of size ", page_size,

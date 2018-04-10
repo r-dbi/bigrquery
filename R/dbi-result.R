@@ -1,4 +1,4 @@
-#' @include dbi-connection.r
+#' @include dbi-connection.R
 NULL
 
 BigQueryResult <- function(connection, statement) {

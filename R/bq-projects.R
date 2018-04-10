@@ -17,7 +17,7 @@
 #' if (bq_authable()) {
 #' bq_projects()
 #' }
-bq_projects <- function(page_size = 100, max_pages = 10, warn = TRUE) {
+bq_projects <- function(page_size = 100, max_pages = 1, warn = TRUE) {
   pages <- bq_get_paginated(
     "projects",
     query = list(fields = "projects(projectReference(projectId))"),
