@@ -10,7 +10,6 @@
 #'   for, you'll also need to submit a `billing` project.
 #' @param ... Other parameters passed on to [bq_perform_query()].
 #' @inheritParams bq_perform_query
-#' @inheritParams job-API
 #' @name query
 #' @return A [bq_table]
 #' @examples

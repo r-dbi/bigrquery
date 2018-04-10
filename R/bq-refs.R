@@ -19,6 +19,8 @@
 #'   the 2nd argument will be interpreted as the `table`
 #' @param x An object to coerce to a `bq_job`, `bq_dataset`, or `bq_table`.
 #'   Built-in methods handle strings and lists.
+#' @seealso [api-job], [api-perform], [api-dataset], and [api-table] for
+#'   functions that work with these objects.
 #' @examples
 #' # Creation ------------------------------------------------
 #' samples <- bq_dataset("publicdata", "samples")
@@ -46,6 +48,7 @@
 #' ))
 #'
 #' @name bq_refs
+#' @aliases NULL
 NULL
 
 # dataset -----------------------------------------------------------------

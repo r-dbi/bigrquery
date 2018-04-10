@@ -21,10 +21,6 @@ queries (> 128 MB compressed).}
 
 \item{...}{Other parameters passed on to \code{\link[=bq_perform_query]{bq_perform_query()}}.}
 
-\item{quiet}{if \code{FALSE} print informative progress messages, if
-\code{TRUE} is silent, if \code{NA} displays messages only for long-running
-jobs.}
-
 \item{billing}{If you are query a dataset that you only have read access
 for, you'll also need to submit a \code{billing} project.}
 }

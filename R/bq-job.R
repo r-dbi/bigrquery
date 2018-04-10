@@ -1,25 +1,27 @@
-#' This methods are all wrapper around a single API endpoint: `get`.
+#' Work with BigQuery jobs
+#'
+#' To perform a job, see [bq_perform]. These functions all retrieve metadata
+#' (in various forms) about an existing job.
 #'
 #' @section API documentation:
-#' * [meta](https://developers.google.com/bigquery/docs/reference/v2/jobs/get)
+#' * [get](https://developers.google.com/bigquery/docs/reference/v2/jobs/get)
 #'
 #' @examples
 #' if (bq_testable()) {
 #' jobs <- bq_project_jobs(bq_test_project())
 #' jobs[[1]]
 #'
-#' str(bq_job_meta(jobs[[1]]))
+#' # Show statistics about job
+#' bq_job_show_statistics(jobs[[1]])
 #'
-#' # This will wait for a job to complete: if it's already complete
-#' # it will display some status information
+#' # Wait for job to complete
 #' bq_job_wait(jobs[[1]])
-#'
 #' }
-#' @name job-API
+#' @name api-job
 NULL
 
 #' @export
-#' @name job-API
+#' @name api-job
 #' @param x A [bq_job]
 #' @param fields An optional field specification for
 #'   [partial response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
@@ -32,23 +34,36 @@ bq_job_meta <- function(x, fields = NULL) {
 }
 
 #' @export
-#' @name job-API
+#' @name api-job
 bq_job_status <- function(x) {
   bq_job_meta(x, "status")$status
 }
 
 #' @export
-#' @name job-API
-bq_job_statistics <- function(x) {
-  bq_job_meta(x, "statistics")$statistics
+#' @name api-job
+bq_job_show_statistics <- function(x) {
+  stats <- bq_job_meta(x, "statistics")$statistics
+
+  if ("load" %in% names(stats)) {
+    in_bytes <- as.numeric(stats$load$inputFileBytes)
+    out_bytes <- as.numeric(stats$load$outputBytes)
+    message("Input:  ", prettyunits::pretty_bytes(in_bytes))
+    message("Output: ", prettyunits::pretty_bytes(out_bytes))
+  }
+
+  if ("query" %in% names(stats)) {
+    bytes <- as.numeric(stats$query$totalBytesBilled)
+    message("Billed: ", prettyunits::pretty_bytes(bytes))
+  }
+
+  invisible(x)
 }
 
-#' @param quiet if `FALSE` print informative progress messages, if
-#'   `TRUE` is silent, if `NA` displays messages only for long-running
-#'   jobs.
+#' @param quiet If `FALSE`, displays progress bar; if `TRUE` is silent;
+#'   if `NA` displays progress bar only for long-running jobs.
 #' @param pause amount of time to wait between status requests
 #' @export
-#' @name job-API
+#' @name api-job
 bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   x <- as_bq_job(x)
 
@@ -72,21 +87,9 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     signal_reason(err$reason, err$message)
   }
 
-  if (!isFALSE(quiet)) {
-    stats <- bq_job_statistics(x)
-
+  if (!isTRUE(quiet)) {
     message("Complete")
-    if ("load" %in% names(stats)) {
-      in_bytes <- as.numeric(stats$load$inputFileBytes)
-      out_bytes <- as.numeric(stats$load$outputBytes)
-      message("Input:  ", prettyunits::pretty_bytes(in_bytes))
-      message("Output: ", prettyunits::pretty_bytes(out_bytes))
-    }
-
-    if ("query" %in% names(stats)) {
-      bytes <- as.numeric(stats$query$totalBytesBilled)
-      message("Billed: ", prettyunits::pretty_bytes(bytes))
-    }
+    bq_job_show_statistics(x)
   }
 
   invisible(x)
