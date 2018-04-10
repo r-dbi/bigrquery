@@ -38,11 +38,11 @@ NULL
 
 #' @export
 #' @rdname dataset-API
-bq_dataset_meta <- function(x) {
+bq_dataset_meta <- function(x, fields = NULL) {
   x <- as_bq_dataset(x)
 
   url <- bq_path(x$project, x$dataset)
-  bq_get(url)
+  bq_get(url, query = list(fields = fields))
 }
 
 #' @export

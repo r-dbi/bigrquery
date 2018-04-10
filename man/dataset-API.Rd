@@ -10,7 +10,7 @@
 \alias{bq_dataset_tables}
 \title{Manipulate BigQuery datasets}
 \usage{
-bq_dataset_meta(x)
+bq_dataset_meta(x, fields = NULL)
 
 bq_dataset_exists(x)
 
