@@ -12,7 +12,7 @@ bq_dataset_query(x, query, destination_table = NULL, ..., billing = NULL,
   quiet = NA)
 }
 \arguments{
-\item{x}{Either a \link{bq_project} or a \link{bq_dataset}.}
+\item{x}{Either a project (a string) or a \link{bq_dataset}.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.
 If not supplied, results will be saved to a temporary table that lives
@@ -21,6 +21,10 @@ queries (> 128 MB compressed).}
 
 \item{...}{Other parameters passed on to \code{\link[=bq_perform_query]{bq_perform_query()}}.}
 
+\item{quiet}{if \code{FALSE} print informative progress messages, if
+\code{TRUE} is silent, if \code{NA} displays messages only for long-running
+jobs.}
+
 \item{billing}{If you are query a dataset that you only have read access
 for, you'll also need to submit a \code{billing} project.}
 }
@@ -28,7 +32,7 @@ for, you'll also need to submit a \code{billing} project.}
 A \link{bq_table}
 }
 \description{
-These submit a query (using \code{\link[=bq_insert_query]{bq_insert_query()}}) and then wait for it
+These submit a query (using \code{\link[=bq_perform_query]{bq_perform_query()}}) and then wait for it
 complete (with \code{\link[=bq_job_wait]{bq_job_wait()}}). All BigQuery queries save their results
 into a table (temporary or otherwise), so these functions return a \link{bq_table}
 which you can then query for more information.

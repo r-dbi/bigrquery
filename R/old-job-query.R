@@ -28,6 +28,7 @@
 #' @seealso API documentation for insert method:
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 #' @export
+#' @keywords internal
 insert_query_job <- function(query, project,
                              destination_table = NULL,
                              default_dataset = NULL,

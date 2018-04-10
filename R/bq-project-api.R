@@ -4,12 +4,11 @@
 #' * [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
 #'
-#' One day we might also expose the general [project metadata]
-#' (https://cloud.google.com/resource-manager/reference/rest/v1/projects).
+#' One day we might also expose the general [project metadata](https://cloud.google.com/resource-manager/reference/rest/v1/projects).
 #'
 #' @return:
 #' * `bq_project_dataset()`: a list of [bq_dataset]s
-#' * `bq_project_jobs()`: a list of [bq_jobs]s.
+#' * `bq_project_jobs()`: a list of [bq_job]s.
 #' * `bq_project_query()`: a [bq_table].
 #'
 #' @name project-API
@@ -22,6 +21,7 @@ NULL
 
 #' @export
 #' @rdname project-API
+#' @param page_size,max_pages Pagination parameters.
 bq_project_datasets <- function(project, page_size = 50, max_pages = 1) {
   assert_that(is.string(project))
 

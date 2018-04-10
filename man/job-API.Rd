@@ -21,6 +21,11 @@ bq_job_statistics(x)
 bq_job_wait(x, quiet = getOption("bigrquery.quiet"), pause = 0.5)
 }
 \arguments{
+\item{x}{A \link{bq_job}}
+
+\item{fields}{An optional field specification for
+\href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
+
 \item{quiet}{if \code{FALSE} print informative progress messages, if
 \code{TRUE} is silent, if \code{NA} displays messages only for long-running
 jobs.}

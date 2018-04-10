@@ -1,7 +1,7 @@
 # bigrquery
 
 [![Build Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
-[![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](http://cran.r-project.org/package=bigrquery)
+[![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 
 The bigrquery packages provides an R interface to
 [Google BigQuery](https://developers.google.com/bigquery/). It makes it easy

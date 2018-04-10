@@ -11,7 +11,6 @@
 #' * `bq_perform_upload()`:  [bq_table_upload()].
 #'
 #' @return A [bq_job].
-#' @keywords internal
 #' @examples
 #' if (bq_testable()) {
 #' ds <- bq_test_dataset()
@@ -64,12 +63,13 @@ bq_perform_extract <- function(x,
 
 #' @export
 #' @name perform
+#' @param values Data frame of values to insert.
 bq_perform_upload <- function(x, values,
-                                 create_disposition = "CREATE_IF_NEEDED",
-                                 write_disposition = "WRITE_APPEND",
-                                 ...,
-                                 billing = x$project
-                                 ) {
+                              create_disposition = "CREATE_IF_NEEDED",
+                              write_disposition = "WRITE_APPEND",
+                              ...,
+                              billing = x$project
+                              ) {
 
   x <- as_bq_table(x)
   assert_that(
@@ -110,18 +110,28 @@ bq_perform_upload <- function(x, values,
 
 #' @export
 #' @rdname perform
+#' @param SQL query string.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
 #'   in a special dataset. You must supply this parameter for large
 #'   queries (> 128 MB compressed).
+#' @param create_disposition Behavior if `destination_table` does not exist.
+#'   Can be `"CREATE_IF_NEEDED"` or `"CREATE_NEVER"`; see
+#'   [API documentation](https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition})
+#'   for more information.
+#' @param write_disposition Behavior if `destination_table` already exists.
+#'   Possible values are `"WRITE_APPEND"`, `"WRITE_TRUNCATE"` and
+#'   `"WRITE_EMPTY"`. See
+#'   [API documentation[(https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition)
+#'   for more information.
 bq_perform_query <- function(query, billing,
-                                ...,
-                                destination_table = NULL,
-                                default_dataset = NULL,
-                                create_disposition = "CREATE_IF_NEEDED",
-                                write_disposition = "WRITE_EMPTY",
-                                use_legacy_sql = FALSE
-                                ) {
+                             ...,
+                             destination_table = NULL,
+                             default_dataset = NULL,
+                             create_disposition = "CREATE_IF_NEEDED",
+                             write_disposition = "WRITE_EMPTY",
+                             use_legacy_sql = FALSE
+                             ) {
   assert_that(is.string(query), is.string(billing))
 
   query <- list(
@@ -155,11 +165,11 @@ bq_perform_query <- function(query, billing,
 #' @export
 #' @rdname perform
 bq_perform_copy <- function(src, dest,
-                               create_disposition = "CREATE_IF_NEEDED",
-                               write_disposition = "WRITE_EMPTY",
-                               ...,
-                               billing = NULL,
-                               quiet = NA) {
+                            create_disposition = "CREATE_IF_NEEDED",
+                            write_disposition = "WRITE_EMPTY",
+                            ...,
+                            billing = NULL,
+                            quiet = NA) {
 
   billing <- billing %||% dest$project
   url <- bq_path(billing, jobs = "")

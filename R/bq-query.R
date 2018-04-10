@@ -1,16 +1,16 @@
 #' Submit query to BigQuery
 #'
-#' These submit a query (using [bq_insert_query()]) and then wait for it
+#' These submit a query (using [bq_perform_query()]) and then wait for it
 #' complete (with [bq_job_wait()]). All BigQuery queries save their results
 #' into a table (temporary or otherwise), so these functions return a [bq_table]
 #' which you can then query for more information.
 #'
-#' @param x Either a [bq_project] or a [bq_dataset].
+#' @param x Either a project (a string) or a [bq_dataset].
 #' @param billing If you are query a dataset that you only have read access
 #'   for, you'll also need to submit a `billing` project.
 #' @param ... Other parameters passed on to [bq_perform_query()].
 #' @inheritParams bq_perform_query
-#' @inheritParams bq_job_wait
+#' @inheritParams job-API
 #' @name query
 #' @return A [bq_table]
 #' @examples

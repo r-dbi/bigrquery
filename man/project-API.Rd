@@ -11,11 +11,14 @@ bq_project_datasets(project, page_size = 50, max_pages = 1)
 
 bq_project_jobs(project, page_size = 50, max_pages = 1)
 }
+\arguments{
+\item{page_size, max_pages}{Pagination parameters.}
+}
 \value{
 :
 \itemize{
 \item \code{bq_project_dataset()}: a list of \link{bq_dataset}s
-\item \code{bq_project_jobs()}: a list of \link{bq_jobs}s.
+\item \code{bq_project_jobs()}: a list of \link{bq_job}s.
 \item \code{bq_project_query()}: a \link{bq_table}.
 }
 }
@@ -29,8 +32,7 @@ Project operations
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list}{jobs}
 }
 
-One day we might also expose the general \link{project metadata}
-(https://cloud.google.com/resource-manager/reference/rest/v1/projects).
+One day we might also expose the general \href{https://cloud.google.com/resource-manager/reference/rest/v1/projects}{project metadata}.
 }
 
 \examples{

@@ -13,7 +13,7 @@
 #' @keywords internal
 get_job <- function(project, job) {
   assert_that(is.string(project), is.string(job))
-  bq_get(bq_path(x$project, jobs = x$job))
+  bq_get(bq_path(project, jobs = job))
 }
 
 

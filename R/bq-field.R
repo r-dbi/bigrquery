@@ -1,3 +1,10 @@
+#' BiqQuery field (and fields) class
+#'
+#' @param name Field name
+#' @param type Field type
+#' @param mode Field mode
+#' @param fields For a field of type "record", a list of sub-fields.
+#' @param x A list of `bg_fields`
 #' @export
 bq_field <- function(name, type, mode = "nullable", fields = NULL) {
   structure(

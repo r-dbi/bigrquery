@@ -41,6 +41,10 @@ NULL
 
 #' @export
 #' @rdname table-API
+#' @param A [bq_table]
+#' @param ... Additional arguments passed on to the underlying BigQuery
+#'   API function. `snake_case` arguments are automatically converted to
+#'   `camelCase()`.
 bq_table_create <- function(x, ...) {
   x <- as_bq_table(x)
 
@@ -55,6 +59,7 @@ bq_table_create <- function(x, ...) {
 
 #' @export
 #' @rdname table-API
+#' @inheritParams bq_job_meta
 bq_table_meta <- function(x, fields = NULL) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)
@@ -87,6 +92,7 @@ bq_table_delete <- function(x) {
 
 #' @export
 #' @rdname table-API
+#' @inheritParams bq_perform_copy
 bq_table_copy <- function(src, dest, ..., quiet = NA) {
   src <- as_bq_table(src)
   dest <- as_bq_table(dest)
@@ -99,6 +105,7 @@ bq_table_copy <- function(src, dest, ..., quiet = NA) {
 
 #' @export
 #' @rdname table-API
+#' @inheritParams bq_perform_upload
 bq_table_upload <- function(x, values, ..., quiet = NA) {
   x <- as_bq_table(x)
 
@@ -110,7 +117,7 @@ bq_table_upload <- function(x, values, ..., quiet = NA) {
 
 #' @export
 #' @rdname table-API
-bq_table_fields <- function(x, fields = NULL) {
+bq_table_fields <- function(x) {
   meta <- bq_table_meta(x, fields = "schema")
   fields <- meta$schema$fields
 
@@ -119,6 +126,7 @@ bq_table_fields <- function(x, fields = NULL) {
 
 #' @export
 #' @rdname table-API
+#' @inheritParams list_tabledata
 bq_table_download <- function(x, billing = NULL, ...,
                               page_size = 1e4,
                               max_pages = 10,

@@ -24,6 +24,7 @@
 #' sql <- "SELECT year, month, day, weight_pounds FROM natality LIMIT 5"
 #' query_exec(sql, project = project, default_dataset = "publicdata:samples")
 #' }
+#' @keywords internal
 query_exec <- function(query, project,
                        destination_table = NULL,
                        default_dataset = NULL,

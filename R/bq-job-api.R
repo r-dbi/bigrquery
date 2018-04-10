@@ -20,6 +20,9 @@ NULL
 
 #' @export
 #' @name job-API
+#' @param x A [bq_job]
+#' @param fields An optional field specification for
+#'   [partial response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
 bq_job_meta <- function(x, fields = NULL) {
   x <- as_bq_job(x)
   bq_get(

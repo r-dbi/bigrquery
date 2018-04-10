@@ -28,7 +28,7 @@ bq_table_copy(src, dest, ..., quiet = NA)
 
 bq_table_upload(x, values, ..., quiet = NA)
 
-bq_table_fields(x, fields = NULL)
+bq_table_fields(x)
 
 bq_table_download(x, billing = NULL, ..., page_size = 10000,
   max_pages = 10, warn = TRUE, quiet = NA)
@@ -38,13 +38,27 @@ bq_table_extract(x, urls, ..., quiet = NA)
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
 
+\item{...}{Additional arguments passed on to the underlying BigQuery
+API function. \code{snake_case} arguments are automatically converted to
+\code{camelCase()}.}
+
 \item{src, dest}{Source and desintation \link{bq_table}s.}
 
 \item{quiet}{if \code{FALSE} print informative progress messages, if
 \code{TRUE} is silent, if \code{NA} displays messages for long-running
 jobs.}
 
+\item{values}{Data frame of values to insert.}
+
 \item{billing}{Project to bill. Defaults to the \code{dest} project.}
+
+\item{page_size}{Number of items per page.}
+
+\item{max_pages}{maximum number of pages to retrieve. Use \code{Inf}
+to retrieve the complete dataset.}
+
+\item{warn}{If \code{TRUE}, warn when there are rows remaining to
+be pulled down from database.}
 
 \item{create_disposition}{Behavior if the destination table does not already
 exist. Default will create table on demand; set to \code{"CREATE_NEVER"} to
@@ -53,6 +67,8 @@ never create (and only copy into existing table).}
 \item{write_disposition}{Behavior if the destination already exists.
 The default, \code{"WRITE_EMPTY"}, will error if the table already contains
 data. Other possible values are \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}.}
+
+\item{A}{\link{bq_table}}
 }
 \value{
 \itemize{

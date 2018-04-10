@@ -25,10 +25,20 @@ bq_perform_copy(src, dest, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", ..., billing = NULL, quiet = NA)
 }
 \arguments{
+\item{values}{Data frame of values to insert.}
+
+\item{write_disposition}{Behavior if \code{destination_table} already exists.
+Possible values are \code{"WRITE_APPEND"}, \code{"WRITE_TRUNCATE"} and
+\code{"WRITE_EMPTY"}. See
+[API documentation[(https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition)
+for more information.}
+
 \item{destination_table}{A \link{bq_table} where results should be stored.
 If not supplied, results will be saved to a temporary table that lives
 in a special dataset. You must supply this parameter for large
 queries (> 128 MB compressed).}
+
+\item{SQL}{query string.}
 }
 \value{
 A \link{bq_job}.
@@ -56,4 +66,3 @@ bq_table_exists(bq_mtcars)
 head(bq_table_download(bq_mtcars))
 }
 }
-\keyword{internal}

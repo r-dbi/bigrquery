@@ -13,6 +13,7 @@
 #' @seealso API documentation at
 #'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
 #' @return `list_tabledata` returns a single dataframe.
+#' @keywords internal
 #' @export
 #' @examples
 #' \dontrun{
