@@ -3,7 +3,7 @@
 
 #' Deprecated dataset API
 #'
-#' See [dataset-API] for recommended API.
+#' See [api-dataset] for recommended API.
 #' @keywords internal
 #' @name dataset-dep
 NULL

@@ -68,7 +68,7 @@ bq_test_dataset <- function() {
   env <- new.env()
   reg.finalizer(
     env,
-    function(e) bq_dataset_delete(ds, recursive = TRUE),
+    function(e) bq_dataset_delete(ds, delete_contents = TRUE),
     onexit = TRUE
   )
   attr(ds, "env") <- env

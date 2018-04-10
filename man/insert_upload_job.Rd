@@ -29,9 +29,8 @@ exists. defaults to \code{"WRITE_APPEND"}, other possible values are
 \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 for more information}
 
-\item{...}{Additional arguments merged into the body of the
-request. \code{snake_case} will automatically be converted into
-\code{camelCase} so you can use consistent argument names.}
+\item{...}{Additional arguments passed on to the underlying API call.
+snake_case names are automatically converted to camelCase.}
 }
 \description{
 This sends all of the data inline in the HTTP request so is only suitable

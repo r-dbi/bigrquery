@@ -1,12 +1,11 @@
-#' Manipulate BigQuery datasets
+#' BigQuery datasets
+#'
+#' Basic create-read-update-delete verbs for datasets.
 #'
 #' @param x A [bq_dataset]
-#' @param recursive If `TRUE`, will recursively delete all contents of the dataset.
-#' @param ... Additional arguments merged into the body of the
-#'   request. `snake_case` will automatically be converted into
-#'   `camelCase` so you can use consistent argument names.
-#' @param page_size Number of items per page
-#' @param max_pages Maximum number of pages to retrieve
+#' @inheritParams api-job
+#' @inheritParams api-perform
+#' @inheritParams bq_projects
 #'
 #' @section API documentation:
 #' * [get](https://cloud.google.com/bigquery/docs/reference/v2/datasets/get)
@@ -33,39 +32,11 @@
 #' bq_table_create(bq_table(ds, "x3"))
 #' bq_dataset_tables(ds)
 #' }
-#' @name dataset-API
+#' @name api-dataset
 NULL
 
 #' @export
-#' @rdname dataset-API
-bq_dataset_meta <- function(x, fields = NULL) {
-  x <- as_bq_dataset(x)
-
-  url <- bq_path(x$project, x$dataset)
-  bq_get(url, query = list(fields = fields))
-}
-
-#' @export
-#' @rdname dataset-API
-bq_dataset_exists <- function(x) {
-  x <- as_bq_dataset(x)
-
-  url <- bq_path(x$project, x$dataset)
-  bq_exists(url)
-}
-
-#' @export
-#' @rdname dataset-API
-bq_dataset_delete <- function(x, recursive = FALSE) {
-  x <- as_bq_dataset(x)
-
-  url <- bq_path(x$project, x$dataset)
-  query <- list(deleteContents = recursive)
-  bq_delete(url, query = query)
-}
-
-#' @export
-#' @rdname dataset-API
+#' @rdname api-dataset
 bq_dataset_create <- function(x, ...) {
   x <- as_bq_dataset(x)
 
@@ -77,8 +48,26 @@ bq_dataset_create <- function(x, ...) {
 }
 
 #' @export
-#' @rdname dataset-API
-bq_dataset_udpate <- function(x, ...) {
+#' @rdname api-dataset
+bq_dataset_meta <- function(x, fields = NULL) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  bq_get(url, query = list(fields = fields))
+}
+
+#' @export
+#' @rdname api-dataset
+bq_dataset_exists <- function(x) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  bq_exists(url)
+}
+
+#' @export
+#' @rdname api-dataset
+bq_dataset_update <- function(x, ...) {
   x <- as_bq_dataset(x)
 
   url <- bq_path(x$project, x$dataset)
@@ -89,8 +78,22 @@ bq_dataset_udpate <- function(x, ...) {
 }
 
 #' @export
-#' @rdname dataset-API
-bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, ...) {
+#' @rdname api-dataset
+#' @param delete_contents If `TRUE`, will recursively delete all tables in
+#'   the dataset. Set to `FALSE` by default for safety.
+bq_dataset_delete <- function(x, delete_contents = FALSE) {
+  x <- as_bq_dataset(x)
+
+  url <- bq_path(x$project, x$dataset)
+  query <- list(deleteContents = delete_contents)
+  bq_delete(url, query = query)
+
+  invisible(x)
+}
+
+#' @export
+#' @rdname api-dataset
+bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, warn = TRUE, ...) {
   x <- as_bq_dataset(x)
   url <- bq_path(x$project, x$dataset, "")
 
@@ -98,12 +101,10 @@ bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, ...) {
     url,
     query = list(fields = "tables(tableReference)"),
     page_size = page_size,
-    max_pages = max_pages
+    max_pages = max_pages,
+    warn = warn
   )
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
-
-  lapply(tables, function(x) {
-    as_bq_table(x$tableReference)
-  })
+  lapply(tables, function(x) as_bq_table(x$tableReference))
 }

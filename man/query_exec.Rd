@@ -21,9 +21,12 @@ either as a string in the format used by BigQuery, or as a list with
 \code{query}, either as a string in the format used by BigQuery or as a
 list with \code{project_id} and \code{dataset_id} entries}
 
-\item{page_size}{Number of items per page}
+\item{page_size}{Number of items per page.}
 
-\item{max_pages}{Maximum number of pages to retrieve}
+\item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} to retrieve
+all pages (this may take a long time!)}
+
+\item{warn}{If \code{TRUE}, warn when there are unretrieved pages.}
 
 \item{create_disposition}{behavior for table creation.
 defaults to \code{"CREATE_IF_NEEDED"},
@@ -39,9 +42,8 @@ for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 
-\item{...}{Additional arguments merged into the body of the
-request. \code{snake_case} will automatically be converted into
-\code{camelCase} so you can use consistent argument names.}
+\item{...}{Additional arguments passed on to the underlying API call.
+snake_case names are automatically converted to camelCase.}
 }
 \description{
 This is a high-level function that inserts a query job

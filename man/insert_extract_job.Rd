@@ -23,9 +23,8 @@ extracts you may need to specify a wild-card since}
 \item{destination_format}{Destination format ("CSV", "ARVO", or
 "NEWLINE_DELIMITED_JSON")}
 
-\item{...}{Additional arguments merged into the body of the
-request. \code{snake_case} will automatically be converted into
-\code{camelCase} so you can use consistent argument names.}
+\item{...}{Additional arguments passed on to the underlying API call.
+snake_case names are automatically converted to camelCase.}
 
 \item{print_header}{Include row of column headers in the results?}
 

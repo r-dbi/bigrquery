@@ -23,6 +23,6 @@ update_dataset(project, dataset, ...)
 list_tables(project, dataset, page_size = 50, max_pages = Inf)
 }
 \description{
-See \link{dataset-API} for recommended API.
+See \link{api-dataset} for recommended API.
 }
 \keyword{internal}
