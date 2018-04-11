@@ -6,11 +6,11 @@
 \alias{bq_table_meta}
 \alias{bq_table_fields}
 \alias{bq_table_size}
+\alias{bq_table_nrow}
 \alias{bq_table_exists}
 \alias{bq_table_delete}
 \alias{bq_table_copy}
 \alias{bq_table_upload}
-\alias{bq_table_download}
 \alias{bq_table_extract}
 \title{BigQuery tables}
 \usage{
@@ -22,6 +22,8 @@ bq_table_fields(x)
 
 bq_table_size(x)
 
+bq_table_nrow(x)
+
 bq_table_exists(x)
 
 bq_table_delete(x)
@@ -29,9 +31,6 @@ bq_table_delete(x)
 bq_table_copy(x, dest, ..., quiet = NA)
 
 bq_table_upload(x, values, ..., quiet = NA)
-
-bq_table_download(x, billing = NULL, ..., page_size = 10000,
-  max_pages = 10, warn = TRUE, quiet = NA)
 
 bq_table_extract(x, destination_uris, ..., quiet = NA)
 }
@@ -50,15 +49,6 @@ snake_case names are automatically converted to camelCase.}
 if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{values}{Data frame of values to insert.}
-
-\item{billing}{Identifier of project to bill.}
-
-\item{page_size}{Number of items per page.}
-
-\item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} to retrieve
-all pages (this may take a long time!)}
-
-\item{warn}{If \code{TRUE}, warn when there are unretrieved pages.}
 
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export
