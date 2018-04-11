@@ -122,13 +122,12 @@
 or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
-\item{billing}{Project to bill. Defaults to the \code{dest} project.}
+\item{billing}{Identifier of project to bill.}
 
 \item{page_size}{Number of items per page.}
 
-\item{quiet}{if \code{FALSE} print informative progress messages, if
-\code{TRUE} is silent, if \code{NA} displays messages for long-running
-jobs.}
+\item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
+if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{...}{authentication arguments needed by the DBMS instance; these
 typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.

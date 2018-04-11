@@ -1,23 +1,23 @@
-#' Manipulate BigQuery tables
+#' BigQuery tables
+#'
+#' Basic create-read-update-delete verbs for tables, as well as functions
+#' for uploading and downloading table data.
 #'
 #' @param x A [bq_table], or an object coercible to a `bq_table`.
-#' @param src,dest Source and desintation [bq_table]s.
-#' @param billing Project to bill. Defaults to the `dest` project.
-#' @param create_disposition Behavior if the destination table does not already
-#'   exist. Default will create table on demand; set to `"CREATE_NEVER"` to
-#'   never create (and only copy into existing table).
-#' @param write_disposition Behavior if the destination already exists.
-#'   The default, `"WRITE_EMPTY"`, will error if the table already contains
-#'   data. Other possible values are `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`.
+#' @inheritParams api-job
+#' @inheritParams api-perform
+#' @inheritParams bq_projects
 #' @section API documentation:
 #' * [insert](https://developers.google.com/bigquery/docs/reference/v2/tables/insert)
 #' * [get](https://developers.google.com/bigquery/docs/reference/v2/tables/get)
 #' * [delete](https://developers.google.com/bigquery/docs/reference/v2/tables/delete)
-#' @inheritParams wait_for
 #' @return
-#' * `bq_table_get()`: a [table resource list](https://developers.google.com/bigquery/docs/reference/v2/tables)
-#' * `bq_table_get()`: either `TRUE` or `FALSE`
-#' * `bq_table_copy()`: a table reference to the new table
+#' * `bq_table_copy()`, `bq_table_create()`, `bq_table_delete()`, `bq_table_upload()`:
+#'   an invisible [bq_table]
+#' * `bq_table_exists()`: either `TRUE` or `FALSE`.
+#' * `bq_table_download()`: a data frame
+#' * `bq_table_size()`: the size of the table in bytes
+#' * `bq_table_fields()`: a [bq_fields].
 #'
 #' @examples
 #' if (bq_testable()) {
@@ -25,10 +25,13 @@
 #'
 #' bq_mtcars <- bq_table(ds, "mtcars")
 #' bq_table_exists(bq_mtcars)
-#' str(bq_table_meta(bq_mtcars))
 #'
 #' bq_table_upload(bq_mtcars, mtcars)
 #' bq_table_exists(bq_mtcars)
+#'
+#' bq_table_fields(bq_mtcars)
+#' bq_table_size(bq_mtcars)
+#' str(bq_table_meta(bq_mtcars))
 #'
 #' bq_table_delete(bq_mtcars)
 #' bq_table_exists(bq_mtcars)
@@ -36,15 +39,11 @@
 #' my_natality <- bq_table(ds, "mynatality")
 #' bq_table_copy("publicdata.samples.natality", my_natality)
 #' }
-#' @name table-API
+#' @name api-table
 NULL
 
 #' @export
-#' @rdname table-API
-#' @param A [bq_table]
-#' @param ... Additional arguments passed on to the underlying BigQuery
-#'   API function. `snake_case` arguments are automatically converted to
-#'   `camelCase()`.
+#' @rdname api-table
 bq_table_create <- function(x, ...) {
   x <- as_bq_table(x)
 
@@ -58,7 +57,7 @@ bq_table_create <- function(x, ...) {
 }
 
 #' @export
-#' @rdname table-API
+#' @rdname api-table
 #' @inheritParams api-job
 bq_table_meta <- function(x, fields = NULL) {
   x <- as_bq_table(x)
@@ -67,56 +66,7 @@ bq_table_meta <- function(x, fields = NULL) {
 }
 
 #' @export
-#' @rdname table-API
-bq_table_size <- function(x) {
-  meta <- bq_table_meta(x, fields = "numBytes")
-  bytes <- as.numeric(meta$numBytes)
-  prettyunits::pretty_bytes(bytes)
-}
-
-#' @export
-#' @rdname table-API
-bq_table_exists <- function(x) {
-  x <- as_bq_table(x)
-  url <- bq_path(x$project, x$dataset, x$table)
-  bq_exists(url)
-}
-
-#' @export
-#' @rdname table-API
-bq_table_delete <- function(x) {
-  x <- as_bq_table(x)
-  url <- bq_path(x$project, x$dataset, x$table)
-  invisible(bq_delete(url))
-}
-
-#' @export
-#' @rdname table-API
-#' @inheritParams bq_perform_copy
-bq_table_copy <- function(src, dest, ..., quiet = NA) {
-  src <- as_bq_table(src)
-  dest <- as_bq_table(dest)
-
-  job <- bq_perform_copy(src, dest, ...)
-  bq_job_wait(job, quiet = quiet)
-
-  dest
-}
-
-#' @export
-#' @rdname table-API
-#' @inheritParams api-perform
-bq_table_upload <- function(x, values, ..., quiet = NA) {
-  x <- as_bq_table(x)
-
-  job <- bq_perform_upload(x, ...)
-  bq_job_wait(job, quiet = quiet)
-
-  x
-}
-
-#' @export
-#' @rdname table-API
+#' @rdname api-table
 bq_table_fields <- function(x) {
   meta <- bq_table_meta(x, fields = "schema")
   fields <- meta$schema$fields
@@ -125,9 +75,62 @@ bq_table_fields <- function(x) {
 }
 
 #' @export
-#' @rdname table-API
+#' @rdname api-table
+bq_table_size <- function(x) {
+  meta <- bq_table_meta(x, fields = "numBytes")
+  bytes <- as.numeric(meta$numBytes)
+  structure(bytes, class = "bq_bytes")
+}
+
+#' @export
+#' @rdname api-table
+bq_table_exists <- function(x) {
+  x <- as_bq_table(x)
+  url <- bq_path(x$project, x$dataset, x$table)
+  bq_exists(url)
+}
+
+#' @export
+#' @rdname api-table
+bq_table_delete <- function(x) {
+  x <- as_bq_table(x)
+  url <- bq_path(x$project, x$dataset, x$table)
+  invisible(bq_delete(url))
+}
+
+#' @export
+#' @rdname api-table
+#' @inheritParams bq_perform_copy
+#' @param dest Source and desintation [bq_table]s.
+bq_table_copy <- function(x, dest, ..., quiet = NA) {
+  x <- as_bq_table(x)
+  dest <- as_bq_table(dest)
+
+  job <- bq_perform_copy(x, dest, ...)
+  bq_job_wait(job, quiet = quiet)
+
+  dest
+}
+
+#' @export
+#' @rdname api-table
+#' @inheritParams api-perform
+bq_table_upload <- function(x, values, ..., quiet = NA) {
+  x <- as_bq_table(x)
+
+  job <- bq_perform_upload(x, values, ...)
+  bq_job_wait(job, quiet = quiet)
+
+  invisible(x)
+}
+
+#' @export
+#' @rdname api-table
 #' @inheritParams list_tabledata
-bq_table_download <- function(x, billing = NULL, ...,
+#' @inheritParams bq_projects
+bq_table_download <- function(x,
+                              billing = NULL,
+                              ...,
                               page_size = 1e4,
                               max_pages = 10,
                               warn = TRUE,
@@ -166,11 +169,11 @@ bq_table_download <- function(x, billing = NULL, ...,
 }
 
 #' @export
-#' @rdname table-API
-bq_table_extract <- function(x, urls, ..., quiet = NA) {
+#' @rdname api-table
+bq_table_extract <- function(x, destination_uris, ..., quiet = NA) {
   x <- as_bq_table(x)
 
-  job <- bq_perform_extract(x, destination_uris = urls, ...)
+  job <- bq_perform_extract(x, destination_uris = destination_uris, ...)
   bq_job_wait(job, quiet = quiet)
 
   x

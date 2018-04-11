@@ -42,3 +42,8 @@ indent <- function(x, n = 2) {
   space <- paste(rep(" ", n), collapse = "")
   paste0(space, gsub("\n", paste0("\n", space), x, fixed = TRUE))
 }
+
+#' @export
+print.bq_bytes <- function(x, ...) {
+  cat_line(prettyunits::pretty_bytes(x))
+}

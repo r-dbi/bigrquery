@@ -17,6 +17,6 @@ exists_table(project, dataset, table)
 delete_table(project, dataset, table)
 }
 \description{
-See \link{table-API} for recommended API.
+See \link{api-table} for recommended API.
 }
 \keyword{internal}

@@ -1,4 +1,4 @@
-context("table.R")
+context("bq-table.R")
 
 test_that("can create and delete tables", {
   ds <- bq_test_dataset()
@@ -13,6 +13,21 @@ test_that("can create and delete tables", {
   expect_false(bq_table_exists(bq_mtcars))
 })
 
+test_that("can round trip a simple data frame", {
+  ds <- bq_test_dataset()
+
+  df1 <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = FALSE)
+
+  bq_df <- bq_table(ds, "df")
+  bq_table_upload(bq_df, df1)
+
+  df2 <- bq_table_download(bq_df)
+  df2 <- df2[order(df2$x), ] # BQ doesn't gaurantee order
+  rownames(df2) <- NULL
+
+  expect_equal(df1, df2)
+})
+
 test_that("can copy table from public dataset", {
   ds <- bq_test_dataset()
   my_natality <- bq_table(ds, "mynatality")
@@ -21,5 +36,3 @@ test_that("can copy table from public dataset", {
   expect_equal(out, my_natality)
   expect_true(bq_table_exists(my_natality))
 })
-
-# Old API -----------------------------------------------------------------

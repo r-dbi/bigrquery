@@ -1,6 +1,6 @@
 #' Deprecated table API
 #'
-#' See [table-API] for recommended API.
+#' See [api-table] for recommended API.
 #' @keywords internal
 #' @name table-dep
 NULL

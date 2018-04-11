@@ -29,7 +29,7 @@ as_bq_field <- function(x) {
   bq_field(
     name = x$name,
     type = x$type,
-    mode = x$mode,
+    mode = x$mode %||% "NULLABLE",
     fields = lapply(x$fields, as_bq_field)
   )
 }
