@@ -84,6 +84,13 @@ bq_table_size <- function(x) {
 
 #' @export
 #' @rdname api-table
+bq_table_nrow <- function(x) {
+  meta <- bq_table_meta(x, fields = "numRows")
+  as.numeric(meta$numRows)
+}
+
+#' @export
+#' @rdname api-table
 bq_table_exists <- function(x) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)
@@ -122,50 +129,6 @@ bq_table_upload <- function(x, values, ..., quiet = NA) {
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
-}
-
-#' @export
-#' @rdname api-table
-#' @inheritParams list_tabledata
-#' @inheritParams bq_projects
-bq_table_download <- function(x,
-                              billing = NULL,
-                              ...,
-                              page_size = 1e4,
-                              max_pages = 10,
-                              warn = TRUE,
-                              quiet = NA) {
-
-  x <- as_bq_table(x)
-  assert_that(is.numeric(max_pages), length(max_pages) == 1)
-
-  table_info <- bq_table_meta(x)
-  if (max_pages < 1) {
-    rows <- extract_data(NULL, table_info$schema)
-    return(rows)
-  }
-
-  # This is a rather inefficient implementation - better strategy would be
-  # preallocate list when max_pages is finite, and use doubling strategy
-  # when it's not.
-  rows <- list()
-  append_rows <- function(new_rows) {
-    rows <<- c(rows, list(new_rows))
-  }
-
-  list_tabledata_callback(
-    x$project,
-    x$dataset,
-    x$table,
-    append_rows,
-    table_info = table_info,
-    page_size = page_size,
-    max_pages = max_pages,
-    warn = warn,
-    quiet = quiet
-  )
-
-  do.call("rbind", rows)
 }
 
 #' @export

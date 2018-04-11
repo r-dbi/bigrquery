@@ -35,6 +35,7 @@ Collate:
     'auth.R'
     'bigrquery.R'
     'bq-dataset.R'
+    'bq-extract.R'
     'bq-field.R'
     'bq-job.R'
     'bq-perform.R'
