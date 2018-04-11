@@ -1,22 +1,31 @@
 # bigrquery 0.4.1.9000
 
-* Complete overhaul of the low-level API to make it easier to use. (The primary
-  motivation is this makes the package more enjoyable for me to maintain).
+## New API
+
+Complete overhaul of the low-level API to make it easier to use. (The primary motivation is to make the package more enjoyable for me to maintain but it should also be helpful if you need to do anything unsupported by the higher-level DBI and dplyr backends).
+
+* Consistent naming scheme:
   All API functions now have the form `bq_object_verb()`, e.g. 
   `bq_table_create()`, or `bq_dataset_delete()`. The old API will continue to
   exist, but I highly recommend moving to the new API.
 
-* New `bq_table()` and `bq_dataset()` functions for constructing references 
-  to BigQuery tables and datasets. These are paired with `as_` coercion
-  functions and used through the new API. This deprecates `format_table()`, 
-  `format_dataset()`, `parse_table()` and `parse_dataset()`.
+* S3 helper classes:
+  `bq_table()`, `bq_dataset()`, `bq_job()`, `bq_field()` and `bq_fields()`
+  constructor functions create S3 objects corresponding to important BigQuery 
+  objects. These are paired with `as_` coercion functions and used throughout 
+  the new API. This deprecates `format_table()`, `format_dataset()`, 
+  `parse_table()` and `parse_dataset()`.
 
-* New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
+* Easier local testing:
+  New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
   bigrquery tests locally. All you need to do is create a new BigQuery project,
-  set up billing, and then make sure the project name is set in the 
-  `BIGQUERY_TEST_PROJECT` environment variable.
+  set up billing, and make sure the project name is set in the 
+  `BIGQUERY_TEST_PROJECT` environment variable, then call `bq_test_init()`.
 
 * The new API uses standard SQL. To use `legacy_sql` set `use_legacy_sql = TRUE`
+  in the query functions.
+
+## Other bug fixes and improvements
 
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
