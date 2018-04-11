@@ -2,7 +2,7 @@
 
 ## New API
 
-Complete overhaul of the low-level API to make it easier to use. (The primary motivation is to make the package more enjoyable for me to maintain but it should also be helpful if you need to do anything unsupported by the higher-level DBI and dplyr backends).
+Complete overhaul of the low-level API to make it easier to use. (The primary motivation is to make the package more enjoyable for me to maintain but it should also be helpful if you need to do anything unsupported by the higher-level DBI and dplyr backends). Changes to the code have been paired with improved documentation and greater unit test coverage.
 
 * Consistent naming scheme:
   All API functions now have the form `bq_object_verb()`, e.g. 
@@ -12,7 +12,7 @@ Complete overhaul of the low-level API to make it easier to use. (The primary mo
 * S3 helper classes:
   `bq_table()`, `bq_dataset()`, `bq_job()`, `bq_field()` and `bq_fields()`
   constructor functions create S3 objects corresponding to important BigQuery 
-  objects. These are paired with `as_` coercion functions and used throughout 
+  objects (#150). These are paired with `as_` coercion functions and used throughout 
   the new API. This deprecates `format_table()`, `format_dataset()`, 
   `parse_table()` and `parse_dataset()`.
 
@@ -21,6 +21,10 @@ Complete overhaul of the low-level API to make it easier to use. (The primary mo
   bigrquery tests locally. All you need to do is create a new BigQuery project,
   set up billing, and make sure the project name is set in the 
   `BIGQUERY_TEST_PROJECT` environment variable, then call `bq_test_init()`.
+
+* More efficient data transer: the new api makes extensive user of the `fields`
+  query parameter ensuring the bigrquery only downloads data that it actually 
+  uses (#153).
 
 * The new API uses standard SQL. To use `legacy_sql` set `use_legacy_sql = TRUE`
   in the query functions.
