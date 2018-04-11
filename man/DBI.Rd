@@ -122,12 +122,16 @@
 or an existing \linkS4class{DBIConnection}
 object (in order to clone an existing connection).}
 
+\item{project, dataset}{Project and dataset identifiers}
+
 \item{billing}{Identifier of project to bill.}
 
 \item{page_size}{Number of items per page.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
+
+\item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
 
 \item{...}{authentication arguments needed by the DBMS instance; these
 typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.
@@ -144,7 +148,7 @@ or a \linkS4class{DBIResult}}
 
 \item{statement}{a character string containing SQL.}
 
-\item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
+\item{x}{A \link{bq_table}}
 
 \item{name}{A character string specifying the unquoted DBMS table name,
 or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}

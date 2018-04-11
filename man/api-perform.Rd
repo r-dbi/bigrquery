@@ -61,6 +61,8 @@ table.
 'notFound' error is returned in the job result.
 }}
 
+\item{query}{SQL query string.}
+
 \item{destination_table}{A \link{bq_table} where results should be stored.
 If not supplied, results will be saved to a temporary table that lives
 in a special dataset. You must supply this parameter for large
@@ -80,8 +82,6 @@ to the table.
 \item "WRITE_EMPTY": If the table already exists and contains data, a
 'duplicate' error is returned in the job result.
 }}
-
-\item{SQL}{query string.}
 }
 \value{
 A \link{bq_job}.

@@ -153,7 +153,7 @@ bq_perform_upload <- function(x, values,
 
 #' @export
 #' @rdname api-perform
-#' @param SQL query string.
+#' @param query SQL query string.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
 #'   in a special dataset. You must supply this parameter for large

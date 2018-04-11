@@ -10,7 +10,8 @@
 #'   for, you'll also need to submit a `billing` project.
 #' @param ... Other parameters passed on to [bq_perform_query()].
 #' @inheritParams bq_perform_query
-#' @name query
+#' @inheritParams api-job
+#' @name bq_query
 #' @return A [bq_table]
 #' @examples
 #' if (bq_testable()) {
@@ -34,7 +35,7 @@
 NULL
 
 #' @export
-#' @rdname query
+#' @rdname bq_query
 bq_project_query <- function(x, query,
                              destination_table = NULL,
                              ...,
@@ -52,7 +53,7 @@ bq_project_query <- function(x, query,
 }
 
 #' @export
-#' @rdname query
+#' @rdname bq_query
 bq_dataset_query <- function(x, query,
                              destination_table = NULL,
                              ...,

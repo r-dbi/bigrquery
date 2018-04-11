@@ -37,7 +37,10 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbConnect
-#' @inheritParams bq_table_upload
+#' @param project,dataset Project and dataset identifiers
+#' @inheritParams bq_perform_query
+#' @inheritParams bq_projects
+#' @inheritParams api-job
 #' @export
 setMethod(
   "dbConnect", "BigQueryDriver",
