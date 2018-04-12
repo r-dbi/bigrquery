@@ -27,6 +27,33 @@ test_that("bq_perform_copy creates job that succeeds", {
   expect_true(bq_table_exists(dst))
 })
 
+
+# Load / extract ----------------------------------------------------------
+
+test_that("can round trip extract + load", {
+  ds_public <- bq_dataset("bigquery-public-data", "moon_phases")
+  ds_mine <- bq_test_dataset()
+
+  tb <- bq_dataset_query(ds_public,
+    query = "SELECT COUNT(*) as count FROM moon_phases",
+    billing = bq_test_project()
+  )
+
+  tmp <- gs_test_object()
+  # on.exit(gs_object_delete(tmp))
+
+  job <- bq_perform_extract(tb, tmp)
+  bq_job_wait(job)
+
+  tb_ks <- bq_table(ds_mine, "natality_ks")
+  job <- bq_perform_load(tb_ks, tmp)
+  bq_job_wait(job)
+
+  df <- bq_table_download(tb_ks)
+  expect_equal(nrow(df), 1)
+  expect_named(df, "count")
+})
+
 # Queries -----------------------------------------------------------------
 
 test_that("bq_perform_query creates job that succeeds", {

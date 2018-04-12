@@ -11,7 +11,8 @@
 \alias{bq_table_delete}
 \alias{bq_table_copy}
 \alias{bq_table_upload}
-\alias{bq_table_extract}
+\alias{bq_table_save}
+\alias{bq_table_load}
 \title{BigQuery tables}
 \usage{
 bq_table_create(x, fields = NULL, ...)
@@ -32,7 +33,9 @@ bq_table_copy(x, dest, ..., quiet = NA)
 
 bq_table_upload(x, values, ..., quiet = NA)
 
-bq_table_extract(x, destination_uris, ..., quiet = NA)
+bq_table_save(x, destination_uris, ..., quiet = NA)
+
+bq_table_load(x, source_uris, ..., quiet = NA)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -55,6 +58,18 @@ Storage URIs where the extracted table should be written. Can export
 up to 1 Gb of data per file. Use a wild card URI (e.g.
 \code{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
 number of files.}
+
+\item{source_uris}{The fully-qualified URIs that point to your data in
+Google Cloud.
+
+For Google Cloud Storage URIs: Each URI can contain one
+`'*'`` wildcard character and it must come after the 'bucket' name.
+Size limits related to load jobs apply to external data sources.
+
+For Google Cloud Bigtable URIs: Exactly one URI can be specified and
+it has be a fully specified and valid HTTPS URL for a Google Cloud
+Bigtable table. For Google Cloud Datastore backups: Exactly one URI
+can be specified. Also, the '*' wildcard character is not allowed.}
 }
 \value{
 \itemize{
@@ -68,7 +83,9 @@ an invisible \link{bq_table}
 }
 \description{
 Basic create-read-update-delete verbs for tables, as well as functions
-for uploading and downloading table data.
+for uploading and downloading data in to/from memory (\code{bq_table_upload()},
+(\code{bq_table_download()})), and saving to/loading from Google CloudStorage
+(\code{bq_table_load()}, \code{bq_table_save()}).
 }
 \section{API documentation}{
 

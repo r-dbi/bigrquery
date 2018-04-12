@@ -6,6 +6,8 @@
 \alias{bq_perform_extract}
 \alias{api-perform}
 \alias{bq_perform_upload}
+\alias{api-perform}
+\alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
@@ -16,6 +18,11 @@ bq_perform_extract(x, destination_uris,
 
 bq_perform_upload(x, values, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_APPEND", ..., billing = x$project)
+
+bq_perform_load(x, source_uris, billing = x$project,
+  source_format = "NEWLINE_DELIMITED_JSON", fields = NULL, nskip = 0,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_APPEND", ...)
 
 bq_perform_query(query, billing, ..., parameters = NULL,
   destination_table = NULL, default_dataset = NULL,
@@ -63,6 +70,33 @@ table.
 'notFound' error is returned in the job result.
 }}
 
+\item{source_uris}{The fully-qualified URIs that point to your data in
+Google Cloud.
+
+For Google Cloud Storage URIs: Each URI can contain one
+`'*'`` wildcard character and it must come after the 'bucket' name.
+Size limits related to load jobs apply to external data sources.
+
+For Google Cloud Bigtable URIs: Exactly one URI can be specified and
+it has be a fully specified and valid HTTPS URL for a Google Cloud
+Bigtable table. For Google Cloud Datastore backups: Exactly one URI
+can be specified. Also, the '*' wildcard character is not allowed.}
+
+\item{source_format}{The format of the data files:
+\itemize{
+\item For CSV files, specify "CSV".
+\item For datastore backups, specify "DATASTORE_BACKUP".
+\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+\item For Avro, specify "AVRO".
+\item For parquet, specify "PARQUET".
+\item For orc, specify "ORC".
+}}
+
+\item{fields}{A \link{bq_fields} specification, or something coercible to it
+(like a data frame).}
+
+\item{nskip}{For \code{source_format = "CSV"}, the number of header rows to skip.}
+
 \item{query}{SQL query string.}
 
 \item{parameters}{Named list of parameters match to query paramters.
@@ -103,9 +137,10 @@ Each of these low-level functions is paired with a high-level function that
 you should use instead:
 \itemize{
 \item \code{bq_perform_copy()}:    \code{\link[=bq_table_copy]{bq_table_copy()}}.
-\item \code{bq_perform_extract()}: \code{\link[=bq_table_extract]{bq_table_extract()}}.
 \item \code{bq_perform_query()}:   \code{\link[=bq_dataset_query]{bq_dataset_query()}}, \code{\link[=bq_project_query]{bq_project_query()}}.
 \item \code{bq_perform_upload()}:  \code{\link[=bq_table_upload]{bq_table_upload()}}.
+\item \code{bq_perform_load()}:    \code{\link[=bq_table_load]{bq_table_load()}}.
+\item \code{bq_perform_extract()}: \code{\link[=bq_table_save]{bq_table_save()}}.
 }
 }
 \section{API documentation}{

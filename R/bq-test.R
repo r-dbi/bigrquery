@@ -1,10 +1,13 @@
 #' Project to use for testing bigquery
 #'
-#' You'll need to set up the `BIGQUERY_TEST_PROJECT` env var if you want to
-#' run bigquery tests locally. I recommend creating a new project because
-#' the tests involve both reading and writing. You will also need to
-#' have billing billing enabled for the project, and to run `bq_test_init()`
-#' once.
+#' @description
+#' You'll need to set up the `BIGQUERY_TEST_PROJECT` (name of a project) and
+#' `BIGQUERY_TEST_PROJECT` (name of bucket) env vars in order to run bigquery
+#' tests locally. I recommend creating a new project because the tests involve
+#' both reading and writing in BigQuery and CloudStorage.
+#'
+#' You will also need to have billing billing enabled for the project, and to
+#' run `bq_test_init()` once.
 #'
 #' @section Testing:
 #' In tests, `bq_test_project()` (and hence `bq_test_dataset()`) will
@@ -39,7 +42,7 @@ bq_test_project <- function() {
   stop(
     "To run bigquery tests you must have BIGQUERY_TEST_PROJECT envvar set ",
     "to name of project which has billing set up and to which you have ",
-    "right access",
+    "write access",
     call. = FALSE
   )
 }
@@ -61,8 +64,8 @@ bq_test_init <- function() {
 
 #' @export
 #' @rdname bq_test_project
-bq_test_dataset <- function() {
-  ds <- bq_dataset(bq_test_project(), random_name())
+bq_test_dataset <- function(name = random_name()) {
+  ds <- bq_dataset(bq_test_project(), name)
   bq_dataset_create(ds)
 
   env <- new.env()
@@ -87,6 +90,33 @@ bq_testable <- function() {
 bq_authable <- function() {
   has_access_cred() || (interactive() && !is_testing())
 }
+
+#' @export
+#' @rdname bq_test_project
+gs_test_bucket <- function() {
+  env <- Sys.getenv("BIGQUERY_TEST_BUCKET")
+  if (!identical(env, "")) {
+    return(env)
+  }
+
+  if (is_testing()) {
+    testthat::skip("BIGQUERY_TEST_BUCKET not set")
+  }
+
+  stop(
+    "To run bigquery extract/load tests you must have BIGQUERY_TEST_BUCKET set ",
+    "to name of the bucket where `bq_test_project()` has write acess",
+    call. = FALSE
+  )
+}
+
+
+#' @export
+#' @rdname bq_test_project
+gs_test_object <- function(name = random_name()) {
+  gs_object(gs_test_bucket(), name)
+}
+
 
 random_name <- function(n = 10) {
   paste0("TESTING_", paste(sample(letters, n, replace = TRUE), collapse = ""))

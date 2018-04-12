@@ -1,7 +1,9 @@
 #' BigQuery tables
 #'
 #' Basic create-read-update-delete verbs for tables, as well as functions
-#' for uploading and downloading table data.
+#' for uploading and downloading data in to/from memory (`bq_table_upload()`,
+#' (`bq_table_download()`)), and saving to/loading from Google CloudStorage
+#' (`bq_table_load()`, `bq_table_save()`).
 #'
 #' @param x A [bq_table], or an object coercible to a `bq_table`.
 #' @inheritParams api-job
@@ -140,10 +142,21 @@ bq_table_upload <- function(x, values, ..., quiet = NA) {
 
 #' @export
 #' @rdname api-table
-bq_table_extract <- function(x, destination_uris, ..., quiet = NA) {
+bq_table_save <- function(x, destination_uris, ..., quiet = NA) {
   x <- as_bq_table(x)
 
   job <- bq_perform_extract(x, destination_uris = destination_uris, ...)
+  bq_job_wait(job, quiet = quiet)
+
+  x
+}
+
+#' @export
+#' @rdname api-table
+bq_table_load <- function(x, source_uris, ..., quiet = NA) {
+  x <- as_bq_table(x)
+
+  job <- bq_perform_load(x, source_uris = source_uris, ...)
   bq_job_wait(job, quiet = quiet)
 
   x

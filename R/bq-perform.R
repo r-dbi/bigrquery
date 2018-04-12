@@ -6,9 +6,10 @@
 #' you should use instead:
 #'
 #' * `bq_perform_copy()`:    [bq_table_copy()].
-#' * `bq_perform_extract()`: [bq_table_extract()].
 #' * `bq_perform_query()`:   [bq_dataset_query()], [bq_project_query()].
 #' * `bq_perform_upload()`:  [bq_table_upload()].
+#' * `bq_perform_load()`:    [bq_table_load()].
+#' * `bq_perform_extract()`: [bq_table_save()].
 #'
 #' @section API documentation:
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
@@ -61,10 +62,8 @@ bq_perform_extract <- function(x,
                                print_header = TRUE,
                                billing = x$project) {
   x <- as_bq_table(x)
-  assert_that(
-    is.character(destination_uris),
-    is.string(billing)
-  )
+  destination_uris <- as.character(destination_uris)
+  assert_that(is.string(billing))
 
   url <- bq_path(billing, jobs = "")
   body <- list(
@@ -151,6 +150,75 @@ bq_perform_upload <- function(x, values,
   )
   as_bq_job(res$jobReference)
 }
+
+
+#' @export
+#' @name api-perform
+#' @param source_uris The fully-qualified URIs that point to your data in
+#'   Google Cloud.
+#'
+#'   For Google Cloud Storage URIs: Each URI can contain one
+#'   `'*'`` wildcard character and it must come after the 'bucket' name.
+#'   Size limits related to load jobs apply to external data sources.
+#'
+#'   For Google Cloud Bigtable URIs: Exactly one URI can be specified and
+#'   it has be a fully specified and valid HTTPS URL for a Google Cloud
+#'    Bigtable table. For Google Cloud Datastore backups: Exactly one URI
+#'  can be specified. Also, the '*' wildcard character is not allowed.
+#' @param source_format The format of the data files:
+#'   * For CSV files, specify "CSV".
+#'   * For datastore backups, specify "DATASTORE_BACKUP".
+#'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+#'   * For Avro, specify "AVRO".
+#'   * For parquet, specify "PARQUET".
+#'   * For orc, specify "ORC".
+#' @param fields A [bq_fields] specification, or something coercible to it
+#'   (like a data frame).
+#' @param nskip For `source_format = "CSV"`, the number of header rows to skip.
+bq_perform_load <- function(x,
+                            source_uris,
+                            billing = x$project,
+                            source_format = "NEWLINE_DELIMITED_JSON",
+                            fields = NULL,
+                            nskip = 0,
+                            create_disposition = "CREATE_IF_NEEDED",
+                            write_disposition = "WRITE_APPEND",
+                            ...
+                            ) {
+  x <- as_bq_table(x)
+  source_uris <- as.character(source_uris)
+  assert_that(is.string(billing))
+
+  load <- list(
+    sourceUris = source_uris,
+    sourceFormat = unbox(source_format),
+    destinationTable = tableReference(x),
+    createDisposition = unbox(create_disposition),
+    writeDisposition = unbox(write_disposition)
+  )
+
+  if (source_format == "CSV") {
+    load$skipLeadingRows <- nskip
+  }
+
+  if (!is.null(fields)) {
+    fields <- as_bq_fields(fields)
+    load$schema <- list(fields = as_json(fields))
+  } else {
+    load$autodetect <- TRUE
+  }
+
+  body <- list(configuration = list(load = load))
+
+  url <- bq_path(billing, jobs = "")
+  res <- bq_post(
+    url,
+    body = bq_body(body, ...),
+    query = list(fields = "jobReference")
+  )
+  as_bq_job(res$jobReference)
+}
+
 
 #' @export
 #' @rdname api-perform

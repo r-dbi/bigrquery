@@ -37,7 +37,9 @@ The old API has been soft-deprecated - it will continue to work, but no further 
 
 * `bq_project_query()` and `bq_dataset_query()` can now supply query parameters
   (#191).
-
+  
+* `bq_table_load()` loads data from a Google CloudStorage URI and is paired with 
+  `bq_table_save()` to save data to a Google CloudStorage URI (#155)
 
 ## Other bug fixes and improvements
 
