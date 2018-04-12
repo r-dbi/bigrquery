@@ -8,7 +8,7 @@ test_that("can work with literal SQL", {
     billing = bq_test_project()
   )
 
-  x <- tbl(con_us, sql("SELECT * FROM country_code_iso"))
+  x <- dplyr::tbl(con_us, sql("SELECT * FROM country_code_iso"))
   expect_true("fips_code" %in% dbplyr::op_vars(x))
 })
 
