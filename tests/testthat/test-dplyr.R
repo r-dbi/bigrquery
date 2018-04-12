@@ -12,6 +12,23 @@ test_that("can work with literal SQL", {
   expect_true("fips_code" %in% dbplyr::op_vars(x))
 })
 
+test_that("can compute queries", {
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    dataset = "basedata"
+  )
+
+  bq_mtcars <- dplyr::tbl(con, "mtcars")
+  bq_mtcars <- bq_mtcars %>% dplyr::filter(cyl == 4)
+
+  name <- random_name()
+  x <- dplyr::compute(bq_mtcars, name, temporary = FALSE)
+  on.exit(DBI::dbRemoveTable(con, name))
+
+  expect_true(DBI::dbExistsTable(con, name))
+})
+
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")
 

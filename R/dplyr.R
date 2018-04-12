@@ -71,6 +71,32 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
   vapply(fields, "[[", "name", FUN.VALUE = character(1))
 }
 
+# registered onLoad
+db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, ...) {
+  if (temporary) {
+    stop(
+      "Can not create temporary tables in BigQuery.\n",
+      "Did you mean `temporary = FALSE`?",
+      call. = FALSE
+    )
+  }
+
+  ds <- bq_dataset(con@project, con@dataset)
+  tb <- bq_table(ds, name)
+
+  bq_dataset_query(ds,
+    query = sql,
+    destination_table = tb
+  )
+
+  name
+}
+
+# registered onLoad
+db_analyze.BigQueryConnection <- function(con, table, ...) {
+  TRUE
+}
+
 # SQL translation -------------------------------------------------------------
 # registered onLoad
 sql_translate_env.BigQueryConnection <- function(x) {

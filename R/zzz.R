@@ -1,7 +1,9 @@
 .onLoad <- function(libname, pkgname) {
 
   # S3 methods --------------------------------------------------------------
+  register_s3_method("dplyr", "db_analyze", "BigQueryConnection")
   register_s3_method("dplyr", "db_query_fields", "BigQueryConnection")
+  register_s3_method("dplyr", "db_save_query", "BigQueryConnection")
   register_s3_method("dplyr", "sql_translate_env", "BigQueryConnection")
   register_s3_method("dplyr", "tbl", "src_bigquery")
 

@@ -45,6 +45,8 @@ The old API has been soft-deprecated - it will continue to work, but no further 
 
 * The dplyr interface can work with literal SQL once more (#218).
 
+* `dplyr::compute()` now works (@realAkhmed, #52).
+
 * The DBI interface has been updated to use the new low-level API.
   This means that it defaults to using modern SQL not legacy SQL.
   Use `use_legacy_sql = TRUE` in `DBI::dbConnect()` if you need to use
