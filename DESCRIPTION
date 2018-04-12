@@ -14,11 +14,15 @@ Depends:
 Imports: 
     assertthat,
     DBI,
+    glue,
     httr,
     jsonlite,
     methods,
     progress,
-    readr
+    prettyunits,
+    rapidjsonr,
+    readr,
+    Rcpp
 Suggests: 
     DBItest,
     dbplyr,
@@ -30,25 +34,40 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Collate: 
-    'auth-test.R'
-    'auth.r'
-    'bigrquery.r'
+    'RcppExports.R'
+    'auth.R'
+    'bigrquery.R'
+    'bq-dataset.R'
+    'bq-download.R'
+    'bq-field.R'
+    'bq-job.R'
+    'bq-perform.R'
+    'bq-project.R'
+    'bq-projects.R'
+    'bq-query.R'
+    'bq-refs.R'
+    'bq-request.R'
+    'bq-table.R'
+    'bq-test.R'
     'camelCase.R'
-    'datasets.r'
-    'dbi-driver.r'
-    'dbi-connection.r'
-    'dbi-result.r'
+    'dbi-driver.R'
+    'dbi-connection.R'
+    'dbi-result.R'
     'dplyr-compat.R'
-    'dplyr.r'
-    'id.R'
-    'job-extract.R'
-    'job-query.R'
-    'job-upload.r'
-    'jobs.r'
-    'projects.r'
-    'query.r'
-    'request.r'
-    'tabledata.r'
-    'tables.r'
-    'utils.r'
-    'zzz.r'
+    'dplyr.R'
+    'old-dataset.R'
+    'old-id.R'
+    'old-job-extract.R'
+    'old-job-query.R'
+    'old-job-upload.R'
+    'old-job.R'
+    'old-project.R'
+    'old-projects.R'
+    'old-query.R'
+    'old-table.R'
+    'old-tabledata.R'
+    'utils.R'
+    'zzz.R'
+LinkingTo: 
+    Rcpp,
+    rapidjsonr

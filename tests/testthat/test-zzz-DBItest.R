@@ -1,4 +1,4 @@
-if (has_auth) {
+if (FALSE) {
 
   tweaks <- DBItest::tweaks(
     constructor_name = "bigquery",
