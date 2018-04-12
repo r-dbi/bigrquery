@@ -9,7 +9,9 @@ as_df <- function(x) {
 
 bq_progress <- function(..., quiet = NA) {
   delay <- if (isFALSE(quiet)) 0 else 1
-  quiet <- if (is.na(quiet)) !interactive() else FALSE
+  if (is.na(quiet)) {
+    quiet <- !interactive()
+  }
 
   if (quiet) {
     list(
