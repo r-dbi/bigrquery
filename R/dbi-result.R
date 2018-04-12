@@ -7,6 +7,7 @@ BigQueryResult <- function(conn, statement) {
     query = statement,
     use_legacy_sql = conn@use_legacy_sql,
     quiet = conn@quiet,
+    billing = conn@billing
   )
   nrow <- bq_table_nrow(dest)
 
