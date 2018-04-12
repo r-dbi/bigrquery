@@ -68,8 +68,7 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
 # registered onLoad
 sql_translate_env.BigQueryConnection <- function(x) {
   dbplyr::sql_variant(
-    dbplyr::sql_translator(
-      .parent = dbplyr::base_scalar,
+    dbplyr::sql_translator(.parent = dbplyr::base_scalar,
 
       `^` = sql_prefix("POW"),
       `%%` = sql_prefix("MOD"),
@@ -93,8 +92,11 @@ sql_translate_env.BigQueryConnection <- function(x) {
       # Other scalar functions
       ifelse = sql_prefix("IF"),
 
+      # string
+      paste0 = sql_prefix("CONCAT"),
+
       # stringr equivalents
-      str_detect = sql_prefix("REGEXP_MATCH", 2),
+      str_detect =  sql_prefix("REGEXP_MATCH", 2),
       str_extract = sql_prefix("REGEXP_EXTRACT", 2),
       str_replace = sql_prefix("REGEXP_REPLACE", 3),
 
@@ -104,33 +106,28 @@ sql_translate_env.BigQueryConnection <- function(x) {
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
+
+      all = sql_prefix("LOGICAL_AND", 1),
+      any = sql_prefix("LOGICAL_OR", 1),
+
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
-      any = sql_prefix("LOGICAL_OR", 1),
-      all = sql_prefix("LOGICAL_AND", 1)
+      cor = dbplyr::sql_aggregate_2("CORR"),
+      cov = dbplyr::sql_aggregate_2("COVAR_SAMP")
     ),
-    dbplyr::sql_translator(
-      .parent = dbplyr::base_win,
-      sd = dbplyr::win_recycled("STDDEV_SAMP"),
+    dbplyr::sql_translator(.parent = dbplyr::base_win,
       all = dbplyr::win_absent("LOGICAL_AND"),
       any = dbplyr::win_absent("LOGICAL_OR"),
+
+      sd =  dbplyr::win_recycled("STDDEV_SAMP"),
+      var = dbplyr::win_recycled("VAR_SAMP"),
+      cor = dbplyr::win_absent("CORR"),
+      cov = dbplyr::win_absent("COVAR_SAMP"),
+
       n_distinct = dbplyr::win_absent("n_distinct")
     )
   )
 }
-
-# # BQ doesn't need frame clause
-# win_bq <- function(f) {
-#   force(f)
-#   function(x) {
-#     dbplyr::over(
-#       dbplyr::build_sql(dbplyr::sql(f), list(x)),
-#       dbplyr::partition_group(),
-#       dbplyr::partition_order()
-#     )
-#   }
-# }
-
 
 simulate_bigrquery <- function(use_legacy_sql = FALSE) {
   new("BigQueryConnection",

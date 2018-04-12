@@ -55,7 +55,8 @@ The old API has been soft-deprecated - it will continue to work, but no further 
   useful information for debugging (#209).
 
 * Improved SQL translation for `pmax()`, `pmin()`, `sd()`, `all()`, and `any()`
-  (#176, #179, @jarodmeng).
+  (#176, #179, @jarodmeng). And for `paste0()`, `cor()` and `cov()`
+  (@edgararuiz).
 
 # Version 0.4.1
 
