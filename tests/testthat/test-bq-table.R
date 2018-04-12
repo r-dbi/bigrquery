@@ -13,6 +13,17 @@ test_that("can create and delete tables", {
   expect_false(bq_table_exists(bq_mtcars))
 })
 
+test_that("can create table with schema", {
+  ds <- bq_test_dataset()
+  tb <- bq_table(ds, "df")
+
+  df <- data.frame(x = 1, y = "a")
+  bq_table_create(tb, "df", fields = df)
+
+  fields <- bq_table_fields(tb)
+  expect_equal(fields, as_bq_fields(df))
+})
+
 test_that("can round trip a simple data frame", {
   ds <- bq_test_dataset()
 

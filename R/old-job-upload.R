@@ -51,7 +51,7 @@ insert_upload_job <- function(project, dataset, table, values,
       load = list(
         sourceFormat = "NEWLINE_DELIMITED_JSON",
         schema = list(
-          fields = as_bq_fields(values)
+          fields = as_json(as_bq_fields(values))
         ),
         destinationTable = list(
           projectId = project,

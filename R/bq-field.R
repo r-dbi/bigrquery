@@ -1,20 +1,45 @@
 #' BiqQuery field (and fields) class
 #'
+#' `bq_field() and `bq_fields()` create; `as_bq_field()` and `as_bq_fields()`
+#' coerce from lists.
+#'
 #' @param name Field name
 #' @param type Field type
 #' @param mode Field mode
 #' @param fields For a field of type "record", a list of sub-fields.
 #' @param x A list of `bg_fields`
 #' @export
-bq_field <- function(name, type, mode = "nullable", fields = NULL) {
+#' @examples
+#' bq_field("name", "string")
+#'
+#' as_bq_fields(list(
+#'   list(name = "name", type = "string"),
+#'   bq_field("age", "integer")
+#' ))
+#'
+#' # as_bq_fields() can also take a data frame
+#' as_bq_fields(mtcars)
+bq_field <- function(name, type, mode = "NULLABLE", fields = list()) {
+  assert_that(is.string(name), is.string(type), is.string(mode))
+
   structure(
     list(
       name = name,
-      type = type,
-      mode = mode,
-      fields = bq_fields(fields)
+      type = toupper(type),
+      mode = toupper(mode),
+      fields = as_bq_fields(fields)
     ),
     class = "bq_field"
+  )
+}
+
+#' @export
+as_json.bq_field <- function(x) {
+  list(
+    name = unbox(x$name),
+    type = unbox(x$type),
+    mode = unbox(x$mode),
+    fields = as_json(x$fields)
   )
 }
 
@@ -24,8 +49,20 @@ bq_fields <- function(x) {
   structure(x, class = "bq_fields")
 }
 
+#' @export
+as_json.bq_fields <- function(x) {
+  lapply(x, as_json)
+}
 
-as_bq_field <- function(x) {
+#' @export
+#' @rdname bq_field
+as_bq_field <- function(x) UseMethod("as_bq_field")
+
+#' @export
+as_bq_field.bq_field <- function(x) x
+
+#' @export
+as_bq_field.list <- function(x) {
   bq_field(
     name = x$name,
     type = x$type,
@@ -34,6 +71,24 @@ as_bq_field <- function(x) {
   )
 }
 
+#' @export
+#' @rdname bq_field
+as_bq_fields <- function(x) UseMethod("as_bq_fields")
+
+#' @export
+as_bq_fields.bq_fields <- function(x) x
+
+#' @export
+as_bq_fields.data.frame <- function(x) {
+  types <- vapply(x, data_type, character(1))
+  fields <- Map(function(type, name) bq_field(name, type), types, names(x))
+  bq_fields(unname(fields))
+}
+
+#' @export
+as_bq_fields.list <- function(x) {
+  bq_fields(lapply(x, as_bq_field))
+}
 
 #' @export
 format.bq_fields <- function(x, ...) {
@@ -48,6 +103,7 @@ format.bq_fields <- function(x, ...) {
 #' @export
 print.bq_fields <- function(x, ...) {
   cat_line("<bq_fields>\n", format(x, ...))
+  invisible(x)
 }
 
 #' @export
@@ -63,11 +119,7 @@ format.bq_field <- function(x, ...) {
 #' @export
 print.bq_field <- function(x, ...) {
   cat_line("<bq_field> ", format(x, ...))
-}
-
-as_bq_fields <- function(data) {
-  types <- vapply(data, data_type, character(1))
-  unname(Map(function(type, name) list(name = name, type = type), types, names(data)))
+  invisible(x)
 }
 
 data_type <- function(x) {

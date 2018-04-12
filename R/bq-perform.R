@@ -119,12 +119,13 @@ bq_perform_upload <- function(x, values,
     is.data.frame(values),
     is.string(billing)
   )
+  fields <- as_bq_fields(values)
 
   config <- list(
     configuration = list(
       load = list(
         sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
-        schema = list(fields = as_bq_fields(values)),
+        schema = list(fields = as_json(fields)),
         destinationTable = tableReference(x),
         createDisposition = unbox(create_disposition),
         writeDisposition = unbox(write_disposition)

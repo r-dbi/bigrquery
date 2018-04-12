@@ -3,11 +3,17 @@
 \name{bq_field}
 \alias{bq_field}
 \alias{bq_fields}
+\alias{as_bq_field}
+\alias{as_bq_fields}
 \title{BiqQuery field (and fields) class}
 \usage{
-bq_field(name, type, mode = "nullable", fields = NULL)
+bq_field(name, type, mode = "NULLABLE", fields = list())
 
 bq_fields(x)
+
+as_bq_field(x)
+
+as_bq_fields(x)
 }
 \arguments{
 \item{name}{Field name}
@@ -21,5 +27,17 @@ bq_fields(x)
 \item{x}{A list of \code{bg_fields}}
 }
 \description{
-BiqQuery field (and fields) class
+\code{bq_field() and}bq_fields()\code{create;}as_bq_field()\code{and}as_bq_fields()`
+coerce from lists.
+}
+\examples{
+bq_field("name", "string")
+
+as_bq_fields(list(
+  list(name = "name", type = "string"),
+  bq_field("age", "integer")
+))
+
+# as_bq_fields() can also take a data frame
+as_bq_fields(mtcars)
 }

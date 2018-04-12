@@ -47,3 +47,9 @@ indent <- function(x, n = 2) {
 print.bq_bytes <- function(x, ...) {
   cat_line(prettyunits::pretty_bytes(x))
 }
+
+
+as_json <- function(x) UseMethod("as_json")
+
+#' @export
+as_json.NULL <- function(x) NULL

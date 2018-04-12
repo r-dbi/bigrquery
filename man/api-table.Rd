@@ -14,7 +14,7 @@
 \alias{bq_table_extract}
 \title{BigQuery tables}
 \usage{
-bq_table_create(x, ...)
+bq_table_create(x, fields = NULL, ...)
 
 bq_table_meta(x, fields = NULL)
 
@@ -37,11 +37,11 @@ bq_table_extract(x, destination_uris, ..., quiet = NA)
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
 
+\item{fields}{A \link{bq_fields} specification, or something coercible to it
+(like a data frame).}
+
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
-
-\item{fields}{An optional field specification for
-\href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
 
 \item{dest}{Source and desintation \link{bq_table}s.}
 
