@@ -138,6 +138,7 @@ simulate_bigrquery <- function(use_legacy_sql = FALSE) {
     dataset = "test",
     billing = "test",
     use_legacy_sql = use_legacy_sql,
-    .envir = new.env(parent = emptyenv())
+    page_size = 0L,
+    quiet = TRUE
   )
 }

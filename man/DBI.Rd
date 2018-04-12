@@ -6,7 +6,6 @@
 \alias{DBI}
 \alias{BigQueryDriver-class}
 \alias{show,BigQueryDriver-method}
-\alias{dbConnect,BigQueryDriver-method}
 \alias{dbIsValid,BigQueryDriver-method}
 \alias{dbGetInfo,BigQueryDriver-method}
 \alias{dbDataType,BigQueryDriver-method}
@@ -45,9 +44,6 @@
 \usage{
 \S4method{show}{BigQueryDriver}(object)
 
-\S4method{dbConnect}{BigQueryDriver}(drv, project, dataset, billing = project,
-  page_size = 10000, quiet = NA, use_legacy_sql = TRUE, ...)
-
 \S4method{dbIsValid}{BigQueryDriver}(dbObj, ...)
 
 \S4method{dbGetInfo}{BigQueryDriver}(dbObj, ...)
@@ -76,8 +72,7 @@
   value, overwrite = FALSE, append = FALSE, ..., field.types = NULL,
   temporary = FALSE, row.names = NA)
 
-\S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...,
-  row.names = NA)
+\S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 
 \S4method{dbListTables}{BigQueryConnection}(conn, ...)
 
@@ -101,7 +96,7 @@
 
 \S4method{dbClearResult}{BigQueryResult}(res, ...)
 
-\S4method{dbFetch}{BigQueryResult}(res, n = -1, ..., row.names = FALSE)
+\S4method{dbFetch}{BigQueryResult}(res, n = -1, ...)
 
 \S4method{dbHasCompleted}{BigQueryResult}(res, ...)
 
@@ -118,28 +113,11 @@
 \arguments{
 \item{object}{Any R object}
 
-\item{drv}{an object that inherits from \linkS4class{DBIDriver},
-or an existing \linkS4class{DBIConnection}
-object (in order to clone an existing connection).}
-
-\item{project, dataset}{Project and dataset identifiers}
-
-\item{billing}{Identifier of project to bill.}
-
-\item{page_size}{Number of items per page.}
-
-\item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
-
-\item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
-
-\item{...}{authentication arguments needed by the DBMS instance; these
-typically include \code{user}, \code{password}, \code{host}, \code{port}, \code{dbname}, etc.
-For details see the appropriate \code{DBIDriver}.}
-
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},
 i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
 or a \linkS4class{DBIResult}}
+
+\item{...}{Other arguments to methods.}
 
 \item{obj}{An R object whose SQL type we want to determine.}
 
@@ -148,7 +126,7 @@ or a \linkS4class{DBIResult}}
 
 \item{statement}{a character string containing SQL.}
 
-\item{x}{A \link{bq_table}}
+\item{x}{A character vector to quote as string.}
 
 \item{name}{A character string specifying the unquoted DBMS table name,
 or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
@@ -182,3 +160,4 @@ special values.}
 \description{
 Implementations of pure virtual functions defined in the \code{DBI} package.
 }
+\keyword{internal}

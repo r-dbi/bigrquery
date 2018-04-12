@@ -113,6 +113,8 @@ bq_table <- function(project, dataset, table = NULL) {
   )
 }
 
+setOldClass("bq_table")
+
 #' @export
 print.bq_table <- function(x, ...) {
   cat_line("<bq_table> ", x$project, ".", x$dataset, ".", x$table)

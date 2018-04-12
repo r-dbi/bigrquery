@@ -4,17 +4,15 @@ NULL
 BigQueryConnection <- function(project, dataset, billing,
                                page_size = 1e4,
                                quiet = NA,
-                               use_legacy_sql = TRUE) {
+                               use_legacy_sql = FALSE) {
   ret <- new("BigQueryConnection",
     project = project,
     dataset = dataset,
     billing = billing,
     page_size = as.integer(page_size),
     quiet = quiet,
-    use_legacy_sql = use_legacy_sql,
-    .envir = new.env(parent = emptyenv())
+    use_legacy_sql = use_legacy_sql
   )
-  ret@.envir$valid <- TRUE
   ret
 }
 
@@ -29,8 +27,7 @@ setClass(
     billing = "character",
     use_legacy_sql = "logical",
     page_size = "integer",
-    quiet = "logical",
-    .envir = "environment"
+    quiet = "logical"
   )
 )
 
@@ -40,9 +37,11 @@ setClass(
 setMethod(
   "show", "BigQueryConnection",
   function(object) {
-    cat("<BigQueryConnection>\n",
-        "  Dataset: ", dbGetInfo(object)$dbname,
-        sep = "")
+    cat_line(
+      "<BigQueryConnection>\n",
+      "  Dataset: ", paste0(object@project, ".", object@dataset), "\n",
+      "  Billing: ", object@billing
+    )
   })
 
 #' @rdname DBI
@@ -51,7 +50,7 @@ setMethod(
 setMethod(
   "dbIsValid", "BigQueryConnection",
   function(dbObj, ...) {
-    dbObj@.envir$valid
+    TRUE
   })
 
 #' @rdname DBI
@@ -60,13 +59,6 @@ setMethod(
 setMethod(
   "dbDisconnect", "BigQueryConnection",
   function(conn, ...) {
-    if (!dbIsValid(conn)) {
-      warning("Connection already closed.", call. = FALSE)
-    }
-
-    unset_result(conn)
-    conn@.envir$valid <- FALSE
-
     invisible(TRUE)
   })
 
@@ -76,15 +68,7 @@ setMethod(
 setMethod(
   "dbSendQuery", c("BigQueryConnection", "character"),
   function(conn, statement, ...) {
-    assert_connection_valid(conn)
-
-    unset_result(conn)
-    res <- BigQueryResult(
-      connection = conn,
-      statement = statement
-    )
-    set_result(conn, res)
-    res
+    BigQueryResult(conn, statement)
   })
 
 #' @rdname DBI
@@ -189,22 +173,15 @@ setMethod(
       write_disposition <- "WRITE_APPEND"
     } else {
       create_disposition <- "CREATE_IF_NEEDED"
-      if (overwrite) {
-        write_disposition <- "WRITE_TRUNCATE"
-      } else {
-        write_disposition <- "WRITE_EMPTY"
-      }
+      write_disposition <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
     }
+    tb <- bq_table(conn@project, conn@dataset, name)
 
-    data <- DBI::sqlRownamesToColumn(value, row.names = row.names)
-
-    job <- insert_upload_job(
-      conn@project, conn@dataset, name, data,
-      conn@billing,
+    bq_table_upload(tb, value,
       create_disposition = create_disposition,
-      write_disposition = write_disposition
+      write_disposition = write_disposition,
+      ...
     )
-    job <- wait_for(job, conn@quiet)
     invisible(TRUE)
   })
 
@@ -213,9 +190,9 @@ setMethod(
 #' @export
 setMethod(
   "dbReadTable", c("BigQueryConnection", "character"),
-  function(conn, name, ..., row.names = NA) {
-    data <- dbGetQuery(conn, paste0("SELECT * FROM ", dbQuoteIdentifier(conn, name)))
-    DBI::sqlColumnToRownames(data, row.names = row.names)
+  function(conn, name, ...) {
+    tb <- bq_table(conn@project, conn@dataset, name)
+    bq_table_download(tb, ...)
   })
 
 #' @rdname DBI
@@ -224,8 +201,10 @@ setMethod(
 setMethod(
   "dbListTables", "BigQueryConnection",
   function(conn, ...) {
-    assert_connection_valid(conn)
-    list_tables(conn@project, conn@dataset)
+    ds <- bq_dataset(conn@project, conn@dataset)
+
+    tbs <- bq_dataset_tables(ds, ...)
+    map_chr(tbs, function(x) x$table)
   })
 
 #' @rdname DBI
@@ -234,8 +213,8 @@ setMethod(
 setMethod(
   "dbExistsTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    assert_connection_valid(conn)
-    exists_table(conn@project, conn@dataset, name)
+    tb <- bq_table(conn@project, conn@dataset, name)
+    bq_table_exists(tb)
   })
 
 #' @rdname DBI
@@ -244,7 +223,8 @@ setMethod(
 setMethod(
   "dbListFields", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    testthat::skip("Not yet implemented: dbListFields(Connection, character)")
+    tb <- bq_table(conn@project, conn@dataset, name)
+    bq_table_fields(tb)
   })
 
 #' @rdname DBI
@@ -253,8 +233,8 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    assert_connection_valid(conn)
-    delete_table(conn@project, conn@dataset, name)
+    tb <- bq_table(conn@project, conn@dataset, name)
+    bq_table_delete(tb)
     invisible(TRUE)
   })
 
@@ -264,10 +244,9 @@ setMethod(
 setMethod(
   "dbGetInfo", "BigQueryConnection",
   function(dbObj, ...) {
-    assert_connection_valid(dbObj)
     list(
       db.version = NA,
-      dbname = format_dataset(dbObj@project, dbObj@dataset),
+      dbname = paste0(dbObj@project, ".", dbObj@dataset),
       username = NA,
       host = NA,
       port = NA
@@ -300,20 +279,3 @@ setMethod(
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbRollback(Connection)")
   })
-
-unset_result <- function(conn) {
-  if (!is.null(conn@.envir$active_result)) {
-    warning("Closing active result set.", call. = FALSE)
-    dbClearResult(conn@.envir$active_result)
-  }
-}
-
-set_result <- function(conn, res) {
-  conn@.envir$active_result <- res
-}
-
-assert_connection_valid <- function(conn) {
-  if (!dbIsValid(conn)) {
-    stop("Connection has been already closed.", call. = FALSE)
-  }
-}

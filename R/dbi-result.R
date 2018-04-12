@@ -1,31 +1,24 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(connection, statement) {
+BigQueryResult <- function(conn, statement) {
+  ds <- bq_dataset(conn@project, conn@dataset)
+  dest <- bq_dataset_query(ds,
+    query = statement,
+    use_legacy_sql = conn@use_legacy_sql,
+    quiet = conn@quiet,
+  )
+  nrow <- bq_table_nrow(dest)
+
   res <- new(
     "BigQueryResult",
-    connection = connection,
+    bq_table = dest,
     statement = statement,
-    .envir = new.env(parent = emptyenv())
+    nrow = nrow,
+    page_size = conn@page_size,
+    quiet = conn@quiet,
+    cursor = cursor(nrow)
   )
-
-  res@.envir$open <- TRUE
-
-  dest <- run_query_job(
-    query = statement,
-    project = connection@billing,
-    destination_table = NULL,
-    default_dataset = format_dataset(connection@project, connection@dataset),
-    use_legacy_sql = connection@use_legacy_sql,
-    quiet = connection@quiet
-  )
-
-  res@.envir$iter <- list_tabledata_iter(
-    project = dest$projectId,
-    dataset = dest$datasetId,
-    table = dest$tableId
-  )
-
   res
 }
 
@@ -35,9 +28,12 @@ setClass(
   "BigQueryResult",
   contains = "DBIResult",
   slots = list(
-    connection = "BigQueryConnection",
+    bq_table = "bq_table",
     statement = "character",
-    .envir = "environment"
+    nrow = "numeric",
+    page_size = "numeric",
+    quiet = "logical",
+    cursor = "list"
   )
 )
 
@@ -47,11 +43,12 @@ setClass(
 setMethod(
   "show", "BigQueryResult",
   function(object) {
-    cat("<BigQueryResult>\n",
-        "  Query: ", dbGetStatement(object), "\n",
-        "  Has completed: ", dbHasCompleted(object), "\n",
-        "  Rows fetched: ", dbGetRowCount(object), "\n",
-        sep = "")
+    cat_line(
+      "<BigQueryResult>\n",
+      "  Query: ", dbGetStatement(object), "\n",
+      "  Has completed: ", dbHasCompleted(object), "\n",
+      "  Rows fetched: ", dbGetRowCount(object)
+    )
   })
 
 #' @rdname DBI
@@ -59,9 +56,8 @@ setMethod(
 #' @export
 setMethod(
   "dbIsValid", "BigQueryResult",
-  function(dbObj, ...) {
-    dbObj@.envir$open
-  })
+  function(dbObj, ...) TRUE
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbClearResult
@@ -69,32 +65,31 @@ setMethod(
 setMethod(
   "dbClearResult", "BigQueryResult",
   function(res, ...) {
-    if (!dbIsValid(res)) {
-      warning("Result already closed.", call. = FALSE)
-    }
-
-    res@.envir$open <- FALSE
-    set_result(res@connection, NULL)
-
     invisible(TRUE)
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbFetch
 #' @export
 setMethod(
   "dbFetch", "BigQueryResult",
-  function(res, n = -1, ..., row.names = FALSE) {
-    assert_result_valid(res)
-
+  function(res, n = -1, ...) {
     stopifnot(length(n) == 1, is.numeric(n))
     stopifnot(n == round(n), !is.na(n), n >= -1)
 
-    if (n == -1) n <- Inf
+    if (n == -1 || n == Inf) {
+      n <- res@cursor$left()
+    }
 
-    data <- res@.envir$iter$next_paged(n, page_size = res@connection@page_size)
+    data <- bq_table_download(res@bq_table,
+      max_results = n,
+      start_index = res@cursor$cur(),
+      page_size = res@page_size
+    )
+    res@cursor$adv(n)
 
-    DBI::sqlColumnToRownames(data, row.names = row.names)
+    data
   })
 
 #' @rdname DBI
@@ -103,9 +98,7 @@ setMethod(
 setMethod(
   "dbHasCompleted", "BigQueryResult",
   function(res, ...) {
-    assert_result_valid(res)
-
-    res@.envir$iter$is_complete()
+    res@cursor$left() == 0
   })
 
 #' @rdname DBI
@@ -114,7 +107,6 @@ setMethod(
 setMethod(
   "dbGetStatement", "BigQueryResult",
   function(res, ...) {
-    assert_result_valid(res)
     res@statement
   })
 
@@ -124,11 +116,11 @@ setMethod(
 setMethod(
   "dbColumnInfo", "BigQueryResult",
   function(res, ...) {
-    schema <- res@.envir$iter$get_schema()
+    fields <- bq_table_fields(res@bq_table)
 
     data.frame(
-      name = vapply(schema$fields, function(x) x$name, character(1)),
-      type = vapply(schema$fields, function(x) x$type, character(1)),
+      name = vapply(fields, function(x) x$name, character(1)),
+      type = vapply(fields, function(x) x$type, character(1)),
       stringsAsFactors = FALSE
     )
   })
@@ -139,8 +131,7 @@ setMethod(
 setMethod(
   "dbGetRowCount", "BigQueryResult",
   function(res, ...) {
-    assert_result_valid(res)
-    res@.envir$iter$get_rows_fetched()
+    res@cursor$cur()
   })
 
 #' @rdname DBI
@@ -149,7 +140,6 @@ setMethod(
 setMethod(
   "dbGetRowsAffected", "BigQueryResult",
   function(res, ...) {
-    assert_result_valid(res)
     0L
   })
 
@@ -162,8 +152,16 @@ setMethod(
     testthat::skip("Not yet implemented: dbBind(Result)")
   })
 
-assert_result_valid <- function(res) {
-  if (!dbIsValid(res)) {
-    stop("Result has been already cleared.", call. = FALSE)
-  }
+
+
+cursor <- function(nrow) {
+  pos <- 0
+
+  list(
+    cur = function() pos,
+    adv = function(i) {
+      pos <<- pos + i
+    },
+    left = function() nrow - pos
+  )
 }

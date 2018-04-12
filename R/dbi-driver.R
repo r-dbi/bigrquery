@@ -2,6 +2,7 @@
 #'
 #' Implementations of pure virtual functions defined in the `DBI` package.
 #' @name DBI
+#' @keywords internal
 NULL
 
 #' BigQuery DBI driver
@@ -9,10 +10,38 @@ NULL
 #' Creates a BigQuery DBI driver for use in [DBI::dbConnect()].
 #'
 #' @export
+#' @usage NULL
 #' @import methods DBI
 #' @examples
-#' \dontrun{
-#' DBI::dbConnect(bigquery(), dataset = "mydb", project = "myproject")
+#' if (bq_testable()) {
+#' con <- DBI::dbConnect(
+#'   bigquery(),
+#'   project = "publicdata",
+#'   dataset = "samples",
+#'   billing = bq_test_project()
+#' )
+#' con
+#' DBI::dbListTables(con)
+#' DBI::dbReadTable(con, "natality", max_results =10)
+#'
+#' # Create a temporary dataset to explore
+#' ds <- bq_test_dataset()
+#' con <- DBI::dbConnect(
+#'   bigquery(),
+#'   project = ds$project,
+#'   dataset = ds$dataset
+#' )
+#' DBI::dbWriteTable(con, "mtcars", mtcars)
+#' DBI::dbReadTable(con, "mtcars")[1:6, ]
+#'
+#' DBI::dbGetQuery(con, "SELECT count(*) FROM mtcars")
+#'
+#' res <- DBI::dbSendQuery(con, "SELECT cyl, mpg FROM mtcars")
+#' dbColumnInfo(res)
+#' dbFetch(res, 10)
+#' dbFetch(res, -1)
+#' DBI::dbHasCompleted(res)
+#'
 #' }
 dbi_driver <- function() {
   new("BigQueryDriver")
@@ -35,19 +64,20 @@ setMethod(
     cat("<BigQueryDriver>\n")
   })
 
-#' @rdname DBI
+#' @rdname dbi_driver
 #' @inheritParams DBI::dbConnect
 #' @param project,dataset Project and dataset identifiers
 #' @inheritParams bq_perform_query
 #' @inheritParams bq_projects
 #' @inheritParams api-job
+#' @param ... Other arguments for compatbility with generic; currently ignored.
 #' @export
 setMethod(
   "dbConnect", "BigQueryDriver",
   function(drv, project, dataset, billing = project,
            page_size = 1e4,
            quiet = NA,
-           use_legacy_sql = TRUE,
+           use_legacy_sql = FALSE,
            ...) {
     BigQueryConnection(
       project = project,

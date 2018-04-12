@@ -42,7 +42,7 @@ bq_table_download <- function(x, max_results = Inf, page_size = 1e4, start_index
     pages[[i]] <- bq_table_download_page(x,
       fields = fields,
       start_index = start,
-      max_results = min(page_size, max_results - start)
+      max_results = min(page_size, max_results - (start - start_index))
     )
 
     start <- start + page_size

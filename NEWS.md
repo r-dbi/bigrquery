@@ -43,6 +43,11 @@ The old API has been soft-deprecated - it will continue to work, but no further 
 
 ## Other bug fixes and improvements
 
+* The DBI interface has been updated to use the new low-level API.
+  This means that it defaults to using modern SQL not legacy SQL.
+  Use `use_legacy_sql = TRUE` in `DBI::dbConnect()` if you need to use
+  legacy SQL (#55).
+
 * `query_exec()` fixed error caused by progress bar for queries with empty result 
    (@byapparov, #206)
 
