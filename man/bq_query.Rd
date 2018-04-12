@@ -28,6 +28,24 @@ if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{billing}{If you are query a dataset that you only have read access
 for, you'll also need to submit a \code{billing} project.}
+
+\item{...}{Arguments passed on to \code{bq_perform_query}
+\describe{
+  \item{create_disposition}{Specifies whether the job is allowed to create
+new tables.
+
+The following values are supported:
+\itemize{
+\item "CREATE_IF_NEEDED": If the table does not exist, BigQuery creates the
+table.
+\item "CREATE_NEVER": The table must already exist. If it does not, a
+'notFound' error is returned in the job result.
+}}
+  \item{priority}{Specifies a priority for the query. Possible values include
+"INTERACTIVE" and "BATCH". Batch queries do not start immediately,
+but are not rate-limited in the same way as interactive queries.}
+  \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
+}}
 }
 \value{
 A \link{bq_table}

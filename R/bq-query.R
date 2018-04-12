@@ -11,6 +11,7 @@
 #' @param ... Other parameters passed on to [bq_perform_query()].
 #' @inheritParams bq_perform_query
 #' @inheritParams api-job
+#' @inheritDotParams bq_perform_query -billing -query -default_dataset -destination_table
 #' @name bq_query
 #' @return A [bq_table]
 #' @examples
