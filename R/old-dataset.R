@@ -1,9 +1,7 @@
-
-# Old API -----------------------------------------------------------------
-
-#' Deprecated dataset API
+#' Dataset API [deprecated]
 #'
-#' See [api-dataset] for recommended API.
+#' Please use [api-dataset] instead.
+#'
 #' @keywords internal
 #' @name dataset-dep
 NULL

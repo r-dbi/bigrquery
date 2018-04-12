@@ -1,4 +1,6 @@
-#' Retrieve data from a table.
+#' Retrieve data from a table [deprecated]
+#'
+#' Please use [bq_table_download] instead.
 #'
 #' @param callback function called with single argument, the data from the
 #'   current page of data

@@ -2,7 +2,7 @@
 % Please edit documentation in R/old-job-upload.R
 \name{insert_upload_job}
 \alias{insert_upload_job}
-\title{Upload data.}
+\title{Create a new upload job \link{deprecated}}
 \usage{
 insert_upload_job(project, dataset, table, values, billing = project,
   create_disposition = "CREATE_IF_NEEDED",
@@ -33,8 +33,7 @@ for more information}
 snake_case names are automatically converted to camelCase.}
 }
 \description{
-This sends all of the data inline in the HTTP request so is only suitable
-for relatively small datasets.
+Please use \link{api-job} instead.
 }
 \examples{
 \dontrun{
@@ -54,3 +53,4 @@ Other jobs: \code{\link{get_job}},
   \code{\link{insert_extract_job}},
   \code{\link{insert_query_job}}, \code{\link{wait_for}}
 }
+\keyword{internal}

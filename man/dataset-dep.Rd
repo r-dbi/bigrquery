@@ -8,7 +8,7 @@
 \alias{insert_dataset}
 \alias{update_dataset}
 \alias{list_tables}
-\title{Deprecated dataset API}
+\title{Dataset API \link{deprecated}}
 \usage{
 get_dataset(project, dataset)
 
@@ -23,6 +23,6 @@ update_dataset(project, dataset, ...)
 list_tables(project, dataset, page_size = 50, max_pages = Inf)
 }
 \description{
-See \link{api-dataset} for recommended API.
+Please use \link{api-dataset} instead.
 }
 \keyword{internal}

@@ -1,9 +1,6 @@
-#' Run a asynchronous query and retrieve results.
+#' Run a asynchronous query and retrieve results [deprecated]
 #'
-#' This is a high-level function that inserts a query job
-#' (with [insert_query_job()]), repeatedly checks the status (with
-#' [get_job()]) until it is complete, then retrieves the results
-#' (with [list_tabledata()])
+#' Please use [bq_project_query()] instead.
 #'
 #' @inheritParams insert_query_job
 #' @inheritParams bq_dataset_tables

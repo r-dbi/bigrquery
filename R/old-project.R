@@ -1,6 +1,9 @@
-#' @rdname project-API
+#' List datasets [deprecated]
+#'
+#' Please use [api-project] instead.
+#'
+#' @keywords internal
 #' @export
-#' @usage NULL
 list_datasets <- function(project, page_size = 50, max_pages = Inf) {
   assert_that(is.string(project))
 

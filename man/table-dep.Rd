@@ -6,7 +6,7 @@
 \alias{get_table}
 \alias{exists_table}
 \alias{delete_table}
-\title{Deprecated table API}
+\title{Table API \link{deprecated}}
 \usage{
 insert_table(project, dataset, table, ...)
 

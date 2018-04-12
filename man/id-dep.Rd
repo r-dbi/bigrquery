@@ -6,7 +6,7 @@
 \alias{format_dataset}
 \alias{parse_table}
 \alias{format_table}
-\title{Deprecated table/dataset objects}
+\title{Table/dataset objects \link{deprecated}}
 \usage{
 parse_dataset(dataset, project_id = NULL)
 
@@ -17,6 +17,6 @@ parse_table(table, project_id = NULL)
 format_table(project_id, dataset, table)
 }
 \description{
-Please see \link{bq_table} and \link{bq_dataset} instead.
+Please use \link{bq_table} and \link{bq_dataset} instead.
 }
 \keyword{internal}

@@ -4,6 +4,8 @@
 
 Complete overhaul of the low-level API to make it easier to use. (The primary motivation is to make the package more enjoyable for me to maintain but it should also be helpful if you need to do anything unsupported by the higher-level DBI and dplyr backends). Changes to the code have been paired with improved documentation and greater unit test coverage.
 
+The old API has been soft-deprecated - it will continue to work, but no further development will occur. It will be formally deprecated in the next version, and then removed in the version after that.
+
 * Consistent naming scheme:
   All API functions now have the form `bq_object_verb()`, e.g. 
   `bq_table_create()`, or `bq_dataset_delete()`. The old API will continue to

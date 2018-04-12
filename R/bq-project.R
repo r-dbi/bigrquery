@@ -14,7 +14,7 @@
 #' * `bq_project_datasets()`: a list of [bq_dataset]s
 #' * `bq_project_jobs()`: a list of [bq_job]s.
 #'
-#' @name project-API
+#' @name api-project
 #' @examples
 #' if (bq_authable()) {
 #' bq_project_datasets("bigquery-public-data")
@@ -27,7 +27,7 @@
 NULL
 
 #' @export
-#' @rdname project-API
+#' @rdname api-project
 #' @param x A string giving a project name.
 #' @inheritParams bq_projects
 bq_project_datasets <- function(x, page_size = 100, max_pages = 1, warn = TRUE) {
@@ -49,7 +49,7 @@ bq_project_datasets <- function(x, page_size = 100, max_pages = 1, warn = TRUE) 
 }
 
 #' @export
-#' @rdname project-API
+#' @rdname api-project
 bq_project_jobs <- function(x, page_size = 100, max_pages = 1, warn = TRUE) {
   assert_that(is.string(x))
 

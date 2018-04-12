@@ -4,7 +4,7 @@
 \alias{list_tabledata}
 \alias{list_tabledata_callback}
 \alias{list_tabledata_iter}
-\title{Retrieve data from a table.}
+\title{Retrieve data from a table \link{deprecated}}
 \usage{
 list_tabledata(project, dataset, table, page_size = 10000,
   table_info = NULL, max_pages = 10, warn = TRUE,
@@ -47,7 +47,7 @@ current page of data}
 }
 }
 \description{
-Retrieve data from a table.
+Please use \link{bq_table_download} instead.
 
 \code{list_tabledata_callback} calls the supplied callback with each page
 of data.

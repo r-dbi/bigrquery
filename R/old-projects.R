@@ -1,6 +1,9 @@
+#' List projects [deprecated]
+#'
+#' Please use [bq_projects()] instead.
+#'
+#' @keywords internal
 #' @export
-#' @rdname bq_projects
-#' @usage NULL
 list_projects <- function() {
   bq_projects()
 }

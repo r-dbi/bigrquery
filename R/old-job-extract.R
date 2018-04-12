@@ -1,8 +1,8 @@
-#' Create a new extract job.
+#' Create a new extract job [deprecated]
 #'
-#' This is a low-level function that creates an extract job. To wait until
-#' it is finished, see \code{\link{wait_for}}.
+#' Please use [api-job] instead.
 #'
+#' @keywords internal
 #' @inheritParams insert_upload_job
 #' @param destination_uris Fully qualified google storage url. For large
 #'    extracts you may need to specify a wild-card since

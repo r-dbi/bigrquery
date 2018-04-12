@@ -1,7 +1,6 @@
-#' Upload data.
+#' Create a new upload job [deprecated]
 #'
-#' This sends all of the data inline in the HTTP request so is only suitable
-#' for relatively small datasets.
+#' Please use [api-job] instead.
 #'
 #' @inheritParams get_table
 #' @param project,dataset Project and dataset identifiers
@@ -23,6 +22,7 @@
 #' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 #' @family jobs
 #' @export
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' list_datasets(bq_test_project)

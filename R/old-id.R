@@ -1,6 +1,6 @@
-#' Deprecated table/dataset objects
+#' Table/dataset objects [deprecated]
 #'
-#' Please see [bq_table] and [bq_dataset] instead.
+#' Please use [bq_table] and [bq_dataset] instead.
 #'
 #' @keywords internal
 #' @name id-dep

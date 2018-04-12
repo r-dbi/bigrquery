@@ -1,4 +1,4 @@
-#' Deprecated table API
+#' Table API [deprecated]
 #'
 #' See [api-table] for recommended API.
 #' @keywords internal

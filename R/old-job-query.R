@@ -1,8 +1,8 @@
-#' Create a new query job.
+#' Create a new query job [deprecated]
 #'
-#' This is a low-level function that creates a query job. To wait until it is
-#' finished and then retrieve the results, see [query_exec()]
+#' Please use [api-job] instead.
 #'
+#' @keywords internal
 #' @inheritParams insert_dataset
 #' @param query SQL query string
 #' @param destination_table (optional) destination table for large queries,

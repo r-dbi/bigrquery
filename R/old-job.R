@@ -1,5 +1,7 @@
 
-#' Check status of a job.
+#' Check status of a job [deprecated]
+#'
+#' Please use [api-job] instead
 #'
 #' @param project project name
 #' @param job job id
@@ -17,7 +19,9 @@ get_job <- function(project, job) {
 }
 
 
-#' Wait for a job to complete, optionally printing updates
+#' Wait for a job to complete [deprecated]
+#'
+#' Please use [api-job] instead
 #'
 #' @param job job to wait for. Probably result of [insert_query_job()]
 #'   or [insert_upload_job()]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/old-query.R
 \name{query_exec}
 \alias{query_exec}
-\title{Run a asynchronous query and retrieve results.}
+\title{Run a asynchronous query and retrieve results \link{deprecated}}
 \usage{
 query_exec(query, project, destination_table = NULL, default_dataset = NULL,
   page_size = 10000, max_pages = 10, warn = TRUE,
@@ -46,10 +46,7 @@ for more information}
 snake_case names are automatically converted to camelCase.}
 }
 \description{
-This is a high-level function that inserts a query job
-(with \code{\link[=insert_query_job]{insert_query_job()}}), repeatedly checks the status (with
-\code{\link[=get_job]{get_job()}}) until it is complete, then retrieves the results
-(with \code{\link[=list_tabledata]{list_tabledata()}})
+Please use \code{\link[=bq_project_query]{bq_project_query()}} instead.
 }
 \examples{
 \dontrun{

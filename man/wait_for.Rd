@@ -2,7 +2,7 @@
 % Please edit documentation in R/old-job.R
 \name{wait_for}
 \alias{wait_for}
-\title{Wait for a job to complete, optionally printing updates}
+\title{Wait for a job to complete \link{deprecated}}
 \usage{
 wait_for(job, quiet = getOption("bigrquery.quiet"), pause = 0.5)
 }
@@ -17,7 +17,7 @@ jobs.}
 \item{pause}{amount of time to wait between status requests}
 }
 \description{
-Wait for a job to complete, optionally printing updates
+Please use \link{api-job} instead
 }
 \seealso{
 Other jobs: \code{\link{get_job}},
