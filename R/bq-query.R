@@ -10,7 +10,7 @@
 #'   for, you'll also need to submit a `billing` project.
 #' @inheritParams bq_perform_query
 #' @inheritParams api-job
-#' @inheritDotParams bq_perform_query -billing -query -default_dataset -destination_table
+#' @param ... Passed on to [bq_perform_query()]
 #' @name bq_query
 #' @return A [bq_table]
 #' @examples
