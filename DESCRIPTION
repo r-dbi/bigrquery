@@ -18,11 +18,11 @@ Imports:
     httr,
     jsonlite,
     methods,
-    progress,
     prettyunits,
+    progress,
     rapidjsonr,
-    readr,
-    Rcpp
+    Rcpp,
+    readr
 Suggests: 
     DBItest,
     dbplyr,
@@ -30,6 +30,9 @@ Suggests:
     hms,
     testthat,
     withr
+LinkingTo: 
+    rapidjsonr,
+    Rcpp
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
@@ -70,6 +73,3 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
-LinkingTo: 
-    Rcpp,
-    rapidjsonr
