@@ -92,7 +92,7 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     signal_reason(err$reason, err$message)
   }
 
-  if (isTRUE(quiet) && is.na(quiet) && interactive()) {
+  if (isFALSE(quiet) || (is.na(quiet) && interactive())) {
     message("Complete")
     bq_job_show_statistics(x)
   }

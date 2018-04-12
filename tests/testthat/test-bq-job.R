@@ -5,5 +5,5 @@ test_that("can control chattiness of bq_job_wait", {
 
   expect_message(bq_job_wait(job, quiet = TRUE), NA)
   expect_message(bq_job_wait(job, quiet = FALSE), "Complete")
-  expect_message(bq_job_wait(job, quiet = NA), "Complete")
+  expect_message(bq_job_wait(job, quiet = NA), if (interactive()) "Complete" else NA)
 })

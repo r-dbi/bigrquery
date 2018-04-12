@@ -6,8 +6,8 @@ test_that("bq_perform_upload creates job that succeeds", {
 
   job <- bq_perform_upload(bq_mtcars, mtcars)
   expect_s3_class(job, "bq_job")
-  expect_message(bq_job_wait(job), "Input")
-  expect_message(bq_job_wait(job), "Output")
+  expect_message(bq_job_wait(job, quiet = FALSE), "Input")
+  expect_message(bq_job_wait(job, quiet = FALSE), "Output")
 
   expect_true(bq_table_exists(bq_mtcars))
 })
@@ -22,7 +22,7 @@ test_that("bq_perform_copy creates job that succeeds", {
   expect_s3_class(job, "bq_job")
 
   # Doesn't return any statistics to show
-  expect_message(bq_job_wait(job), "Complete")
+  expect_message(bq_job_wait(job, quiet = FALSE), "Complete")
 
   expect_true(bq_table_exists(dst))
 })
@@ -65,7 +65,7 @@ test_that("bq_perform_query creates job that succeeds", {
   )
 
   expect_s3_class(job, "bq_job")
-  expect_message(bq_job_wait(job), "Billed")
+  expect_message(bq_job_wait(job, quiet = FALSE), "Billed")
 
   job_tb <- bq_job_table(job)
   expect_true(bq_table_exists(job_tb))

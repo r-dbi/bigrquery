@@ -2,13 +2,13 @@ context("dplyr.R")
 
 test_that("can work with literal SQL", {
   con_us <- DBI::dbConnect(
-    dbi_driver(),
+    bigquery(),
     project = "bigquery-public-data",
     dataset = "utility_us",
     billing = bq_test_project()
   )
 
-  x <- dplyr::tbl(con_us, sql("SELECT * FROM country_code_iso"))
+  x <- dplyr::tbl(con_us, dplyr::sql("SELECT * FROM country_code_iso"))
   expect_true("fips_code" %in% dbplyr::op_vars(x))
 })
 
