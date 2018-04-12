@@ -1,5 +1,17 @@
 context("dplyr.R")
 
+test_that("can work with literal SQL", {
+  con_us <- DBI::dbConnect(
+    dbi_driver(),
+    project = "bigquery-public-data",
+    dataset = "utility_us",
+    billing = bq_test_project()
+  )
+
+  x <- tbl(con_us, sql("SELECT * FROM country_code_iso"))
+  expect_true("fips_code" %in% dbplyr::op_vars(x))
+})
+
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")
 

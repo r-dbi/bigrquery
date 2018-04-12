@@ -60,8 +60,15 @@ tbl.src_bigquery <- function(src, from, ...) {
 
 # registered onLoad
 db_query_fields.BigQueryConnection <- function(con, sql) {
-  info <- get_table(con@project, con@dataset, sql)
-  vapply(info$schema$fields, "[[", "name", FUN.VALUE = character(1))
+  if (dbplyr::is.sql(sql)) {
+    ds <- bq_dataset(con@project, con@dataset)
+    fields <- bq_query_fields(sql, con@billing, default_dataset = ds)
+  } else {
+    tb <- bq_table(con@project, con@dataset, sql)
+    fields <- bq_table_fields(tb)
+  }
+
+  vapply(fields, "[[", "name", FUN.VALUE = character(1))
 }
 
 # SQL translation -------------------------------------------------------------
