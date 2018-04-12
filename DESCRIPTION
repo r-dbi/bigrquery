@@ -41,6 +41,7 @@ Collate:
     'bq-download.R'
     'bq-field.R'
     'bq-job.R'
+    'bq-param.R'
     'bq-perform.R'
     'bq-project.R'
     'bq-projects.R'

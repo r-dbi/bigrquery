@@ -41,6 +41,10 @@ table.
 \item "CREATE_NEVER": The table must already exist. If it does not, a
 'notFound' error is returned in the job result.
 }}
+  \item{parameters}{Named list of parameters match to query paramters.
+Parameter \code{x} will be matched to placeholder \code{@x}. See
+\url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+for more details.}
   \item{priority}{Specifies a priority for the query. Possible values include
 "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 but are not rate-limited in the same way as interactive queries.}
@@ -69,8 +73,15 @@ bq_table_download(tb)
 # Querying a dataset sets default dataset so you can use bare table name,
 # but for public data, you'll need to set a project to bill.
 ds <- bq_dataset("publicdata", "samples")
-tb <- bq_dataset_query(
-  ds, "SELECT count(*) FROM natality",
+tb <- bq_dataset_query(ds,
+  query = "SELECT count(*) FROM natality",
+  billing = bq_test_project()
+)
+bq_table_download(tb)
+
+tb <- bq_dataset_query(ds,
+  query = "SELECT count(*) FROM natality WHERE state = @state",
+  parameters = list(state = "KS"),
   billing = bq_test_project()
 )
 bq_table_download(tb)

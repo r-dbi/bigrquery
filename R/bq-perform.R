@@ -155,6 +155,10 @@ bq_perform_upload <- function(x, values,
 #' @export
 #' @rdname api-perform
 #' @param query SQL query string.
+#' @param parameters Named list of parameters match to query paramters.
+#'   Parameter `x` will be matched to placeholder `@x`. See
+#'   <https://cloud.google.com/bigquery/docs/parameterized-queries>
+#'   for more details.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
 #'   in a special dataset. You must supply this parameter for large
@@ -166,6 +170,7 @@ bq_perform_upload <- function(x, values,
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
 bq_perform_query <- function(query, billing,
                              ...,
+                             parameters = NULL,
                              destination_table = NULL,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
@@ -180,6 +185,11 @@ bq_perform_query <- function(query, billing,
     useLegacySql = unbox(use_legacy_sql),
     priority = unbox(priority)
   )
+
+  if (!is.null(parameters)) {
+    parameters <- as_bq_params(parameters)
+    query$queryParameters <- as_json(parameters)
+  }
 
   if (!is.null(destination_table)) {
     query$destinationTable <- tableReference(destination_table)

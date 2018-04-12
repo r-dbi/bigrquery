@@ -17,8 +17,9 @@ bq_perform_extract(x, destination_uris,
 bq_perform_upload(x, values, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_APPEND", ..., billing = x$project)
 
-bq_perform_query(query, billing, ..., destination_table = NULL,
-  default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
+bq_perform_query(query, billing, ..., parameters = NULL,
+  destination_table = NULL, default_dataset = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", use_legacy_sql = FALSE,
   priority = "INTERACTIVE")
 
@@ -63,6 +64,11 @@ table.
 }}
 
 \item{query}{SQL query string.}
+
+\item{parameters}{Named list of parameters match to query paramters.
+Parameter \code{x} will be matched to placeholder \code{@x}. See
+\url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+for more details.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.
 If not supplied, results will be saved to a temporary table that lives

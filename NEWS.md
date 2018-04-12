@@ -31,6 +31,14 @@ The old API has been soft-deprecated - it will continue to work, but no further 
 * The new API uses standard SQL. To use `legacy_sql` set `use_legacy_sql = TRUE`
   in the query functions.
 
+### New feautres
+
+* `bq_table_create()` can now specify `fields`. (#204)
+
+* `bq_project_query()` and `bq_dataset_query()` can now supply query parameters
+  (#191).
+
+
 ## Other bug fixes and improvements
 
 * `query_exec()` fixed error caused by progress bar for queries with empty result 

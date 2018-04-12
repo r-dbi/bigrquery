@@ -33,6 +33,11 @@ bq_job_meta <- function(x, fields = NULL) {
   )
 }
 
+bq_job_table <- function(x) {
+  meta <- bq_job_meta(x, "configuration(query(destinationTable))")
+  as_bq_table(meta$configuration$query$destinationTable)
+}
+
 #' @export
 #' @name api-job
 bq_job_status <- function(x) {
