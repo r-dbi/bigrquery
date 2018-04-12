@@ -19,7 +19,8 @@ bq_perform_upload(x, values, create_disposition = "CREATE_IF_NEEDED",
 
 bq_perform_query(query, billing, ..., destination_table = NULL,
   default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = FALSE)
+  write_disposition = "WRITE_EMPTY", use_legacy_sql = FALSE,
+  priority = "INTERACTIVE")
 
 bq_perform_copy(src, dest, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", ..., billing = NULL)
@@ -71,6 +72,10 @@ queries (> 128 MB compressed).}
 \item{default_dataset}{A \link{bq_dataset} used to automatically qualify table names.}
 
 \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
+
+\item{priority}{Specifies a priority for the query. Possible values include
+"INTERACTIVE" and "BATCH". Batch queries do not start immediately,
+but are not rate-limited in the same way as interactive queries.}
 
 \item{write_dispoition}{Specifies the action that occurs if the
 destination table already exists. The following values are supported:

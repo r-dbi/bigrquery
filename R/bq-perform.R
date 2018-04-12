@@ -159,6 +159,9 @@ bq_perform_upload <- function(x, values,
 #'   If not supplied, results will be saved to a temporary table that lives
 #'   in a special dataset. You must supply this parameter for large
 #'   queries (> 128 MB compressed).
+#' @param priority Specifies a priority for the query. Possible values include
+#'   "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
+#'   but are not rate-limited in the same way as interactive queries.
 #' @param default_dataset A [bq_dataset] used to automatically qualify table names.
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
 bq_perform_query <- function(query, billing,
@@ -167,13 +170,15 @@ bq_perform_query <- function(query, billing,
                              default_dataset = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
-                             use_legacy_sql = FALSE
+                             use_legacy_sql = FALSE,
+                             priority = "INTERACTIVE"
                              ) {
   assert_that(is.string(query), is.string(billing))
 
   query <- list(
     query = unbox(query),
-    useLegacySql = unbox(use_legacy_sql)
+    useLegacySql = unbox(use_legacy_sql),
+    priority = unbox(priority)
   )
 
   if (!is.null(destination_table)) {
