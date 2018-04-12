@@ -11,5 +11,6 @@
 #'
 #' @import assertthat
 #' @importFrom jsonlite unbox
+#' @importFrom Rcpp sourceCpp
 #' @useDynLib bigrquery, .registration = TRUE
 "_PACKAGE"

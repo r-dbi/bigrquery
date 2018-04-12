@@ -20,7 +20,9 @@ Imports:
     methods,
     progress,
     prettyunits,
-    readr
+    rapidjsonr,
+    readr,
+    Rcpp
 Suggests: 
     DBItest,
     dbplyr,
@@ -32,6 +34,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Collate: 
+    'RcppExports.R'
     'auth.R'
     'bigrquery.R'
     'bq-dataset.R'
@@ -65,3 +68,6 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
+LinkingTo: 
+    Rcpp,
+    rapidjsonr

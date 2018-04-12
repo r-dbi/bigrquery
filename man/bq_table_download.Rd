@@ -10,17 +10,20 @@ bq_table_download(x, max_results = Inf, page_size = 10000,
 \arguments{
 \item{x}{A \link{bq_table}}
 
-\item{max_results}{Maximum nubmer of results to return}
+\item{max_results}{Maximum number of results to retrieve. Use \code{Inf}
+retrieve all rows.}
 
 \item{page_size}{The number of rows returned per page. Make this smaller
 if you have many fields or large records and you are seeing a
 "responseTooLarge" error.}
 
-\item{max_pages}{Maximum number of pages to retrieve. Use \code{Inf} retrieve all
-rows.}
+\item{start_index}{Starting row index (zero-based).}
 }
 \description{
-Download table data
+This retrieves rows in chunks of \code{page_size}. It is most suitable for results
+of smaller queries (<100 meg, say). For larger queries, it is better to
+export the results to a CSV file stored on google cloud and use the
+bq command line tool to download locally.
 }
 \section{API documentation}{
 

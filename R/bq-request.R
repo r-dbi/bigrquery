@@ -27,10 +27,10 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
 }
 
 bq_ua <- function() {
-  httr::user_agent(paste0(
+  paste0(
     "bigrquery/", utils::packageVersion("bigrquery"), " ",
     "httr/", utils::packageVersion("httr")
-  ))
+  )
 }
 
 bq_body <- function(body, ...) {
@@ -40,22 +40,22 @@ bq_body <- function(body, ...) {
 
 
 #' @importFrom httr GET config
-bq_get <- function(url, ..., query = NULL, token = get_access_cred()) {
+bq_get <- function(url, ..., query = NULL, raw = FALSE, token = get_access_cred()) {
   req <- GET(
     paste0(base_url, url),
     config(token = token),
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
   )
-  process_request(req)
+  process_request(req, raw = raw)
 }
 
 bq_exists <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- GET(
     paste0(base_url, url),
     config(token = token),
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
   )
@@ -107,7 +107,7 @@ bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
   req <- DELETE(
     paste0(base_url, url),
     config(token = token),
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
   )
@@ -120,7 +120,7 @@ bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   req <- POST(
     paste0(base_url, url),
     body = json,
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     config(token = token),
     add_headers("Content-Type" = "application/json"),
     ...,
@@ -135,7 +135,7 @@ bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   req <- PUT(
     paste0(base_url, url),
     body = json,
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     config(token = token),
     add_headers("Content-Type" = "application/json"),
     ...,
@@ -151,7 +151,7 @@ bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()
     url,
     parts = parts,
     config(token = token),
-    bq_ua(),
+    httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
   )
@@ -160,12 +160,16 @@ bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()
 
 
 #' @importFrom httr http_status content parse_media status_code
-process_request <- function(req) {
+process_request <- function(req, process, raw = FALSE) {
   # No content -> success
   if (status_code(req) == 204) return(TRUE)
 
   if (status_code(req) >= 200 && status_code(req) < 300) {
-    return(content(req, "parsed", "application/json"))
+    if (raw) {
+      return(content(req, "raw"))
+    } else {
+      return(content(req, "parsed", "application/json"))
+    }
   }
 
   type <- parse_media(req$headers$`Content-type`)
