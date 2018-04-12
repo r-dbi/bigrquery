@@ -10,7 +10,7 @@ License: GPL-3 | file LICENSE
 URL: https://github.com/rstats-db/bigrquery
 BugReports: https://github.com/rstats-db/bigrquery/issues
 Depends: 
-    R (>= 3.1.0)
+    R (>= 3.1)
 Imports: 
     assertthat,
     DBI,
@@ -29,7 +29,8 @@ Suggests:
     dplyr (>= 0.7.0),
     hms,
     testthat,
-    withr
+    withr,
+    covr
 LinkingTo: 
     rapidjsonr,
     Rcpp
