@@ -144,6 +144,21 @@ bq_put <- function(url, body, ..., query = NULL, token = get_access_cred()) {
   process_request(req)
 }
 
+#' @importFrom httr PATCH add_headers config
+bq_patch <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+  json <- jsonlite::toJSON(body, pretty = TRUE)
+  req <- PATCH(
+    paste0(base_url, url),
+    body = json,
+    httr::user_agent(bq_ua()),
+    config(token = token),
+    add_headers("Content-Type" = "application/json"),
+    ...,
+    query = prepare_bq_query(query)
+  )
+  process_request(req)
+}
+
 #' @importFrom httr POST add_headers config
 bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()) {
   url <- paste0(upload_url, url)

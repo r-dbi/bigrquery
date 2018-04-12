@@ -1,7 +1,7 @@
 context("test-bq-dataset.R")
 
 test_that("can create and delete datasets", {
-  ds <- bq_dataset(bq_test_project(), "dataset_api")
+  ds <- bq_dataset(bq_test_project(), random_name())
   expect_false(bq_dataset_exists(ds))
 
   bq_dataset_create(ds)
@@ -9,6 +9,18 @@ test_that("can create and delete datasets", {
 
   bq_dataset_delete(ds)
   expect_false(bq_dataset_exists(ds))
+})
+
+test_that("can update dataset metadata", {
+  ds <- bq_dataset(bq_test_project(), random_name())
+  on.exit(bq_dataset_delete(ds))
+
+  bq_dataset_create(ds, description = "a", friendly_name = "b")
+  bq_dataset_update(ds, description = "b")
+
+  meta <- bq_dataset_meta(ds, "description,friendlyName")
+  expect_equal(meta$description, "b")
+  expect_equal(meta$friendlyName, "b")
 })
 
 test_that("by default can not delete dataset containing tables", {

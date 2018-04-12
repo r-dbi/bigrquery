@@ -72,7 +72,7 @@ bq_dataset_update <- function(x, ...) {
 
   url <- bq_path(x$project, x$dataset)
   body <- list(datasetReference = datasetReference(x))
-  bq_put(url, body = bq_body(body, ...))
+  bq_patch(url, body = bq_body(body, ...))
 
   invisible(x)
 }
