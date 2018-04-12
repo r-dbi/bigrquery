@@ -8,7 +8,6 @@
 #' @param x Either a project (a string) or a [bq_dataset].
 #' @param billing If you are query a dataset that you only have read access
 #'   for, you'll also need to submit a `billing` project.
-#' @param ... Other parameters passed on to [bq_perform_query()].
 #' @inheritParams bq_perform_query
 #' @inheritParams api-job
 #' @inheritDotParams bq_perform_query -billing -query -default_dataset -destination_table

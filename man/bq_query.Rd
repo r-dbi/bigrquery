@@ -21,7 +21,8 @@ If not supplied, results will be saved to a temporary table that lives
 in a special dataset. You must supply this parameter for large
 queries (> 128 MB compressed).}
 
-\item{...}{Other parameters passed on to \code{\link[=bq_perform_query]{bq_perform_query()}}.}
+\item{...}{Additional arguments passed on to the underlying API call.
+snake_case names are automatically converted to camelCase.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
