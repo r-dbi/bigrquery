@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// bq_field_init
+SEXP bq_field_init(std::string json, std::string value);
+RcppExport SEXP _bigrquery_bq_field_init(SEXP jsonSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type json(jsonSEXP);
+    Rcpp::traits::input_parameter< std::string >::type value(valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(bq_field_init(json, value));
+    return rcpp_result_gen;
+END_RCPP
+}
 // bq_tabledata_to_list
 Rcpp::List bq_tabledata_to_list(Rcpp::RawVector x);
 RcppExport SEXP _bigrquery_bq_tabledata_to_list(SEXP xSEXP) {
@@ -20,6 +32,7 @@ END_RCPP
 RcppExport SEXP null_to_na_(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_bigrquery_bq_field_init", (DL_FUNC) &_bigrquery_bq_field_init, 2},
     {"_bigrquery_bq_tabledata_to_list", (DL_FUNC) &_bigrquery_bq_tabledata_to_list, 1},
     {"null_to_na_",                     (DL_FUNC) &null_to_na_,                     1},
     {NULL, NULL, 0}

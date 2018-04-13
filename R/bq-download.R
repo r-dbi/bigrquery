@@ -115,8 +115,3 @@ bq_table_save_json <- function(x, path, max_results = 100) {
   json <- bq_get(url, query = query, raw = TRUE)
   writeBin(json, path)
 }
-
-bq_table_load_json <- function(path) {
-  json <- readBin(path, "raw", n = file.size(path))
-  bq_tabledata_to_list(json)
-}
