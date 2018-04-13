@@ -100,3 +100,23 @@ bq_parse_type <- function(type, x) {
     x
   )
 }
+
+# Helpers for testing -----------------------------------------------------
+
+bq_table_save_json <- function(x, path, max_results = 100) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
+  query <- list(
+    startIndex = 0,
+    maxResults = max_results
+  )
+
+  json <- bq_get(url, query = query, raw = TRUE)
+  writeBin(json, path)
+}
+
+bq_table_load_json <- function(path) {
+  json <- readBin(path, "raw", n = file.size(path))
+  bq_tabledata_to_list(json)
+}

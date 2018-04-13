@@ -30,9 +30,7 @@ Rcpp::List bq_tabledata_to_list(Rcpp::RawVector x) {
     for (int j = 0; j < p; ++j) {
       const rapidjson::Value& v = f[j]["v"];
 
-      if (v.IsNull()) {
-        SET_STRING_ELT(VECTOR_ELT(out, j), i, NA_STRING);
-      } else {
+      if (v.IsString()) {
         SEXP chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
         SET_STRING_ELT(VECTOR_ELT(out, j), i, chr);
       }
