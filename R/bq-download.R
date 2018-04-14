@@ -110,7 +110,7 @@ bq_parse_file <- function(fields, data) {
   bq_parse(fields, data)
 }
 
-bq_table_save_data <- function(x, path, max_results = 100) {
+bq_table_save_values <- function(x, path, max_results = 100) {
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
@@ -123,7 +123,7 @@ bq_table_save_data <- function(x, path, max_results = 100) {
   writeBin(json, path)
 }
 
-bq_table_save_fields <- function(x, path) {
+bq_table_save_schema <- function(x, path) {
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, x$dataset, x$table)

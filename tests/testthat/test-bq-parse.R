@@ -97,21 +97,44 @@ test_that("can parse arrays of structs", {
 
 # Complete files ----------------------------------------------------------
 
-test_that("can parse table of simple values", {
-  df <- data_frame(
-    x = 1:5,
-    y = letters[5:1],
-    z = as.Date("2018-01-01") + 0:4
+replay_query <- function(name, sql) {
+  schema_path <- test_path(glue::glue("parse-schema-{name}.json"))
+  values_path <- test_path(glue::glue("parse-values-{name}.json"))
+
+  if (!file.exists(schema_path)) {
+    tbl <- bq_project_query(bq_test_project(), sql)
+    bq_table_save_schema(tbl, schema_path)
+    bq_table_save_values(tbl, values_path)
+  }
+
+  out <- bq_parse_file(schema_path, values_path)
+  tibble::as_tibble(out)
+}
+
+test_that("can parse nested structures", {
+  df <- replay_query("struct", "SELECT STRUCT(1 AS a, 'abc' AS b) as x")
+  expect_named(df, "x")
+  expect_type(df$x, "list")
+  expect_equal(df$x[[1]], list(a = 1, b = "abc"))
+
+  df <- replay_query("array", "SELECT [1, 2, 3] as x")
+  expect_named(df, "x")
+  expect_type(df$x, "list")
+  expect_equal(df$x[[1]], 1:3)
+
+  df <- replay_query(
+    "array-struct",
+    "SELECT [STRUCT(1 as a, 'a' as b), STRUCT(2, 'b'), STRUCT(3, 'c')] as x"
   )
-  # ds <- bq_test_dataset()
-  # tb <- bq_table(ds, "simple")
-  # bq_table_upload(tb, df)
-  # bq_table_save_fields(tb, "tests/testthat/field-simple.json")
-  # bq_table_save_data(tb, "tests/testthat/data-simple.json")
+  expect_named(df, "x")
+  expect_type(df$x, "list")
+  expect_equal(df$x[[1]], data_frame(a = 1:3, b = c("a", "b", "c")))
 
-  out <- bq_parse_file(test_path("field-simple.json"), test_path("data-simple.json"))
-  out <- out[order(out$x), ]
-  rownames(out) <- NULL
-
-  expect_equal(out, df)
+  df <- replay_query(
+    "struct-array",
+    "SELECT STRUCT([1, 2, 3] as a, ['a', 'b'] as b) as x"
+  )
+  expect_named(df, "x")
+  expect_type(df$x, "list")
+  expect_equal(df$x[[1]], list(a = 1:3, b = c("a", "b")))
 })
