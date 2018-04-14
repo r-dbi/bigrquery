@@ -60,3 +60,7 @@ as_json.NULL <- function(x) NULL
 show_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
+
+data_frame <- function(...) {
+  data.frame(..., check.names = FALSE, stringsAsFactors = FALSE)
+}

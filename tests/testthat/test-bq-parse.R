@@ -64,3 +64,15 @@ test_that("can parse structs of arrays", {
   expect_equal(out, list(list(x = 1:3, y = c("a", "b"))))
 })
 
+
+test_that("can parse arrays of structs", {
+  fields <- list(
+    bq_field("x", "integer"),
+    bq_field("y", "string")
+  )
+
+  x <- vs(list(f = vs("1", "a")), list(f = vs("2", "b")))
+  out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
+
+  expect_equal(out, list(data_frame(x = 1:2, y = c("a", "b"))))
+})
