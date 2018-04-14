@@ -30,6 +30,21 @@ test_that("can parse date/times", {
   )
 })
 
+test_that("can parse NULLs", {
+  expect_identical(bq_parse_single(NULL, "string"), NA_character_)
+  expect_identical(bq_parse_single(NULL, "integer"), NA_integer_)
+  expect_identical(bq_parse_single(NULL, "float"), NA_real_)
+  expect_identical(bq_parse_single(NULL, "boolean"), NA)
+
+  expect_identical(bq_parse_single(NULL, "date"), as.Date(NA))
+
+  na_dtm <- structure(as.POSIXct(NA), tzone = "UTC")
+  expect_identical(bq_parse_single(NULL, "datetime"), na_dtm)
+  expect_identical(bq_parse_single(NULL, "timestamp"), na_dtm)
+  expect_identical(bq_parse_single(NULL, "time"), as.difftime(NA_real_, units = "secs"))
+})
+
+
 test_that("can parse arrays of simple values", {
   x <- vs("1", "2", "3")
 

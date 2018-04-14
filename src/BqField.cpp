@@ -123,42 +123,57 @@ public:
 
     switch(type_) {
     case BQ_INTEGER:
-      INTEGER(x)[i] = atoi(v.GetString());
+      INTEGER(x)[i] = v.IsString() ? atoi(v.GetString()) : NA_INTEGER;
       break;
     case BQ_FLOAT:
-      REAL(x)[i] = atof(v.GetString());
+      REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
       break;
-    case BQ_BOOLEAN: {
-      bool is_true = strncmp(v.GetString(), "T", 1) == 0;
-      INTEGER(x)[i] = is_true;
+    case BQ_BOOLEAN:
+      if (v.IsString()) {
+        bool is_true = strncmp(v.GetString(), "T", 1) == 0;
+        INTEGER(x)[i] = is_true;
+      } else {
+        INTEGER(x)[i] = NA_LOGICAL;
+      }
       break;
-    }
-    case BQ_STRING: {
-      SEXP chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
-      SET_STRING_ELT(x, i, chr);
+    case BQ_STRING:
+      if (v.IsString()) {
+        SEXP chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
+        SET_STRING_ELT(x, i, chr);
+      } else {
+        SET_STRING_ELT(x, i, NA_STRING);
+      }
       break;
-    }
     case BQ_TIMESTAMP:
-      REAL(x)[i] = atof(v.GetString());
+      REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
       break;
-    case BQ_TIME: {
-      struct tm tm;
-      strptime(v.GetString(), "%H:%M:%S", &tm);
+    case BQ_TIME:
+      if (v.IsString()) {
+        struct tm tm;
+        strptime(v.GetString(), "%H:%M:%S", &tm);
 
-      REAL(x)[i] = tm.tm_hour * 3600 + tm.tm_min * 60 + tm.tm_sec;
+        REAL(x)[i] = tm.tm_hour * 3600 + tm.tm_min * 60 + tm.tm_sec;
+      } else {
+        REAL(x)[i] = NA_REAL;
+      }
       break;
-    }
-    case BQ_DATE: {
-      Rcpp::Date date(v.GetString());
-      REAL(x)[i] = date.getDate();
+    case BQ_DATE:
+      if (v.IsString()) {
+        Rcpp::Date date(v.GetString());
+        REAL(x)[i] = date.getDate();
+      } else {
+        REAL(x)[i] = NA_REAL;
+      }
       break;
-    }
-    case BQ_DATETIME: {
-      struct tm tm;
-      strptime(v.GetString(), "%Y-%m-%d %H:%M:%S", &tm);
-      REAL(x)[i] = timegm(&tm);
+    case BQ_DATETIME:
+      if (v.IsString()) {
+        struct tm tm;
+        strptime(v.GetString(), "%Y-%m-%d %H:%M:%S", &tm);
+        REAL(x)[i] = timegm(&tm);
+      } else {
+        REAL(x)[i] = NA_REAL;
+      }
       break;
-    }
     case BQ_RECORD:
       SET_VECTOR_ELT(x, i, recordValue(v));
       break;
