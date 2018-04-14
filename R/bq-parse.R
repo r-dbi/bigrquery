@@ -6,7 +6,6 @@ bq_parse_single <- function(value, type, ...) {
   bq_field_init(field_j, value_j)
 }
 
-
 v <- function(x) list(v = x)
 vs <- function(...) lapply(list(...), v)
 f <- function(...) list(f = list(...))

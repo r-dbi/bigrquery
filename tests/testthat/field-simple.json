@@ -1,0 +1,21 @@
+{
+ "schema": {
+  "fields": [
+   {
+    "name": "x",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+   },
+   {
+    "name": "y",
+    "type": "STRING",
+    "mode": "NULLABLE"
+   },
+   {
+    "name": "z",
+    "type": "DATE",
+    "mode": "NULLABLE"
+   }
+  ]
+ }
+}

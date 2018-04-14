@@ -103,7 +103,14 @@ bq_parse_type <- function(type, x) {
 
 # Helpers for testing -----------------------------------------------------
 
-bq_table_save_json <- function(x, path, max_results = 100) {
+bq_parse_file <- function(fields, data) {
+  fields <- readr::read_file(fields)
+  data <- readr::read_file(data)
+
+  bq_parse(fields, data)
+}
+
+bq_table_save_data <- function(x, path, max_results = 100) {
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
@@ -111,6 +118,16 @@ bq_table_save_json <- function(x, path, max_results = 100) {
     startIndex = 0,
     maxResults = max_results
   )
+
+  json <- bq_get(url, query = query, raw = TRUE)
+  writeBin(json, path)
+}
+
+bq_table_save_fields <- function(x, path) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, x$dataset, x$table)
+  query <- list(fields = "schema")
 
   json <- bq_get(url, query = query, raw = TRUE)
   writeBin(json, path)

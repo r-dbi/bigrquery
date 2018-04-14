@@ -53,7 +53,14 @@ private:
   std::vector<BqField> fields_;
 
 public:
-  BqField(std::string name, BqType type) : name_(name), type_(type), array_(false) {
+  BqField(std::string name, BqType type, bool array = false) :
+      name_(name), type_(type), array_(array)
+  {
+  }
+
+  BqField(std::string name, std::vector<BqField> fields, bool array = false) :
+      name_(name), type_(BQ_RECORD), array_(array), fields_(fields)
+  {
   }
 
   BqField(const rapidjson::Value& field) {
@@ -70,6 +77,8 @@ public:
       }
     }
   }
+
+  std::string name() const { return name_; }
 
   SEXP vectorInit(int n, bool array) const {
     if (array) {
@@ -241,6 +250,54 @@ public:
   }
 
 };
+
+// [[Rcpp::export]]
+SEXP bq_parse(std::string meta_s, std::string data_s) {
+  rapidjson::Document meta_d;
+  meta_d.Parse(&meta_s[0]);
+
+  const rapidjson::Value& schema_fields = meta_d["schema"]["fields"];
+  int p = schema_fields.Size();
+
+  std::vector<BqField> fields;
+  for (int j = 0; j < p; ++j) {
+    fields.push_back(BqField(schema_fields[j]));
+  }
+  BqField row_record("", fields, true);
+
+  rapidjson::Document data_d;
+  data_d.Parse(&data_s[0]);
+
+  if (!data_d.HasMember("rows")) {
+    // No data, so need to make 0 zero row data frame
+    return Rcpp::List();
+  }
+
+  const rapidjson::Value& rows = data_d["rows"];
+  int n = rows.Size();
+
+  // Create output data frame
+  Rcpp::List out(p);
+  Rcpp::CharacterVector names(p);
+  for (int j = 0; j < p; ++j) {
+    out[j] = fields[j].vectorInit(n);
+    names[j] = fields[j].name();
+  }
+
+  // Fill in values
+  for (int i = 0; i < n; ++i) {
+    const rapidjson::Value& f = rows[i]["f"];
+    for (int j = 0; j < p; ++j) {
+      fields[j].vectorSet(out[j], i, f[j]["v"]);
+    }
+  }
+
+  out.attr("class") = "data.frame";
+  out.attr("names") = names;
+  out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
+
+  return out;
+}
 
 // [[Rcpp::export]]
 SEXP bq_field_init(std::string json, std::string value = "") {

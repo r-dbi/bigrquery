@@ -1,5 +1,7 @@
 context("test-bq-parse.R")
 
+# Individual values -------------------------------------------------------
+
 test_that("can parse atomic vectors", {
   expect_identical(bq_parse_single("x", "string"), "x")
   expect_identical(bq_parse_single("10", "integer"), 10L)
@@ -90,4 +92,26 @@ test_that("can parse arrays of structs", {
   out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
 
   expect_equal(out, list(data_frame(x = 1:2, y = c("a", "b"))))
+})
+
+
+# Complete files ----------------------------------------------------------
+
+test_that("can parse table of simple values", {
+  df <- data_frame(
+    x = 1:5,
+    y = letters[5:1],
+    z = as.Date("2018-01-01") + 0:4
+  )
+  # ds <- bq_test_dataset()
+  # tb <- bq_table(ds, "simple")
+  # bq_table_upload(tb, df)
+  # bq_table_save_fields(tb, "tests/testthat/field-simple.json")
+  # bq_table_save_data(tb, "tests/testthat/data-simple.json")
+
+  out <- bq_parse_file(test_path("field-simple.json"), test_path("data-simple.json"))
+  out <- out[order(out$x), ]
+  rownames(out) <- NULL
+
+  expect_equal(out, df)
 })
