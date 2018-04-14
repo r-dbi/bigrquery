@@ -29,3 +29,13 @@ test_that("can parse date/times", {
     as.difftime(6 * 3600, units = "secs")
   )
 })
+
+test_that("can parse arrays of simple values", {
+  x <- vs("1", "2", "3")
+
+  out1 <- bq_parse_single(x, "string", mode = "repeated")
+  expect_equal(out1, list(c("1", "2", "3")))
+
+  out2 <- bq_parse_single(x, "integer", mode = "repeated")
+  expect_equal(out2, list(1:3))
+})
