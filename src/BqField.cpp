@@ -4,7 +4,10 @@
 
 #include <ctime>
 #include <stdlib.h>
+
+#if defined(_WIN32) || defined(_WIN64)
 #define timegm _mkgmtime
+#endif
 
 enum BqType {
   BQ_INTEGER,
