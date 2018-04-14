@@ -170,19 +170,26 @@ public:
 
     Rcpp::List out(p);
     Rcpp::CharacterVector names(p);
+    out.attr("names") = names;
 
     const rapidjson::Value& f = v["f"];
     if (!f.IsArray())
       Rcpp::stop("Not array [2]");
 
-    int n = (array_) ? f.Size() : 1;
-
     if (!array_) {
       for (int j = 0; j < p; ++j) {
         const BqField& field = fields_[j];
+        const rapidjson::Value& vs = f[j]["v"];
 
-        SEXP col = field.vectorInit(1);
-        field.vectorSet(col, 0, f[j]["v"]);
+        int n = (field.array_) ? vs.Size() : 1;
+        SEXP col = field.vectorInit(n, false);
+        if (field.array_) {
+          for (int i = 0; i < n; ++i) {
+            field.vectorSet(col, i, vs[i]["v"], false);
+          }
+        } else {
+          field.vectorSet(col, 0, vs);
+        }
 
         out[j] = col;
         names[j] = field.name_;
@@ -205,11 +212,12 @@ public:
         out[j] = col;
         names[j] = field.name_;
       }
+
+      Rprintf("Here\n");
+      out.attr("class") = "data.frame";
+      out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
     }
 
-    out.attr("names") = names;
-    out.attr("class") = "data.frame";
-    out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
     return out;
   }
 

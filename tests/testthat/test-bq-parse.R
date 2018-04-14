@@ -39,3 +39,28 @@ test_that("can parse arrays of simple values", {
   out2 <- bq_parse_single(x, "integer", mode = "repeated")
   expect_equal(out2, list(1:3))
 })
+
+test_that("can parse structs of simple values", {
+  fields <- list(
+    bq_field("x", "integer"),
+    bq_field("y", "string")
+  )
+
+  x <- f(v("1"), v("a"))
+  out <- bq_parse_single(x, "record", field = fields)
+
+  expect_equal(out, list(list(x = 1L, y = "a")))
+})
+
+test_that("can parse structs of arrays", {
+  fields <- list(
+    bq_field("x", "integer", "repeated"),
+    bq_field("y", "string", "repeated")
+  )
+
+  x <- f(v(vs("1", "2", "3")), v(vs("a", "b")))
+  out <- bq_parse_single(x, "record", field = fields)
+
+  expect_equal(out, list(list(x = 1:3, y = c("a", "b"))))
+})
+
