@@ -49,13 +49,15 @@ bq_table_download <- function(x,
     quiet = quiet
   )
 
-  bq_parse_files(schema, pages, n = max_results)
+  bq_parse_files(schema, pages, n = max_results, quiet = bq_quiet(quiet))
 }
 
 bq_download_pages <- function(x, page_begin, page_end,
                               max_connections = 6L,
                               quiet = NA)
                               {
+
+  x <- as_bq_table(x)
   stopifnot(length(page_begin) == length(page_end))
   n_pages <- length(page_begin)
 

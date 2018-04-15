@@ -30,15 +30,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // bq_parse_files
-SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths, int n);
-RcppExport SEXP _bigrquery_bq_parse_files(SEXP schema_pathSEXP, SEXP file_pathsSEXP, SEXP nSEXP) {
+SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths, int n, bool quiet);
+RcppExport SEXP _bigrquery_bq_parse_files(SEXP schema_pathSEXP, SEXP file_pathsSEXP, SEXP nSEXP, SEXP quietSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type schema_path(schema_pathSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type file_paths(file_pathsSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(bq_parse_files(schema_path, file_paths, n));
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    rcpp_result_gen = Rcpp::wrap(bq_parse_files(schema_path, file_paths, n, quiet));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -59,7 +60,7 @@ RcppExport SEXP null_to_na_(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_bigrquery_bq_parse", (DL_FUNC) &_bigrquery_bq_parse, 2},
     {"_bigrquery_bq_field_init", (DL_FUNC) &_bigrquery_bq_field_init, 2},
-    {"_bigrquery_bq_parse_files", (DL_FUNC) &_bigrquery_bq_parse_files, 3},
+    {"_bigrquery_bq_parse_files", (DL_FUNC) &_bigrquery_bq_parse_files, 4},
     {"_bigrquery_bq_tabledata_to_list", (DL_FUNC) &_bigrquery_bq_tabledata_to_list, 1},
     {"null_to_na_",                     (DL_FUNC) &null_to_na_,                     1},
     {NULL, NULL, 0}

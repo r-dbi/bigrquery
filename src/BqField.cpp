@@ -342,7 +342,10 @@ SEXP bq_field_init(std::string json, std::string value = "") {
 }
 
 // [[Rcpp::export]]
-SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths, int n) {
+SEXP bq_parse_files(std::string schema_path,
+                    std::vector<std::string> file_paths,
+                    int n,
+                    bool quiet) {
 
   // Generate field specification
   rapidjson::Document schema_doc;
@@ -367,7 +370,8 @@ SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths
     values_doc.ParseStream(values_stream_w);
 
     offset += bq_fields_set(values_doc, out, fields, offset);
-    pb.tick();
+    if (!quiet)
+      pb.tick();
   }
 
   return out;
