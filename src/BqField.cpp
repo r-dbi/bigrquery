@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
+#include <RProgress.h>
 
 #include <ctime>
 #include <stdlib.h>
@@ -355,6 +356,9 @@ SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths
   std::vector<std::string>::const_iterator it = file_paths.begin(),
     it_end = file_paths.end();
 
+  RProgress::RProgress pb("Parsing [:bar] ETA: :eta");
+  pb.set_total(file_paths.size());
+
   int offset = 0;
   for ( ; it != it_end; ++it) {
     rapidjson::Document values_doc;
@@ -363,6 +367,7 @@ SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths
     values_doc.ParseStream(values_stream_w);
 
     offset += bq_fields_set(values_doc, out, fields, offset);
+    pb.tick();
   }
 
   return out;

@@ -33,6 +33,7 @@ Suggests:
     withr,
     covr
 LinkingTo: 
+    progress,
     rapidjsonr,
     Rcpp
 LazyData: true
