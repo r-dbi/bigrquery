@@ -9,6 +9,10 @@ bq_field_init <- function(json, value = "") {
     .Call(`_bigrquery_bq_field_init`, json, value)
 }
 
+bq_parse_files <- function(schema_path, file_paths, n) {
+    .Call(`_bigrquery_bq_parse_files`, schema_path, file_paths, n)
+}
+
 bq_tabledata_to_list <- function(x) {
     .Call(`_bigrquery_bq_tabledata_to_list`, x)
 }

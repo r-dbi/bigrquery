@@ -19,86 +19,82 @@
 #' if (bq_testable()) {
 #' df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
 #' }
-bq_table_download <- function(x, max_results = Inf, page_size = 1e4, start_index = 0L) {
+bq_table_download <- function(x,
+                              max_results = Inf,
+                              page_size = 1e4,
+                              start_index = 0L,
+                              max_connections = 6L,
+                              quiet = NA) {
   x <- as_bq_table(x)
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.numeric(max_results), length(max_results) == 1)
   assert_that(is.numeric(start_index), length(start_index) == 1)
 
   if (!is.finite(max_results)) {
-    max_results <- bq_table_size(x) - start_index
+    max_results <- bq_table_nrow(x) - start_index
   }
-  fields <- bq_table_fields(x)
+
+  schema_path <- tempfile()
+  bq_table_save_schema(x, schema_path)
 
   n_pages <- ceiling(max_results / page_size)
   if (n_pages == 0) {
-    return(bq_tabledata_to_data_frame(NULL, fields))
+    stop("Implement me")
   }
 
-  pages <- vector("list", n_pages)
+  paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
+  cons <- lapply(paths, file, open = "wb")
+  on.exit(lapply(cons, close), add = TRUE)
 
+  pool <- curl::new_pool(host_con = max_connections)
   start <- start_index
-  for (i in seq_len(n_pages)) {
-    pages[[i]] <- bq_table_download_page(x,
-      fields = fields,
-      start_index = start,
-      max_results = min(page_size, max_results - (start - start_index))
-    )
 
+  progress <- bq_progress(
+    "Downloading data [:bar] :percent eta: :eta",
+    total = n_pages,
+    quiet = quiet
+  )
+
+  for (i in seq_len(n_pages)) {
+    max <- min(page_size, max_results - (start - start_index))
     start <- start + page_size
+
+    h <- bq_table_page_handle(x, start_index = start, max_results = max)
+    curl::multi_add(h, data = cons[[i]], function(h) progress$tick(), pool = pool)
   }
 
-  do.call("rbind", pages)
+  curl::multi_run(pool = pool)
+
+  bq_parse_files(schema_path, paths, n = max_results)
 }
 
-bq_table_download_page <- function(x,
-                                   fields,
-                                   start_index = 0L,
-                                   max_results = 1e4
-                                   ) {
-
+bq_table_page_handle <- function(x, start_index = 0L, max_results = 1e4) {
   x <- as_bq_table(x)
   assert_that(is.numeric(max_results), length(max_results) == 1)
   assert_that(is.numeric(start_index), length(start_index) == 1)
 
-  url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
   query <- list(
     startIndex = start_index,
     maxResults = max_results
   )
 
-  json <- bq_get(url, query = query, raw = TRUE)
-  out <- bq_tabledata_to_list(json)
+  url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
+  url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  bq_tabledata_to_data_frame(out, fields)
-}
-
-bq_tabledata_to_data_frame <- function(out, fields) {
-  if (length(out) == 0) {
-    out <- rep(list(character()), length(fields))
+  token <- get_access_cred()
+  if (!is.null(token)) {
+    signed <- token$sign("GET", url)
+    url <- signed$url
+    headers <- signed$headers
+  } else {
+    headers <- list()
   }
 
-  types <- map_chr(fields, function(x) x$type)
-  out <- Map(bq_parse_type, types, out)
+  h <- curl::new_handle(url = url)
+  curl::handle_setopt(h, useragent = bq_ua())
+  curl::handle_setheaders(h, .list = headers)
 
-  class(out) <- "data.frame"
-  names(out) <- map_chr(fields, function(x) x$name)
-  attr(out, "row.names") <- c(NA_integer_, -length(out[[1]]))
-
-  out
-}
-
-bq_parse_type <- function(type, x) {
-  switch(type,
-    INTEGER = as.integer(x),
-    FLOAT = as.double(x),
-    BOOLEAN = as.logical(x),
-    TIMESTAMP = as.POSIXct(as.numeric(x), origin = "1970-01-01", tz = "UTC"),
-    TIME = readr::parse_time(x, "%H:%M:%OS"),
-    DATE = readr::parse_date(x, format = "%Y-%m-%d"),
-    DATETIME = readr::parse_datetime(x),
-    x
-  )
+  h
 }
 
 # Helpers for testing -----------------------------------------------------

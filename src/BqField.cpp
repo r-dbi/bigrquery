@@ -1,9 +1,11 @@
 // [[Rcpp::depends(rapidjsonr)]]
 #include <Rcpp.h>
 #include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 
 #include <ctime>
 #include <stdlib.h>
+#include <fstream>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define timegm _mkgmtime
@@ -251,50 +253,71 @@ public:
 
 };
 
-// [[Rcpp::export]]
-SEXP bq_parse(std::string meta_s, std::string data_s) {
-  rapidjson::Document meta_d;
-  meta_d.Parse(&meta_s[0]);
+std::vector<BqField> bq_fields_parse(const rapidjson::Value& meta) {
+  const rapidjson::Value& schema_fields = meta["schema"]["fields"];
 
-  const rapidjson::Value& schema_fields = meta_d["schema"]["fields"];
   int p = schema_fields.Size();
 
   std::vector<BqField> fields;
   for (int j = 0; j < p; ++j) {
     fields.push_back(BqField(schema_fields[j]));
   }
-  BqField row_record("", fields, true);
 
-  rapidjson::Document data_d;
-  data_d.Parse(&data_s[0]);
+  return fields;
+}
 
-  if (!data_d.HasMember("rows")) {
-    // No data, so need to make 0 zero row data frame
-    return Rcpp::List();
-  }
+Rcpp::List bq_fields_init(const std::vector<BqField>& fields, int n) {
+  int p = fields.size();
 
-  const rapidjson::Value& rows = data_d["rows"];
-  int n = rows.Size();
-
-  // Create output data frame
   Rcpp::List out(p);
   Rcpp::CharacterVector names(p);
   for (int j = 0; j < p; ++j) {
     out[j] = fields[j].vectorInit(n);
     names[j] = fields[j].name();
-  }
-
-  // Fill in values
-  for (int i = 0; i < n; ++i) {
-    const rapidjson::Value& f = rows[i]["f"];
-    for (int j = 0; j < p; ++j) {
-      fields[j].vectorSet(out[j], i, f[j]["v"]);
-    }
-  }
-
+  };
   out.attr("class") = "data.frame";
   out.attr("names") = names;
   out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
+
+  return out;
+}
+
+int bq_fields_set(const rapidjson::Value& data,
+                  Rcpp::List out,
+                  const std::vector<BqField>& fields,
+                  int offset
+                  ) {
+  if (!data.HasMember("rows")) {
+    // no rows
+    return 0;
+  }
+
+  const rapidjson::Value& rows = data["rows"];
+  int n = rows.Size(), p = fields.size();
+
+  for (int i = 0; i < n; ++i) {
+    const rapidjson::Value& f = rows[i]["f"];
+    for (int j = 0; j < p; ++j) {
+      fields[j].vectorSet(out[j], i + offset, f[j]["v"]);
+    }
+  }
+
+  return n;
+}
+
+// [[Rcpp::export]]
+SEXP bq_parse(std::string meta_s, std::string data_s) {
+  rapidjson::Document meta_d;
+  meta_d.Parse(&meta_s[0]);
+  std::vector<BqField> fields = bq_fields_parse(meta_d);
+
+  rapidjson::Document values_d;
+  values_d.Parse(&data_s[0]);
+
+  int n = (values_d.HasMember("rows")) ? values_d["rows"].Size() : 0;
+
+  Rcpp::List out = bq_fields_init(fields, n);
+  bq_fields_set(values_d, out, fields, 0);
 
   return out;
 }
@@ -312,6 +335,34 @@ SEXP bq_field_init(std::string json, std::string value = "") {
     d2.Parse(&value[0]);
 
     field.vectorSet(out, 0, d2);
+  }
+
+  return out;
+}
+
+// [[Rcpp::export]]
+SEXP bq_parse_files(std::string schema_path, std::vector<std::string> file_paths, int n) {
+
+  // Generate field specification
+  rapidjson::Document schema_doc;
+  std::ifstream schema_stream(schema_path);
+  rapidjson::IStreamWrapper schema_stream_w(schema_stream);
+  schema_doc.ParseStream(schema_stream_w);
+
+  std::vector<BqField> fields = bq_fields_parse(schema_doc);
+  Rcpp::List out = bq_fields_init(fields, n);
+
+  std::vector<std::string>::const_iterator it = file_paths.begin(),
+    it_end = file_paths.end();
+
+  int offset = 0;
+  for ( ; it != it_end; ++it) {
+    rapidjson::Document values_doc;
+    std::ifstream values_stream(*it);
+    rapidjson::IStreamWrapper values_stream_w(values_stream);
+    values_doc.ParseStream(values_stream_w);
+
+    offset += bq_fields_set(values_doc, out, fields, offset);
   }
 
   return out;
