@@ -7,11 +7,17 @@ as_df <- function(x) {
 
 "%||%" <- function(x, y) if (is.null(x)) y else x
 
-bq_progress <- function(..., quiet = NA) {
-  delay <- if (isFALSE(quiet)) 0 else 1
-  if (is.na(quiet)) {
-    quiet <- !interactive()
+bq_quiet <- function(x) {
+  if (is.na(x)) {
+    !interactive()
+  } else {
+    x
   }
+}
+
+bq_progress <- function(..., quiet = NA) {
+  delay <- if (isFALSE(quiet)) 1 else 0
+  quiet <- bq_quiet(quiet)
 
   if (quiet) {
     list(
