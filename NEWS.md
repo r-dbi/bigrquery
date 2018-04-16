@@ -41,6 +41,27 @@ The old API has been soft-deprecated - it will continue to work, but no further 
 * `bq_table_load()` loads data from a Google CloudStorage URI and is paired with 
   `bq_table_save()` to save data to a Google CloudStorage URI (#155)
 
+## Improved downloads
+
+I have substantially improved the performance and flexibility of downloading data from a table/query.
+
+* The two steps (downloading and parsing) now happen in sequence, rather than
+  in parallel. For large downloads, this means that you'll now see two progress
+  bars: one for download and one for parsing.
+  
+* Downloads now occur in parallel, using up to 6 simultaneous connections by 
+  default.
+
+* The parsing code has been rewritten in C++. As well as considerably improving 
+  performance, this also adds supported for nested (record) and repeated 
+  (array) columns. These columns will yield list-columns in the following form:
+  
+    * Arrays become list-columns containing a single vector
+    * Records become list-columns containing named lists
+    * Repeated records become list-columns containing data frames
+
+In my benchmark experiment, I can now download the first million rows of `publicdata.samples.natality` in about a minute, yielding a data frame that's about 140 meg in memory. The bottleneck for loading BigQuery data is now parsing BigQuery's json format. I don't see any obvious ways to make the performance faster as I'm already using the fastest C++ json parser, RapidJson. If you need to download gigabytes of data, I recommending use `bq_table_save()` to export a csv file to google cloud storage, and using the `gsutil` command line utility to download it, and then `readr::read_csv()` or `data.table::fread()` to read it. Unfortunately you can not export nested or repeated formats into CSV, but I am not aware of any R packages that will efficiently load the arvo or ndjson formats that BigQuery will produce.
+
 ## Other bug fixes and improvements
 
 * The dplyr interface can work with literal SQL once more (#218).
