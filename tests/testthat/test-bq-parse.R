@@ -22,7 +22,7 @@ test_that("can parse date/times", {
     dt
   )
   expect_identical(
-    bq_parse_single(as.character(dt), "datetime"),
+    bq_parse_single(as.character(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
     dt
   )
 

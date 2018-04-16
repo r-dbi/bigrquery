@@ -50,6 +50,14 @@ BqType parse_bq_type(std::string x) {
   }
 }
 
+double parse_partial_seconds(char* string) {
+  if (string == NULL || string[0] != '.')
+    return 0;
+
+  char *endptr;
+  return strtod(string, &endptr);
+}
+
 class BqField {
 private:
   std::string name_;
@@ -139,6 +147,7 @@ public:
     case BQ_INTEGER:
       INTEGER(x)[i] = v.IsString() ? atoi(v.GetString()) : NA_INTEGER;
       break;
+    case BQ_TIMESTAMP:
     case BQ_FLOAT:
       REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
       break;
@@ -158,15 +167,17 @@ public:
         SET_STRING_ELT(x, i, NA_STRING);
       }
       break;
-    case BQ_TIMESTAMP:
-      REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
-      break;
     case BQ_TIME:
       if (v.IsString()) {
-        struct tm tm;
-        strptime(v.GetString(), "%H:%M:%S", &tm);
+        struct tm dtm;
+        char* parsed = strptime(v.GetString(), "%H:%M:%S", &dtm);
 
-        REAL(x)[i] = tm.tm_hour * 3600 + tm.tm_min * 60 + tm.tm_sec;
+        if (parsed == NULL) {
+          REAL(x)[i] == NA_REAL;
+        } else {
+          REAL(x)[i] = dtm.tm_hour * 3600 + dtm.tm_min * 60 + dtm.tm_sec +
+            parse_partial_seconds(parsed);
+        }
       } else {
         REAL(x)[i] = NA_REAL;
       }
@@ -181,9 +192,14 @@ public:
       break;
     case BQ_DATETIME:
       if (v.IsString()) {
-        struct tm tm;
-        strptime(v.GetString(), "%Y-%m-%d %H:%M:%S", &tm);
-        REAL(x)[i] = timegm(&tm);
+        struct tm dtm;
+        char* parsed = strptime(v.GetString(), "%Y-%m-%dT%H:%M:%S", &dtm);
+
+        if (parsed == NULL) {
+          REAL(x)[i] = NA_REAL;
+        } else {
+          REAL(x)[i] = timegm(&dtm) + parse_partial_seconds(parsed);
+        }
       } else {
         REAL(x)[i] = NA_REAL;
       }
