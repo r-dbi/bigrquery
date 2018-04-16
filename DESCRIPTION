@@ -22,8 +22,7 @@ Imports:
     prettyunits,
     progress,
     rapidjsonr,
-    Rcpp,
-    readr
+    Rcpp
 Suggests: 
     DBItest,
     dbplyr,
@@ -31,7 +30,8 @@ Suggests:
     hms,
     testthat,
     withr,
-    covr
+    covr,
+    readr
 LinkingTo: 
     progress,
     rapidjsonr,

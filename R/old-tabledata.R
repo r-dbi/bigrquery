@@ -33,6 +33,10 @@ list_tabledata <- function(project, dataset, table,
                            ) {
 
 
+  if (!requireNamespace("readr", qquietly = TRUE)) {
+    stop("Must install readr package to use `list_tabledata", call. = FALSE)
+  }
+
   assert_that(is.string(project), is.string(dataset), is.string(table))
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
 
