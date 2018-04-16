@@ -54,7 +54,7 @@ bq_table_download <- function(x,
     quiet = quiet
   )
 
-  bq_parse_files(schema_path, page_paths, n = max_results, quiet = bq_quiet(quiet))
+  bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
 }
 
 bq_download_page_info <- function(nrow,
