@@ -278,7 +278,7 @@ Rcpp::List bq_fields_init(const std::vector<BqField>& fields, int n) {
     out[j] = fields[j].vectorInit(n);
     names[j] = fields[j].name();
   };
-  out.attr("class") = "data.frame";
+  out.attr("class") = Rcpp::CharacterVector::create("tbl_df", "df", "data.frame");
   out.attr("names") = names;
   out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
 
