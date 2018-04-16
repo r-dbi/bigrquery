@@ -176,24 +176,34 @@ bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()
 
 #' @importFrom httr http_status content parse_media status_code
 process_request <- function(req, process, raw = FALSE) {
+  status <- status_code(req)
   # No content -> success
-  if (status_code(req) == 204) return(TRUE)
+  if (status == 204) return(TRUE)
 
-  if (status_code(req) >= 200 && status_code(req) < 300) {
-    if (raw) {
-      return(content(req, "raw"))
-    } else {
-      return(content(req, "parsed", "application/json"))
-    }
+  type <- req$headers$`Content-type`
+  content <- content(req, "raw")
+
+  bq_check_response(status, type, content)
+
+  if (raw) {
+    content
+  } else {
+    jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+  }
+}
+
+bq_check_response <- function(status, type, content) {
+  if (status >= 200 && status < 300) {
+    return()
   }
 
-  type <- parse_media(req$headers$`Content-type`)
+  type <- httr::parse_media(type)
   if (type$complete == "application/json") {
-    out <- content(req, "parsed", "application/json")
-    signal_reason(out$error$errors[[1L]]$reason, out$error$message)
+    json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+    signal_reason(json$error$errors[[1L]]$reason, json$error$message)
   } else {
-    out <- content(req, "text")
-    stop("HTTP error [", req$status, "] ", out, call. = FALSE)
+    text <- rawToChar(content)
+    stop("HTTP error [", status, "] ", text, call. = FALSE)
   }
 }
 

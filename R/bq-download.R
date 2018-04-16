@@ -83,11 +83,7 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
   }
 
   paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
-  cons <- lapply(paths, file, open = "wb")
-  on.exit(lapply(cons, close), add = TRUE)
-
   pool <- curl::new_pool(host_con = max_connections)
-
   progress <- bq_progress(
     "Downloading data [:bar] :percent eta: :eta",
     total = n_pages,
@@ -100,10 +96,8 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
       begin = page_info$begin[i],
       end = page_info$end[i]
     )
-    curl::multi_add(
-      handle,
-      data = cons[[i]],
-      function(h) progress$tick(),
+    curl::multi_add(handle,
+      done = bq_download_callback(page, paths[[i]], progress),
       pool = pool
     )
   }
@@ -111,6 +105,25 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
   curl::multi_run(pool = pool)
 
   paths
+}
+
+bq_download_callback <- function(page, path, progress) {
+  force(page)
+  force(path)
+
+  function(result) {
+    progress$tick()
+
+    bq_check_response(
+      result$status_code,
+      curl::parse_headers_list(result$headers)[["content-type"]],
+      result$content
+    )
+
+    con <- file(path, open = "wb")
+    on.exit(close(con))
+    writeBin(result$content, con)
+  }
 }
 
 bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
