@@ -12,6 +12,9 @@
 #'   if you have many fields or large records and you are seeing a
 #'   "responseTooLarge" error.
 #' @param start_index Starting row index (zero-based).
+#' @param max_connections Number of maximum simultaneously connections to
+#'   BigQuery servers.
+#' @inheritParams api-job
 #' @section API documentation:
 #' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
 #' @export
@@ -97,7 +100,7 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
       end = page_info$end[i]
     )
     curl::multi_add(handle,
-      done = bq_download_callback(page, paths[[i]], progress),
+      done = bq_download_callback(i, paths[[i]], progress),
       pool = pool
     )
   }

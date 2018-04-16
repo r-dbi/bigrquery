@@ -18,6 +18,12 @@ if you have many fields or large records and you are seeing a
 "responseTooLarge" error.}
 
 \item{start_index}{Starting row index (zero-based).}
+
+\item{max_connections}{Number of maximum simultaneously connections to
+BigQuery servers.}
+
+\item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
+if \code{NA} displays progress bar only for long-running jobs.}
 }
 \description{
 This retrieves rows in chunks of \code{page_size}. It is most suitable for results
