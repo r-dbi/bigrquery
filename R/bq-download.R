@@ -30,37 +30,54 @@ bq_table_download <- function(x,
   assert_that(is.numeric(max_results), length(max_results) == 1)
   assert_that(is.numeric(start_index), length(start_index) == 1)
 
-  nrow <- bq_table_nrow(x)
-  max_results <- pmax(pmin(max_results, nrow - start_index), 0)
+  schema_path <- bq_download_schema(x, tempfile())
 
-  n_pages <- ceiling(max_results / page_size)
+  nrow <- bq_table_nrow(x)
+  page_info <- bq_download_page_info(nrow,
+    max_results = max_results,
+    page_size = page_size,
+    start_index = start_index
+  )
   if (!bq_quiet(quiet)) {
-    message(glue::glue("Downloading {big_mark(max_results)} rows in {n_pages} pages."))
+    message(glue::glue_data(
+      page_info,
+      "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
+    ))
   }
 
-  page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
-  page_end <- pmin(page_begin + page_size, max_results)
-
-  schema <- bq_download_schema(x, tempfile())
-  pages <- bq_download_pages(x,
-    page_begin = page_begin,
-    page_end = page_end,
+  page_paths <- bq_download_pages(x,
+    page_info = page_info,
     max_connections = max_connections,
     quiet = quiet
   )
 
-  bq_parse_files(schema, pages, n = max_results, quiet = bq_quiet(quiet))
+  bq_parse_files(schema_path, page_paths, n = max_results, quiet = bq_quiet(quiet))
 }
 
-bq_download_pages <- function(x, page_begin, page_end,
-                              max_connections = 6L,
-                              quiet = NA)
-                              {
+bq_download_page_info <- function(nrow,
+                              max_results = Inf,
+                              start_index = 0,
+                              page_size = 1e4) {
+  max_results <- pmax(pmin(max_results, nrow - start_index), 0)
 
+  n_pages <- ceiling(max_results / page_size)
+  page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
+  page_end <- pmin(page_begin + page_size, max_results)
+
+  list(
+    n_rows = max_results,
+    n_pages = n_pages,
+
+    begin = page_begin,
+    end = page_end
+  )
+}
+
+bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
   x <- as_bq_table(x)
-  stopifnot(length(page_begin) == length(page_end))
-  n_pages <- length(page_begin)
+  assert_that(is.list(page_info))
 
+  n_pages <- page_info$n_pages
   if (n_pages == 0) {
     return(character())
   }
@@ -80,8 +97,8 @@ bq_download_pages <- function(x, page_begin, page_end,
   for (i in seq_len(n_pages)) {
     handle <- bq_download_page_handle(
       x,
-      begin = page_begin[i],
-      end = page_end[i]
+      begin = page_info$begin[i],
+      end = page_info$end[i]
     )
     curl::multi_add(
       handle,
