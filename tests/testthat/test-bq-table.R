@@ -27,7 +27,7 @@ test_that("can create table with schema", {
 test_that("can round trip a simple data frame", {
   ds <- bq_test_dataset()
 
-  df1 <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = FALSE)
+  df1 <- data_frame(x = 1:10, y = letters[1:10])
 
   bq_df <- bq_table(ds, "df")
   bq_table_upload(bq_df, df1)

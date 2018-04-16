@@ -26,9 +26,10 @@ test_that("can parse date/times", {
     dt
   )
 
+  skip_if_not_installed("hms")
   expect_identical(
     bq_parse_single("06:00:00", "time"),
-    as.difftime(6 * 3600, units = "secs")
+    hms::hms(6 * 3600)
   )
 })
 
@@ -43,7 +44,9 @@ test_that("can parse NULLs", {
   na_dtm <- structure(as.POSIXct(NA), tzone = "UTC")
   expect_identical(bq_parse_single(NULL, "datetime"), na_dtm)
   expect_identical(bq_parse_single(NULL, "timestamp"), na_dtm)
-  expect_identical(bq_parse_single(NULL, "time"), as.difftime(NA_real_, units = "secs"))
+
+  skip_if_not_installed("hms")
+  expect_identical(bq_parse_single(NULL, "time"), hms::hms(NA_real_))
 })
 
 

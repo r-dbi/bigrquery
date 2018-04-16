@@ -107,7 +107,7 @@ public:
     case BQ_TIME:
       {
         Rcpp::DoubleVector out(n);
-        out.attr("class") = "difftime";
+        out.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
         out.attr("units") = "secs";
         return out;
       }
@@ -233,7 +233,7 @@ public:
         out[j] = field.vectorInit(n);
         names[j] = field.name_;
       }
-      out.attr("class") = "data.frame";
+      out.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
       out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
 
       for (int i = 0; i < n; ++i) {
@@ -278,7 +278,7 @@ Rcpp::List bq_fields_init(const std::vector<BqField>& fields, int n) {
     out[j] = fields[j].vectorInit(n);
     names[j] = fields[j].name();
   };
-  out.attr("class") = Rcpp::CharacterVector::create("tbl_df", "df", "data.frame");
+  out.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
   out.attr("names") = names;
   out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
 

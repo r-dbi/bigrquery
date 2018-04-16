@@ -68,5 +68,7 @@ show_json <- function(x) {
 }
 
 data_frame <- function(...) {
-  data.frame(..., check.names = FALSE, stringsAsFactors = FALSE)
+  x <- data.frame(..., check.names = FALSE, stringsAsFactors = FALSE)
+  class(x) <- c("tbl_df", "tbl", "data.frame")
+  x
 }
