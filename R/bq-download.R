@@ -5,6 +5,18 @@
 #' export the results to a CSV file stored on google cloud and use the
 #' bq command line tool to download locally.
 #'
+#' @section Complex data:
+#' bigrquery will retrieve nested and repeated columns in to list-columns
+#' as follows:
+#'
+#' * Repeated values (arrays) will become a list-cols of vectors.
+#' * Records will become list-cols of named lists.
+#' * Repeated records will become list-cols of data frames.
+#'
+#' @return Because data retrieval may generalise list-cols and the data frame
+#'   print method can have problems with list-cols, this method returns
+#'   tibbles. If you need a data frame, coerce the results with
+#'   `as.data.frame()`.
 #' @param x A [bq_table]
 #' @param max_results Maximum number of results to retrieve. Use `Inf`
 #'   retrieve all rows.

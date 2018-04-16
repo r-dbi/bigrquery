@@ -25,12 +25,29 @@ BigQuery servers.}
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
 }
+\value{
+Because data retrieval may generalise list-cols and the data frame
+print method can have problems with list-cols, this method returns
+tibbles. If you need a data frame, coerce the results with
+\code{as.data.frame()}.
+}
 \description{
 This retrieves rows in chunks of \code{page_size}. It is most suitable for results
 of smaller queries (<100 meg, say). For larger queries, it is better to
 export the results to a CSV file stored on google cloud and use the
 bq command line tool to download locally.
 }
+\section{Complex data}{
+
+bigrquery will retrieve nested and repeated columns in to list-columns
+as follows:
+\itemize{
+\item Repeated values (arrays) will become a list-cols of vectors.
+\item Records will become list-cols of named lists.
+\item Repeated records will become list-cols of data frames.
+}
+}
+
 \section{API documentation}{
 
 \itemize{
