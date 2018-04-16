@@ -13,7 +13,3 @@ bq_parse_files <- function(schema_path, file_paths, n, quiet) {
     .Call(`_bigrquery_bq_parse_files`, schema_path, file_paths, n, quiet)
 }
 
-bq_tabledata_to_list <- function(x) {
-    .Call(`_bigrquery_bq_tabledata_to_list`, x)
-}
-
