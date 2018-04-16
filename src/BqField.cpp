@@ -2,9 +2,11 @@
 #include <Rcpp.h>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
+#include "rapidjson/filereadstream.h"
 #include <RProgress.h>
 
 #include <ctime>
+#include <cstdio>
 #include <stdlib.h>
 #include <fstream>
 
@@ -363,15 +365,24 @@ SEXP bq_parse_files(std::string schema_path,
   pb.set_total(file_paths.size());
 
   int offset = 0;
+  char readBuffer[100 * 1024];
+
   for ( ; it != it_end; ++it) {
+    FILE* values_file = fopen(it->c_str(), "rb");
+    rapidjson::FileReadStream values_stream(values_file, readBuffer, sizeof(readBuffer));
     rapidjson::Document values_doc;
-    std::ifstream values_stream(*it);
-    rapidjson::IStreamWrapper values_stream_w(values_stream);
-    values_doc.ParseStream(values_stream_w);
+    values_doc.ParseStream(values_stream);
+
+    if (values_doc.HasParseError()) {
+      Rcpp::stop("Failed to parse '%s'", *it);
+      fclose(values_file);
+    }
 
     offset += bq_fields_set(values_doc, out, fields, offset);
     if (!quiet)
       pb.tick();
+
+    fclose(values_file);
   }
 
   return out;
