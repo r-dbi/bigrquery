@@ -27,14 +27,35 @@ test_that("can create table with schema", {
 test_that("can round trip a simple data frame", {
   ds <- bq_test_dataset()
 
-  df1 <- data.frame(x = 1:10, y = letters[1:10], stringsAsFactors = FALSE)
+  df1 <- data_frame(x = 1:10, y = letters[1:10])
 
   bq_df <- bq_table(ds, "df")
   bq_table_upload(bq_df, df1)
 
   df2 <- bq_table_download(bq_df)
-  df2 <- df2[order(df2$x), ] # BQ doesn't gaurantee order
+  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
   rownames(df2) <- NULL
+
+  expect_equal(df1, df2)
+})
+
+test_that("can round trip data frame with list-cols", {
+  ds <- bq_test_dataset()
+  tb <- bq_table(ds, "complex")
+
+  df1 <- tibble::tibble(
+    val = 1,
+    array = list(1:5),
+    struct = list(list(x = 1, y = 2)),
+    array_struct = list(tibble::tibble(x = "a", y = "b"))
+  )
+  bq_table_upload(tb, df1)
+
+  df2 <- bq_table_download(tb)
+  # restore column order
+  df2 <- df2[names(df1)]
+  df2$struct[[1]] <- df2$struct[[1]][c("x", "y")]
+  df2$array_struct[[1]] <- df2$array_struct[[1]][c("x", "y")]
 
   expect_equal(df1, df2)
 })

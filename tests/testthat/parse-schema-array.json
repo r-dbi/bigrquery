@@ -1,0 +1,11 @@
+{
+ "schema": {
+  "fields": [
+   {
+    "name": "x",
+    "type": "INTEGER",
+    "mode": "REPEATED"
+   }
+  ]
+ }
+}

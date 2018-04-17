@@ -5,6 +5,18 @@
 #' export the results to a CSV file stored on google cloud and use the
 #' bq command line tool to download locally.
 #'
+#' @section Complex data:
+#' bigrquery will retrieve nested and repeated columns in to list-columns
+#' as follows:
+#'
+#' * Repeated values (arrays) will become a list-cols of vectors.
+#' * Records will become list-cols of named lists.
+#' * Repeated records will become list-cols of data frames.
+#'
+#' @return Because data retrieval may generalise list-cols and the data frame
+#'   print method can have problems with list-cols, this method returns
+#'   tibbles. If you need a data frame, coerce the results with
+#'   `as.data.frame()`.
 #' @param x A [bq_table]
 #' @param max_results Maximum number of results to retrieve. Use `Inf`
 #'   retrieve all rows.
@@ -12,6 +24,9 @@
 #'   if you have many fields or large records and you are seeing a
 #'   "responseTooLarge" error.
 #' @param start_index Starting row index (zero-based).
+#' @param max_connections Number of maximum simultaneously connections to
+#'   BigQuery servers.
+#' @inheritParams api-job
 #' @section API documentation:
 #' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
 #' @export
@@ -19,104 +34,159 @@
 #' if (bq_testable()) {
 #' df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
 #' }
-bq_table_download <- function(x, max_results = Inf, page_size = 1e4, start_index = 0L) {
+bq_table_download <- function(x,
+                              max_results = Inf,
+                              page_size = 1e4,
+                              start_index = 0L,
+                              max_connections = 6L,
+                              quiet = NA) {
   x <- as_bq_table(x)
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.numeric(max_results), length(max_results) == 1)
   assert_that(is.numeric(start_index), length(start_index) == 1)
 
-  if (!is.finite(max_results)) {
-    max_results <- bq_table_size(x) - start_index
+  schema_path <- bq_download_schema(x, tempfile())
+
+  nrow <- bq_table_nrow(x)
+  page_info <- bq_download_page_info(nrow,
+    max_results = max_results,
+    page_size = page_size,
+    start_index = start_index
+  )
+  if (!bq_quiet(quiet)) {
+    message(glue::glue_data(
+      page_info,
+      "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
+    ))
   }
-  fields <- bq_table_fields(x)
+
+  page_paths <- bq_download_pages(x,
+    page_info = page_info,
+    max_connections = max_connections,
+    quiet = quiet
+  )
+
+  bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+}
+
+bq_download_page_info <- function(nrow,
+                              max_results = Inf,
+                              start_index = 0,
+                              page_size = 1e4) {
+  max_results <- pmax(pmin(max_results, nrow - start_index), 0)
 
   n_pages <- ceiling(max_results / page_size)
+  page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
+  page_end <- pmin(page_begin + page_size, max_results)
+
+  list(
+    n_rows = max_results,
+    n_pages = n_pages,
+
+    begin = page_begin,
+    end = page_end
+  )
+}
+
+bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
+  x <- as_bq_table(x)
+  assert_that(is.list(page_info))
+
+  n_pages <- page_info$n_pages
   if (n_pages == 0) {
-    return(bq_tabledata_to_data_frame(NULL, fields))
+    return(character())
   }
 
-  pages <- vector("list", n_pages)
+  paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
+  pool <- curl::new_pool(host_con = max_connections)
+  progress <- bq_progress(
+    "Downloading data [:bar] :percent eta: :eta",
+    total = n_pages,
+    quiet = quiet
+  )
 
-  start <- start_index
   for (i in seq_len(n_pages)) {
-    pages[[i]] <- bq_table_download_page(x,
-      fields = fields,
-      start_index = start,
-      max_results = min(page_size, max_results - (start - start_index))
+    handle <- bq_download_page_handle(
+      x,
+      begin = page_info$begin[i],
+      end = page_info$end[i]
+    )
+    curl::multi_add(handle,
+      done = bq_download_callback(i, paths[[i]], progress),
+      pool = pool
+    )
+  }
+
+  curl::multi_run(pool = pool)
+
+  paths
+}
+
+bq_download_callback <- function(page, path, progress) {
+  force(page)
+  force(path)
+
+  function(result) {
+    progress$tick()
+
+    bq_check_response(
+      result$status_code,
+      curl::parse_headers_list(result$headers)[["content-type"]],
+      result$content
     )
 
-    start <- start + page_size
+    con <- file(path, open = "wb")
+    on.exit(close(con))
+    writeBin(result$content, con)
   }
-
-  do.call("rbind", pages)
 }
 
-bq_table_download_page <- function(x,
-                                   fields,
-                                   start_index = 0L,
-                                   max_results = 1e4
-                                   ) {
-
+bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   x <- as_bq_table(x)
-  assert_that(is.numeric(max_results), length(max_results) == 1)
-  assert_that(is.numeric(start_index), length(start_index) == 1)
+  assert_that(is.numeric(begin), length(begin) == 1)
+  assert_that(is.numeric(end), length(end) == 1)
 
-  url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
   query <- list(
-    startIndex = start_index,
-    maxResults = max_results
+    startIndex = begin,
+    maxResults = end - begin
   )
 
-  json <- bq_get(url, query = query, raw = TRUE)
-  out <- bq_tabledata_to_list(json)
+  url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
+  url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  bq_tabledata_to_data_frame(out, fields)
-}
-
-bq_tabledata_to_data_frame <- function(out, fields) {
-  if (length(out) == 0) {
-    out <- rep(list(character()), length(fields))
+  token <- get_access_cred()
+  if (!is.null(token)) {
+    signed <- token$sign("GET", url)
+    url <- signed$url
+    headers <- signed$headers
+  } else {
+    headers <- list()
   }
 
-  types <- map_chr(fields, function(x) x$type)
-  out <- Map(bq_parse_type, types, out)
+  h <- curl::new_handle(url = url)
+  curl::handle_setopt(h, useragent = bq_ua())
+  curl::handle_setheaders(h, .list = headers)
 
-  class(out) <- "data.frame"
-  names(out) <- map_chr(fields, function(x) x$name)
-  attr(out, "row.names") <- c(NA_integer_, -length(out[[1]]))
-
-  out
-}
-
-bq_parse_type <- function(type, x) {
-  switch(type,
-    INTEGER = as.integer(x),
-    FLOAT = as.double(x),
-    BOOLEAN = as.logical(x),
-    TIMESTAMP = as.POSIXct(as.numeric(x), origin = "1970-01-01", tz = "UTC"),
-    TIME = readr::parse_time(x, "%H:%M:%OS"),
-    DATE = readr::parse_date(x, format = "%Y-%m-%d"),
-    DATETIME = readr::parse_datetime(x),
-    x
-  )
+  h
 }
 
 # Helpers for testing -----------------------------------------------------
 
-bq_table_save_json <- function(x, path, max_results = 100) {
+bq_parse_file <- function(fields, data) {
+  fields <- readr::read_file(fields)
+  data <- readr::read_file(data)
+
+  bq_parse(fields, data)
+}
+
+bq_download_schema <- function(x, path) {
   x <- as_bq_table(x)
 
-  url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
-  query <- list(
-    startIndex = 0,
-    maxResults = max_results
-  )
+  url <- bq_path(x$project, x$dataset, x$table)
+  query <- list(fields = "schema")
 
   json <- bq_get(url, query = query, raw = TRUE)
   writeBin(json, path)
-}
 
-bq_table_load_json <- function(path) {
-  json <- readBin(path, "raw", n = file.size(path))
-  bq_tabledata_to_list(json)
+  path
 }

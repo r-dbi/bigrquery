@@ -5,7 +5,7 @@ sudo: false
 cache: packages
 
 r:
-- 3.1
+# - 3.1 # test fail because dbplyr requires 3.2
 - 3.2
 - oldrel
 - release
@@ -16,7 +16,7 @@ after_success:
 
 before_install:
 - if [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then
-    openssl aes-256-cbc -K $encrypted_95be9bef5db7_key -iv $encrypted_95be9bef5db7_iv -in tests/testthat/service-token.json.enc -out ~/.bigrquery-token.json -d;
+    openssl aes-256-cbc -K $encrypted_0498f4d83ad4_key -iv $encrypted_0498f4d83ad4_iv -in tests/testthat/service-token.json.enc -out ~/.bigrquery-token.json -d;
   fi
 
 env:

@@ -14,6 +14,7 @@ Depends:
 Imports: 
     assertthat,
     DBI,
+    curl,
     glue,
     httr,
     jsonlite,
@@ -22,7 +23,7 @@ Imports:
     progress,
     rapidjsonr,
     Rcpp,
-    readr
+    tibble
 Suggests: 
     DBItest,
     dbplyr,
@@ -30,8 +31,10 @@ Suggests:
     hms,
     testthat,
     withr,
-    covr
+    covr,
+    readr
 LinkingTo: 
+    progress,
     rapidjsonr,
     Rcpp
 LazyData: true
@@ -46,6 +49,7 @@ Collate:
     'bq-field.R'
     'bq-job.R'
     'bq-param.R'
+    'bq-parse.R'
     'bq-perform.R'
     'bq-project.R'
     'bq-projects.R'
