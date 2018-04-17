@@ -53,10 +53,11 @@ I have substantially improved the performance and flexibility of downloading dat
   default.
 
 * The parsing code has been rewritten in C++. As well as considerably improving 
-  performance, this also adds supported for nested (record) and repeated 
-  (array) columns. These columns will yield list-columns in the following form:
+  performance, this also adds supported for nested (record/struct) and repeated 
+  (array) columns (#145). These columns will yield list-columns in the 
+  following form:
   
-    * Arrays become list-columns containing a single vector
+    * Repeated values become list-columns containing vectors.
     * Records become list-columns containing named lists
     * Repeated records become list-columns containing data frames
 
