@@ -218,6 +218,9 @@ public:
     out.attr("names") = names;
 
     if (!array_) {
+      if (!v.IsObject())
+        return out;
+
       const rapidjson::Value& f = v["f"];
       // f is array of fields
       if (!f.IsArray())
@@ -241,8 +244,7 @@ public:
         names[j] = field.name_;
       }
     } else {
-      // v is array
-      int n = v.Size();
+      int n = (v.IsArray()) ? v.Size() : 0;
 
       for (int j = 0; j < p; ++j) {
         const BqField& field = fields_[j];
@@ -251,6 +253,9 @@ public:
       }
       out.attr("class") = Rcpp::CharacterVector::create("tbl_df", "tbl", "data.frame");
       out.attr("row.names") = Rcpp::IntegerVector::create(NA_INTEGER, -n);
+
+      if (n == 0)
+        return out;
 
       for (int i = 0; i < n; ++i) {
         const rapidjson::Value& f = v[i]["v"]["f"];

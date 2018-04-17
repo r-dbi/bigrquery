@@ -141,3 +141,13 @@ test_that("can parse nested structures", {
   expect_type(df$x, "list")
   expect_equal(df$x[[1]], list(a = 1:3, b = c("a", "b")))
 })
+
+test_that("can parse empty arrays", {
+  tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<INT64>[] as x")
+  df <- bq_table_download(tb)
+  expect_equal(df$x, list(integer(0)))
+
+  tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<STRUCT<a INT64, b STRING>>[] as x")
+  df <- bq_table_download(tb)
+  expect_equal(df$x, list(tibble::tibble(a = integer(0), b = character())))
+})

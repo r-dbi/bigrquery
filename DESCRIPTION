@@ -22,7 +22,8 @@ Imports:
     prettyunits,
     progress,
     rapidjsonr,
-    Rcpp
+    Rcpp,
+    tibble
 Suggests: 
     DBItest,
     dbplyr,
