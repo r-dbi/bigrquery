@@ -372,7 +372,7 @@ SEXP bq_parse_files(std::string schema_path,
 
   // Generate field specification
   rapidjson::Document schema_doc;
-  std::ifstream schema_stream(schema_path);
+  std::ifstream schema_stream(schema_path.c_str());
   rapidjson::IStreamWrapper schema_stream_w(schema_stream);
   schema_doc.ParseStream(schema_stream_w);
 
