@@ -173,7 +173,7 @@ public:
         char* parsed = strptime(v.GetString(), "%H:%M:%S", &dtm);
 
         if (parsed == NULL) {
-          REAL(x)[i] == NA_REAL;
+          REAL(x)[i] = NA_REAL;
         } else {
           REAL(x)[i] = dtm.tm_hour * 3600 + dtm.tm_min * 60 + dtm.tm_sec +
             parse_partial_seconds(parsed);
