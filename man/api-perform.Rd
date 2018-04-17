@@ -16,7 +16,8 @@ bq_perform_extract(x, destination_uris,
   destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE", ...,
   print_header = TRUE, billing = x$project)
 
-bq_perform_upload(x, values, create_disposition = "CREATE_IF_NEEDED",
+bq_perform_upload(x, values, fields = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_APPEND", ..., billing = x$project)
 
 bq_perform_load(x, source_uris, billing = x$project,
@@ -59,6 +60,10 @@ snake_case names are automatically converted to camelCase.}
 
 \item{values}{Data frame of values to insert.}
 
+\item{fields}{A \link{bq_fields} specification, or something coercible to it
+(like a data frame). Leave as \code{NULL} to allow BigQuery to auto-detect
+the fields.}
+
 \item{create_disposition}{Specifies whether the job is allowed to create
 new tables.
 
@@ -91,9 +96,6 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 \item For parquet, specify "PARQUET".
 \item For orc, specify "ORC".
 }}
-
-\item{fields}{A \link{bq_fields} specification, or something coercible to it
-(like a data frame).}
 
 \item{nskip}{For \code{source_format = "CSV"}, the number of header rows to skip.}
 

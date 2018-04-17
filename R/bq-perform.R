@@ -107,6 +107,7 @@ bq_perform_extract <- function(x,
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
 bq_perform_upload <- function(x, values,
+                              fields = NULL,
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_APPEND",
                               ...,
@@ -118,19 +119,22 @@ bq_perform_upload <- function(x, values,
     is.data.frame(values),
     is.string(billing)
   )
-  fields <- as_bq_fields(values)
 
-  config <- list(
-    configuration = list(
-      load = list(
-        sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
-        schema = list(fields = as_json(fields)),
-        destinationTable = tableReference(x),
-        createDisposition = unbox(create_disposition),
-        writeDisposition = unbox(write_disposition)
-      )
-    )
+  load <- list(
+    sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
+    destinationTable = tableReference(x),
+    createDisposition = unbox(create_disposition),
+    writeDisposition = unbox(write_disposition)
   )
+
+  if (!is.null(fields)) {
+    fields <- as_bq_fields(fields)
+    load$schema <- list(fields = as_json(fields))
+  } else {
+    load$autodetect <- TRUE
+  }
+
+  config <- list(configuration = list(load = load))
   config <- bq_body(config, ...)
   config_part <- part(
     c("Content-type" = "application/json; charset=UTF-8"),
@@ -173,7 +177,8 @@ bq_perform_upload <- function(x, values,
 #'   * For parquet, specify "PARQUET".
 #'   * For orc, specify "ORC".
 #' @param fields A [bq_fields] specification, or something coercible to it
-#'   (like a data frame).
+#'   (like a data frame). Leave as `NULL` to allow BigQuery to auto-detect
+#'   the fields.
 #' @param nskip For `source_format = "CSV"`, the number of header rows to skip.
 bq_perform_load <- function(x,
                             source_uris,
