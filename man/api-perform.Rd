@@ -18,12 +18,12 @@ bq_perform_extract(x, destination_uris,
 
 bq_perform_upload(x, values, fields = NULL,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_APPEND", ..., billing = x$project)
+  write_disposition = "WRITE_EMPTY", ..., billing = x$project)
 
 bq_perform_load(x, source_uris, billing = x$project,
   source_format = "NEWLINE_DELIMITED_JSON", fields = NULL, nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_APPEND", ...)
+  write_disposition = "WRITE_EMPTY", ...)
 
 bq_perform_query(query, billing, ..., parameters = NULL,
   destination_table = NULL, default_dataset = NULL,
