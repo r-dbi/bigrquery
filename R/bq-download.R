@@ -13,6 +13,18 @@
 #' * Records will become list-cols of named lists.
 #' * Repeated records will become list-cols of data frames.
 #'
+#' @section Larger datasets:
+#' In my timings, this code takes around 1 minute per 100 MB of data.
+#' If you need to download considerably more than this, I recommend:
+#'
+#'  * Export a `.csv` file to Cloud Storage using [bq_table_save()]
+#'  * Use the `gsutil` command line utility to download it
+#'  * Read the csv file into R with `readr::read_csv()` or `data.table::fread()`.
+#'
+#'  Unfortunately you can not export nested or repeated formats into CSV, and
+#'  the formats that BigQuery supports (arvn and ndjson) that allow for
+#'  nested/repeated values, are not well supported in R.
+#'
 #' @return Because data retrieval may generalise list-cols and the data frame
 #'   print method can have problems with list-cols, this method returns
 #'   tibbles. If you need a data frame, coerce the results with

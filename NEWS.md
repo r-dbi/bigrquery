@@ -1,53 +1,14 @@
 # bigrquery 0.4.1.9000
-
-## New API
-
-Complete overhaul of the low-level API to make it easier to use. (The primary motivation is to make the package more enjoyable for me to maintain but it should also be helpful if you need to do anything unsupported by the higher-level DBI and dplyr backends). Changes to the code have been paired with improved documentation and greater unit test coverage.
-
-The old API has been soft-deprecated - it will continue to work, but no further development will occur. It will be formally deprecated in the next version, and then removed in the version after that.
-
-* Consistent naming scheme:
-  All API functions now have the form `bq_object_verb()`, e.g. 
-  `bq_table_create()`, or `bq_dataset_delete()`. The old API will continue to
-  exist, but I highly recommend moving to the new API.
-
-* S3 helper classes:
-  `bq_table()`, `bq_dataset()`, `bq_job()`, `bq_field()` and `bq_fields()`
-  constructor functions create S3 objects corresponding to important BigQuery 
-  objects (#150). These are paired with `as_` coercion functions and used throughout 
-  the new API. This deprecates `format_table()`, `format_dataset()`, 
-  `parse_table()` and `parse_dataset()`.
-
-* Easier local testing:
-  New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
-  bigrquery tests locally. All you need to do is create a new BigQuery project,
-  set up billing, and make sure the project name is set in the 
-  `BIGQUERY_TEST_PROJECT` environment variable, then call `bq_test_init()`.
-
-* More efficient data transer: the new api makes extensive user of the `fields`
-  query parameter ensuring the bigrquery only downloads data that it actually 
-  uses (#153).
-
-* The new API uses standard SQL. To use `legacy_sql` set `use_legacy_sql = TRUE`
-  in the query functions.
-
-### New feautres
-
-* `bq_table_create()` can now specify `fields`. (#204)
-
-* `bq_project_query()` and `bq_dataset_query()` can now supply query parameters
-  (#191).
-  
-* `bq_table_load()` loads data from a Google CloudStorage URI and is paired with 
-  `bq_table_save()` to save data to a Google CloudStorage URI (#155)
+(To become bigquery 1.0.0)
 
 ## Improved downloads
 
-I have substantially improved the performance and flexibility of downloading data from a table/query.
+The system for downloading data from BigQuery into R has been rewritten from the ground up to give considerable improvements in performance and flexibility.
 
-* The two steps (downloading and parsing) now happen in sequence, rather than
-  in parallel. For large downloads, this means that you'll now see two progress
-  bars: one for download and one for parsing.
+* The two steps, downloading and parsing, now happen in sequence, rather than
+  interleaved. This means that you'll now see two progress bars: one for 
+  downloading JSON from BigQuery and one for parsing that JSON into a data 
+  frame.
   
 * Downloads now occur in parallel, using up to 6 simultaneous connections by 
   default.
@@ -55,46 +16,90 @@ I have substantially improved the performance and flexibility of downloading dat
 * The parsing code has been rewritten in C++. As well as considerably improving 
   performance, this also adds supported for nested (record/struct) and repeated 
   (array) columns (#145). These columns will yield list-columns in the 
-  following form:
+  following forms:
   
     * Repeated values become list-columns containing vectors.
-    * Records become list-columns containing named lists
-    * Repeated records become list-columns containing data frames
+    * Nested values become list-columns containing named lists
+    * Repeated nested values become list-columns containing data frames.
 
-In my benchmark experiment, I can now download the first million rows of `publicdata.samples.natality` in about a minute. This data frame is about 170 MB in BigQuery and 140 MB in R; a minute to download this much data seems fairly reasonable to me. The bottleneck for loading BigQuery data is now parsing BigQuery's json format. I don't see any obvious ways to make the performance faster as I'm already using the fastest C++ json parser, RapidJson. If you need to download gigabytes of data, I recommending use `bq_table_save()` to export a csv file to google cloud storage, and using the `gsutil` command line utility to download it, and then `readr::read_csv()` or `data.table::fread()` to read it. Unfortunately you can not export nested or repeated formats into CSV, but I am not aware of any R packages that will efficiently load the arvo or ndjson formats that BigQuery will produce.
+* Results are now returned as tibbles, not data frames, because the base print 
+  method does not handle list columns well.
 
-Results are now returned as tibbles because the base print method does not handle list columns well.
+I can now download the first million rows of `publicdata.samples.natality` in about a minute. This data frame is about 170 MB in BigQuery and 140 MB in R; a minute to download this much data seems reasonable to me. The bottleneck for loading BigQuery data is now parsing BigQuery's json format. I don't see any obvious way to make this faster as I'm already using the fastest C++ json parser, [RapidJson](http://rapidjson.org). If this is still too slow for you (i.e. you're downloading GBs of data), see `?bq_table_download` for an alternative approach.
 
-## Other bug fixes and improvements
+## New features
 
-* The dplyr interface can work with literal SQL once more (#218).
+### dplyr
 
 * `dplyr::compute()` now works (@realAkhmed, #52).
 
-* The DBI interface has been updated to use the new low-level API.
-  This means that it defaults to using modern SQL not legacy SQL.
-  Use `use_legacy_sql = TRUE` in `DBI::dbConnect()` if you need to use
-  legacy SQL (#147).
+* `tbl()` now accepts fully (or partially) qualified table names, like
+  "publicdata.samples.shakespeare" or "samples.shakespeare". This makes it 
+  possible to join tables across datasets (#219).
 
-* `query_exec()` fixed error caused by progress bar for queries with empty result 
-   (@byapparov, #206)
+### DBI
 
-* Request error messages will now contain the "reason", which can contain 
-  useful information for debugging (#209).
+* `dbConnect()` now defaults to modern SQL, rather than legacy SQL. Use 
+  `use_legacy_sql = TRUE` if you need the previous behaviour (#147).
+
+* `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
+  want to use tables from multiple datasets.
+  
+* `dbWriteTable()` and `dbReadTable()` now accept fully (or partially) 
+  qualified table names.
+
+### Low-level API
+
+The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.
+
+* __Consistent naming scheme__:
+  All API functions now have the form `bq_object_verb()`, e.g. 
+  `bq_table_create()`, or `bq_dataset_delete()`.
+
+* __S3 classes__:
+  `bq_table()`, `bq_dataset()`, `bq_job()`, `bq_field()` and `bq_fields()`
+  constructor functions create S3 objects corresponding to important BigQuery 
+  objects (#150). These are paired with `as_` coercion functions and used throughout 
+  the new API.
+
+* __Easier local testing__:
+  New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
+  bigrquery tests locally. To run the tests yourself, you need to do create a 
+  BigQuery project, and then follow the instructions in `?bq_test_project`.
+
+* __More efficient data transfer__: 
+  The new API makes extensive user of the `fields` query parameter ensuring 
+  that functions only download data that they actually use (#153).
+
+* __Tighter GCS connection__: New `bq_table_load()` loads data from a Google 
+  Cloud Storage URI, pairing with `bq_table_save()` which saves data to a GCS
+  URI (#155)
+
+## Bug fixes and minor improvements
+
+### dplyr
+
+* The dplyr interface can work with literal SQL once more (#218).
 
 * Improved SQL translation for `pmax()`, `pmin()`, `sd()`, `all()`, and `any()`
   (#176, #179, @jarodmeng). And for `paste0()`, `cor()` and `cov()`
   (@edgararuiz).
-  
+
 * If you have the development version of dbplyr installed, `print()`ing
   a BigQuery table will not perform an unneeded query, but will instead 
   download directly from the table (#226)
 
-* `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
-  want to join use tables from multiple datasets, or indeed, even multiple
-  project. In `tbl()`, you can now supply table names qualified by the
-  dataset and project names (e.g. "publicdata.samples.shakespeare").
-  Together these changes make it easy to join tables across datasets (#219).
+### Low-level
+
+* Request error messages now contain the "reason", which can contain 
+  useful information for debugging (#209).
+
+* `bq_dataset_query()` and `bq_project_query()` can now supply query parameters
+  (#191).
+
+* `bq_table_create()` can now specify `fields`. (#204)
+
+* `bq_perform_query()` no longer fails with empty results (@byapparov, #206)
 
 # Version 0.4.1
 

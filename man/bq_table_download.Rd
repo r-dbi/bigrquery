@@ -48,6 +48,21 @@ as follows:
 }
 }
 
+\section{Larger datasets}{
+
+In my timings, this code takes around 1 minute per 100 MB of data.
+If you need to download considerably more than this, I recommend:
+\itemize{
+\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}
+\item Use the \code{gsutil} command line utility to download it
+\item Read the csv file into R with \code{readr::read_csv()} or \code{data.table::fread()}.
+}
+
+Unfortunately you can not export nested or repeated formats into CSV, and
+the formats that BigQuery supports (arvn and ndjson) that allow for
+nested/repeated values, are not well supported in R.
+}
+
 \section{API documentation}{
 
 \itemize{
