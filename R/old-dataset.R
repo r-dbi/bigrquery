@@ -57,7 +57,7 @@ update_dataset <- function(project, dataset, ...) {
     )
   )
 
-  bq_put(url, body = bq_body(body, ...))
+  bq_patch(url, body = bq_body(body, ...))
 }
 
 #' @export
