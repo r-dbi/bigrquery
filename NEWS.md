@@ -48,6 +48,8 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 * `dbWriteTable()` and `dbReadTable()` now accept fully (or partially) 
   qualified table names.
 
+* `dbi_driver()` is deprecated; please use `bigquery()` instead.
+
 ### Low-level API
 
 The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.

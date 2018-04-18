@@ -43,13 +43,20 @@ NULL
 #' DBI::dbHasCompleted(res)
 #'
 #' }
-dbi_driver <- function() {
+bigquery <- function() {
   new("BigQueryDriver")
 }
 
 #' @export
-#' @rdname dbi_driver
-bigquery <- dbi_driver
+#' @rdname bigquery
+#' @usage NULL
+dbi_driver  <- function() {
+  warning(
+    "`dbi_driver()` deprecated; please use `bigquery()` instead`",
+    call. = FALSE
+  )
+  new("BigQueryDriver")
+}
 
 #' @rdname DBI
 #' @export
@@ -64,7 +71,7 @@ setMethod(
     cat("<BigQueryDriver>\n")
   })
 
-#' @rdname dbi_driver
+#' @rdname bigquery
 #' @inheritParams DBI::dbConnect
 #' @param project,dataset Project and dataset identifiers
 #' @inheritParams bq_perform_query
