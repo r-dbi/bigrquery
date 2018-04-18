@@ -62,15 +62,6 @@ dbi_driver  <- function() {
 #' @export
 setClass("BigQueryDriver", contains = "DBIDriver")
 
-#' @rdname DBI
-#' @inheritParams methods::show
-#' @export
-setMethod(
-  "show", "BigQueryDriver",
-  function(object) {
-    cat("<BigQueryDriver>\n")
-  })
-
 #' @rdname bigquery
 #' @inheritParams DBI::dbConnect
 #' @param project,dataset Project and dataset identifiers
@@ -97,14 +88,32 @@ setMethod(
   }
 )
 
+
 #' @rdname DBI
-#' @inheritParams DBI::dbIsValid
 #' @export
 setMethod(
-  "dbIsValid", "BigQueryDriver",
-  function(dbObj, ...) {
-    TRUE
-  })
+  "dbConnect", "bq_dataset",
+  function(drv, ...) {
+    DBI::dbConnect(bigquery(),
+      project = drv$project,
+      dataset = drv$dataset,
+      ...
+    )
+  }
+)
+
+
+# Included for DBI compatibility ------------------------------------------
+# nocov start
+#' @rdname DBI
+#' @inheritParams methods::show
+#' @export
+setMethod(
+  "show", "BigQueryDriver",
+  function(object) {
+    cat("<BigQueryDriver>\n")
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbGetInfo
@@ -117,8 +126,18 @@ setMethod(
       client.version = NA,
       max.connections = NA
     )
-  })
+  }
+)
 
+#' @rdname DBI
+#' @inheritParams DBI::dbIsValid
+#' @export
+setMethod(
+  "dbIsValid", "BigQueryDriver",
+  function(dbObj, ...) {
+    TRUE
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbDataType
@@ -129,3 +148,4 @@ setMethod(
     data_type(obj)
   }
 )
+# nocov end

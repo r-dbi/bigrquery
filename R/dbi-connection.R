@@ -115,6 +115,7 @@ setMethod(
     } else {
       out <- encodeString(x, quote = "`")
     }
+
     SQL(out, names = names(x))
   })
 

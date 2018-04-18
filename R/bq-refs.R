@@ -68,6 +68,8 @@ bq_dataset <- function(project, dataset) {
   )
 }
 
+setOldClass("bq_dataset")
+
 #' @export
 print.bq_dataset <- function(x, ...) {
   cat_line("<bq_dataset> ", x$project, ".", x$dataset)
