@@ -8,7 +8,7 @@ test_that("can retrieve full query results", {
   )
 
   df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM mtcars")
-  expect_equal(df, data_frame(count = 32))
+  expect_equal(df, tibble(count = 32))
 })
 
 test_that("can retrieve query in pieces", {

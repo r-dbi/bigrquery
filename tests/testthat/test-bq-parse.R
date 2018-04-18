@@ -94,7 +94,7 @@ test_that("can parse arrays of structs", {
   x <- vs(list(f = vs("1", "a")), list(f = vs("2", "b")))
   out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
 
-  expect_equal(out, list(data_frame(x = 1:2, y = c("a", "b"))))
+  expect_equal(out, list(tibble(x = 1:2, y = c("a", "b"))))
 })
 
 
@@ -131,7 +131,7 @@ test_that("can parse nested structures", {
   )
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], data_frame(a = 1:3, b = c("a", "b", "c")))
+  expect_equal(df$x[[1]], tibble(a = 1:3, b = c("a", "b", "c")))
 
   df <- replay_query(
     "struct-array",

@@ -77,8 +77,12 @@ public:
   }
 
   BqField(const rapidjson::Value& field) {
+    if (!field.IsObject()) {
+      Rcpp::stop("Invalid field spec");
+    }
+
     name_ = field["name"].GetString();
-    array_ = std::string(field["mode"].GetString()) == "REPEATED";
+    array_ = field.HasMember("mode") && std::string(field["mode"].GetString()) == "REPEATED";
     type_ = parse_bq_type(field["type"].GetString());
 
     if (field.HasMember("fields")) {

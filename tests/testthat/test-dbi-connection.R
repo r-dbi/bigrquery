@@ -39,6 +39,10 @@ test_that("uses BigQuery quoting standards", {
   x <- SQL("x")
   expect_equal(DBI::dbQuoteString(con, x), x)
   expect_equal(DBI::dbQuoteIdentifier(con, x), x)
+
+  # Returns 0-length outputs
+  expect_equal(DBI::dbQuoteString(con, character()), SQL(character()))
+  expect_equal(DBI::dbQuoteIdentifier(con, character()), SQL(character()))
 })
 
 test_that("can retrieve information about public dataset", {
@@ -46,9 +50,11 @@ test_that("can retrieve information about public dataset", {
     bigquery(),
     project = "publicdata",
     dataset = "samples",
-    billing = bq_test_project(),
-    quiet = TRUE
+    billing = bq_test_project()
   )
+
+  fields <- DBI::dbListFields(con, "natality")
+  expect_length(fields, 31)
 
   expect_true("natality" %in% DBI::dbListTables(con))
 
@@ -97,6 +103,7 @@ test_that("can create bq_table from connection + name", {
   expect_error(as_bq_table(con1, "x"), "must have 2 or 3 components")
   expect_equal(as_bq_table(con1, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con1, "x.y.z"), as_bq_table("x.y.z"))
+  expect_error(as_bq_table(con1, "a.b.c.d"), "must have 1-3 components")
 
   con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
   expect_equal(as_bq_table(con2, "x"), as_bq_table("p.d.x"))

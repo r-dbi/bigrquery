@@ -5,9 +5,10 @@
 \name{DBI}
 \alias{DBI}
 \alias{BigQueryDriver-class}
+\alias{dbConnect,bq_dataset-method}
 \alias{show,BigQueryDriver-method}
-\alias{dbIsValid,BigQueryDriver-method}
 \alias{dbGetInfo,BigQueryDriver-method}
+\alias{dbIsValid,BigQueryDriver-method}
 \alias{dbDataType,BigQueryDriver-method}
 \alias{BigQueryConnection-class}
 \alias{show,BigQueryConnection-method}
@@ -42,11 +43,13 @@
 \alias{dbBind,BigQueryResult-method}
 \title{DBI methods}
 \usage{
+\S4method{dbConnect}{bq_dataset}(drv, ...)
+
 \S4method{show}{BigQueryDriver}(object)
 
-\S4method{dbIsValid}{BigQueryDriver}(dbObj, ...)
-
 \S4method{dbGetInfo}{BigQueryDriver}(dbObj, ...)
+
+\S4method{dbIsValid}{BigQueryDriver}(dbObj, ...)
 
 \S4method{dbDataType}{BigQueryDriver}(dbObj, obj, ...)
 
@@ -111,13 +114,13 @@
 \S4method{dbBind}{BigQueryResult}(res, params, ...)
 }
 \arguments{
+\item{...}{Other arguments to methods.}
+
 \item{object}{Any R object}
 
 \item{dbObj}{An object inheriting from \linkS4class{DBIObject},
 i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
 or a \linkS4class{DBIResult}}
-
-\item{...}{Other arguments to methods.}
 
 \item{obj}{An R object whose SQL type we want to determine.}
 

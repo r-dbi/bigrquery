@@ -36,7 +36,7 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   }
 
   con <- DBI::dbConnect(
-    dbi_driver(),
+    bigquery(),
     project = project,
     dataset = dataset,
     billing = billing,
@@ -44,14 +44,6 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   )
 
   dbplyr::src_dbi(con)
-}
-
-# registered onLoad
-tbl.src_bigquery <- function(src, from, ...) {
-  if (src@use_legacy_sql) {
-    stop("dplyr backend must have use_legacy_sql = FALSE", call. = FALSE)
-  }
-  dbplyr::tbl_sql("bigquery", src = src, from = from, ...)
 }
 
 # registered onLoad
@@ -69,13 +61,19 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
 
 # registered onLoad
 db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, ...) {
-  ds <- bq_dataset(con@project, con@dataset)
-  destination_table <- if (!temporary) bq_table(ds, name)
 
-  tb <- bq_dataset_query(ds,
-    query = sql,
-    destination_table = destination_table
-  )
+  if (is.null(con@dataset)) {
+    destination_table <- if (!temporary) as_bq_table(con, name)
+    tb <- bq_project_query(con@project, sql, destination_table = destination_table)
+  } else {
+    ds <- bq_dataset(con@project, con@dataset)
+    destination_table <- if (!temporary) as_bq_table(con, name)
+
+    tb <- bq_dataset_query(ds,
+      query = sql,
+      destination_table = destination_table
+    )
+  }
 
   paste0(tb$project, ".", tb$dataset, ".", tb$table)
 }
@@ -103,7 +101,7 @@ collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TR
     if (is.null(x$src$con@dataset)) {
       tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet)
     } else {
-      ds <- ds
+      ds <- as_bq_dataset(x$src$con)
       tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing)
     }
   }

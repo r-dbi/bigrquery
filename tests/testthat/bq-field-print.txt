@@ -1,0 +1,15 @@
+Field:
+<bq_field> z3 <RECORD>
+  z2 <RECORD>
+    z1 <RECORD>
+      x <STRING>
+      y <INTEGER>
+
+
+Fields: 
+<bq_fields>
+  z2 <RECORD>
+    z1 <RECORD>
+      x <STRING>
+      y <INTEGER>
+

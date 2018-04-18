@@ -51,24 +51,18 @@ indent <- function(x, n = 2) {
   paste0(space, gsub("\n", paste0("\n", space), x, fixed = TRUE))
 }
 
-#' @export
-print.bq_bytes <- function(x, ...) {
-  cat_line(prettyunits::pretty_bytes(x))
-}
-
-
 as_json <- function(x) UseMethod("as_json")
 
 #' @export
 as_json.NULL <- function(x) NULL
 
-
+# nocov start
 show_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
 
-data_frame <- function(...) {
-  x <- data.frame(..., check.names = FALSE, stringsAsFactors = FALSE)
-  class(x) <- c("tbl_df", "tbl", "data.frame")
-  x
+#' @export
+print.bq_bytes <- function(x, ...) {
+  cat_line(prettyunits::pretty_bytes(x))
 }
+# nocov end

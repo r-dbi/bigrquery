@@ -230,7 +230,8 @@ setMethod(
   "dbListFields", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
     tb <- as_bq_table(conn, name)
-    bq_table_fields(tb)
+    flds <- bq_table_fields(tb)
+    map_chr(flds, function(x) x$name)
   })
 
 #' @rdname DBI
@@ -244,6 +245,7 @@ setMethod(
     invisible(TRUE)
   })
 
+# nocov start
 #' @rdname DBI
 #' @inheritParams DBI::dbGetInfo
 #' @export
@@ -259,7 +261,6 @@ setMethod(
     )
   })
 
-# nocov start
 #' @rdname DBI
 #' @inheritParams DBI::dbBegin
 #' @export
