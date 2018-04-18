@@ -109,7 +109,7 @@ bq_perform_extract <- function(x,
 bq_perform_upload <- function(x, values,
                               fields = NULL,
                               create_disposition = "CREATE_IF_NEEDED",
-                              write_disposition = "WRITE_APPEND",
+                              write_disposition = "WRITE_EMPTY",
                               ...,
                               billing = x$project
                               ) {
@@ -187,7 +187,7 @@ bq_perform_load <- function(x,
                             fields = NULL,
                             nskip = 0,
                             create_disposition = "CREATE_IF_NEEDED",
-                            write_disposition = "WRITE_APPEND",
+                            write_disposition = "WRITE_EMPTY",
                             ...
                             ) {
   x <- as_bq_table(x)
