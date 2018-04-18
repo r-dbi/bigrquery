@@ -64,7 +64,6 @@ Collate:
     'dbi-driver.R'
     'dbi-connection.R'
     'dbi-result.R'
-    'dplyr-compat.R'
     'dplyr.R'
     'gs-object.R'
     'old-dataset.R'
