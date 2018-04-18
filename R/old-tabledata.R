@@ -33,7 +33,7 @@ list_tabledata <- function(project, dataset, table,
                            ) {
 
 
-  if (!requireNamespace("readr", qquietly = TRUE)) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
     stop("Must install readr package to use `list_tabledata", call. = FALSE)
   }
 
