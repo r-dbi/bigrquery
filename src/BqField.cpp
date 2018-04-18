@@ -404,8 +404,11 @@ SEXP bq_parse_files(std::string schema_path,
     }
 
     offset += bq_fields_set(values_doc, out, fields, offset);
-    if (!quiet)
+    if (!quiet) {
       pb.tick();
+    } else {
+      Rcpp::checkUserInterrupt();
+    };
 
     fclose(values_file);
   }
