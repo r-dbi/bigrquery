@@ -14,12 +14,12 @@ The system for downloading data from BigQuery into R has been rewritten from the
   default.
 
 * The parsing code has been rewritten in C++. As well as considerably improving 
-  performance, this also adds supported for nested (record/struct) and repeated 
+  performance, this also adds support for nested (record/struct) and repeated 
   (array) columns (#145). These columns will yield list-columns in the 
   following forms:
   
     * Repeated values become list-columns containing vectors.
-    * Nested values become list-columns containing named lists
+    * Nested values become list-columns containing named lists.
     * Repeated nested values become list-columns containing data frames.
 
 * Results are now returned as tibbles, not data frames, because the base print 
@@ -39,7 +39,7 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 
 ### DBI
 
-* `dbConnect()` now defaults to modern SQL, rather than legacy SQL. Use 
+* `dbConnect()` now defaults to standard SQL, rather than legacy SQL. Use 
   `use_legacy_sql = TRUE` if you need the previous behaviour (#147).
 
 * `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
@@ -50,7 +50,7 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 
 ### Low-level API
 
-The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.
+The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.
 
 * __Consistent naming scheme__:
   All API functions now have the form `bq_object_verb()`, e.g. 
@@ -64,16 +64,16 @@ The low-level API has been completely overhauled to make it easier to use. The p
 
 * __Easier local testing__:
   New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
-  bigrquery tests locally. To run the tests yourself, you need to do create a 
+  bigrquery tests locally. To run the tests yourself, you need to create a 
   BigQuery project, and then follow the instructions in `?bq_test_project`.
 
 * __More efficient data transfer__: 
-  The new API makes extensive user of the `fields` query parameter ensuring 
+  The new API makes extensive use of the `fields` query parameter, ensuring 
   that functions only download data that they actually use (#153).
 
-* __Tighter GCS connection__: New `bq_table_load()` loads data from a Google 
-  Cloud Storage URI, pairing with `bq_table_save()` which saves data to a GCS
-  URI (#155)
+* __Tighter GCS connection__: 
+  New `bq_table_load()` loads data from a Google Cloud Storage URI, pairing 
+  with `bq_table_save()` which saves data to a GCS URI (#155).
 
 ## Bug fixes and minor improvements
 
@@ -87,7 +87,7 @@ The low-level API has been completely overhauled to make it easier to use. The p
 
 * If you have the development version of dbplyr installed, `print()`ing
   a BigQuery table will not perform an unneeded query, but will instead 
-  download directly from the table (#226)
+  download directly from the table (#226).
 
 ### Low-level
 
@@ -97,9 +97,9 @@ The low-level API has been completely overhauled to make it easier to use. The p
 * `bq_dataset_query()` and `bq_project_query()` can now supply query parameters
   (#191).
 
-* `bq_table_create()` can now specify `fields`. (#204)
+* `bq_table_create()` can now specify `fields` (#204).
 
-* `bq_perform_query()` no longer fails with empty results (@byapparov, #206)
+* `bq_perform_query()` no longer fails with empty results (@byapparov, #206).
 
 # Version 0.4.1
 
