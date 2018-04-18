@@ -1,7 +1,11 @@
-#' A bigquery data source.
+#' A BigQuery data source for dplyr.
 #'
-#' Use `src_bigquery` to connect to an existing bigquery dataset,
-#' and `tbl` to connect to tables within that database.
+#' Create the connection to the database with `DBI::dbConnect()` then
+#' use [dplyr::tbl()] to connect to tables within that database. Generally,
+#' it's best to provide the fully qualified name of the table (i.e.
+#' `project.dataset.table`) but if you supply a default `dataset` in the
+#' connection, you can use just the table name. (This, however, will
+#' prevent you from making joins across datasets.)
 #'
 #' @param project project id or name
 #' @param dataset dataset name
@@ -14,21 +18,13 @@
 #'
 #' # To run this example, replace billing with the id of one of your projects
 #' # set up for billing
-#' con <- DBI::dbConnect(dbi_driver(),
-#'   project = "publicdata",
-#'   dataset = "samples",
-#'   billing = "887175176791"
-#' )
+#' con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 #'
-#' DBI::dbListTables(con)
-#' DBI::dbGetQuery(con, "SELECT * FROM gsod LIMIT 5")
-#'
-#' # You can also use the dplyr interface
-#' shakespeare <- con %>% tbl("shakespeare")
+#' shakespeare <- con %>% tbl("publicdata.samples.shakespeare")
 #' shakespeare
 #' shakespeare %>%
 #'   group_by(word) %>%
-#'   summarise(n = sum(word_count)) %>%
+#'   summarise(n = sum(word_count, na.rm = TRUE)) %>%
 #'   arrange(desc(n))
 #' }
 src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
@@ -64,7 +60,7 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
     ds <- bq_dataset(con@project, con@dataset)
     fields <- bq_query_fields(sql, con@billing, default_dataset = ds)
   } else {
-    tb <- bq_table(con@project, con@dataset, sql)
+    tb <- as_bq_table(con, sql)
     fields <- bq_table_fields(tb)
   }
 
@@ -73,28 +69,72 @@ db_query_fields.BigQueryConnection <- function(con, sql) {
 
 # registered onLoad
 db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, ...) {
-  if (temporary) {
-    stop(
-      "Can not create temporary tables in BigQuery.\n",
-      "Did you mean `temporary = FALSE`?",
-      call. = FALSE
-    )
-  }
-
   ds <- bq_dataset(con@project, con@dataset)
-  tb <- bq_table(ds, name)
+  destination_table <- if (!temporary) bq_table(ds, name)
 
-  bq_dataset_query(ds,
+  tb <- bq_dataset_query(ds,
     query = sql,
-    destination_table = tb
+    destination_table = destination_table
   )
 
-  name
+  paste0(tb$project, ".", tb$dataset, ".", tb$table)
 }
 
 # registered onLoad
 db_analyze.BigQueryConnection <- function(con, table, ...) {
   TRUE
+}
+
+
+# Efficient downloads -----------------------------------------------
+
+# registered onLoad
+collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TRUE) {
+  assert_that(length(n) == 1, n > 0L)
+
+  if (op_can_download(x$ops)) {
+    name <- op_table(x$ops, x$src$con)
+    tb <- as_bq_table(x$src$con, name)
+    n <- min(op_rows(x$ops), n)
+  } else {
+    sql <- dbplyr::db_sql_render(x$src$con, x)
+
+    billing <- x$src$con@billing
+    if (is.null(x$src$con@dataset)) {
+      tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet)
+    } else {
+      ds <- ds
+      tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing)
+    }
+  }
+
+  quiet <- if (n < 100) TRUE else x$src$con@quiet
+  out <- bq_table_download(tb, max_results = n, quiet = quiet)
+  dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
+}
+
+# Can download directly if only head and
+
+op_can_download <- function(x) UseMethod("op_can_download")
+#' @export
+op_can_download.op <- function(x) FALSE
+#' @export
+op_can_download.op_head <- function(x) op_can_download(x$x)
+#' @export
+op_can_download.op_base_remote <- function(x) dbplyr::is.ident(x$x)
+
+op_rows <- function(x) UseMethod("op_rows")
+#' @export
+op_rows.op_base <- function(x) Inf
+#' @export
+op_rows.op_head <- function(x) min(x$args$n, op_rows(x$x))
+
+op_table <- function(x, con) UseMethod("op_table")
+#' @export
+op_table.op <- function(x, con) op_table(x$x, con)
+#' @export
+op_table.op_base_remote <- function(x, con) {
+  x$x
 }
 
 # SQL translation -------------------------------------------------------------

@@ -85,6 +85,16 @@ Results are now returned as tibbles because the base print method does not handl
 * Improved SQL translation for `pmax()`, `pmin()`, `sd()`, `all()`, and `any()`
   (#176, #179, @jarodmeng). And for `paste0()`, `cor()` and `cov()`
   (@edgararuiz).
+  
+* If you have the development version of dbplyr installed, `print()`ing
+  a BigQuery table will not perform an unneeded query, but will instead 
+  download directly from the table (#226)
+
+* `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
+  want to join use tables from multiple datasets, or indeed, even multiple
+  project. In `tbl()`, you can now supply table names qualified by the
+  dataset and project names (e.g. "publicdata.samples.shakespeare").
+  Together these changes make it easy to join tables across datasets (#219).
 
 # Version 0.4.1
 

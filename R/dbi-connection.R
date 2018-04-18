@@ -23,7 +23,7 @@ setClass(
   contains = "DBIConnection",
   slots = list(
     project = "character",
-    dataset = "character",
+    dataset = "ANY",
     billing = "character",
     use_legacy_sql = "logical",
     page_size = "integer",
@@ -37,11 +37,13 @@ setClass(
 setMethod(
   "show", "BigQueryConnection",
   function(object) {
-    cat_line(
-      "<BigQueryConnection>\n",
-      "  Dataset: ", paste0(object@project, ".", object@dataset), "\n",
-      "  Billing: ", object@billing
-    )
+    cat_line("<BigQueryConnection>")
+
+    if (!is.null(object@dataset)) {
+      cat_line("  Dataset: ", object@project, ".", object@dataset)
+    }
+    cat_line("  Billing: ", object@billing)
+
   })
 
 #' @rdname DBI
@@ -175,7 +177,7 @@ setMethod(
       create_disposition <- "CREATE_IF_NEEDED"
       write_disposition <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
     }
-    tb <- bq_table(conn@project, conn@dataset, name)
+    tb <- as_bq_table(conn, name)
 
     bq_table_upload(tb, value,
       create_disposition = create_disposition,
@@ -191,7 +193,7 @@ setMethod(
 setMethod(
   "dbReadTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    tb <- bq_table(conn@project, conn@dataset, name)
+    tb <- as_bq_table(conn, name)
     bq_table_download(tb, ...)
   })
 
@@ -201,6 +203,9 @@ setMethod(
 setMethod(
   "dbListTables", "BigQueryConnection",
   function(conn, ...) {
+    if (is.null(conn@dataset)) {
+      stop("To list table, must supply `dataset` when creating connection", call. = FALSE)
+    }
     ds <- bq_dataset(conn@project, conn@dataset)
 
     tbs <- bq_dataset_tables(ds, ...)
@@ -213,7 +218,7 @@ setMethod(
 setMethod(
   "dbExistsTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    tb <- bq_table(conn@project, conn@dataset, name)
+    tb <- as_bq_table(conn, name)
     bq_table_exists(tb)
   })
 
@@ -223,7 +228,7 @@ setMethod(
 setMethod(
   "dbListFields", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    tb <- bq_table(conn@project, conn@dataset, name)
+    tb <- as_bq_table(conn, name)
     bq_table_fields(tb)
   })
 
@@ -233,7 +238,7 @@ setMethod(
 setMethod(
   "dbRemoveTable", c("BigQueryConnection", "character"),
   function(conn, name, ...) {
-    tb <- bq_table(conn@project, conn@dataset, name)
+    tb <- as_bq_table(conn, name)
     bq_table_delete(tb)
     invisible(TRUE)
   })
@@ -246,7 +251,7 @@ setMethod(
   function(dbObj, ...) {
     list(
       db.version = NA,
-      dbname = paste0(dbObj@project, ".", dbObj@dataset),
+      dbname = paste0(c(dbObj@project, dbObj@dataset), collapse = "."),
       username = NA,
       host = NA,
       port = NA
@@ -279,3 +284,39 @@ setMethod(
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbRollback(Connection)")
   })
+
+
+
+# Convert to bq objects ---------------------------------------------------
+
+#' @export
+as_bq_dataset.BigQueryConnection <- function(x) {
+  bq_dataset(x@project, x@dataset)
+}
+
+
+#' @export
+as_bq_table.BigQueryConnection <- function(x, name, ...) {
+  pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
+
+  if (length(pieces) > 3) {
+    stop(
+      "Table name, '", name, "', must have 1-3 components.",
+      call. = FALSE
+    )
+  }
+  if (length(pieces) == 1 && is.null(x@dataset)) {
+    stop(
+      "Table name, '", name, "', must have 2 or 3 components ",
+      "when the connection has no dataset",
+      call. = FALSE
+    )
+  }
+
+  switch(length(pieces),
+    bq_table(x@project, x@dataset, pieces[[1]]),
+    bq_table(x@project, pieces[[1]], pieces[[2]]),
+    bq_table(pieces[[1]], pieces[[2]], pieces[[3]])
+  )
+}
+

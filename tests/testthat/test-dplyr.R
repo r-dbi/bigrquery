@@ -13,6 +13,8 @@ test_that("can work with literal SQL", {
 })
 
 test_that("can compute queries", {
+  skip_if_not_installed("dbplyr", "1.2.0.9001")
+
   con <- DBI::dbConnect(
     bigquery(),
     project = bq_test_project(),
@@ -22,11 +24,35 @@ test_that("can compute queries", {
   bq_mtcars <- dplyr::tbl(con, "mtcars")
   bq_mtcars <- bq_mtcars %>% dplyr::filter(cyl == 4)
 
+  # Temporary table
+  temp <- dplyr::compute(bq_mtcars)
+
+  # Persistently
   name <- random_name()
-  x <- dplyr::compute(bq_mtcars, name, temporary = FALSE)
+  temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
   on.exit(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
+})
+
+test_that("collect can identify  directly download tables", {
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    dataset = "basedata"
+  )
+
+  bq1 <- dplyr::tbl(con, "mtcars")
+  expect_true(op_can_download(bq1$ops))
+  expect_equal(op_rows(bq1$ops), Inf)
+
+  bq2 <- head(bq1, 4)
+  expect_true(op_can_download(bq2$ops))
+  expect_equal(op_rows(bq2$ops), 4)
+
+  bq3 <- head(bq2, 2)
+  expect_true(op_can_download(bq3$ops))
+  expect_equal(op_rows(bq3$ops), 2)
 })
 
 test_that("casting uses bigquery types", {

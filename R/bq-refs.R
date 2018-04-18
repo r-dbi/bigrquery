@@ -19,6 +19,7 @@
 #'   the 2nd argument will be interpreted as the `table`
 #' @param x An object to coerce to a `bq_job`, `bq_dataset`, or `bq_table`.
 #'   Built-in methods handle strings and lists.
+#' @param ... Other arguments passed on to methods.
 #' @seealso [api-job], [api-perform], [api-dataset], and [api-table] for
 #'   functions that work with these objects.
 #' @examples
@@ -123,21 +124,21 @@ print.bq_table <- function(x, ...) {
 
 #' @rdname bq_refs
 #' @export
-as_bq_table <- function(x) UseMethod("as_bq_table")
+as_bq_table <- function(x, ...) UseMethod("as_bq_table")
 
 #' @export
-as_bq_table.bq_table <- function(x) {
+as_bq_table.bq_table <- function(x, ...) {
   x
 }
 
 #' @export
-as_bq_table.character <- function(x) {
+as_bq_table.character <- function(x, ...) {
   x <- bq_from_string(x, 3, "bq_table")
   bq_table(x[[1]], x[[2]], x[[3]])
 }
 
 #' @export
-as_bq_table.list <- function(x) {
+as_bq_table.list <- function(x, ...) {
   x <- bq_from_list(x, c("projectId", "datasetId", "tableId"), "bq_table")
   bq_table(x$projectId, x$datasetId, x$tableId)
 }

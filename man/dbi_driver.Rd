@@ -9,8 +9,9 @@
 \usage{
 bigquery()
 
-\S4method{dbConnect}{BigQueryDriver}(drv, project, dataset, billing = project,
-  page_size = 10000, quiet = NA, use_legacy_sql = FALSE, ...)
+\S4method{dbConnect}{BigQueryDriver}(drv, project, dataset = NULL,
+  billing = project, page_size = 10000, quiet = NA,
+  use_legacy_sql = FALSE, ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \linkS4class{DBIDriver},

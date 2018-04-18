@@ -15,7 +15,7 @@ as_bq_dataset(x)
 
 bq_table(project, dataset, table = NULL)
 
-as_bq_table(x)
+as_bq_table(x, ...)
 
 bq_job(project, job)
 
@@ -30,6 +30,8 @@ the 2nd argument will be interpreted as the \code{table}}
 
 \item{x}{An object to coerce to a \code{bq_job}, \code{bq_dataset}, or \code{bq_table}.
 Built-in methods handle strings and lists.}
+
+\item{...}{Other arguments passed on to methods.}
 }
 \description{
 Create references to BigQuery datasets, jobs, and tables. Each class
