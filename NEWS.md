@@ -39,7 +39,7 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 
 ### DBI
 
-* `dbConnect()` now defaults to modern SQL, rather than legacy SQL. Use 
+* `dbConnect()` now defaults to standard SQL, rather than legacy SQL. Use 
   `use_legacy_sql = TRUE` if you need the previous behaviour (#147).
 
 * `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
