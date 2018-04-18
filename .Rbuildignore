@@ -7,3 +7,4 @@
 ^tests/testthat/service-token\.json$
 ^codecov\.yml$
 ^README\.Rmd$
+^\.covrignore$
