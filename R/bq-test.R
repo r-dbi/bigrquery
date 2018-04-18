@@ -49,7 +49,8 @@ bq_test_project <- function() {
 
 #' @export
 #' @rdname bq_test_project
-bq_test_init <- function() {
+#' @param name Dataset name - used only for testing.
+bq_test_init <- function(name = "basedata") {
   proj <- bq_test_project()
 
   basedata <- bq_dataset(proj, "basedata")

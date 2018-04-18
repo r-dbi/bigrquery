@@ -12,7 +12,7 @@
 \usage{
 bq_test_project()
 
-bq_test_init()
+bq_test_init(name = "basedata")
 
 bq_test_dataset(name = random_name())
 
@@ -23,6 +23,9 @@ bq_authable()
 gs_test_bucket()
 
 gs_test_object(name = random_name())
+}
+\arguments{
+\item{name}{Dataset name - used only for testing.}
 }
 \value{
 \code{bq_test_project()} returns the name of a project suitable for
