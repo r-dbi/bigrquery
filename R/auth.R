@@ -1,8 +1,12 @@
 #' @importFrom httr oauth_endpoint oauth_app oauth2.0_token
-google <- oauth_endpoint(NULL, "auth", "token",
+bq_endpoint <- oauth_endpoint(NULL, "auth", "token",
   base_url = "https://accounts.google.com/o/oauth2"
 )
-bigqr <- oauth_app(
+bq_scopes <- c(
+  "https://www.googleapis.com/auth/bigquery",
+  "https://www.googleapis.com/auth/cloud-platform"
+)
+bq_app <- oauth_app(
   "google",
   "465736758727.apps.googleusercontent.com",
   "fJbIIyoIag0oA6p114lwsV2r"
@@ -54,6 +58,7 @@ reset_access_cred <- function() {
   set_access_cred(NULL)
 }
 
+
 #' @rdname get_access_cred
 #' @param app A Google OAuth application created using
 #'  \code{\link[httr]{oauth_app}}
@@ -64,13 +69,7 @@ set_oauth2.0_cred <- function(app = NULL) {
     app <- bigqr
   }
 
-  cred <- oauth2.0_token(google, app,
-    scope = c(
-      "https://www.googleapis.com/auth/bigquery",
-      "https://www.googleapis.com/auth/cloud-platform"
-    )
-  )
-
+  cred <- oauth2.0_token(bq_endpoint, bq_app, scope = bq_scopes)
   set_access_cred(cred)
 }
 # nocov end
@@ -81,9 +80,7 @@ set_oauth2.0_cred <- function(app = NULL) {
 #'   the service token file.
 set_service_token <- function(service_token) {
   service_token <- jsonlite::fromJSON(service_token)
-  endpoint <- httr::oauth_endpoints("google")
-  scope <- "https://www.googleapis.com/auth/bigquery"
 
-  cred <- httr::oauth_service_token(endpoint, service_token, scope)
+  cred <- httr::oauth_service_token(bq_endpoint, service_token, scope = bq_scopes)
   set_access_cred(cred)
 }
