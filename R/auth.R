@@ -65,11 +65,7 @@ reset_access_cred <- function() {
 #' @export
 # nocov start
 set_oauth2.0_cred <- function(app = NULL) {
-  if (is.null(app)) {
-    app <- bigqr
-  }
-
-  cred <- oauth2.0_token(bq_endpoint, bq_app, scope = bq_scopes)
+  cred <- oauth2.0_token(bq_endpoint, app %||% bq_app, scope = bq_scopes)
   set_access_cred(cred)
 }
 # nocov end
