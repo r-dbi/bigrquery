@@ -13,6 +13,12 @@ test_that("can create and delete tables", {
   expect_false(bq_table_exists(bq_mtcars))
 })
 
+test_that("can retrieve table size information", {
+  bq_mtcars <- bq_table(bq_test_project(), "basedata", "mtcars")
+  expect_equal(bq_table_nrow(bq_mtcars), 32)
+  expect_equal(as.numeric(bq_table_size(bq_mtcars)), 2816)
+})
+
 test_that("can create table with schema", {
   ds <- bq_test_dataset()
   tb <- bq_table(ds, "df")
@@ -59,6 +65,22 @@ test_that("can round trip data frame with list-cols", {
 
   expect_equal(df1, df2)
 })
+
+test_that("can roundtrip via save + load", {
+  ds <- bq_test_dataset()
+
+  tb1 <- bq_table(bq_test_project(), "basedata", "mtcars")
+  tb2 <- bq_table(ds, "save_load")
+  gs <- gs_test_object()
+
+  bq_table_save(tb1, gs)
+  on.exit(gs_object_delete(gs))
+  bq_table_load(tb2, gs)
+
+  df <- bq_table_download(tb2)
+  expect_equal(dim(df), c(32, 11))
+})
+
 
 test_that("can copy table from public dataset", {
   ds <- bq_test_dataset()

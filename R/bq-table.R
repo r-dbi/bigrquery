@@ -148,7 +148,7 @@ bq_table_save <- function(x, destination_uris, ..., quiet = NA) {
   job <- bq_perform_extract(x, destination_uris = destination_uris, ...)
   bq_job_wait(job, quiet = quiet)
 
-  x
+  invisible(x)
 }
 
 #' @export
@@ -159,5 +159,5 @@ bq_table_load <- function(x, source_uris, ..., quiet = NA) {
   job <- bq_perform_load(x, source_uris = source_uris, ...)
   bq_job_wait(job, quiet = quiet)
 
-  x
+  invisible(x)
 }
