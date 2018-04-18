@@ -58,6 +58,7 @@ reset_access_cred <- function() {
 #' @param app A Google OAuth application created using
 #'  \code{\link[httr]{oauth_app}}
 #' @export
+# nocov start
 set_oauth2.0_cred <- function(app = NULL) {
   if (is.null(app)) {
     app <- bigqr
@@ -72,6 +73,7 @@ set_oauth2.0_cred <- function(app = NULL) {
 
   set_access_cred(cred)
 }
+# nocov end
 
 #' @export
 #' @rdname get_access_cred

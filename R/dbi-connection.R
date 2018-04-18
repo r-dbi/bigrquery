@@ -258,6 +258,7 @@ setMethod(
     )
   })
 
+# nocov start
 #' @rdname DBI
 #' @inheritParams DBI::dbBegin
 #' @export
@@ -284,7 +285,7 @@ setMethod(
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbRollback(Connection)")
   })
-
+# nocov end
 
 
 # Convert to bq objects ---------------------------------------------------

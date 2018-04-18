@@ -31,7 +31,7 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   if (!requireNamespace("dplyr", quietly = TRUE)) {
     stop("dplyr is required to use src_bigquery", call. = FALSE)
   }
-  if (!use_dbplyr()) {
+  if (utils::packageVersion("dplyr") < "0.6.0") {
     stop("dplyr 0.6.0 and dbplyr required to use src_bigquery", call. = FALSE)
   }
 
@@ -138,6 +138,12 @@ op_table.op_base_remote <- function(x, con) {
 }
 
 # SQL translation -------------------------------------------------------------
+
+# Don't import to avoid build-time dependency
+sql_prefix <- function(f, n = NULL) {
+  dbplyr::sql_prefix(f = f, n = n)
+}
+
 # registered onLoad
 sql_translate_env.BigQueryConnection <- function(x) {
   dbplyr::sql_variant(
