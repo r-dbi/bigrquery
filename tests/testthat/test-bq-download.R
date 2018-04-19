@@ -20,6 +20,8 @@ test_that("can retrieve fraction of page size", {
 })
 
 test_that("can retrieve zero rows", {
+  skip_if_no_auth()
+
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
   df <- bq_table_download(tb, max_results = 0)
   expect_equal(nrow(df), 0)
