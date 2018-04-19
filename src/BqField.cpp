@@ -157,7 +157,7 @@ public:
       break;
     case BQ_BOOLEAN:
       if (v.IsString()) {
-        bool is_true = strncmp(v.GetString(), "T", 1) == 0;
+        bool is_true = strncmp(v.GetString(), "t", 1) == 0;
         INTEGER(x)[i] = is_true;
       } else {
         INTEGER(x)[i] = NA_LOGICAL;

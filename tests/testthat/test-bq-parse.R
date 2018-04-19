@@ -6,8 +6,8 @@ test_that("can parse atomic vectors", {
   expect_identical(bq_parse_single("x", "string"), "x")
   expect_identical(bq_parse_single("10", "integer"), 10L)
   expect_identical(bq_parse_single("10", "float"), 10)
-  expect_identical(bq_parse_single("TRUE", "boolean"), TRUE)
-  expect_identical(bq_parse_single("FALSE", "boolean"), FALSE)
+  expect_identical(bq_parse_single("true", "boolean"), TRUE)
+  expect_identical(bq_parse_single("false", "boolean"), FALSE)
 })
 
 test_that("can parse date/times", {

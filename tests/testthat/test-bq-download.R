@@ -50,3 +50,10 @@ test_that("can convert date time types", {
   expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
 })
 
+test_that("correctly parse logical values" ,{
+  query <- "SELECT TRUE as x"
+  tb <- bq_project_query(bq_test_project(), query)
+  df <- bq_table_download(tb)
+
+  expect_true(df$x)
+})
