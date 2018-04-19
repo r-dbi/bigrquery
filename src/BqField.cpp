@@ -138,7 +138,7 @@ public:
         Rcpp::stop("Not an array [1]");
 
       int n = v.Size();
-      SEXP out = vectorInit(n, false);
+      Rcpp::RObject out = vectorInit(n, false);
       for (int j = 0; j < n; ++j) {
         vectorSet(out, j, v[j]["v"], false);
       }
@@ -165,7 +165,7 @@ public:
       break;
     case BQ_STRING:
       if (v.IsString()) {
-        SEXP chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
+        Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
         SET_STRING_ELT(x, i, chr);
       } else {
         SET_STRING_ELT(x, i, NA_STRING);
@@ -235,7 +235,7 @@ public:
         const rapidjson::Value& vs = f[j]["v"];
 
         int n = (field.array_) ? vs.Size() : 1;
-        SEXP col = field.vectorInit(n, false);
+        Rcpp::RObject col = field.vectorInit(n, false);
         if (field.array_) {
           for (int i = 0; i < n; ++i) {
             field.vectorSet(col, i, vs[i]["v"], false);
@@ -356,7 +356,7 @@ SEXP bq_field_init(std::string json, std::string value = "") {
   d1.Parse(&json[0]);
 
   BqField field(d1);
-  SEXP out = field.vectorInit(1);
+  Rcpp::RObject out = field.vectorInit(1);
 
   if (value != "") {
     rapidjson::Document d2;
