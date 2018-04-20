@@ -34,7 +34,8 @@ Suggests:
     testthat,
     withr,
     covr,
-    readr
+    readr,
+    sodium
 LinkingTo: 
     progress,
     rapidjsonr,
