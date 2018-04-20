@@ -34,6 +34,7 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Kungliga Tekniska Högskolan (strptime implementation) [contributor]
   \item RStudio [copyright holder]
 }
 
