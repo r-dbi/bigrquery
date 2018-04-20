@@ -1,6 +1,7 @@
 context("test-bq-request.R")
 
 test_that("pagination warns if pages left on server", {
+  skip_if_no_auth()
 
   expect_warning(
     bq_get_paginated(
