@@ -4,6 +4,13 @@ language: R
 sudo: false
 cache: packages
 
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+      - libsodium-dev
+
 r:
 # - 3.1 # test fail because dbplyr requires 3.2
 - 3.2
