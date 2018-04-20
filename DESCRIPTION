@@ -3,7 +3,7 @@ Title: An Interface to Google's 'BigQuery' 'API'
 Version: 0.4.1.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
-    person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime implementation"),
+    person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime & gmtime implementations"),
     person("RStudio", role = "cph")
     )
 Description: Easily talk to Google's 'BigQuery' database from R.

@@ -11,8 +11,8 @@
 #include <fstream>
 
 #if defined(_WIN32) || defined(_WIN64)
-#define timegm _mkgmtime
-char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
+time_t rep_timegm(struct tm *tm);
+extern char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
 #endif
 
 enum BqType {
