@@ -4,7 +4,7 @@ token_path <- function() {
     return(path)
   }
 
-  if (!requireNamespace("openssl", quietly = TRUE)) {
+  if (!requireNamespace("sodium", quietly = TRUE)) {
     return()
   }
 
@@ -49,7 +49,12 @@ file_decrypt <- function(src, dst, key = find_key()) {
 # file_encrypt("~~/Desktop/bigrquery-examples-d37557b06951.json", "tests/testthat/service-token.json.enc")
 
 path <- token_path()
-has_auth <- file.exists(path)
+has_auth <- !is.null(path) && file.exists(path)
+
+if (has_auth) {
+  cat_line("Using token: ", path)
+  set_service_token(path)
+}
 
 skip_if_no_auth <- function() {
   if (!has_auth) {
@@ -57,5 +62,3 @@ skip_if_no_auth <- function() {
   }
 }
 
-if (has_auth)
-  set_service_token(path)
