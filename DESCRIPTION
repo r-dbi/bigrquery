@@ -80,5 +80,6 @@ Collate:
     'old-query.R'
     'old-table.R'
     'old-tabledata.R'
+    'secret.R'
     'utils.R'
     'zzz.R'
