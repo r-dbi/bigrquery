@@ -11,8 +11,10 @@
 #include <fstream>
 
 #if defined(_WIN32) || defined(_WIN64)
-time_t rep_timegm(struct tm *tm);
-extern char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
+extern "C" {
+time_t timegm(struct tm *tm);
+char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
+}
 #endif
 
 enum BqType {
@@ -127,6 +129,8 @@ public:
     case BQ_RECORD:
       return Rcpp::List(n);
     }
+
+    Rcpp::stop("Unknown type");
   }
 
   SEXP vectorInit(int n) const  {
