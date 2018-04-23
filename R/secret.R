@@ -12,6 +12,9 @@
 # Will fail gracefully if password not found or suggested sodium package
 # not installed. Up to the user to handle absense of encryption - see
 # helper-auth.R for an example
+#
+# Can test on r-hub by passing along env var:
+# rhub::check(env_vars = Sys.getenv(secret_pw_name("bigrquery"), names = TRUE))
 
 secret_can_decrypt <- function(package) {
   requireNamespace("sodium", quietly = TRUE) && secret_pw_exists(package)
