@@ -4,7 +4,7 @@ Version: 0.4.1.9000
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime implementation"),
-    person("The NetBSD Foundation, Inc.", comment = "gmtime implementation"),
+    person("The NetBSD Foundation, Inc.", role = "ctb", comment = "gmtime implementation"),
     person("RStudio", role = "cph")
     )
 Description: Easily talk to Google's 'BigQuery' database from R.
