@@ -73,9 +73,10 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   x <- as_bq_job(x)
 
   progress <- bq_progress(
-    "Running job :spin: :elapsed:",
+    "Running job [:spin] :elapsed",
     total = 1e7,
-    quiet = quiet
+    quiet = quiet,
+    clear = FALSE
   )
 
   status <- bq_job_status(x)

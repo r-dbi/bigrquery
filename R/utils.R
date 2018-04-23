@@ -16,7 +16,7 @@ bq_quiet <- function(x) {
 }
 
 bq_progress <- function(..., quiet = NA) {
-  delay <- if (isFALSE(quiet)) 1 else 0
+  delay <- if (isTRUE(quiet)) 0 else 1
   quiet <- bq_quiet(quiet)
 
   if (quiet) {
