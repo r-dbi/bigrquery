@@ -41,8 +41,6 @@ LinkingTo:
     rapidjsonr,
     Rcpp
 LazyData: true
-Remotes:
-    tidyverse/dbplyr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Collate: 

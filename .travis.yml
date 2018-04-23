@@ -18,6 +18,13 @@ r:
 - release
 - devel
 
+matrix:
+  include:
+  - r: release
+    before_script: Rscript -e 'devtools::install_github("tidyverse/dbplyr")'
+  - r: release
+    env: BIGRQUERY_PASSWORD=''
+
 after_success:
   - Rscript -e 'covr::codecov()'
 
