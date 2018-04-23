@@ -21,6 +21,7 @@ r:
 matrix:
   include:
   - r: release
+    env: DBPLYR="devel-version"
     before_script: Rscript -e 'devtools::install_github("tidyverse/dbplyr")'
   - r: release
     env: BIGRQUERY_PASSWORD=''
