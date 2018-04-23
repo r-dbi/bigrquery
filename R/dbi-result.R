@@ -1,20 +1,19 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, statement) {
-  ds <- bq_dataset(conn@project, conn@dataset)
-  dest <- bq_dataset_query(ds,
-    query = statement,
-    use_legacy_sql = conn@use_legacy_sql,
-    quiet = conn@quiet,
-    billing = conn@billing
-  )
-  nrow <- bq_table_nrow(dest)
+BigQueryResult <- function(conn, sql) {
+  if (is.null(conn@dataset)) {
+    tb <- bq_project_query(conn@billing, sql, quiet = conn@quiet)
+  } else {
+    ds <- as_bq_dataset(conn)
+    tb <- bq_dataset_query(ds, sql, quiet = conn@quiet, billing = conn@billing)
+  }
+  nrow <- bq_table_nrow(tb)
 
   res <- new(
     "BigQueryResult",
-    bq_table = dest,
-    statement = statement,
+    bq_table = tb,
+    statement = sql,
     nrow = nrow,
     page_size = conn@page_size,
     quiet = conn@quiet,

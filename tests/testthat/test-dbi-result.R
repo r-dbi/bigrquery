@@ -11,6 +11,12 @@ test_that("can retrieve full query results", {
   expect_equal(df, tibble(count = 32))
 })
 
+test_that("can retrieve without dataset", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+  df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM `basedata.mtcars`")
+  expect_equal(df, tibble(count = 32))
+})
+
 test_that("can retrieve query in pieces", {
   con <- DBI::dbConnect(
     bigquery(),
