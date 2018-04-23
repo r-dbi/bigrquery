@@ -46,7 +46,7 @@ bq_table_load(x, source_uris, ..., quiet = NA)
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
 
-\item{dest}{Source and desintation \link{bq_table}s.}
+\item{dest}{Source and destination \link{bq_table}s.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}

@@ -8,7 +8,7 @@
 \alias{bq_authable}
 \alias{gs_test_bucket}
 \alias{gs_test_object}
-\title{Project to use for testing bigquery}
+\title{Project to use for testing bigrquery}
 \usage{
 bq_test_project()
 
@@ -34,7 +34,7 @@ who's lifetime is tied to the lifetime of the object that it returns.
 }
 \description{
 You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
-\code{BIGQUERY_TEST_PROJECT} (name of bucket) env vars in order to run bigquery
+\code{BIGQUERY_TEST_PROJECT} (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
 both reading and writing in BigQuery and CloudStorage.
 

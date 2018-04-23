@@ -1,8 +1,8 @@
-#' Project to use for testing bigquery
+#' Project to use for testing bigrquery
 #'
 #' @description
 #' You'll need to set up the `BIGQUERY_TEST_PROJECT` (name of a project) and
-#' `BIGQUERY_TEST_PROJECT` (name of bucket) env vars in order to run bigquery
+#' `BIGQUERY_TEST_PROJECT` (name of bucket) env vars in order to run bigrquery
 #' tests locally. I recommend creating a new project because the tests involve
 #' both reading and writing in BigQuery and CloudStorage.
 #'
@@ -40,7 +40,7 @@ bq_test_project <- function() {
   }
 
   stop(
-    "To run bigquery tests you must have BIGQUERY_TEST_PROJECT envvar set ",
+    "To run bigrquery tests you must have BIGQUERY_TEST_PROJECT envvar set ",
     "to name of project which has billing set up and to which you have ",
     "write access",
     call. = FALSE
@@ -105,7 +105,7 @@ gs_test_bucket <- function() {
   }
 
   stop(
-    "To run bigquery extract/load tests you must have BIGQUERY_TEST_BUCKET set ",
+    "To run bigrquery extract/load tests you must have BIGQUERY_TEST_BUCKET set ",
     "to name of the bucket where `bq_test_project()` has write acess",
     call. = FALSE
   )

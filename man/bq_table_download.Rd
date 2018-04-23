@@ -15,7 +15,7 @@ retrieve all rows.}
 
 \item{page_size}{The number of rows returned per page. Make this smaller
 if you have many fields or large records and you are seeing a
-"responseTooLarge" error.}
+'responseTooLarge' error.}
 
 \item{start_index}{Starting row index (zero-based).}
 
@@ -33,7 +33,7 @@ tibbles. If you need a data frame, coerce the results with
 }
 \description{
 This retrieves rows in chunks of \code{page_size}. It is most suitable for results
-of smaller queries (<100 meg, say). For larger queries, it is better to
+of smaller queries (<100 MB, say). For larger queries, it is better to
 export the results to a CSV file stored on google cloud and use the
 bq command line tool to download locally.
 }

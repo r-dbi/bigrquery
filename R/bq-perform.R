@@ -228,7 +228,7 @@ bq_perform_load <- function(x,
 #' @export
 #' @rdname api-perform
 #' @param query SQL query string.
-#' @param parameters Named list of parameters match to query paramters.
+#' @param parameters Named list of parameters match to query parameters.
 #'   Parameter `x` will be matched to placeholder `@x`. See
 #'   <https://cloud.google.com/bigquery/docs/parameterized-queries>
 #'   for more details.

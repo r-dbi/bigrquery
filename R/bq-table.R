@@ -117,7 +117,7 @@ bq_table_delete <- function(x) {
 #' @export
 #' @rdname api-table
 #' @inheritParams bq_perform_copy
-#' @param dest Source and desintation [bq_table]s.
+#' @param dest Source and destination [bq_table]s.
 bq_table_copy <- function(x, dest, ..., quiet = NA) {
   x <- as_bq_table(x)
   dest <- as_bq_table(dest)

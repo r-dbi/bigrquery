@@ -101,7 +101,7 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 
 \item{query}{SQL query string.}
 
-\item{parameters}{Named list of parameters match to query paramters.
+\item{parameters}{Named list of parameters match to query parameters.
 Parameter \code{x} will be matched to placeholder \code{@x}. See
 \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}

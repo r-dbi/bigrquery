@@ -10,7 +10,7 @@
 #' @param project project id or name
 #' @param dataset dataset name
 #' @param billing billing project, if different to `project`
-#' @param max_pages (IGNORED) max pages returned by a query
+#' @param max_pages (IGNORED) maximum pages returned by a query
 #' @export
 #' @examples
 #' \dontrun{

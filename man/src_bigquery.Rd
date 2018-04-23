@@ -13,7 +13,7 @@ src_bigquery(project, dataset, billing = project, max_pages = 10)
 
 \item{billing}{billing project, if different to \code{project}}
 
-\item{max_pages}{(IGNORED) max pages returned by a query}
+\item{max_pages}{(IGNORED) maximum pages returned by a query}
 }
 \description{
 Create the connection to the database with \code{DBI::dbConnect()} then

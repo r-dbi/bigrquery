@@ -32,7 +32,7 @@ set_service_token(service_token)
 the service token file.}
 }
 \value{
-\code{get_access_cred()} oauth2 credentials token
+\code{get_access_cred()} OAuth2 credentials token
 
 \code{has_access_cred()} TRUE if credentials are set
 }
