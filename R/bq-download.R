@@ -112,7 +112,7 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
   paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
   pool <- curl::new_pool(host_con = max_connections)
   progress <- bq_progress(
-    "Downloading data [:bar] :percent eta: :eta",
+    "Downloading data [:bar] :percent ETA: :eta",
     total = n_pages,
     quiet = quiet
   )
