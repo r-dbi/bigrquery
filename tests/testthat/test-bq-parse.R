@@ -10,6 +10,21 @@ test_that("can parse atomic vectors", {
   expect_identical(bq_parse_single("false", "boolean"), FALSE)
 })
 
+test_that("gracefully handles out-of-range int64", {
+  # Largest/smallest int
+  expect_equal(bq_parse_single("2147483647", "integer"), 2147483647L)
+  expect_equal(bq_parse_single("-2147483647", "integer"), -2147483647L)
+  # 2147483647 + 1
+  expect_equal(bq_parse_single("2147483648", "integer"), NA_integer_)
+  expect_equal(bq_parse_single("-2147483648", "integer"), NA_integer_)
+  # 2147483647 + 5
+  expect_equal(bq_parse_single("2147483652", "integer"), NA_integer_)
+  expect_equal(bq_parse_single("-2147483652", "integer"), NA_integer_)
+  # Largest long
+  expect_equal(bq_parse_single("9223372036854775807", "integer"), NA_integer_)
+  expect_equal(bq_parse_single("-9223372036854775807", "integer"), NA_integer_)
+})
+
 test_that("can parse date/times", {
   d <- as.Date("2018-01-01")
   expect_identical(bq_parse_single(as.character(d), "date"), d)

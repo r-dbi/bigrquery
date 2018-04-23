@@ -7,6 +7,7 @@
 
 #include <ctime>
 #include <cstdio>
+#include <climits>
 #include <stdlib.h>
 #include <fstream>
 
@@ -16,6 +17,17 @@ time_t timegm(struct tm *tm);
 char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
 }
 #endif
+
+long int parse_int(const char* x) {
+  errno = 0;
+  long int y = strtol(x, NULL, 10);
+
+  if (errno != 0 || y > INT_MAX || y < INT_MIN) {
+    return NA_INTEGER;
+  } else {
+    return y;
+  }
+}
 
 enum BqType {
   BQ_INTEGER,
@@ -154,7 +166,7 @@ public:
 
     switch(type_) {
     case BQ_INTEGER:
-      INTEGER(x)[i] = v.IsString() ? atoi(v.GetString()) : NA_INTEGER;
+      INTEGER(x)[i] = v.IsString() ? parse_int(v.GetString()) : NA_INTEGER;
       break;
     case BQ_TIMESTAMP:
     case BQ_FLOAT:
