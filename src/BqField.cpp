@@ -10,6 +10,7 @@
 #include <climits>
 #include <stdlib.h>
 #include <fstream>
+#include <errno.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 extern "C" {

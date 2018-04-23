@@ -126,6 +126,6 @@ random_name <- function(n = 10) {
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")
 
 skip_if_no_auth <- function() {
-  skip_if_not(has_access_cred(), "Authentication not available")
+  testthat::skip_if_not(has_access_cred(), "Authentication not available")
 }
 
