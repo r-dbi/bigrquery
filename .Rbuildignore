@@ -8,3 +8,4 @@
 ^codecov\.yml$
 ^README\.Rmd$
 ^\.covrignore$
+^CRAN-RELEASE$
