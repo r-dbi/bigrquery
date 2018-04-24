@@ -30,6 +30,16 @@ test_that("can retrieve zero rows", {
 
 # types -------------------------------------------------------------------
 
+test_that("can read utf-8 strings", {
+  sql <- "SELECT '\U0001f603' as x"
+  tb <- bq_project_query(bq_test_project(), sql)
+  df <- bq_table_download(tb)
+  x <- df$x[[1]]
+
+  expect_equal(Encoding(x), "UTF-8")
+  expect_equal(x, "\U0001f603")
+})
+
 test_that("can convert date time types", {
   sql <- "SELECT
     datetime,
