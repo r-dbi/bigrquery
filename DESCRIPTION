@@ -24,7 +24,6 @@ Imports:
     methods,
     prettyunits,
     progress,
-    rapidjsonr,
     Rcpp,
     tibble
 Suggests: 
