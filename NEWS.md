@@ -1,5 +1,4 @@
-# bigrquery 0.4.1.9000
-(To become bigquery 1.0.0)
+# bigrquery 1.0.0
 
 ## Improved downloads
 

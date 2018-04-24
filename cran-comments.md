@@ -1,16 +1,15 @@
 ## Test environments
-* local OS X install, R 3.4.0
-* ubuntu 14.04 (on travis-ci), R 3.4.0
-* win-builder (devel)
+* local OS X install: R 3.4.0
+* travis-ci: R 3.2, 3.3, 3.4, release, devel.
+* win-builder: R devel
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 notes
+0 errors | 0 warnings | 0 notes
 
-* There was one note: there have only been 3 days since the last automated
-  release. Unfortunately I just discovered a bug thanks to stricter
-  checks in dbplyr 1.1.0.
+## revdepcheck results
 
-## Reverse dependencies
+We checked 1 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
-* There are currently no reverse dependencies
+ * We saw 0 new problems
+ * We failed to check 0 packages
