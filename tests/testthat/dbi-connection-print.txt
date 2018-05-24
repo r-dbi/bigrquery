@@ -1,0 +1,8 @@
+With dataset:
+<BigQueryConnection>
+  Dataset: p.x
+  Billing: b
+
+Without dataset:
+<BigQueryConnection>
+  Billing: p

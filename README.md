@@ -1,101 +1,184 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # bigrquery
 
-[![Build Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
-[![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](http://cran.r-project.org/package=bigrquery)
+[![Build
+Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![CRAN
+Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
+[![Coverage
+status](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/github/r-dbi/bigrquery?branch=master)
 
-The bigrquery packages provides an R interface to
-[Google BigQuery](https://developers.google.com/bigquery/). It makes it easy
-to retrieve metadata about your projects, datasets, tables and jobs, and
-provides a convenient wrapper for working with bigquery from R.
+The bigrquery package makes it easy to work with data stored in [Google
+BigQuery](https://developers.google.com/bigquery/) by allowing you to
+query BigQuery tables and retrieve metadata about your projects,
+datasets, tables, and jobs. The bigrquery package provides three levels
+of abstraction on top of BigQuery:
+
+  - The low-level API provides thin wrappers over the underlying REST
+    API. All the low-level functions start with `bq_`, and mostly have
+    the form `bq_noun_verb()`. This level of abstraction is most
+    appropriate if you’re familiar with the REST API and you want do
+    something not supported in the higher-level APIs.
+
+  - The [DBI interface](http://www.r-dbi.org) wraps the low-level API
+    and makes working with BigQuery like working with any other database
+    system. This is most convenient layer if you want to execute SQL
+    queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of
+    data.
+
+  - The [dplyr interface](http://dbplyr.tidyverse.org/) lets you treat
+    BigQuery tables as if they are in-memory data frames. This is the
+    most convenient layer if you don’t want to write SQL, but instead
+    want dbplyr to write it for you.
 
 ## Installation
 
-The current bigrquery release can be installed from CRAN: 
+The current bigrquery release can be installed from CRAN:
 
-```R
+``` r
 install.packages("bigrquery")
 ```
 
-The newest development release can be installed from github:
+The newest development release can be installed from GitHub:
 
-```R
+``` r
 # install.packages('devtools')
-devtools::install_github("rstats-db/bigrquery")
+devtools::install_github("r-dbi/bigrquery")
 ```
 
-## Authentication
+## Usage
 
-The first time you use bigrquery in a session, it will ask you to
-[authorize bigrquery](https://developers.google.com/bigquery/authorization) in
-the browser. This gives bigrquery the credentials to access data on your
-behalf. By default, bigrquery picks up [httr's](http://github.com/hadley/httr)
-policy of caching per-working-directory credentials in `.httr-oauth`.
+### Low-level API
 
-Note that `bigrquery` requests permission to modify your data; in general, the
-only data created or modified by `bigrquery` are the temporary tables created
-as query results, unless you explicitly modify your own data (say by calling
-`delete_table()` or `insert_upload_job()`).
+``` r
+library(bigrquery)
+billing <- bq_test_project() # replace this with your project ID 
+sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"
 
-## Sample data and a billing project
+tb <- bq_project_query(billing, sql)
+#> Auto-refreshing stale OAuth token.
+bq_table_download(tb, max_results = 10)
+#> # A tibble: 10 x 4
+#>     year month   day weight_pounds
+#>    <int> <int> <int>         <dbl>
+#>  1  1969     1    20          6.44
+#>  2  1969     1     9          6.38
+#>  3  1969     1     9          7.19
+#>  4  1969     1    11          8.13
+#>  5  1969     1     3          7.25
+#>  6  1969     1    15          5.06
+#>  7  1969     1    25         NA   
+#>  8  1969     1     4          7.06
+#>  9  1969     1     6          7.19
+#> 10  1969     1    26          3.53
+```
 
-If you just want to play around with the bigquery API, it's easiest to start
-with the Google's free
-[sample data](https://developers.google.com/bigquery/docs/sample-tables). To
-do that, you'll also need to create your own project for billing purposes. If
-you're just playing around, it's unlikely that you'll go over the 10,000
-request/day free limit, but google still needs a project that it can bill (you
-don't even need to provide a credit card).
+## DBI
+
+``` r
+library(DBI)
+
+con <- dbConnect(
+  bigrquery::bigquery(),
+  project = "publicdata",
+  dataset = "samples",
+  billing = billing
+)
+con 
+#> <BigQueryConnection>
+#>   Dataset: publicdata.samples
+#>   Billing: bigrquery-examples
+
+dbListTables(con)
+#> [1] "github_nested"   "github_timeline" "gsod"            "natality"       
+#> [5] "shakespeare"     "trigrams"        "wikipedia"
+
+dbGetQuery(con, sql, n = 10)
+#> # A tibble: 10 x 4
+#>     year month   day weight_pounds
+#>    <int> <int> <int>         <dbl>
+#>  1  1969     1    20          6.44
+#>  2  1969     1     9          6.38
+#>  3  1969     1     9          7.19
+#>  4  1969     1    11          8.13
+#>  5  1969     1     3          7.25
+#>  6  1969     1    15          5.06
+#>  7  1969     1    25         NA   
+#>  8  1969     1     4          7.06
+#>  9  1969     1     6          7.19
+#> 10  1969     1    26          3.53
+```
+
+### dplyr
+
+``` r
+library(dplyr)
+
+natality <- tbl(con, "natality")
+
+natality %>%
+  select(year, month, day, weight_pounds) %>% 
+  head(10) %>%
+  collect()
+#> # A tibble: 10 x 4
+#>     year month   day weight_pounds
+#>    <int> <int> <int>         <dbl>
+#>  1  1969    11    29          6.00
+#>  2  1969     2     6          8.94
+#>  3  1969     5    16          6.88
+#>  4  1970     9     4          7.13
+#>  5  1970     1    24          7.63
+#>  6  1970     6     6          9.00
+#>  7  1970    10    30          6.50
+#>  8  1971     3    18          5.75
+#>  9  1971     8    11          6.19
+#> 10  1971     1    23          5.75
+```
+
+## Important details
+
+### Authentication
+
+When using bigquery interactively, you’ll be prompted to [authorize
+bigrquery](https://developers.google.com/bigquery/authorization) in the
+browser. Your credentials will be cached across sessions in
+`.httr-oauth`. For non-interactive usage, you’ll need to download a
+service token JSON file and use `set_service_token()`.
+
+Note that `bigrquery` requests permission to modify your data; but it
+will never do so unless you explicitly request it (e.g. by calling
+`bq_table_delete()` or `bq_table_upload()`).
+
+### Billing project
+
+If you just want to play around with the bigquery API, it’s easiest to
+start with the Google’s free [sample
+data](https://developers.google.com/bigquery/docs/sample-tables). You’ll
+still need to create a project, but if you’re just playing around, it’s
+unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of
+storage).
 
 To create a project:
 
-1. Open https://console.cloud.google.com/
-2. Click "Create Project" at the top
-3. Select a name and project ID, and click "Create"
-4. Turn on the BigQuery API by clicking "APIs & Auth" on the left, scrolling
-down to "BigQuery API", and clicking the button at the right from "OFF" to
-"ON".
-5. Click on "Overview" at the left
-6. Use the `Project ID` or `Project Number` to identify your project with
-`bigrquery`. (You can also use the project number, though it's harder to
-remember.)
+1.  Open <https://console.cloud.google.com/> and create a project. Make
+    a note of the “Project ID” in the “Project info” box.
 
-To run your first query:
+2.  Click on “APIs & Services”, then “Dashboard” in the left the left
+    menu.
 
-```R
-library(bigrquery)
-project <- bq_test_project() # put your project ID here
-sql <- "SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"
-query_exec(sql, project = project)
-```
+3.  Click on “Enable Apis and Services” at the top of the page, then
+    search for “BigQuery API” and “Cloud storage”.
 
-## Using `DBI` and `dplyr`
-
-For a more traditional database connection using `dbConnect()`, the driver to use is `bigrquery::dbi_driver()`.
-
-The arguments passed to Big Query connections differ a bit from others, there are 3 specific arguments:
-
-- dataset 
-- project
-- billing
-
-If you plan to access a Public Dataset, then very specific information will have to be passed to the connection.  For example, the examples in the NOAA GSOD Weather page, found here: https://cloud.google.com/bigquery/public-data/noaa-gsod, the code snippets address the tables in a very specific way.  To access the list of Weather Stations, the code calls this table: `[bigquery-public-data:noaa_gsod.stations]`.  These values can be parsed to create the correct `dbConnect()` call:
-
-```r
-con <- DBI::dbConnect(bigrquery::dbi_driver(),
-                       dataset = "noaa_gsod",
-                       project = "bigquery-public-data",
-                       billing = project)
-```
-
-The `stations` table can then be referred to using `tbl()`
-
-```r
-tbl(con, "stations")
-```
+Use your project ID as the `billing` project whenever you work with free
+sample data; and as the `project` when you work with your own data.
 
 ## Useful links
 
-* [SQL reference](https://developers.google.com/bigquery/query-reference)
-* [API reference](https://developers.google.com/bigquery/docs/reference/v2/)
-* [Query/job console](https://bigquery.cloud.google.com/)
-* [Billing console](https://console.cloud.google.com/)
+  - [SQL
+    reference](https://developers.google.com/bigquery/query-reference)
+  - [API
+    reference](https://developers.google.com/bigquery/docs/reference/v2/)
+  - [Query/job console](https://bigquery.cloud.google.com/)
+  - [Billing console](https://console.cloud.google.com/)

@@ -5,3 +5,7 @@
 ^cran-comments\.md$
 ^revdep$
 ^tests/testthat/service-token\.json$
+^codecov\.yml$
+^README\.Rmd$
+^\.covrignore$
+^CRAN-RELEASE$

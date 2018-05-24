@@ -1,0 +1,51 @@
+{
+ "kind": "bigquery#tableDataList",
+ "etag": "\"Of60aSRqAJUNFSgRZSQLdr125eE/O-wKGy4ThFRXlLvNoqf9sBdNeJw\"",
+ "totalRows": "1",
+ "rows": [
+  {
+   "f": [
+    {
+     "v": [
+      {
+       "v": {
+        "f": [
+         {
+          "v": "1"
+         },
+         {
+          "v": "a"
+         }
+        ]
+       }
+      },
+      {
+       "v": {
+        "f": [
+         {
+          "v": "2"
+         },
+         {
+          "v": "b"
+         }
+        ]
+       }
+      },
+      {
+       "v": {
+        "f": [
+         {
+          "v": "3"
+         },
+         {
+          "v": "c"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

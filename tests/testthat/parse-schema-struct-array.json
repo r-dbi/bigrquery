@@ -1,0 +1,23 @@
+{
+ "schema": {
+  "fields": [
+   {
+    "name": "x",
+    "type": "RECORD",
+    "mode": "NULLABLE",
+    "fields": [
+     {
+      "name": "a",
+      "type": "INTEGER",
+      "mode": "REPEATED"
+     },
+     {
+      "name": "b",
+      "type": "STRING",
+      "mode": "REPEATED"
+     }
+    ]
+   }
+  ]
+ }
+}

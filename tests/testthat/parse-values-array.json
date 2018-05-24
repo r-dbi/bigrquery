@@ -1,0 +1,24 @@
+{
+ "kind": "bigquery#tableDataList",
+ "etag": "\"Of60aSRqAJUNFSgRZSQLdr125eE/ks_Rm4lhbTcow-jlwec1clKIBNA\"",
+ "totalRows": "1",
+ "rows": [
+  {
+   "f": [
+    {
+     "v": [
+      {
+       "v": "1"
+      },
+      {
+       "v": "2"
+      },
+      {
+       "v": "3"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
