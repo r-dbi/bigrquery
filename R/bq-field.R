@@ -139,6 +139,7 @@ data_type <- function(x) {
 }
 
 #' @export
+#' @noRd
 bq_time_partitioning <- function(type = "DAY") {
   list(
     type = type
