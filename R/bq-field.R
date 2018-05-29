@@ -137,11 +137,3 @@ data_type <- function(x) {
     stop("Unsupported type: ", typeof(x), call. = FALSE)
   )
 }
-
-#' @export
-#' @noRd
-bq_time_partitioning <- function(type = "DAY") {
-  list(
-    type = type
-  )
-}
