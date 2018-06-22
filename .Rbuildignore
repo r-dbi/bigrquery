@@ -9,3 +9,4 @@
 ^README\.Rmd$
 ^\.covrignore$
 ^CRAN-RELEASE$
+^\.github$
