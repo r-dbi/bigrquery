@@ -90,3 +90,17 @@ test_that("can copy table from public dataset", {
   expect_equal(out, my_natality)
   expect_true(bq_table_exists(my_natality))
 })
+
+test_that("can create table with time partitioning", {
+  ds <- bq_test_dataset()
+  partition_table <- bq_table(ds, "partition_daily")
+
+  bq_table_create(
+    partition_table,
+    fields = bq_fields(list(bq_field("id", "integer"))),
+    time_partitioning = list(type = "DAY")
+  )
+  meta <- bq_table_meta(partition_table)
+  partitioning <- meta$timePartitioning$type
+  expect_equal(partitioning, "DAY")
+})
