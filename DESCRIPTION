@@ -16,6 +16,7 @@ Depends:
     R (>= 3.1)
 Imports: 
     assertthat,
+    bit64,
     DBI,
     curl,
     glue,
@@ -42,7 +43,7 @@ LinkingTo:
     Rcpp
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Collate: 
     'RcppExports.R'
     'auth.R'

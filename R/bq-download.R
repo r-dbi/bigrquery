@@ -39,6 +39,10 @@
 #' @param max_connections Number of maximum simultaneously connections to
 #'   BigQuery servers.
 #' @inheritParams api-job
+#' @param bigint The R type that BigQuery's 64-bit integer types should be mapped to.
+#'   The default is [bit64::integer64], which allows the full range of 64 bit
+#'   integers. `"integer"` returns R `integer` type but results in `NA` for
+#'   values above/below +/- 2147483647.
 #' @section API documentation:
 #' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
 #' @export
@@ -46,16 +50,19 @@
 #' if (bq_testable()) {
 #' df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
 #' }
-bq_table_download <- function(x,
-                              max_results = Inf,
-                              page_size = 1e4,
-                              start_index = 0L,
-                              max_connections = 6L,
-                              quiet = NA) {
+bq_table_download <-
+  function(x,
+           max_results = Inf,
+           page_size = 1e4,
+           start_index = 0L,
+           max_connections = 6L,
+           quiet = NA,
+           bigint = c("integer64", "integer", "numeric", "character")) {
   x <- as_bq_table(x)
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.numeric(max_results), length(max_results) == 1)
   assert_that(is.numeric(start_index), length(start_index) == 1)
+  bigint <- match.arg(bigint)
 
   schema_path <- bq_download_schema(x, tempfile())
 
@@ -78,7 +85,26 @@ bq_table_download <- function(x,
     quiet = quiet
   )
 
-  bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+  table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+  convert_bigint(table_data, bigint)
+}
+
+# This function is a modified version of
+# https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R
+convert_bigint <- function(df, bigint) {
+  if (bigint == "integer64") return(df)
+
+  is_int64 <- which(vapply(df, inherits, FUN.VALUE = logical(1L), "integer64"))
+  if (length(is_int64) == 0) return(df)
+
+  as_bigint <- switch(bigint,
+    integer = as.integer,
+    numeric = as.numeric,
+    character = as.character
+  )
+
+  df[is_int64] <- suppressWarnings(lapply(df[is_int64], as_bigint))
+  df
 }
 
 bq_download_page_info <- function(nrow,
