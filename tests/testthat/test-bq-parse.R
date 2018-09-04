@@ -4,25 +4,25 @@ context("test-bq-parse.R")
 
 test_that("can parse atomic vectors", {
   expect_identical(bq_parse_single("x", "string"), "x")
-  expect_identical(bq_parse_single("10", "integer"), 10L)
+  expect_identical(bq_parse_single("10", "integer"), bit64::as.integer64(10))
   expect_identical(bq_parse_single("10", "float"), 10)
   expect_identical(bq_parse_single("true", "boolean"), TRUE)
   expect_identical(bq_parse_single("false", "boolean"), FALSE)
 })
 
-test_that("gracefully handles out-of-range int64", {
-  # Largest/smallest int
-  expect_equal(bq_parse_single("2147483647", "integer"), 2147483647L)
-  expect_equal(bq_parse_single("-2147483647", "integer"), -2147483647L)
+test_that("gracefully handles int64 values", {
+  # Largest/smallest 32-bit int
+  expect_equal(bq_parse_single("2147483647", "integer"), bit64::as.integer64(2147483647L))
+  expect_equal(bq_parse_single("-2147483647", "integer"), bit64::as.integer64(-2147483647L))
   # 2147483647 + 1
-  expect_equal(bq_parse_single("2147483648", "integer"), NA_integer_)
-  expect_equal(bq_parse_single("-2147483648", "integer"), NA_integer_)
-  # 2147483647 + 5
-  expect_equal(bq_parse_single("2147483652", "integer"), NA_integer_)
-  expect_equal(bq_parse_single("-2147483652", "integer"), NA_integer_)
-  # Largest long
-  expect_equal(bq_parse_single("9223372036854775807", "integer"), NA_integer_)
-  expect_equal(bq_parse_single("-9223372036854775807", "integer"), NA_integer_)
+  expect_equal(bq_parse_single("2147483648", "integer"), bit64::as.integer64("2147483648"))
+  expect_equal(bq_parse_single("-2147483648", "integer"), bit64::as.integer64("-2147483648"))
+  # Largest/smallest integer64
+  expect_equal(bq_parse_single("9223372036854775807", "integer"), bit64::as.integer64("9223372036854775807"))
+  expect_equal(bq_parse_single("-9223372036854775807", "integer"), bit64::as.integer64("-9223372036854775807"))
+  # Largest/smallest integer64 + 1
+  expect_equal(bq_parse_single("9223372036854775808", "integer"), bit64::as.integer64(NA))
+  expect_equal(bq_parse_single("-9223372036854775808", "integer"), bit64::as.integer64(NA))
 })
 
 test_that("can parse date/times", {
@@ -50,7 +50,7 @@ test_that("can parse date/times", {
 
 test_that("can parse NULLs", {
   expect_identical(bq_parse_single(NULL, "string"), NA_character_)
-  expect_identical(bq_parse_single(NULL, "integer"), NA_integer_)
+  expect_identical(bq_parse_single(NULL, "integer"), bit64::as.integer64(NA))
   expect_identical(bq_parse_single(NULL, "float"), NA_real_)
   expect_identical(bq_parse_single(NULL, "boolean"), NA)
 
@@ -72,7 +72,7 @@ test_that("can parse arrays of simple values", {
   expect_equal(out1, list(c("1", "2", "3")))
 
   out2 <- bq_parse_single(x, "integer", mode = "repeated")
-  expect_equal(out2, list(1:3))
+  expect_equal(out2, list(bit64::as.integer64(1:3)))
 })
 
 test_that("can parse structs of simple values", {
@@ -84,7 +84,7 @@ test_that("can parse structs of simple values", {
   x <- f(v("1"), v("a"))
   out <- bq_parse_single(x, "record", field = fields)
 
-  expect_equal(out, list(list(x = 1L, y = "a")))
+  expect_equal(out, list(list(x = bit64::as.integer64(1L), y = "a")))
 })
 
 test_that("can parse structs of arrays", {
@@ -96,7 +96,7 @@ test_that("can parse structs of arrays", {
   x <- f(v(vs("1", "2", "3")), v(vs("a", "b")))
   out <- bq_parse_single(x, "record", field = fields)
 
-  expect_equal(out, list(list(x = 1:3, y = c("a", "b"))))
+  expect_equal(out, list(list(x = bit64::as.integer64(1:3), y = c("a", "b"))))
 })
 
 
@@ -109,7 +109,7 @@ test_that("can parse arrays of structs", {
   x <- vs(list(f = vs("1", "a")), list(f = vs("2", "b")))
   out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
 
-  expect_equal(out, list(tibble(x = 1:2, y = c("a", "b"))))
+  expect_equal(out, list(tibble(x = bit64::as.integer64(1:2), y = c("a", "b"))))
 })
 
 
@@ -133,12 +133,12 @@ test_that("can parse nested structures", {
   df <- replay_query("struct", "SELECT STRUCT(1 AS a, 'abc' AS b) as x")
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], list(a = 1, b = "abc"))
+  expect_equal(df$x[[1]], list(a = bit64::as.integer64(1), b = "abc"))
 
   df <- replay_query("array", "SELECT [1, 2, 3] as x")
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], 1:3)
+  expect_equal(df$x[[1]], bit64::as.integer64(1:3))
 
   df <- replay_query(
     "array-struct",
@@ -146,7 +146,7 @@ test_that("can parse nested structures", {
   )
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], tibble(a = 1:3, b = c("a", "b", "c")))
+  expect_equal(df$x[[1]], tibble(a = bit64::as.integer64(1:3), b = c("a", "b", "c")))
 
   df <- replay_query(
     "struct-array",
@@ -154,15 +154,15 @@ test_that("can parse nested structures", {
   )
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], list(a = 1:3, b = c("a", "b")))
+  expect_equal(df$x[[1]], list(a = bit64::as.integer64(1:3), b = c("a", "b")))
 })
 
 test_that("can parse empty arrays", {
   tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<INT64>[] as x")
   df <- bq_table_download(tb)
-  expect_equal(df$x, list(integer(0)))
+  expect_equal(df$x, list(bit64::integer64(0)))
 
   tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<STRUCT<a INT64, b STRING>>[] as x")
   df <- bq_table_download(tb)
-  expect_equal(df$x, list(tibble::tibble(a = integer(0), b = character())))
+  expect_equal(df$x, list(tibble::tibble(a = bit64::integer64(0), b = character())))
 })

@@ -38,7 +38,7 @@ test_that("can round trip a simple data frame", {
   bq_df <- bq_table(ds, "df")
   bq_table_upload(bq_df, df1)
 
-  df2 <- bq_table_download(bq_df)
+  df2 <- bq_table_download(bq_df, bigint = "integer")
   df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
   rownames(df2) <- NULL
 
@@ -57,7 +57,7 @@ test_that("can round trip data frame with list-cols", {
   )
   bq_table_upload(tb, df1)
 
-  df2 <- bq_table_download(tb)
+  df2 <- bq_table_download(tb, bigint = "integer")
   # restore column order
   df2 <- df2[names(df1)]
   df2$struct[[1]] <- df2$struct[[1]][c("x", "y")]
