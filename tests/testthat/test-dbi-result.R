@@ -9,7 +9,7 @@ test_that("can retrieve full query results", {
   )
 
   df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM mtcars")
-  expect_equal(df, tibble(count = 32))
+  expect_equal(df, tibble(count = 32L))
 })
 
 test_that("can retrieve without dataset", {
@@ -19,7 +19,7 @@ test_that("can retrieve without dataset", {
     bigint = "integer"
   )
   df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM `basedata.mtcars`")
-  expect_equal(df, tibble(count = 32))
+  expect_equal(df, tibble(count = 32L))
 })
 
 test_that("can retrieve query in pieces", {
