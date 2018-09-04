@@ -94,18 +94,16 @@ bq_table_download <-
 convert_bigint <- function(df, bigint) {
   if (bigint == "integer64") return(df)
 
-  is_int64 <- which(vapply(df, inherits, FUN.VALUE = logical(1L), "integer64"))
-  if (length(is_int64) == 0) return(df)
-
   as_bigint <- switch(bigint,
     integer = as.integer,
     numeric = as.numeric,
     character = as.character
   )
 
-  df[is_int64] <- suppressWarnings(lapply(df[is_int64], as_bigint))
+  df <- rapply(df, f = as_bigint, classes = "integer64", how = "replace")
   df
 }
+
 
 bq_download_page_info <- function(nrow,
                               max_results = Inf,
