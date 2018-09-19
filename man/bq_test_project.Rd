@@ -34,7 +34,7 @@ who's lifetime is tied to the lifetime of the object that it returns.
 }
 \description{
 You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
-\code{BIGQUERY_TEST_PROJECT} (name of bucket) env vars in order to run bigrquery
+\code{BIGQUERY_TEST_BUCKET} (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
 both reading and writing in BigQuery and CloudStorage.
 
