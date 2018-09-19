@@ -20,6 +20,7 @@ char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
 }
 #endif
 
+// This is currently not used in favor of parse_int64(const char* x) .
 long int parse_int(const char* x) {
   errno = 0;
   long int y = strtol(x, NULL, 10);

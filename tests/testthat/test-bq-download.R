@@ -67,3 +67,28 @@ test_that("correctly parse logical values" ,{
 
   expect_true(df$x)
 })
+
+test_that("the return type of integer columns is set by the bigint argument", {
+  sql <- "
+  SELECT *
+  FROM UNNEST ([-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648]) AS x;"
+
+  default_col <-   bq_table_download( bq_project_query(bq_test_project(), sql) )$x
+  integer64_col <- bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "integer64" )$x
+  integer_col <-   bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "integer" )$x
+  numeric_col <-   bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "numeric" )$x
+  character_col <- bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "character" )$x
+
+  integer64_target <- bit64::as.integer64( c("-2147483648", "-2147483647", "-1",
+                                             "0", "1", "2147483647", "2147483648") )
+  integer_target <- c(NA, -2147483647L, -1L, 0L, 1L, 2147483647L, NA)
+  numeric_target <- c(-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648)
+  character_target <- c("-2147483648", "-2147483647", "-1",
+                        "0", "1", "2147483647", "2147483648")
+
+  expect_identical(default_col, integer64_target)
+  expect_identical(integer64_col, integer64_target)
+  expect_identical(integer_col, integer_target)
+  expect_identical(numeric_col, numeric_target)
+  expect_identical(character_col, character_target)
+})
