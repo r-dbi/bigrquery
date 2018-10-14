@@ -19,7 +19,7 @@
 #'
 #' # as_bq_fields() can also take a data frame
 #' as_bq_fields(mtcars)
-bq_field <- function(name, type, mode = "NULLABLE", fields = list()) {
+bq_field <- function(name, type, mode = "NULLABLE", fields = list(), description = NULL) {
   assert_that(is.string(name), is.string(type), is.string(mode))
 
   structure(
@@ -27,7 +27,8 @@ bq_field <- function(name, type, mode = "NULLABLE", fields = list()) {
       name = name,
       type = toupper(type),
       mode = toupper(mode),
-      fields = as_bq_fields(fields)
+      fields = as_bq_fields(fields),
+      description = description
     ),
     class = "bq_field"
   )
@@ -39,7 +40,8 @@ as_json.bq_field <- function(x) {
     name = unbox(x$name),
     type = unbox(x$type),
     mode = unbox(x$mode),
-    fields = as_json(x$fields)
+    fields = as_json(x$fields),
+    description = unbox(x$description)
   )
 }
 
@@ -67,7 +69,8 @@ as_bq_field.list <- function(x) {
     name = x$name,
     type = x$type,
     mode = x$mode %||% "NULLABLE",
-    fields = lapply(x$fields, as_bq_field)
+    fields = lapply(x$fields, as_bq_field),
+    description = x$description
   )
 }
 
