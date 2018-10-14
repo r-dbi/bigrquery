@@ -60,10 +60,6 @@ bq_table_create <- function(x, fields = NULL, ...) {
     body$schema <- list(fields = as_json(fields))
   }
 
-  if (hasArg(time_partitioning)) {
-    body$timePartitioning <- time_partitioning
-  }
-
   bq_post(url, body = bq_body(body, ...))
 
   x

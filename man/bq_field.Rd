@@ -7,7 +7,8 @@
 \alias{as_bq_fields}
 \title{BiqQuery field (and fields) class}
 \usage{
-bq_field(name, type, mode = "NULLABLE", fields = list())
+bq_field(name, type, mode = "NULLABLE", fields = list(),
+  description = NULL)
 
 bq_fields(x)
 
@@ -23,6 +24,8 @@ as_bq_fields(x)
 \item{mode}{Field mode}
 
 \item{fields}{For a field of type "record", a list of sub-fields.}
+
+\item{description}{Field description}
 
 \item{x}{A list of \code{bg_fields}}
 }

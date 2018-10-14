@@ -7,6 +7,7 @@
 #' @param type Field type
 #' @param mode Field mode
 #' @param fields For a field of type "record", a list of sub-fields.
+#' @param description Field description
 #' @param x A list of `bg_fields`
 #' @export
 #' @examples
@@ -138,12 +139,5 @@ data_type <- function(x) {
     double = "FLOAT",
     integer = "INTEGER",
     stop("Unsupported type: ", typeof(x), call. = FALSE)
-  )
-}
-
-#' @export
-bq_time_partitioning <- function(type = "DAY") {
-  list(
-    type = type
   )
 }

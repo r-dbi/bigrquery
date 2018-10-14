@@ -97,10 +97,12 @@ test_that("can create table with time partitioning", {
 
   bq_table_create(
     partition_table,
-    fields = bq_fields(list(bq_field("id", "integer"))),
-    time_partitioning = bq_time_partitioning("DAY")
+    fields = bq_fields(list(bq_field("id", "integer", description = "Key field"))),
+    time_partitioning = list(type = "DAY")
   )
+
   meta <- bq_table_meta(partition_table)
   partitioning <- meta$timePartitioning$type
   expect_equal(partitioning, "DAY")
+  expect_equal(meta$schema$fields[[1]]$description, "Key field")
 })
