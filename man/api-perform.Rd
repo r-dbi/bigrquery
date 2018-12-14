@@ -119,7 +119,7 @@ queries (> 128 MB compressed).}
 "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 but are not rate-limited in the same way as interactive queries.}
 
-\item{write_dispoition}{Specifies the action that occurs if the
+\item{write_disposition}{Specifies the action that occurs if the
 destination table already exists. The following values are supported:
 \itemize{
 \item "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
