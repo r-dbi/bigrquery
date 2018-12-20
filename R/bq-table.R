@@ -60,6 +60,7 @@ bq_table_create <- function(x, fields = NULL, ...) {
     body$schema <- list(fields = as_json(fields))
   }
 
+  print(bq_body(body, ...))
   bq_post(url, body = bq_body(body, ...))
 
   x
