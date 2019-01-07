@@ -45,6 +45,8 @@ enum BqType {
 BqType parse_bq_type(std::string x) {
   if (x == "INTEGER") {
     return BQ_INTEGER;
+  } else if (x == "NUMERIC") {
+    return BQ_FLOAT;
   } else if (x == "FLOAT") {
     return BQ_FLOAT;
   } else if (x == "BOOLEAN") {
@@ -121,7 +123,7 @@ public:
     switch(type_) {
     case BQ_INTEGER:
       return Rcpp::IntegerVector(n);
-    case BQ_FLOAT:
+	case BQ_FLOAT:
       return Rcpp::DoubleVector(n);
     case BQ_BOOLEAN:
       return Rcpp::LogicalVector(n);
