@@ -45,6 +45,8 @@ enum BqType {
 BqType parse_bq_type(std::string x) {
   if (x == "INTEGER") {
     return BQ_INTEGER;
+  } else if (x == "NUMERIC") { 
+    return BQ_FLOAT;  
   } else if (x == "FLOAT") {
     return BQ_FLOAT;
   } else if (x == "BOOLEAN") {
