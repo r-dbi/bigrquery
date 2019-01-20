@@ -179,7 +179,10 @@ sql_translate_env.BigQueryConnection <- function(x) {
 
       # Parallel min and max
       pmax = sql_prefix("GREATEST"),
-      pmin = sql_prefix("LEAST")
+      pmin = sql_prefix("LEAST"),
+
+      # Median
+      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
