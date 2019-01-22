@@ -1,5 +1,7 @@
 # bigrquery 1.0.0.9000
 
+* `as.character()` now translated to `SAFE_CAST(x AS STRING)` (#268).
+
 # bigrquery 1.0.0
 
 ## Improved downloads

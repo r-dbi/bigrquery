@@ -155,6 +155,7 @@ sql_translate_env.BigQueryConnection <- function(x) {
       as.integer = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS INT64)"),
       as.logical = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS BOOLEAN)"),
       as.numeric = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS FLOAT64)"),
+      as.character = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS STRING)"),
 
       # Date/time
       Sys.date = sql_prefix("current_date"),
