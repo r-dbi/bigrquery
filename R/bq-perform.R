@@ -70,7 +70,7 @@ bq_perform_extract <- function(x,
     configuration = list(
       extract = list(
         sourceTable = tableReference(x),
-        destinationUris = destination_uris,
+        destinationUris = as.list(destination_uris),
         destinationFormat = unbox(destination_format),
         compression = unbox(compression),
         printHeader = unbox(print_header)
@@ -195,7 +195,7 @@ bq_perform_load <- function(x,
   assert_that(is.string(billing))
 
   load <- list(
-    sourceUris = source_uris,
+    sourceUris = as.list(source_uris),
     sourceFormat = unbox(source_format),
     destinationTable = tableReference(x),
     createDisposition = unbox(create_disposition),
