@@ -212,7 +212,7 @@ bq_from_list <- function(x, names, type) {
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue::collapse(names, sep = ", ", last = " and ")
+  names_str <- glue::glue_collapse(names, sep = ", ", last = " and ")
   stop(glue::glue("List <{type}> must have components {names_str}"), call. = FALSE)
 }
 
