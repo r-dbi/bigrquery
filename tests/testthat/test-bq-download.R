@@ -28,6 +28,20 @@ test_that("can retrieve zero rows", {
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
 
+
+# bq_table_info -----------------------------------------------------------
+
+test_that("max_results + start_index affects end values", {
+  out <- bq_download_page_info(
+    nrow = 100,
+    max_results = 5,
+    page_size = 2,
+    start_index = 5
+  )
+  expect_equal(out$begin, c(5, 7, 9))
+  expect_equal(out$end, c(7, 9, 10))
+})
+
 # types -------------------------------------------------------------------
 
 test_that("can read utf-8 strings", {
