@@ -97,7 +97,7 @@ bq_perform_extract <- function(x,
 #'     table.
 #'   * "CREATE_NEVER": The table must already exist. If it does not, a
 #'     'notFound' error is returned in the job result.
-#' @param write_dispoition Specifies the action that occurs if the
+#' @param write_disposition Specifies the action that occurs if the
 #'   destination table already exists. The following values are supported:
 #'
 #'   * "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
