@@ -50,7 +50,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bigrquery_bq_parse", (DL_FUNC) &_bigrquery_bq_parse, 2},
     {"_bigrquery_bq_field_init", (DL_FUNC) &_bigrquery_bq_field_init, 2},
     {"_bigrquery_bq_parse_files", (DL_FUNC) &_bigrquery_bq_parse_files, 4},
-    {"null_to_na_",               (DL_FUNC) &null_to_na_,               1},
+    {"null_to_na_", (DL_FUNC) &null_to_na_, 1},
     {NULL, NULL, 0}
 };
 
