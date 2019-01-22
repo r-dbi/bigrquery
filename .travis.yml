@@ -7,29 +7,27 @@ cache: packages
 addons:
   apt:
     sources:
-      - sourceline: 'ppa:chris-lea/libsodium'
+    - sourceline: 'ppa:chris-lea/libsodium'
     packages:
-      - libsodium-dev
-
-r:
-# - 3.1 # test fail because dbplyr requires 3.2
-- 3.2
-- oldrel
-- release
-- devel
+    - libsodium-dev
 
 matrix:
   include:
+  - r: devel
   - r: release
-    env: DBPLYR="devel-version"
-    before_script: Rscript -e 'devtools::install_github("tidyverse/dbplyr")'
+    after_success:
+    - Rscript -e 'covr::codecov()'
+  - r: release
+    env: dbplyr="devel"
+    before_script: Rscript -e 'remotes::install_github("tidyverse/dbplyr")'
   - r: release
     env: BIGRQUERY_PASSWORD=''
-
-after_success:
-  - Rscript -e 'covr::codecov()'
+  - r: oldrel
+  - r: 3.3
+  - r: 3.2
+# - r: 3.1  # dbplyr fails on 3.1
 
 env:
   global:
-    - _R_CHECK_FORCE_SUGGESTS_=false
-    - BIGQUERY_TEST_PROJECT=bigrquery-examples
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  - BIGQUERY_TEST_PROJECT=bigrquery-examples
