@@ -2,19 +2,16 @@
 % Please edit documentation in R/bq-perform.R
 \name{api-perform}
 \alias{api-perform}
-\alias{api-perform}
 \alias{bq_perform_extract}
-\alias{api-perform}
 \alias{bq_perform_upload}
-\alias{api-perform}
 \alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
 bq_perform_extract(x, destination_uris,
-  destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE", ...,
-  print_header = TRUE, billing = x$project)
+  destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE",
+  ..., print_header = TRUE, billing = x$project)
 
 bq_perform_upload(x, values, fields = NULL,
   create_disposition = "CREATE_IF_NEEDED",

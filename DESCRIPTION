@@ -42,7 +42,7 @@ LinkingTo:
     Rcpp
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Collate: 
     'RcppExports.R'
     'auth.R'
