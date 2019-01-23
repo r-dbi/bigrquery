@@ -29,7 +29,10 @@ bq_job_meta <- function(x, fields = NULL) {
   x <- as_bq_job(x)
   bq_get(
     bq_path(x$project, jobs = x$job),
-    query = list(fields = fields)
+    query = list(
+      location = x$location,
+      fields = fields
+    )
   )
 }
 

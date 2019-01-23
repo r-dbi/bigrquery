@@ -1,5 +1,8 @@
 # bigrquery 1.0.0.9000
 
+* `bq_job()` tracks location so bigrquery now works painlessly with non-US/EU
+  locations (#274).
+
 * Jobs now print their ids while running (#252)
 
 * Unparseable date times return NA (#285)
