@@ -1,5 +1,7 @@
 # bigrquery 1.0.0.9000
 
+* In `parse_bq_type()`, `x` now evaluates 'NUMERIC' as 'BQ_FLOAT' rather than throwing error. (@paulsendavidjay, #282, #286) 
+
 # bigrquery 1.0.0
 
 ## Improved downloads
