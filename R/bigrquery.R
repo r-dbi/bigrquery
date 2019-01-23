@@ -13,5 +13,6 @@
 #' @importFrom jsonlite unbox
 #' @importFrom Rcpp sourceCpp
 #' @importFrom tibble tibble
+#' @keywords internal
 #' @useDynLib bigrquery, .registration = TRUE
 "_PACKAGE"
