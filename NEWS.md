@@ -1,10 +1,7 @@
 # bigrquery 1.0.0.9000
 
-* In parse_bq_type(), x now evaluates 'NUMERIC' as 'BQ_FLOAT' rather than throwing error. (@paulsendavidjay, #282, #286)
-* `bq_table_download()` correctly computes page ranges if both `max_results`
-  and `start_index` are supplied (#248)
-
-* `as.character()` now translated to `SAFE_CAST(x AS STRING)` (#268).
+* In parse_bq_type(), x now evaluates 'NUMERIC' as 'BQ_FLOAT' rather than 
+  throwing error. (@paulsendavidjay, #282)
 
 # bigrquery 1.0.0
 
