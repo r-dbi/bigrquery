@@ -184,6 +184,10 @@ print.bq_job <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+as.character.bq_job <- function(x, ...) {
+  paste0(x$project, ".", x$job)
+}
 
 # JSON --------------------------------------------------------------------
 
