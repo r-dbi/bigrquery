@@ -48,6 +48,15 @@ test_that("can parse date/times", {
   )
 })
 
+test_that("unparseable date-times return NA", {
+  skip_on_os("linux")
+
+  expect_equal(
+    as.numeric(bq_parse_single("1900-01-01T12:00:00", "datetime")),
+    NA_real_
+  )
+})
+
 test_that("can parse NULLs", {
   expect_identical(bq_parse_single(NULL, "string"), NA_character_)
   expect_identical(bq_parse_single(NULL, "integer"), NA_integer_)

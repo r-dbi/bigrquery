@@ -4,9 +4,9 @@
 \alias{query_exec}
 \title{Run a asynchronous query and retrieve results \link{deprecated}}
 \usage{
-query_exec(query, project, destination_table = NULL, default_dataset = NULL,
-  page_size = 10000, max_pages = 10, warn = TRUE,
-  create_disposition = "CREATE_IF_NEEDED",
+query_exec(query, project, destination_table = NULL,
+  default_dataset = NULL, page_size = 10000, max_pages = 10,
+  warn = TRUE, create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE,
   quiet = getOption("bigrquery.quiet"), ...)
 }

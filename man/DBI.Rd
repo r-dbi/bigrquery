@@ -71,9 +71,9 @@
 
 \S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
 
-\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(conn, name,
-  value, overwrite = FALSE, append = FALSE, ..., field.types = NULL,
-  temporary = FALSE, row.names = NA)
+\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(conn,
+  name, value, overwrite = FALSE, append = FALSE, ...,
+  field.types = NULL, temporary = FALSE, row.names = NA)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 

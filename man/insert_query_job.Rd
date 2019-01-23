@@ -48,4 +48,5 @@ Other jobs: \code{\link{get_job}},
   \code{\link{insert_extract_job}},
   \code{\link{insert_upload_job}}, \code{\link{wait_for}}
 }
+\concept{jobs}
 \keyword{internal}

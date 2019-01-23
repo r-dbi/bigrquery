@@ -10,7 +10,7 @@
 \alias{bq_dataset_tables}
 \title{BigQuery datasets}
 \usage{
-bq_dataset_create(x, ...)
+bq_dataset_create(x, location = "US", ...)
 
 bq_dataset_meta(x, fields = NULL)
 
@@ -20,10 +20,13 @@ bq_dataset_update(x, ...)
 
 bq_dataset_delete(x, delete_contents = FALSE)
 
-bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
+bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{A \link{bq_dataset}}
+
+\item{location}{Dataset location}
 
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}

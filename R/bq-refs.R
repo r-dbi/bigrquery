@@ -45,7 +45,8 @@
 #'
 #' as_bq_job(list(
 #'   projectId = "bigrquery-examples",
-#'   jobId = "US.job_m0SgFu2ycbbge6jgcvzvflBJ_Wft"
+#'   jobId = "job_m0SgFu2ycbbge6jgcvzvflBJ_Wft",
+#'   location = "US"
 #' ))
 #'
 #' @name bq_refs
@@ -148,12 +149,14 @@ as_bq_table.list <- function(x, ...) {
 # job ---------------------------------------------------------------------
 
 #' @rdname bq_refs
+#' @param location Job location
 #' @export
-bq_job <- function(project, job) {
+bq_job <- function(project, job, location = "US") {
   structure(
     list(
       project = project,
-      job = job
+      job = job,
+      location = location
     ),
     class = "bq_job"
   )
@@ -168,22 +171,26 @@ as_bq_job.bq_job <- function(x) x
 
 #' @export
 as_bq_job.list <- function(x) {
-  x <- bq_from_list(x, c("projectId", "jobId"), "bq_job")
-  bq_job(x$projectId, x$jobId)
+  x <- bq_from_list(x, c("projectId", "jobId", "location"), "bq_job")
+  bq_job(x$projectId, x$jobId, x$location)
 }
 
 #' @export
 as_bq_job.character <- function(x) {
-  x <- bq_from_string(x, 2, "bq_job")
-  bq_job(x[[1]], x[[2]])
+  x <- bq_from_string(x, 3, "bq_job")
+  bq_job(x[[1]], x[[2]], x[[3]])
 }
 
 #' @export
 print.bq_job <- function(x, ...) {
-  cat_line("<bq_job> ", x$project, ".", x$job)
+  cat_line("<bq_job> ", as.character(x))
   invisible(x)
 }
 
+#' @export
+as.character.bq_job <- function(x, ...) {
+  paste0(x$project, ".", x$job, ".", x$location)
+}
 
 # JSON --------------------------------------------------------------------
 
@@ -212,7 +219,7 @@ bq_from_list <- function(x, names, type) {
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue::collapse(names, sep = ", ", last = " and ")
+  names_str <- glue::glue_collapse(names, sep = ", ", last = " and ")
   stop(glue::glue("List <{type}> must have components {names_str}"), call. = FALSE)
 }
 

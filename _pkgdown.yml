@@ -1,0 +1,12 @@
+url: https://bigrquery.r-dbi.org
+destination: docs
+
+reference:
+- title: DBI and dplyr
+  contents:
+  - src_bigquery
+  - bigquery
+
+- title: Low-level API
+  contents:
+  - starts_with("bq")

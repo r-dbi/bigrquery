@@ -17,7 +17,7 @@ bq_table(project, dataset, table = NULL)
 
 as_bq_table(x, ...)
 
-bq_job(project, job)
+bq_job(project, job, location = "US")
 
 as_bq_job(x)
 }
@@ -32,6 +32,8 @@ the 2nd argument will be interpreted as the \code{table}}
 Built-in methods handle strings and lists.}
 
 \item{...}{Other arguments passed on to methods.}
+
+\item{location}{Job location}
 }
 \description{
 Create references to BigQuery datasets, jobs, and tables. Each class
@@ -68,7 +70,8 @@ as_bq_table(list(
 
 as_bq_job(list(
   projectId = "bigrquery-examples",
-  jobId = "US.job_m0SgFu2ycbbge6jgcvzvflBJ_Wft"
+  jobId = "job_m0SgFu2ycbbge6jgcvzvflBJ_Wft",
+  location = "US"
 ))
 
 }

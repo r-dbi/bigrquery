@@ -65,9 +65,9 @@ bq_test_init <- function(name = "basedata") {
 
 #' @export
 #' @rdname bq_test_project
-bq_test_dataset <- function(name = random_name()) {
+bq_test_dataset <- function(name = random_name(), location = "US") {
   ds <- bq_dataset(bq_test_project(), name)
-  bq_dataset_create(ds)
+  bq_dataset_create(ds, location = location)
 
   env <- new.env()
   reg.finalizer(

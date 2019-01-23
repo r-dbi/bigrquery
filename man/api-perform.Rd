@@ -2,19 +2,16 @@
 % Please edit documentation in R/bq-perform.R
 \name{api-perform}
 \alias{api-perform}
-\alias{api-perform}
 \alias{bq_perform_extract}
-\alias{api-perform}
 \alias{bq_perform_upload}
-\alias{api-perform}
 \alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
 bq_perform_extract(x, destination_uris,
-  destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE", ...,
-  print_header = TRUE, billing = x$project)
+  destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE",
+  ..., print_header = TRUE, billing = x$project)
 
 bq_perform_upload(x, values, fields = NULL,
   create_disposition = "CREATE_IF_NEEDED",
@@ -75,6 +72,17 @@ table.
 'notFound' error is returned in the job result.
 }}
 
+\item{write_disposition}{Specifies the action that occurs if the
+destination table already exists. The following values are supported:
+\itemize{
+\item "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
+table data.
+\item "WRITE_APPEND": If the table already exists, BigQuery appends the data
+to the table.
+\item "WRITE_EMPTY": If the table already exists and contains data, a
+'duplicate' error is returned in the job result.
+}}
+
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.
 
@@ -118,17 +126,6 @@ queries (> 128 MB compressed).}
 \item{priority}{Specifies a priority for the query. Possible values include
 "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 but are not rate-limited in the same way as interactive queries.}
-
-\item{write_dispoition}{Specifies the action that occurs if the
-destination table already exists. The following values are supported:
-\itemize{
-\item "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
-table data.
-\item "WRITE_APPEND": If the table already exists, BigQuery appends the data
-to the table.
-\item "WRITE_EMPTY": If the table already exists and contains data, a
-'duplicate' error is returned in the job result.
-}}
 }
 \value{
 A \link{bq_job}.

@@ -2,13 +2,9 @@
 % Please edit documentation in R/bq-job.R
 \name{api-job}
 \alias{api-job}
-\alias{api-job}
 \alias{bq_job_meta}
-\alias{api-job}
 \alias{bq_job_status}
-\alias{api-job}
 \alias{bq_job_show_statistics}
-\alias{api-job}
 \alias{bq_job_wait}
 \title{BigQuery job: retrieve metadata}
 \usage{

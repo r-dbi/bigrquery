@@ -3,6 +3,20 @@
 * In parse_bq_type(), x now evaluates 'NUMERIC' as 'BQ_FLOAT' rather than 
   throwing error. (@paulsendavidjay, #282)
 
+* `bq_job()` tracks location so bigrquery now works painlessly with non-US/EU
+  locations (#274).
+
+* Jobs now print their ids while running (#252)
+
+* Unparseable date times return NA (#285)
+
+* `bq_table_download()` correctly computes page ranges if both `max_results`
+  and `start_index` are supplied (#248)
+
+* `as.character()` now translated to `SAFE_CAST(x AS STRING)` (#268).
+
+* `median()` now translates to `APPROX_QUANTILES(x, 2)[SAFE_ORDINAL(2)]` (@valentinumbach, #267).
+
 # bigrquery 1.0.0
 
 ## Improved downloads

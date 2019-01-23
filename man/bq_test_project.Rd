@@ -14,7 +14,7 @@ bq_test_project()
 
 bq_test_init(name = "basedata")
 
-bq_test_dataset(name = random_name())
+bq_test_dataset(name = random_name(), location = "US")
 
 bq_testable()
 

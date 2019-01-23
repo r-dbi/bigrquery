@@ -37,11 +37,15 @@ NULL
 
 #' @export
 #' @rdname api-dataset
-bq_dataset_create <- function(x, ...) {
+#' @param location Dataset location
+bq_dataset_create <- function(x, location = "US", ...) {
   x <- as_bq_dataset(x)
 
   url <- bq_path(x$project, "")
-  body <- list(datasetReference = datasetReference(x))
+  body <- list(
+    datasetReference = datasetReference(x),
+    location = location
+  )
   bq_post(url, body = bq_body(body, ...))
 
   x

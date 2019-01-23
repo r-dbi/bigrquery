@@ -1,10 +1,12 @@
 context("test-bq-job.R")
 
 test_that("job coercion equivalent to construction", {
-  expect_equal(bq_job("a", "b"), as_bq_job("a.b"))
+  ref <- bq_job("a", "b", "c")
 
-  x <- list(projectId = "a", jobId = "b")
-  expect_equal(bq_job("a", "b"), as_bq_job(x))
+  expect_equal(bq_job("a", "b", "c"), ref)
+  expect_equal(as_bq_job("a.b.c"), ref)
+  x <- list(projectId = "a", jobId = "b", location = "c")
+  expect_equal(as_bq_job(x), ref)
 })
 
 test_that("dataset coercion equivalent to construction", {
@@ -23,7 +25,7 @@ test_that("table equivalent to construction", {
 
 test_that("objects have helpful print methods", {
   expect_known_output({
-    print(as_bq_job("x.y"))
+    print(as_bq_job("x.y.US"))
     print(as_bq_dataset("x.y"))
     print(as_bq_table("x.y.z"))
   }, file = test_path("bg-refs-print.txt"))
@@ -32,7 +34,7 @@ test_that("objects have helpful print methods", {
 test_that("string coercion error on invalid number of components", {
   expect_error(as_bq_table("x"), "must contain 3")
   expect_error(as_bq_table("a.b.c.d"), "must contain 3")
-  expect_error(as_bq_job("x"), "must contain 2")
+  expect_error(as_bq_job("x"), "must contain 3")
   expect_error(as_bq_dataset("x"), "must contain 2")
 })
 
