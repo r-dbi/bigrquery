@@ -7,6 +7,8 @@
 
 * `as.character()` now translated to `SAFE_CAST(x AS STRING)` (#268).
 
+* `median()` now translates to `APPROX_QUANTILES(x, 2)[SAFE_ORDINAL(2)]` (@valentinumbach, #267).
+
 # bigrquery 1.0.0
 
 ## Improved downloads
