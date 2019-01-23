@@ -216,11 +216,12 @@ public:
       if (v.IsString()) {
         struct tm dtm;
         char* parsed = strptime(v.GetString(), "%Y-%m-%dT%H:%M:%S", &dtm);
+        time_t utc = timegm(&dtm);
 
-        if (parsed == NULL) {
+        if (parsed == NULL || utc == -1) {
           REAL(x)[i] = NA_REAL;
         } else {
-          REAL(x)[i] = timegm(&dtm) + parse_partial_seconds(parsed);
+          REAL(x)[i] = utc + parse_partial_seconds(parsed);
         }
       } else {
         REAL(x)[i] = NA_REAL;
