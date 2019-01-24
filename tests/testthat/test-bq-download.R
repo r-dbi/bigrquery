@@ -86,7 +86,7 @@ test_that("the return type of integer columns is set by the bigint argument", {
   character_target <- c("-2147483648", "-2147483647", "-1",
                         "0", "1", "2147483647", "2147483648")
 
-  expect_identical(default_col, integer64_target)
+  expect_identical(default_col, integer_target)
   expect_identical(integer64_col, integer64_target)
   expect_identical(integer_col, integer_target)
   expect_identical(numeric_col, numeric_target)

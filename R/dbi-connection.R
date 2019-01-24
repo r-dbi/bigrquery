@@ -6,7 +6,7 @@ BigQueryConnection <-
            page_size = 1e4,
            quiet = NA,
            use_legacy_sql = FALSE,
-           bigint = c("integer64", "integer", "numeric", "character")) {
+           bigint = c("integer", "integer64", "numeric", "character")) {
   ret <- new("BigQueryConnection",
     project = project,
     dataset = dataset,

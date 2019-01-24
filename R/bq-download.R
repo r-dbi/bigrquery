@@ -40,9 +40,9 @@
 #'   BigQuery servers.
 #' @inheritParams api-job
 #' @param bigint The R type that BigQuery's 64-bit integer types should be mapped to.
-#'   The default is [bit64::integer64], which allows the full range of 64 bit
-#'   integers. `"integer"` returns R `integer` type but results in `NA` for
-#'   values above/below +/- 2147483647.
+#'   The default is `"integer"` which returns R's `integer` type but results in `NA` for
+#'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
+#'   which allows the full range of 64 bit integers.
 #' @section API documentation:
 #' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
 #' @export
@@ -57,7 +57,7 @@ bq_table_download <-
            start_index = 0L,
            max_connections = 6L,
            quiet = NA,
-           bigint = c("integer64", "integer", "numeric", "character")) {
+           bigint = c("integer", "integer64", "numeric", "character")) {
   x <- as_bq_table(x)
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.numeric(max_results), length(max_results) == 1)

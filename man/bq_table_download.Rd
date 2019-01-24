@@ -6,7 +6,7 @@
 \usage{
 bq_table_download(x, max_results = Inf, page_size = 10000,
   start_index = 0L, max_connections = 6L, quiet = NA,
-  bigint = c("integer64", "integer", "numeric", "character"))
+  bigint = c("integer", "integer64", "numeric", "character"))
 }
 \arguments{
 \item{x}{A \link{bq_table}}
@@ -27,9 +27,9 @@ BigQuery servers.}
 if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
-The default is \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
-integers. \code{"integer"} returns R \code{integer} type but results in \code{NA} for
-values above/below +/- 2147483647.}
+The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
+values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:integer64]{bit64::integer64},
+which allows the full range of 64 bit integers.}
 }
 \value{
 Because data retrieval may generalise list-cols and the data frame
