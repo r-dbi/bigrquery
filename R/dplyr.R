@@ -155,6 +155,7 @@ sql_translate_env.BigQueryConnection <- function(x) {
       as.integer = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS INT64)"),
       as.logical = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS BOOLEAN)"),
       as.numeric = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS FLOAT64)"),
+      as.character = function(x) dbplyr::build_sql("SAFE_CAST(", x, " AS STRING)"),
 
       # Date/time
       Sys.date = sql_prefix("current_date"),
@@ -179,7 +180,10 @@ sql_translate_env.BigQueryConnection <- function(x) {
 
       # Parallel min and max
       pmax = sql_prefix("GREATEST"),
-      pmin = sql_prefix("LEAST")
+      pmin = sql_prefix("LEAST"),
+
+      # Median
+      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),

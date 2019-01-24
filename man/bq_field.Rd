@@ -27,7 +27,7 @@ as_bq_fields(x)
 \item{x}{A list of \code{bg_fields}}
 }
 \description{
-\code{bq_field() and}bq_fields()\code{create;}as_bq_field()\code{and}as_bq_fields()`
+\code{bq_field() and }bq_fields()\code{create;}as_bq_field()\code{and}as_bq_fields()`
 coerce from lists.
 }
 \examples{

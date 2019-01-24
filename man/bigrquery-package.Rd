@@ -13,7 +13,7 @@ Easily talk to Google's 'BigQuery' database from R.
 \describe{
 \item{\code{bigrquery.quiet}}{Verbose output during processing? The default
 value, \code{NA}, turns on verbose output for queries that run longer than
-two seconds.  Use \code{TRUE} for immediate verbose output, \code{FALSE}
+two seconds.  Use \code{FALSE} for immediate verbose output, \code{TRUE}
 for quiet operation.}
 
 \item{\code{bigrquery.page.size}}{Default page size for fetching data,
@@ -40,3 +40,4 @@ Other contributors:
 }
 
 }
+\keyword{internal}

@@ -19,7 +19,7 @@ Imports:
     bit64,
     DBI,
     curl,
-    glue,
+    glue (>= 1.3.0),
     httr,
     jsonlite,
     methods,

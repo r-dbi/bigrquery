@@ -72,6 +72,17 @@ table.
 'notFound' error is returned in the job result.
 }}
 
+\item{write_disposition}{Specifies the action that occurs if the
+destination table already exists. The following values are supported:
+\itemize{
+\item "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
+table data.
+\item "WRITE_APPEND": If the table already exists, BigQuery appends the data
+to the table.
+\item "WRITE_EMPTY": If the table already exists and contains data, a
+'duplicate' error is returned in the job result.
+}}
+
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.
 
@@ -115,17 +126,6 @@ queries (> 128 MB compressed).}
 \item{priority}{Specifies a priority for the query. Possible values include
 "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 but are not rate-limited in the same way as interactive queries.}
-
-\item{write_dispoition}{Specifies the action that occurs if the
-destination table already exists. The following values are supported:
-\itemize{
-\item "WRITE_TRUNCATE": If the table already exists, BigQuery overwrites the
-table data.
-\item "WRITE_APPEND": If the table already exists, BigQuery appends the data
-to the table.
-\item "WRITE_EMPTY": If the table already exists and contains data, a
-'duplicate' error is returned in the job result.
-}}
 }
 \value{
 A \link{bq_job}.

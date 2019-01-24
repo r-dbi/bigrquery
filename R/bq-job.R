@@ -29,7 +29,10 @@ bq_job_meta <- function(x, fields = NULL) {
   x <- as_bq_job(x)
   bq_get(
     bq_path(x$project, jobs = x$job),
-    query = list(fields = fields)
+    query = list(
+      location = x$location,
+      fields = fields
+    )
   )
 }
 
@@ -73,7 +76,7 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   x <- as_bq_job(x)
 
   progress <- bq_progress(
-    "Running job [:spin] :elapsed",
+    paste0("Running job '", x, "' [:spin] :elapsed"),
     total = 1e7,
     quiet = quiet,
     clear = FALSE

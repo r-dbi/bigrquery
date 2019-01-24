@@ -113,7 +113,7 @@ bq_download_page_info <- function(nrow,
 
   n_pages <- ceiling(max_results / page_size)
   page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
-  page_end <- pmin(page_begin + page_size, max_results)
+  page_end <- pmin(page_begin + page_size, start_index + max_results)
 
   list(
     n_rows = max_results,

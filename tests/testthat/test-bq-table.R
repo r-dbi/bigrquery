@@ -45,6 +45,20 @@ test_that("can round trip a simple data frame", {
   expect_equal(df1, df2)
 })
 
+test_that("can round trip to non-default location", {
+  asia <- bq_test_dataset(location = "asia-east1")
+  df1 <- tibble(x = 1:10, y = letters[1:10])
+
+  bq_df <- bq_table(asia, "df")
+  bq_table_upload(bq_df, df1)
+
+  df2 <- bq_table_download(bq_df)
+  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
+  rownames(df2) <- NULL
+
+  expect_equal(df1, df2)
+})
+
 test_that("can round trip data frame with list-cols", {
   ds <- bq_test_dataset()
   tb <- bq_table(ds, "complex")
