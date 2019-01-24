@@ -83,26 +83,22 @@ test_that("correctly parse logical values" ,{
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
-  sql <- "
-  SELECT *
-  FROM UNNEST ([-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648]) AS x;"
+  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  qry <- bq_project_query(bq_test_project(), sql)
 
-  default_col <-   bq_table_download( bq_project_query(bq_test_project(), sql) )$x
-  integer64_col <- bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "integer64" )$x
-  integer_col <-   bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "integer" )$x
-  numeric_col <-   bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "numeric" )$x
-  character_col <- bq_table_download( bq_project_query(bq_test_project(), sql), bigint = "character" )$x
+  expect_warning(
+    out_int <- bq_table_download(qry, bigint = "integer")$x,
+    "integer overflow"
+  )
+  expect_identical(out_int, suppressWarnings(as.integer(x)))
 
-  integer64_target <- bit64::as.integer64( c("-2147483648", "-2147483647", "-1",
-                                             "0", "1", "2147483647", "2147483648") )
-  integer_target <- c(NA, -2147483647L, -1L, 0L, 1L, 2147483647L, NA)
-  numeric_target <- c(-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648)
-  character_target <- c("-2147483648", "-2147483647", "-1",
-                        "0", "1", "2147483647", "2147483648")
+  out_int64 <- bq_table_download(qry, bigint = "integer64")$x
+  expect_identical(out_int64, bit64::as.integer64(x))
 
-  expect_identical(default_col, integer_target)
-  expect_identical(integer64_col, integer64_target)
-  expect_identical(integer_col, integer_target)
-  expect_identical(numeric_col, numeric_target)
-  expect_identical(character_col, character_target)
+  out_dbl <- bq_table_download(qry, bigint = "numeric")$x
+  expect_identical(out_dbl, as.double(x))
+
+  out_chr <- bq_table_download(qry, bigint = "character")$x
+  expect_identical(out_chr, x)
 })

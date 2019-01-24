@@ -100,10 +100,18 @@ convert_bigint <- function(df, bigint) {
     character = as.character
   )
 
-  df <- rapply(df, f = as_bigint, classes = "integer64", how = "replace")
-  df
+  rapply_int64(df, f = as_bigint)
 }
-
+rapply_int64 <- function(x, f) {
+  if (is.list(x)) {
+    x[] <- lapply(x, rapply_int64, f = f)
+    x
+  } else if (bit64::is.integer64(x)) {
+    f(x)
+  } else {
+    x
+  }
+}
 
 bq_download_page_info <- function(nrow,
                               max_results = Inf,

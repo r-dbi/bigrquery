@@ -112,36 +112,12 @@ test_that("can create bq_table from connection + name", {
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
-  sql <- "
-  SELECT *
-  FROM UNNEST ([-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648]) AS x;"
+  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
 
-  con_default <- DBI::dbConnect(bigquery(), project = bq_test_project())
-  con_integer64 <- DBI::dbConnect(bigquery(), project = bq_test_project(),
-                                bigint = "integer64")
-  con_integer <- DBI::dbConnect(bigquery(), project = bq_test_project(),
-                                bigint = "integer")
-  con_numeric <- DBI::dbConnect(bigquery(), project = bq_test_project(),
-                                bigint = "numeric")
-  con_character <- DBI::dbConnect(bigquery(), project = bq_test_project(),
-                                bigint = "character")
+  con_integer64 <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "integer64")
+  con_character <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "character")
 
-  default_col <- DBI::dbGetQuery(con_default, sql)$x
-  integer64_col <- DBI::dbGetQuery(con_integer64, sql)$x
-  integer_col <- DBI::dbGetQuery(con_integer, sql)$x
-  numeric_col <- DBI::dbGetQuery(con_numeric, sql)$x
-  character_col <- DBI::dbGetQuery(con_character, sql)$x
-
-  integer64_target <- bit64::as.integer64( c("-2147483648", "-2147483647", "-1",
-                                             "0", "1", "2147483647", "2147483648") )
-  integer_target <- c(NA, -2147483647L, -1L, 0L, 1L, 2147483647L, NA)
-  numeric_target <- c(-2147483648, -2147483647, -1, 0, 1, 2147483647, 2147483648)
-  character_target <- c("-2147483648", "-2147483647", "-1",
-                        "0", "1", "2147483647", "2147483648")
-
-  expect_identical(default_col, integer_target)
-  expect_identical(integer64_col, integer64_target)
-  expect_identical(integer_col, integer_target)
-  expect_identical(numeric_col, numeric_target)
-  expect_identical(character_col, character_target)
+  expect_equal(DBI::dbGetQuery(con_integer64, sql)$x, bit64::as.integer64(x))
+  expect_equal(DBI::dbGetQuery(con_character, sql)$x, x)
 })
