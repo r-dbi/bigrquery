@@ -9,7 +9,8 @@
 \usage{
 \S4method{dbConnect}{BigQueryDriver}(drv, project, dataset = NULL,
   billing = project, page_size = 10000, quiet = NA,
-  use_legacy_sql = FALSE, ...)
+  use_legacy_sql = FALSE, bigint = c("integer", "integer64", "numeric",
+  "character"), ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \linkS4class{DBIDriver},
@@ -26,6 +27,11 @@ object (in order to clone an existing connection).}
 if \code{NA} displays progress bar only for long-running jobs.}
 
 \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
+
+\item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
+The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
+values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:integer64]{bit64::integer64},
+which allows the full range of 64 bit integers.}
 
 \item{...}{Other arguments for compatbility with generic; currently ignored.}
 }

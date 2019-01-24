@@ -1,5 +1,6 @@
 # bigrquery 1.0.0.9000
 
+* The `bq_table_download()` function and the `DBI::dbConnect` method now has a `bigint` argument which governs how BigQuery integer columns are imported into R. As before, the default is `bigint = "integer"`. You can set `bigint = "integer64"` to import BigQuery integer columns as `bit64::integer64` columns in R which allows for values outside the range of `integer` (`-2147483647` to `2147483647`). (@rasmusab, #94)
 * In parse_bq_type(), x now evaluates 'NUMERIC' as 'BQ_FLOAT' rather than
   throwing error. (@paulsendavidjay, #282)
 

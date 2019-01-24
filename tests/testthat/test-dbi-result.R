@@ -4,17 +4,22 @@ test_that("can retrieve full query results", {
   con <- DBI::dbConnect(
     bigquery(),
     project = bq_test_project(),
-    dataset = "basedata"
+    dataset = "basedata",
+    bigint = "integer"
   )
 
   df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM mtcars")
-  expect_equal(df, tibble(count = 32))
+  expect_equal(df, tibble(count = 32L))
 })
 
 test_that("can retrieve without dataset", {
-  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    bigint = "integer"
+  )
   df <- DBI::dbGetQuery(con, "SELECT count(*) as count FROM `basedata.mtcars`")
-  expect_equal(df, tibble(count = 32))
+  expect_equal(df, tibble(count = 32L))
 })
 
 test_that("can retrieve query in pieces", {

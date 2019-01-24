@@ -4,6 +4,7 @@
 #include <rapidjson/istreamwrapper.h>
 #include "rapidjson/filereadstream.h"
 #include <RProgress.h>
+#include "integer64.h"
 
 #include <ctime>
 #include <cstdio>
@@ -19,6 +20,7 @@ char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
 }
 #endif
 
+// This is currently not used in favor of parse_int64(const char* x) .
 long int parse_int(const char* x) {
   errno = 0;
   long int y = strtol(x, NULL, 10);
@@ -28,6 +30,15 @@ long int parse_int(const char* x) {
   } else {
     return y;
   }
+}
+
+int64_t parse_int64(const char* x) {
+  errno = 0;
+  int64_t y = strtoll(x, NULL, 10);
+  if (errno != 0) {
+    y = NA_INTEGER64;
+  }
+  return y;
 }
 
 enum BqType {
@@ -121,8 +132,11 @@ public:
     }
 
     switch(type_) {
-    case BQ_INTEGER:
-      return Rcpp::IntegerVector(n);
+    case BQ_INTEGER: {
+      Rcpp::DoubleVector out(n);
+      out.attr("class") = "integer64";
+      return out;
+    }
     case BQ_FLOAT:
       return Rcpp::DoubleVector(n);
     case BQ_BOOLEAN:
@@ -169,7 +183,7 @@ public:
 
     switch(type_) {
     case BQ_INTEGER:
-      INTEGER(x)[i] = v.IsString() ? parse_int(v.GetString()) : NA_INTEGER;
+      INTEGER64(x)[i] = v.IsString() ? parse_int64(v.GetString()) : NA_INTEGER64;
       break;
     case BQ_TIMESTAMP:
     case BQ_FLOAT:

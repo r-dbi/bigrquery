@@ -38,7 +38,7 @@ test_that("can round trip a simple data frame", {
   bq_df <- bq_table(ds, "df")
   bq_table_upload(bq_df, df1)
 
-  df2 <- bq_table_download(bq_df)
+  df2 <- bq_table_download(bq_df, bigint = "integer")
   df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
   rownames(df2) <- NULL
 
@@ -64,19 +64,23 @@ test_that("can round trip data frame with list-cols", {
   tb <- bq_table(ds, "complex")
 
   df1 <- tibble::tibble(
-    val = 1,
-    array = list(1:5),
-    struct = list(list(x = 1, y = 2)),
-    array_struct = list(tibble::tibble(x = "a", y = "b"))
+    val = 1.5,
+    array = list(1L:5L),
+    struct = list(list(x = "a", y = 1.5, z = 2L)),
+    array_struct = list(tibble::tibble(x = "a", y = 1.5, z = 2L))
   )
   bq_table_upload(tb, df1)
 
-  df2 <- bq_table_download(tb)
+  df2 <- bq_table_download(tb, bigint = "integer")
   # restore column order
   df2 <- df2[names(df1)]
-  df2$struct[[1]] <- df2$struct[[1]][c("x", "y")]
-  df2$array_struct[[1]] <- df2$array_struct[[1]][c("x", "y")]
+  df2$struct[[1]] <- df2$struct[[1]][c("x", "y", "z")]
+  df2$array_struct[[1]] <- df2$array_struct[[1]][c("x", "y", "z")]
 
+  # Converting to dataframe to avoid getting the error:
+  # Can't join on 'array' x 'array' because of incompatible types (list / list)
+  df1 <- as.data.frame(df1)
+  df2 <- as.data.frame(df2)
   expect_equal(df1, df2)
 })
 

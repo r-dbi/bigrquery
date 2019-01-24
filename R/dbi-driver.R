@@ -68,6 +68,10 @@ setClass("BigQueryDriver", contains = "DBIDriver")
 #' @inheritParams bq_perform_query
 #' @inheritParams bq_projects
 #' @inheritParams api-job
+#' @param bigint The R type that BigQuery's 64-bit integer types should be mapped to.
+#'   The default is `"integer"` which returns R's `integer` type but results in `NA` for
+#'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
+#'   which allows the full range of 64 bit integers.
 #' @param ... Other arguments for compatbility with generic; currently ignored.
 #' @export
 setMethod(
@@ -76,6 +80,7 @@ setMethod(
            page_size = 1e4,
            quiet = NA,
            use_legacy_sql = FALSE,
+           bigint = c("integer", "integer64", "numeric", "character"),
            ...) {
     BigQueryConnection(
       project = project,
@@ -83,7 +88,8 @@ setMethod(
       billing = billing,
       page_size = page_size,
       quiet = quiet,
-      use_legacy_sql = use_legacy_sql
+      use_legacy_sql = use_legacy_sql,
+      bigint = match.arg(bigint)
     )
   }
 )

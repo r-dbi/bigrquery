@@ -1,17 +1,20 @@
 #' @include dbi-driver.R
 NULL
 
-BigQueryConnection <- function(project, dataset, billing,
-                               page_size = 1e4,
-                               quiet = NA,
-                               use_legacy_sql = FALSE) {
+BigQueryConnection <-
+  function(project, dataset, billing,
+           page_size = 1e4,
+           quiet = NA,
+           use_legacy_sql = FALSE,
+           bigint = c("integer", "integer64", "numeric", "character")) {
   ret <- new("BigQueryConnection",
     project = project,
     dataset = dataset,
     billing = billing,
     page_size = as.integer(page_size),
     quiet = quiet,
-    use_legacy_sql = use_legacy_sql
+    use_legacy_sql = use_legacy_sql,
+    bigint = match.arg(bigint)
   )
   ret
 }
@@ -27,7 +30,8 @@ setClass(
     billing = "character",
     use_legacy_sql = "logical",
     page_size = "integer",
-    quiet = "logical"
+    quiet = "logical",
+    bigint = "character"
   )
 )
 
