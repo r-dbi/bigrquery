@@ -11,6 +11,13 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+if (bigrquery:::secret_can_decrypt("bigrquery")) {
+  json <- bigrquery:::secret_read("bigrquery", "service-token.json")
+  bigrquery::set_service_token(rawToChar(json))
+} else {
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 # bigrquery
 
@@ -64,6 +71,7 @@ sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality
 tb <- bq_project_query(billing, sql)
 bq_table_download(tb, max_results = 10)
 ```
+
 ## DBI
 
 ```{r, warning = FALSE}
