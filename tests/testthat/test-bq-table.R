@@ -30,21 +30,6 @@ test_that("can create table with schema", {
   expect_equal(fields, as_bq_fields(df))
 })
 
-test_that("can round trip a simple data frame", {
-  ds <- bq_test_dataset()
-
-  df1 <- tibble(x = 1:10, y = letters[1:10])
-
-  bq_df <- bq_table(ds, "df")
-  bq_table_upload(bq_df, df1)
-
-  df2 <- bq_table_download(bq_df, bigint = "integer")
-  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
-  rownames(df2) <- NULL
-
-  expect_equal(df1, df2)
-})
-
 test_that("can round trip to non-default location", {
   asia <- bq_test_dataset(location = "asia-east1")
   df1 <- tibble(x = 1:10, y = letters[1:10])
@@ -57,6 +42,72 @@ test_that("can round trip to non-default location", {
   rownames(df2) <- NULL
 
   expect_equal(df1, df2)
+})
+
+test_that("can roundtrip via save + load", {
+  ds <- bq_test_dataset()
+
+  tb1 <- bq_table(bq_test_project(), "basedata", "mtcars")
+  tb2 <- bq_table(ds, "save_load")
+  gs <- gs_test_object()
+
+  bq_table_save(tb1, gs)
+  on.exit(gs_object_delete(gs))
+  bq_table_load(tb2, gs)
+
+  df <- bq_table_download(tb2)
+  expect_equal(dim(df), c(32, 11))
+})
+
+test_that("can copy table from public dataset", {
+  ds <- bq_test_dataset()
+  my_natality <- bq_table(ds, "mynatality")
+
+  out <- bq_table_copy("publicdata.samples.natality", my_natality)
+  expect_equal(out, my_natality)
+  expect_true(bq_table_exists(my_natality))
+})
+
+# data-types --------------------------------------------------------------
+
+test_that("can round trip atomic vectors", {
+  ds <- bq_test_dataset()
+  df1 <- tibble(
+    lgl = c(FALSE, TRUE, NA),
+    int = c(-1, 1, NA),
+    dbl = c(-1.5, 1.5, NA),
+    chr = c("A", "B", NA)
+  )
+
+  bq_df <- bq_table(ds, "df")
+  bq_table_upload(bq_df, df1)
+
+  df2 <- bq_table_download(bq_df, bigint = "integer")
+  df2 <- df2[order(df2[[1]]), names(df1)] # BQ doesn't gaurantee order
+  rownames(df2) <- NULL
+
+  expect_equal(df1, df2)
+})
+
+test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
+  ds <- bq_test_dataset()
+  df <- tibble(datetime = as.POSIXct("2020-01-01 09:00", tz = "UTC"))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "timestamp"),
+    bq_fields(list(bq_field("datetime", "TIMESTAMP")))
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
+
+  tb2 <- bq_table_create(
+    bq_table(ds, "datetime2"),
+    bq_fields(list(bq_field("datetime", "DATETIME")))
+  )
+  bq_table_upload(tb2, df)
+  df2 <- bq_table_download(tb2)
+  expect_equal(df2, df)
 })
 
 test_that("can round trip data frame with list-cols", {
@@ -82,29 +133,4 @@ test_that("can round trip data frame with list-cols", {
   df1 <- as.data.frame(df1)
   df2 <- as.data.frame(df2)
   expect_equal(df1, df2)
-})
-
-test_that("can roundtrip via save + load", {
-  ds <- bq_test_dataset()
-
-  tb1 <- bq_table(bq_test_project(), "basedata", "mtcars")
-  tb2 <- bq_table(ds, "save_load")
-  gs <- gs_test_object()
-
-  bq_table_save(tb1, gs)
-  on.exit(gs_object_delete(gs))
-  bq_table_load(tb2, gs)
-
-  df <- bq_table_download(tb2)
-  expect_equal(dim(df), c(32, 11))
-})
-
-
-test_that("can copy table from public dataset", {
-  ds <- bq_test_dataset()
-  my_natality <- bq_table(ds, "mynatality")
-
-  out <- bq_table_copy("publicdata.samples.natality", my_natality)
-  expect_equal(out, my_natality)
-  expect_true(bq_table_exists(my_natality))
 })

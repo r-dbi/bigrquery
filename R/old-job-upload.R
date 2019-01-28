@@ -82,9 +82,10 @@ export_json <- function(values) {
   # Eliminate row names
   rownames(values) <- NULL
 
-  # Convert times to unix timestamps
+  # Convert times to canonical format
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#canonical-format_1
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
-  values[is_time] <- lapply(values[is_time], as.numeric)
+  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
 
   con <- rawConnection(raw(0), "r+")
   on.exit(close(con))

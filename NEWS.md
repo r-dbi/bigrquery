@@ -1,5 +1,10 @@
 # bigrquery 1.0.0.9000
 
+* `bq_table_upload()` works with POSIXct/POSIXct varibles (#251)
+
+* `bq_perform_upload()` will only autodetect a schema if the table does 
+  not already exist.
+
 * `bq_table_download()` and the `DBI::dbConnect` method now has a `bigint` 
   argument which governs how BigQuery integer columns are imported into R. As 
   before, the default is `bigint = "integer"`. You can set 
