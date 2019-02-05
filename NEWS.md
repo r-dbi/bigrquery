@@ -1,4 +1,4 @@
-# bigrquery 1.0.0.9000
+# bigrquery 1.1.0
 
 ## Improved type support
 
