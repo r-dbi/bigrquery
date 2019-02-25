@@ -30,7 +30,7 @@ gs_test_object(name = random_name())
 \value{
 \code{bq_test_project()} returns the name of a project suitable for
 use in testing. \code{bq_test_dataset()} creates a temporary dataset
-who's lifetime is tied to the lifetime of the object that it returns.
+whose lifetime is tied to the lifetime of the object that it returns.
 }
 \description{
 You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
@@ -38,7 +38,7 @@ You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
 tests locally. I recommend creating a new project because the tests involve
 both reading and writing in BigQuery and CloudStorage.
 
-You will also need to have billing billing enabled for the project, and to
+You will also need to have billing enabled for the project, and to
 run \code{bq_test_init()} once.
 }
 \section{Testing}{
