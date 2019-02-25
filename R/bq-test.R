@@ -60,7 +60,7 @@ bq_test_init <- function(name = "basedata") {
 
   bq_mtcars <- bq_table(basedata, "mtcars")
   if (!bq_table_exists(bq_mtcars)) {
-    bq_table_upload(bq_mtcars, "mtcars", datasets::mtcars)
+    bq_table_upload(bq_mtcars, values = datasets::mtcars)
   }
 }
 
