@@ -53,9 +53,10 @@ bq_test_project <- function() {
 bq_test_init <- function(name = "basedata") {
   proj <- bq_test_project()
 
-  basedata <- bq_dataset(proj, "basedata")
-  if (!bq_dataset_exists(basedata))
+  basedata <- bq_dataset(proj, name)
+  if (!bq_dataset_exists(basedata)) {
     bq_dataset_create(basedata)
+  }
 
   bq_mtcars <- bq_table(basedata, "mtcars")
   if (!bq_table_exists(bq_mtcars)) {
