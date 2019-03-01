@@ -15,6 +15,8 @@ methods <- methods %>% map(add_global_params, dd)
 
 .endpoints <- methods
 attr(.endpoints, "base_url") <- dd$rootUrl
+attr(.endpoints, "dd_date") <-
+  str_extract(basename(x), "[0-9]{4}-[0-9]{2}-[0-9]{2}")
 ## View(.endpoints)
 
 usethis::use_data(.endpoints, internal = TRUE, overwrite = TRUE)
