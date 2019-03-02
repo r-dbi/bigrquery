@@ -15,6 +15,7 @@
 #' @importFrom tibble tibble
 #' @importFrom bit64 integer64
 #' @importFrom rlang %||%
+#' @importFrom glue glue glue_data glue_collapse
 #' @keywords internal
 #' @useDynLib bigrquery, .registration = TRUE
 "_PACKAGE"

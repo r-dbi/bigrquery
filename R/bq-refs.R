@@ -219,8 +219,8 @@ bq_from_list <- function(x, names, type) {
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue::glue_collapse(names, sep = ", ", last = " and ")
-  stop(glue::glue("List <{type}> must have components {names_str}"), call. = FALSE)
+  names_str <- glue_collapse(names, sep = ", ", last = " and ")
+  stop(glue("List <{type}> must have components {names_str}"), call. = FALSE)
 }
 
 bq_from_string <- function(x, n, type) {
@@ -229,7 +229,7 @@ bq_from_string <- function(x, n, type) {
   pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
   if (length(pieces) != n) {
     stop(
-      glue::glue("Character <{type}> must contain {n} components when split by `.`"),
+      glue("Character <{type}> must contain {n} components when split by `.`"),
       call. = FALSE
     )
   }

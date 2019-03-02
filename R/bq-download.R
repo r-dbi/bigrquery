@@ -73,7 +73,7 @@ bq_table_download <-
     start_index = start_index
   )
   if (!bq_quiet(quiet)) {
-    message(glue::glue_data(
+    message(glue_data(
       page_info,
       "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
     ))
