@@ -26,6 +26,7 @@ Imports:
     prettyunits,
     progress,
     Rcpp,
+    rlang,
     tibble
 Suggests: 
     DBItest,

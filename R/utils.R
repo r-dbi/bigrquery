@@ -5,8 +5,6 @@ as_df <- function(x) {
   x
 }
 
-"%||%" <- function(x, y) if (is.null(x)) y else x
-
 bq_quiet <- function(x) {
   if (is.na(x)) {
     !interactive()
