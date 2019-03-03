@@ -134,3 +134,19 @@ test_that("can round trip data frame with list-cols", {
   df2 <- as.data.frame(df2)
   expect_equal(df1, df2)
 })
+
+test_that("can create table with time partitioning", {
+  ds <- bq_test_dataset()
+  partition_table <- bq_table(ds, "partition_daily")
+
+  bq_table_create(
+    partition_table,
+    fields = bq_fields(list(bq_field("id", "integer", description = "Key field"))),
+    time_partitioning = list(type = "DAY")
+  )
+
+  meta <- bq_table_meta(partition_table)
+  partitioning <- meta$timePartitioning$type
+  expect_equal(partitioning, "DAY")
+  expect_equal(meta$schema$fields[[1]]$description, "Key field")
+})
