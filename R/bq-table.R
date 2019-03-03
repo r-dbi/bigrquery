@@ -25,7 +25,13 @@
 #' if (bq_testable()) {
 #' ds <- bq_test_dataset()
 #'
-#' bq_mtcars <- bq_table(ds, "mtcars")
+#' bq_mtcars <- bq_table(
+#'   ds,
+#'   "mtcars",
+#'   friendly_name = "Motor Trend Car Road Tests",
+#'   description = "The data was extracted from the 1974 Motor Trend US magazine",
+#'   labels = list(category = "example")
+#' )
 #' bq_table_exists(bq_mtcars)
 #'
 #' bq_table_upload(bq_mtcars, mtcars)
