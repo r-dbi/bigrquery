@@ -6,7 +6,13 @@ test_that("can create and delete tables", {
   bq_mtcars <- bq_table(ds, "mtcars")
   expect_false(bq_table_exists(bq_mtcars))
 
-  bq_table_create(bq_mtcars, mtcars)
+  bq_table_create(
+    bq_mtcars,
+    mtcars,
+    friendly_name = "Motor Trend Car Road Tests",
+    description = "The data was extracted from the 1974 Motor Trend US magazine",
+    labels = list(category = "test")
+  )
   expect_true(bq_table_exists(bq_mtcars))
 
   bq_table_delete(bq_mtcars)
