@@ -19,6 +19,7 @@ Imports:
     bit64,
     DBI,
     curl,
+    gargle (>= 0.0.0.9003),
     glue (>= 1.3.0),
     httr,
     jsonlite,
@@ -49,6 +50,7 @@ Collate:
     'RcppExports.R'
     'auth.R'
     'bigrquery.R'
+    'bq-auth.R'
     'bq-dataset.R'
     'bq-download.R'
     'bq-field.R'
@@ -63,6 +65,7 @@ Collate:
     'bq-request.R'
     'bq-table.R'
     'bq-test.R'
+    'bq_endpoints.R'
     'camelCase.R'
     'dbi-driver.R'
     'dbi-connection.R'
@@ -80,6 +83,8 @@ Collate:
     'old-query.R'
     'old-table.R'
     'old-tabledata.R'
+    'request_generate.R'
     'secret.R'
+    'ui-glue.R'
     'utils.R'
     'zzz.R'

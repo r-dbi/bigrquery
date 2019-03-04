@@ -82,7 +82,9 @@ bq_auth <- function(email = NULL,
       call. = FALSE
     )
   }
+  ## FIXME: stop caching the cred in 2 places when the switchover is done
   .auth$set_cred(cred)
+  set_access_cred(cred)
 
   invisible()
 }
@@ -112,9 +114,11 @@ bq_token <- function() {
 
 #' View or edit auth config
 #'
-#' @eval gargle:::PREFIX_auth_config_description(gargle_lookup_table)
-#' @eval gargle:::PREFIX_auth_config_params()
-#' @eval gargle:::PREFIX_auth_config_return(gargle_lookup_table)
+#' @eval gargle:::PREFIX_auth_config_description(
+#'   gargle_lookup_table, .deauth_possible = FALSE
+#' )
+#' @eval gargle:::PREFIX_auth_config_params_except_key()
+#' @eval gargle:::PREFIX_auth_config_return_without_key(gargle_lookup_table)
 #'
 #' @family auth functions
 #' @export
