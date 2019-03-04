@@ -88,3 +88,5 @@ Collate:
     'ui-glue.R'
     'utils.R'
     'zzz.R'
+Remotes:  
+    r-lib/gargle
