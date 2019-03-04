@@ -112,6 +112,10 @@ test_that("collect can identify directly download tables", {
 
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")
+  skip_if(
+    identical(Sys.getenv("dbplyr"), "devel"),
+    "Skip until https://github.com/r-dbi/bigrquery/issues/293 gets fixed"
+  )
 
   sql <- dbplyr::lazy_frame(x = "1") %>%
     dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
@@ -128,6 +132,10 @@ test_that("casting uses bigquery types", {
 
 test_that("%||% translates to IFNULL", {
   skip_if_not_installed("dbplyr")
+  skip_if(
+    identical(Sys.getenv("dbplyr"), "devel"),
+    "Skip until https://github.com/r-dbi/bigrquery/issues/293 gets fixed"
+  )
 
   sql <- dbplyr::lazy_frame(x = 1L) %>%
     dplyr::mutate(y = x %||% 2L) %>%
