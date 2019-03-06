@@ -1,82 +1,66 @@
-#' @importFrom httr oauth_endpoint oauth_app oauth2.0_token
-bq_endpoint <- oauth_endpoint(NULL, "auth", "token",
-  base_url = "https://accounts.google.com/o/oauth2"
-)
-bq_scopes <- c(
-  "https://www.googleapis.com/auth/bigquery",
-  "https://www.googleapis.com/auth/cloud-platform"
-)
-bq_app <- oauth_app(
-  "google",
-  "465736758727.apps.googleusercontent.com",
-  "fJbIIyoIag0oA6p114lwsV2r"
-)
-bq_env <- new.env(parent = emptyenv())
+# nocov start
 
-
-#' Get and set access credentials
+#' Deprecated functions for access credentials
 #'
-#' Since the majority of bigquery API requests need to be authenticated
-#' bigrquery maintains package-wide OAuth authentication credentials in a
-#' private environment. In ordinary operation, you should never need to use
-#' these functions but they are provided in case you want to switch
-#' credentials mid-stream. You may can use `set_service_token`
-#' for non-interactive authentication.
-#'
-#' @section API console:
-#' To manage your google projects, use the API console:
-#' \url{https://console.cloud.google.com/}
+#' bigrquery's main functions for managing credentials are now [bq_auth()] and
+#' [bq_auth_config()]. The functions documented here are now deprecated and will
+#' eventually be removed.
 #'
 #' @keywords internal
+#' @name deprecated-auth
+NULL
+
+#' @rdname deprecated-auth
 #' @export
-#' @param value new access credentials, as returned by
-#'  [httr::oauth2.0_token()]
-#' @return `get_access_cred()` OAuth2 credentials token
+#' @return `get_access_cred()` returns the current OAuth2 credentials token.
 get_access_cred <- function() {
+  .Deprecated("bq_auth")
   if (!has_access_cred()) {
-    set_oauth2.0_cred()
+    bq_auth()
   }
-  bq_env$access_cred
+  .auth$get_cred()
 }
 
-#' @export
-#' @return `has_access_cred()` TRUE if credentials are set
-#' @rdname get_access_cred
-has_access_cred <- function() {
-  !is.null(bq_env$access_cred)
-}
-
-#' @rdname get_access_cred
+#' @rdname deprecated-auth
+#' @param value New access credentials, as returned by [httr::oauth2.0_token()].
 #' @export
 set_access_cred <- function(value) {
-  bq_env$access_cred <- value
+  .Deprecated("GOOD_QUESTION")
+  .auth$set_cred(value)
 }
 
-#' @rdname get_access_cred
+#' @rdname deprecated-auth
 #' @export
 reset_access_cred <- function() {
-  set_access_cred(NULL)
+  .Deprecated("GOOD_QUESTION")
+  .auth$clear_cred()
 }
 
-
-#' @rdname get_access_cred
-#' @param app A Google OAuth application created using
-#'  \code{\link[httr]{oauth_app}}
+#' @rdname deprecated-auth
+#' @param app A Google OAuth application created with [httr::oauth_app()].
 #' @export
-# nocov start
 set_oauth2.0_cred <- function(app = NULL) {
-  cred <- oauth2.0_token(bq_endpoint, app %||% bq_app, scope = bq_scopes)
-  set_access_cred(cred)
+  ## jennybc: I'm not entirely sure of this function's role. I am assuming it
+  ## exists as a way to "Bring Your Own OAuth App".
+  .Deprecated("bq_auth_config")
+  cred <- httr::oauth2.0_token(
+    endpoint = httr::oauth_endpoints("google"),
+    app %||% bq_app,
+    scope = c(
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/cloud-platform"
+    )
+  )
+  .auth$set_cred(cred)
 }
-# nocov end
 
+#' @rdname deprecated-auth
+#' @param service_token A JSON string, URL or file, providing a service account
+#'   token.
 #' @export
-#' @rdname get_access_cred
-#' @param service_token A JSON string, URL or file, giving or pointing to
-#'   the service token file.
 set_service_token <- function(service_token) {
-  service_token <- jsonlite::fromJSON(service_token)
-
-  cred <- httr::oauth_service_token(bq_endpoint, service_token, scope = bq_scopes)
-  set_access_cred(cred)
+  .Deprecated("bq_auth")
+  bq_auth(path = service_token)
 }
+
+# nocov end

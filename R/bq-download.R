@@ -198,8 +198,8 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
   url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  token <- get_access_cred()
-  if (!is.null(token)) {
+  if (has_access_cred()) {
+    token <- .auth$get_cred()
     signed <- token$sign("GET", url)
     url <- signed$url
     headers <- signed$headers

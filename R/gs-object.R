@@ -21,14 +21,14 @@ print.gs_object <- function(x, ...) {
   invisible(x)
 }
 
-gs_object_delete <- function(x, token = get_access_cred()) {
+gs_object_delete <- function(x, token = bq_token()) {
   url <- glue_data(x, "https://www.googleapis.com/storage/v1/b/{bucket}/o/{object}")
-  req <- httr::DELETE(url, config(token = token), httr::user_agent(bq_ua()))
+  req <- httr::DELETE(url, token, httr::user_agent(bq_ua()))
   process_request(req)
 }
 
-gs_object_exists <- function(x, token = get_access_cred()) {
+gs_object_exists <- function(x, token = bq_token()) {
   url <- glue_data(x, "https://www.googleapis.com/storage/v1/b/{bucket}/o/{object}")
-  req <- httr::GET(url, config(token = token), httr::user_agent(bq_ua()))
+  req <- httr::GET(url, token, httr::user_agent(bq_ua()))
   req$status_code != 404
 }

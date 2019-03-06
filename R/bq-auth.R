@@ -1,9 +1,17 @@
 ## This file is the interface between bigrquery and the
 ## auth functionality in gargle.
 
+bq_app <- httr::oauth_app(
+  "google",
+  "465736758727.apps.googleusercontent.com",
+  "fJbIIyoIag0oA6p114lwsV2r"
+)
+
 .auth <- gargle::AuthState$new(
   package     = "bigrquery",
-  app         = gargle::tidyverse_app(),
+  ## FIXME(jennybc): which app to use? tidyverse or existing bigrquery app?
+  # app       = gargle::tidyverse_app(),
+  app         = bq_app,
   api_key     = NULL,
   auth_active = TRUE,
   cred        = NULL
@@ -82,11 +90,20 @@ bq_auth <- function(email = NULL,
       call. = FALSE
     )
   }
-  ## FIXME: stop caching the cred in 2 places when the switchover is done
   .auth$set_cred(cred)
-  set_access_cred(cred)
 
   invisible()
+}
+
+#' @rdname deprecated-auth
+#' @keywords internal
+#' @export
+has_access_cred <- function() {
+  ## jennybc: I'd prefer to NOT export this, but it was previously exported
+  ## I won't deprecate because it is called internally
+  ## since it needs to be documented, I'm documenting with the deprecated auth
+  ## functions
+  .auth$has_cred()
 }
 
 #' Produce configured token
@@ -106,10 +123,10 @@ bq_auth <- function(email = NULL,
 #' req
 #' }
 bq_token <- function() {
-  if (is.null(.auth$cred)) {
+  if (!has_access_cred()) {
     bq_auth()
   }
-  httr::config(token = .auth$cred)
+  httr::config(token = .auth$get_cred())
 }
 
 #' View or edit auth config
