@@ -135,7 +135,7 @@ test_that("can round trip data frame with list-cols", {
   expect_equal(df1, df2)
 })
 
-test_that("can create table with time partitioning", {
+test_that("can create table with time partitioning and description", {
   ds <- bq_test_dataset()
   partition_table <- bq_table(ds, "partition_daily")
 
