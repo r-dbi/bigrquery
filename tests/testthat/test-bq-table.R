@@ -140,3 +140,16 @@ test_that("can round trip data frame with list-cols", {
   df2 <- as.data.frame(df2)
   expect_equal(df1, df2)
 })
+
+test_that("can create table field description", {
+  ds <- bq_test_dataset()
+  partition_table <- bq_table(ds, "table_field_description")
+
+  bq_table_create(
+    partition_table,
+    fields = bq_fields(list(bq_field("id", "integer", description = "Key field")))
+  )
+
+  meta <- bq_table_meta(partition_table)
+  expect_equal(meta$schema$fields[[1]]$description, "Key field")
+})
