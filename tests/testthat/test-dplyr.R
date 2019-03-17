@@ -117,8 +117,13 @@ test_that("casting uses bigquery types", {
     dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64) AS `y`')
-  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64) AS `z`')
+  if (utils::packageVersion("dbplyr") > "1.3.0") {
+    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
+    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
+  } else {
+    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64) AS `y`')
+    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64) AS `z`')
+  }
 })
 
 test_that("%||% translates to IFNULL", {
@@ -128,5 +133,9 @@ test_that("%||% translates to IFNULL", {
     dplyr::mutate(y = x %||% 2L) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2) AS `y`')
+  if (utils::packageVersion("dbplyr") > "1.3.0") {
+    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
+  } else {
+    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2) AS `y`')
+  }
 })
