@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="BiqQuery field (and fields) class — bq_field" />
 
-<meta property="og:description" content="bq_field() and bq_fields()create;as_bq_field()andas_bq_fields()`
+<meta property="og:description" content="bq_field() and bq_fields() create; as_bq_field() and as_bq_fields()
 coerce from lists." />
 <meta name="twitter:card" content="summary" />
 
@@ -110,12 +110,13 @@ coerce from lists." />
 
     <div class="ref-description">
     
-    <p><code>bq_field() and </code>bq_fields()<code>create;</code>as_bq_field()<code>and</code>as_bq_fields()`
+    <p><code>bq_field()</code> and <code>bq_fields()</code> create; <code>as_bq_field()</code> and <code>as_bq_fields()</code>
 coerce from lists.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>bq_field</span>(<span class='no'>name</span>, <span class='no'>type</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"NULLABLE"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())
+    <pre class="usage"><span class='fu'>bq_field</span>(<span class='no'>name</span>, <span class='no'>type</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"NULLABLE"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(),
+  <span class='kw'>description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>bq_fields</span>(<span class='no'>x</span>)
 
@@ -141,6 +142,10 @@ coerce from lists.</p>
     <tr>
       <th>fields</th>
       <td><p>For a field of type "record", a list of sub-fields.</p></td>
+    </tr>
+    <tr>
+      <th>description</th>
+      <td><p>Field description</p></td>
     </tr>
     <tr>
       <th>x</th>
