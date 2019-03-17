@@ -1,6 +1,6 @@
 #' BiqQuery field (and fields) class
 #'
-#' `bq_field() and `bq_fields()` create; `as_bq_field()` and `as_bq_fields()`
+#' `bq_field()` and `bq_fields()` create; `as_bq_field()` and `as_bq_fields()`
 #' coerce from lists.
 #'
 #' @param name Field name
