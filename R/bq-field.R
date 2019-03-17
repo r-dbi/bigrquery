@@ -29,7 +29,7 @@ bq_field <- function(name, type, mode = "NULLABLE", fields = list(), description
       type = toupper(type),
       mode = toupper(mode),
       fields = as_bq_fields(fields),
-      description = description
+      description = description %||% ""
     ),
     class = "bq_field"
   )
@@ -71,7 +71,7 @@ as_bq_field.list <- function(x) {
     type = x$type,
     mode = x$mode %||% "NULLABLE",
     fields = lapply(x$fields, as_bq_field),
-    description = x$description
+    description = x$description %||% ""
   )
 }
 
