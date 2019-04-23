@@ -167,3 +167,17 @@ bq_table_load <- function(x, source_uris, ..., quiet = NA) {
 
   invisible(x)
 }
+
+#' @export
+#' @rdname api-table
+bq_table_patch <- function(x, fields) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, x$dataset, x$table)
+  body <- list(
+    tableReference = tableReference(x)
+  )
+  fields <- as_bq_fields(fields)
+  body$schema <- list(fields = as_json(fields))
+  bq_patch(url, body)
+}
