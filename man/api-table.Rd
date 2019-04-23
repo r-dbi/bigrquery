@@ -13,6 +13,7 @@
 \alias{bq_table_upload}
 \alias{bq_table_save}
 \alias{bq_table_load}
+\alias{bq_table_patch}
 \title{BigQuery tables}
 \usage{
 bq_table_create(x, fields = NULL, ...)
@@ -36,6 +37,8 @@ bq_table_upload(x, values, ..., quiet = NA)
 bq_table_save(x, destination_uris, ..., quiet = NA)
 
 bq_table_load(x, source_uris, ..., quiet = NA)
+
+bq_table_patch(x, fields)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
