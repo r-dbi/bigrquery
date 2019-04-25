@@ -43,7 +43,10 @@ as_json.bq_params <- function(x) {
       values <- lapply(values, function(x) list(value = x))
       out[[i]] <- list(
         name = names(x)[[i]],
-        parameterType = list(type = "ARRAY", arrayType = list(type = unbox(x[[i]]$type))),
+        parameterType = list(
+          type = "ARRAY",
+          arrayType = list(type = unbox(x[[i]]$type))
+        ),
         parameterValue = list(arrayValues = values)
       )
     }
