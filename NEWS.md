@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of ARRAY type (@byapparov, #303).
+
 * `bq_field()` can now pass `description` parameter which will be applied
   in `bq_table_create()` call (@byapparov, #272).
 

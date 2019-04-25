@@ -31,11 +31,22 @@ as_json.bq_params <- function(x) {
 
   out <- vector("list", length(x))
   for (i in seq_along(x)) {
-    out[[i]] <- list(
-      name = names(x)[[i]],
-      parameterType = list(type = unbox(x[[i]]$type)),
-      parameterValue = list(value = x[[i]]$value)
-    )
+    if (length(x[[i]]$value) == 1L) {
+      out[[i]] <- list(
+        name = names(x)[[i]],
+        parameterType = list(type = unbox(x[[i]]$type)),
+        parameterValue = list(value = x[[i]]$value)
+      )
+    }
+    else {
+      values <- c(x[[i]]$value)
+      values <- lapply(values, function(x) list(value = x))
+      out[[i]] <- list(
+        name = names(x)[[i]],
+        parameterType = list(type = "ARRAY", arrayType = list(type = unbox(x[[i]]$type))),
+        parameterValue = list(arrayValues = values)
+      )
+    }
   }
 
   out
