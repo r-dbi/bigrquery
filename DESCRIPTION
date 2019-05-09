@@ -81,4 +81,5 @@ Collate:
     'old-tabledata.R'
     'secret.R'
     'utils.R'
+    'viewer.R'
     'zzz.R'

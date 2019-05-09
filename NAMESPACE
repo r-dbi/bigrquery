@@ -2,6 +2,7 @@
 
 S3method(as.character,bq_job)
 S3method(as.character,gs_object)
+S3method(as.data.frame,bq_fields)
 S3method(as_bq_dataset,BigQueryConnection)
 S3method(as_bq_dataset,bq_dataset)
 S3method(as_bq_dataset,character)

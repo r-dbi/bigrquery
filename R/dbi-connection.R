@@ -16,6 +16,7 @@ BigQueryConnection <-
     use_legacy_sql = use_legacy_sql,
     bigint = match.arg(bigint)
   )
+  on_connection_opened(ret)
   ret
 }
 

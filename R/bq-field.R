@@ -90,6 +90,21 @@ as_bq_fields.data.frame <- function(x) {
 }
 
 #' @export
+as.data.frame.bq_fields <- function(x) {
+  name = unlist(lapply(x, function(field) {
+    field$name
+  }))
+  type =  unlist(lapply(x, function(field) {
+    field$type
+  }))
+  data.frame(
+    name = name,
+    type = type,
+    stringsAsFactors = FALSE
+  )
+}
+
+#' @export
 as_bq_fields.list <- function(x) {
   bq_fields(lapply(x, as_bq_field))
 }
