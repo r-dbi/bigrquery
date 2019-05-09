@@ -62,25 +62,30 @@ list_bigquery_objects <- function(organisation = NULL, project = NULL, dataset =
     projects <- bigrquery::list_projects()
     return(data.frame(
       name = projects,
-      type = "project",
+      type = rep("project", length(projects)),
       stringsAsFactors = FALSE
     ))
   }
 
   if (is.null(dataset)) {
     datasets <- bigrquery::list_datasets(project = project)
-    return(data.frame(
-      name = datasets,
-      type = "dataset",
-      stringsAsFactors = FALSE
-    ))
+    return(
+      data.frame(
+        name = datasets,
+        type = rep("dataset", length(datasets)),
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   tables <- bigrquery::list_tables(project = project, dataset = dataset)
-  return(data.frame(
-    name = tables,
-    type = "table",
-    stringsAsFactors = FALSE
-  ))
+
+  return(
+    data.frame(
+      name = tables,
+      type = rep("table", length(tables)),
+      stringsAsFactors = FALSE
+    )
+  )
 
 }
