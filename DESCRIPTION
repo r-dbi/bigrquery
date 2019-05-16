@@ -1,6 +1,6 @@
 Package: bigrquery
 Title: An Interface to Google's 'BigQuery' 'API'
-Version: 1.1.0.9000
+Version: 1.1.1
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime implementation"),
