@@ -9,7 +9,4 @@
 
 ## revdepcheck results
 
-We checked 3 reverse dependencies (1 from CRAN + 2 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
+This is a patch release to fix a failing CRAN test, so I did not test revdeps.
