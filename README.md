@@ -181,3 +181,5 @@ sample data; and as the `project` when you work with your own data.
     reference](https://developers.google.com/bigquery/docs/reference/v2/)
   - [Query/job console](https://bigquery.cloud.google.com/)
   - [Billing console](https://console.cloud.google.com/)
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
