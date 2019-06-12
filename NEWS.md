@@ -3,6 +3,10 @@
 * `dbConnect` triggers connectionObserver in RStudio which makes BigQuery projects, datasets
   and tables available in Connections pane (@byapparov, #298).
 
+# bigrquery 1.1.1
+
+* Fix test failure with dbplyr 1.4.0.
+
 * `bq_field()` can now pass `description` parameter which will be applied
   in `bq_table_create()` call (@byapparov, #272).
 
