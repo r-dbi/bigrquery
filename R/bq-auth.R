@@ -166,7 +166,7 @@ bq_auth_config <- function(app = NULL,
   stopifnot(is.null(path) || is_string(path))
 
   if (!is.null(app) && !is.null(path)) {
-    stop_glue("Don't provide both 'app' and 'path'. Pick one.")
+    stop("Don't provide both 'app' and 'path'. Pick one.", call. = FALSE)
   }
 
   if (is.null(app) && !is.null(path)) {

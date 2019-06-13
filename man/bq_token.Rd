@@ -23,7 +23,4 @@ initiate OAuth2.0 flow. If auth has been deactivated via
 bq_token()
 }
 }
-\seealso{
-Other low-level API functions: \code{\link{request_generate}}
-}
 \concept{low-level API functions}
