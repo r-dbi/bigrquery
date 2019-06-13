@@ -20,12 +20,7 @@ initiate OAuth2.0 flow. If auth has been deactivated via
 }
 \examples{
 \dontrun{
-req <- request_generate(
-  "drive.files.get",
-  list(fileId = "abc"),
-  token = drive_token()
-)
-req
+bq_token()
 }
 }
 \seealso{

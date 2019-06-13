@@ -19,7 +19,8 @@ gargle_lookup_table <- list(
   YOUR_STUFF  = "your BigQuery projects",
   PRODUCT     = "Google BigQuery",
   API         = "BigQuery API",
-  PREFIX      = "bq"
+  PREFIX      = "bq",
+  AUTH_CONFIG_SOURCE = "bigrquery"
 )
 
 #' Authorize bigrquery
@@ -134,7 +135,7 @@ has_access_cred <- function() {
 #' @eval gargle:::PREFIX_auth_config_description(
 #'   gargle_lookup_table, .deauth_possible = FALSE
 #' )
-#' @eval gargle:::PREFIX_auth_config_params_except_key()
+#' @eval gargle:::PREFIX_auth_config_params_except_key(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_config_return_without_key(gargle_lookup_table)
 #'
 #' @family auth functions

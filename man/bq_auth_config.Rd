@@ -10,7 +10,7 @@ bq_auth_config(app = NULL, path = NULL)
 bq_oauth_app()
 }
 \arguments{
-\item{app}{OAuth app. Defaults to a tidyverse app.}
+\item{app}{OAuth app. Defaults to a bigrquery app.}
 
 \item{path}{Path to the JSON file.}
 }
@@ -20,7 +20,15 @@ which is defined in the gargle package. \code{bq_oauth_app()}: the
 current \code{\link[httr:oauth_app]{httr::oauth_app()}}.
 }
 \description{
-View or edit auth config
+These functions give the user more control over auth than what is
+possible with \code{\link[=bq_auth]{bq_auth()}}. \code{bq_auth_config()} gives control
+of:
+\itemize{
+\item The OAuth app, which is used when obtaining a user token.
+}
+
+See the vignette \href{https://gargle.r-lib.org/articles/get-api-credentials.html}{How to get your own API credentials}
+for more.
 
 \code{bq_oauth_app()} retrieves the currently configured OAuth app.
 }
