@@ -19,7 +19,7 @@ Imports:
     bit64,
     DBI,
     curl,
-    gargle (>= 0.0.0.9004),
+    gargle (>= 0.2.0),
     glue (>= 1.3.0),
     httr,
     jsonlite,
@@ -88,5 +88,3 @@ Collate:
     'ui-glue.R'
     'utils.R'
     'zzz.R'
-Remotes:  
-    r-lib/gargle
