@@ -14,8 +14,9 @@ NULL
 #' @export
 #' @return `get_access_cred()` returns the current OAuth2 credentials token.
 get_access_cred <- function() {
+  # FIXME(jennybc): is `bq_auth()` really the right function to refer to here?
   .Deprecated("bq_auth")
-  if (!has_access_cred()) {
+  if (!bq_has_token()) {
     bq_auth()
   }
   .auth$get_cred()

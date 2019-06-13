@@ -7,14 +7,9 @@ bq_app <- httr::oauth_app(
   "fJbIIyoIag0oA6p114lwsV2r"
 )
 
-.auth <- gargle::AuthState$new(
+.auth <- gargle::init_AuthState(
   package     = "bigrquery",
-  ## FIXME(jennybc): which app to use? tidyverse or existing bigrquery app?
-  # app       = gargle::tidyverse_app(),
-  app         = bq_app,
-  api_key     = NULL,
-  auth_active = TRUE,
-  cred        = NULL
+  auth_active = TRUE
 )
 
 ## The roxygen comments for these functions are mostly generated from data
@@ -24,18 +19,14 @@ gargle_lookup_table <- list(
   YOUR_STUFF  = "your BigQuery projects",
   PRODUCT     = "Google BigQuery",
   API         = "BigQuery API",
-  PREFIX      = "bq",
-  SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes#bigqueryv2"
+  PREFIX      = "bq"
 )
 
 #' Authorize bigrquery
 #'
 #' @eval gargle:::PREFIX_auth_description(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_details(gargle_lookup_table)
-#' @eval gargle:::PREFIX_auth_params_email()
-#' @eval gargle:::PREFIX_auth_params_path()
-#' @eval gargle:::PREFIX_auth_params_scopes(gargle_lookup_table)
-#' @eval gargle:::PREFIX_auth_params_cache_use_oob()
+#' @eval gargle:::PREFIX_auth_params()
 #'
 #' @family auth functions
 #' @export
@@ -72,17 +63,19 @@ bq_auth <- function(email = NULL,
                       "https://www.googleapis.com/auth/cloud-platform"
                     ),
                     cache = getOption("gargle.oauth_cache"),
-                    use_oob = getOption("gargle.oob_default")) {
+                    use_oob = getOption("gargle.oob_default"),
+                    token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = .auth$app,
+    app = bq_oauth_app() %||% bq_app,
     email = email,
     path = path,
     package = "bigrquery",
     cache = cache,
-    use_oob = use_oob
+    use_oob = use_oob,
+    token = token
   )
-  if (!gargle::is_legit_token(cred, verbose = TRUE)) {
+  if (!inherits(cred, "Token2.0")) {
     stop(
       "Can't get Google credentials.\n",
       "Are you running bigrquery in a non-interactive session? Consider:\n",
@@ -91,19 +84,9 @@ bq_auth <- function(email = NULL,
     )
   }
   .auth$set_cred(cred)
+  .auth$set_auth_active(TRUE)
 
   invisible()
-}
-
-#' @rdname deprecated-auth
-#' @keywords internal
-#' @export
-has_access_cred <- function() {
-  ## jennybc: I'd prefer to NOT export this, but it was previously exported
-  ## I won't deprecate because it is called internally
-  ## since it needs to be documented, I'm documenting with the deprecated auth
-  ## functions
-  .auth$has_cred()
 }
 
 #' Produce configured token
@@ -115,18 +98,35 @@ has_access_cred <- function() {
 #' @export
 #' @examples
 #' \dontrun{
-#' req <- request_generate(
-#'   "drive.files.get",
-#'   list(fileId = "abc"),
-#'   token = drive_token()
-#' )
-#' req
+#' bq_token()
 #' }
 bq_token <- function() {
-  if (!has_access_cred()) {
+  if (!bq_has_token()) {
     bq_auth()
   }
-  httr::config(token = .auth$get_cred())
+  httr::config(token = .auth$cred)
+}
+
+#' Is there a token on hand?
+#'
+#' Reports whether bigrquery has stored a token, ready for use in downstream
+#' requests.
+#'
+#' @return Logical.
+#' @export
+#'
+#' @examples
+#' bq_has_token()
+bq_has_token <- function() {
+  inherits(.auth$cred, "Token2.0")
+}
+
+#' @rdname deprecated-auth
+#' @keywords internal
+#' @export
+has_access_cred <- function() {
+  .Deprecated("bq_has_token")
+  bq_has_token()
 }
 
 #' View or edit auth config
