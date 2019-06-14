@@ -7,8 +7,8 @@
 bq_auth(email = NULL, path = NULL,
   scopes = c("https://www.googleapis.com/auth/bigquery",
   "https://www.googleapis.com/auth/cloud-platform"),
-  cache = getOption("gargle.oauth_cache"),
-  use_oob = getOption("gargle.oob_default"), token = NULL)
+  cache = gargle::gargle_oauth_cache(),
+  use_oob = gargle::gargle_oob_default(), token = NULL)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If
