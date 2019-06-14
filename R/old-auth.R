@@ -46,7 +46,7 @@ set_oauth2.0_cred <- function(app = NULL) {
   .Deprecated("bq_auth_config")
   cred <- httr::oauth2.0_token(
     endpoint = httr::oauth_endpoints("google"),
-    app %||% bq_app,
+    app %||% bq_app(),
     scope = c(
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/cloud-platform"

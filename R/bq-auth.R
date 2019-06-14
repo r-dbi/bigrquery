@@ -1,16 +1,11 @@
 ## This file is the interface between bigrquery and the
 ## auth functionality in gargle.
-
-bq_app <- httr::oauth_app(
-  "google",
-  "465736758727.apps.googleusercontent.com",
-  "fJbIIyoIag0oA6p114lwsV2r"
-)
-
 .auth <- gargle::init_AuthState(
   package     = "bigrquery",
   auth_active = TRUE
 )
+
+bq_app <- function() bqoa()
 
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
@@ -68,7 +63,7 @@ bq_auth <- function(email = NULL,
                     token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_app() %||% bq_app,
+    app = bq_oauth_app() %||% bq_app(),
     email = email,
     path = path,
     package = "bigrquery",
