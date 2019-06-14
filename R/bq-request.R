@@ -29,6 +29,8 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
 bq_ua <- function() {
   paste0(
     "bigrquery/", utils::packageVersion("bigrquery"), " ",
+    "(GPN:RStudio; )", " ",
+    "gargle/", utils::packageVersion("gargle"), " ",
     "httr/", utils::packageVersion("httr")
   )
 }
