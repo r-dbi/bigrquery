@@ -48,7 +48,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Collate: 
     'RcppExports.R'
-    'auth.R'
     'bigrquery.R'
     'bq-auth.R'
     'bq-dataset.R'
@@ -71,6 +70,7 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
+    'old-auth.R'
     'old-dataset.R'
     'old-id.R'
     'old-job-extract.R'
