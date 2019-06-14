@@ -137,14 +137,6 @@ bq_has_token <- function() {
   inherits(.auth$cred, "Token2.0")
 }
 
-#' @rdname deprecated-auth
-#' @keywords internal
-#' @export
-has_access_cred <- function() {
-  .Deprecated("bq_has_token")
-  bq_has_token()
-}
-
 #' View or edit auth config
 #'
 #' @eval gargle:::PREFIX_auth_config_description(
