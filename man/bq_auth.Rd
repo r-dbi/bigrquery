@@ -105,6 +105,7 @@ bq_auth(path = "foofy-83ee9e7c9c48.json")
 }
 }
 \seealso{
-Other auth functions: \code{\link{bq_auth_config}}
+Other auth functions: \code{\link{bq_auth_config}},
+  \code{\link{bq_deauth}}
 }
 \concept{auth functions}

@@ -85,6 +85,26 @@ bq_auth <- function(email = NULL,
   invisible()
 }
 
+#' Clear current token
+#'
+#' Clears any currently stored token. The next time bigrquery needs a token, the
+#' token acquisition process starts over, with a fresh call to [bq_auth()] and,
+#' therefore, internally, a call to [gargle::token_fetch()]. Unlike some other
+#' packages that use gargle, bigrquery is not usable in a de-authorized state.
+#' Therefore, calling `bq_deauth()` only clears the token, i.e. it does NOT
+#' imply that subsequent requests are made with an API key in lieu of a token.
+#'
+#' @family auth functions
+#' @export
+#' @examples
+#' \dontrun{
+#' bq_deauth()
+#' }
+bq_deauth <- function() {
+  .auth$clear_cred()
+  invisible()
+}
+
 #' Produce configured token
 #'
 #' @eval gargle:::PREFIX_token_description(gargle_lookup_table)
