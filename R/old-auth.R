@@ -1,5 +1,3 @@
-# nocov start
-
 #' Deprecated functions for access credentials
 #'
 #' bigrquery's main functions for managing credentials are now [bq_auth()] and
@@ -72,5 +70,3 @@ set_service_token <- function(service_token) {
   .Deprecated("bq_auth(path = ...)", package = "bigrquery")
   bq_auth(path = service_token)
 }
-
-# nocov end
