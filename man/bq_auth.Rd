@@ -84,12 +84,8 @@ For details on the many ways to find a token, see
 ## otherwise, go to browser for authentication and authorization
 bq_auth()
 
-## see user associated with current token
-bq_user()
-
 ## force use of a token associated with a specific email
 bq_auth(email = "jenny@example.com")
-bq_user()
 
 ## force a menu where you can choose from existing tokens or
 ## choose to get a new one
@@ -105,7 +101,7 @@ bq_auth(path = "foofy-83ee9e7c9c48.json")
 }
 }
 \seealso{
-Other auth functions: \code{\link{bq_auth_config}},
+Other auth functions: \code{\link{bq_auth_configure}},
   \code{\link{bq_deauth}}
 }
 \concept{auth functions}

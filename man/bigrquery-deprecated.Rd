@@ -35,7 +35,7 @@ token.}
 }
 \description{
 bigrquery's main functions for managing credentials are now \code{\link[=bq_auth]{bq_auth()}} and
-\code{\link[=bq_auth_config]{bq_auth_config()}}. The functions documented here are now deprecated and will
-eventually be removed.
+\code{\link[=bq_auth_configure]{bq_auth_configure()}}. The functions documented here are now deprecated and
+will eventually be removed.
 }
 \keyword{internal}

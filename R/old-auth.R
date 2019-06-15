@@ -1,8 +1,8 @@
 #' Deprecated functions for access credentials
 #'
 #' bigrquery's main functions for managing credentials are now [bq_auth()] and
-#' [bq_auth_config()]. The functions documented here are now deprecated and will
-#' eventually be removed.
+#' [bq_auth_configure()]. The functions documented here are now deprecated and
+#' will eventually be removed.
 #'
 #' @keywords internal
 #' @name bigrquery-deprecated
@@ -47,9 +47,9 @@ has_access_cred <- function() {
 #' @export
 set_oauth2.0_cred <- function(app) {
   .Deprecated(msg = glue("
-     Use `bq_auth_config()` to configure your own OAuth app. That will dictate
-     the app used when `bq_auth()` is called implicitly or explicitly to obtain
-     an OAuth2 token.
+     Use `bq_auth_configure()` to configure your own OAuth app. That will
+     dictate the app used when `bq_auth()` is called implicitly or explicitly to
+     obtain an OAuth2 token.
   "))
   cred <- gargle::gargle2.0_token(
     scopes = c(

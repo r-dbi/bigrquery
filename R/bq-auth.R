@@ -33,12 +33,8 @@ gargle_lookup_table <- list(
 #' ## otherwise, go to browser for authentication and authorization
 #' bq_auth()
 #'
-#' ## see user associated with current token
-#' bq_user()
-#'
 #' ## force use of a token associated with a specific email
 #' bq_auth(email = "jenny@example.com")
-#' bq_user()
 #'
 #' ## force a menu where you can choose from existing tokens or
 #' ## choose to get a new one
@@ -137,55 +133,82 @@ bq_has_token <- function() {
   inherits(.auth$cred, "Token2.0")
 }
 
-#' View or edit auth config
+# TODO(jennybc): update roxygen header below when/if gargle supports
+# THING_auth_configure, instead of or in addition to THING_auth_config.
+# Remove @aliases entry below at same time.
+
+#' Edit auth configuration
 #'
-#' @eval gargle:::PREFIX_auth_config_description(
-#'   gargle_lookup_table, .deauth_possible = FALSE
-#' )
-#' @eval gargle:::PREFIX_auth_config_params_except_key(gargle_lookup_table)
-#' @eval gargle:::PREFIX_auth_config_return_without_key(gargle_lookup_table)
+#' @description
+#' These functions give the user more control over auth than what is possible
+#' with [bq_auth()]. `bq_auth_configure()` gives control of:
+#'   * The OAuth app, which is used when obtaining a user token.
+#'
+#' See the vignette [How to get your own API
+#' credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) for
+#' more.
+#'
+#' @param app OAuth app.
+#' @inheritParams gargle::oauth_app_from_json
+#'
+#' @return
+#'   * `bq_auth_configure()`: An object of R6 class [gargle::AuthState],
+#'     invisibly.
+#'   * `bq_oauth_app()`: the current user-configured [httr::oauth_app()].
 #'
 #' @family auth functions
 #' @export
+#' @aliases bq_auth_config
 #' @examples
-#' ## this will print current config
-#' bq_auth_config()
+#' # see the current user-configured OAuth app (probaby `NULL`)
+#' bq_oauth_app()
 #'
 #' if (require(httr)) {
-#'   ## bring your own app via client id (aka key) and secret
+#'
+#'   # store current state, so we can restore
+#'   original_app <- bq_oauth_app()
+#'
+#'   # bring your own app via client id (aka key) and secret
 #'   google_app <- httr::oauth_app(
 #'     "my-awesome-google-api-wrapping-package",
 #'     key = "123456789.apps.googleusercontent.com",
 #'     secret = "abcdefghijklmnopqrstuvwxyz"
 #'   )
-#'   bq_auth_config(app = google_app)
+#'   bq_auth_configure(app = google_app)
+#'
+#'   # confirm current app
+#'   bq_oauth_app()
+#'
+#'   # restore original state
+#'   bq_auth_configure(app = original_app)
+#'   bq_oauth_app()
 #' }
 #'
 #' \dontrun{
-#' ## bring your own app via JSON downloaded from Google Developers Console
-#' bq_auth_config(
+#' # bring your own app via JSON downloaded from Google Developers Console
+#' bq_auth_configure(
 #'   path = "/path/to/the/JSON/you/downloaded/from/google/dev/console.json"
 #' )
 #' }
-bq_auth_config <- function(app = NULL,
-                           path = NULL) {
-  stopifnot(is.null(app) || inherits(app, "oauth_app"))
-  stopifnot(is.null(path) || is_string(path))
-
-  if (!is.null(app) && !is.null(path)) {
-    stop("Don't provide both 'app' and 'path'. Pick one.", call. = FALSE)
+#'
+bq_auth_configure <- function(app, path) {
+  if (!xor(missing(app), missing(path))) {
+    stop("Must supply exactly one of `app` and `path`", call. = FALSE)
   }
-
-  if (is.null(app) && !is.null(path)) {
+  if (!missing(path)) {
+    stopifnot(is_string(path))
     app <- gargle::oauth_app_from_json(path)
   }
-  if (!is.null(app)) {
-    .auth$set_app(app)
-  }
+  stopifnot(is.null(app) || inherits(app, "oauth_app"))
 
-  .auth
+  .auth$app <- app
+  invisible(.auth)
+
+  # switch to this once this is resolved and released
+  # https://github.com/r-lib/gargle/issues/82#issuecomment-502343745
+  #.auth$set_app(app)
 }
 
 #' @export
-#' @rdname bq_auth_config
+#' @rdname bq_auth_configure
 bq_oauth_app <- function() .auth$app
