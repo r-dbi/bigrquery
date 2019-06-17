@@ -25,10 +25,25 @@
     <loc>https://bigrquery.r-dbi.org/reference/bigquery.html</loc>
   </url>
   <url>
+    <loc>https://bigrquery.r-dbi.org/reference/bigrquery-deprecated.html</loc>
+  </url>
+  <url>
     <loc>https://bigrquery.r-dbi.org/reference/bigrquery-package.html</loc>
   </url>
   <url>
+    <loc>https://bigrquery.r-dbi.org/reference/bq_auth.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/reference/bq_auth_configure.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/reference/bq_deauth.html</loc>
+  </url>
+  <url>
     <loc>https://bigrquery.r-dbi.org/reference/bq_field.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/reference/bq_has_token.html</loc>
   </url>
   <url>
     <loc>https://bigrquery.r-dbi.org/reference/bq_projects.html</loc>
@@ -46,10 +61,10 @@
     <loc>https://bigrquery.r-dbi.org/reference/bq_test_project.html</loc>
   </url>
   <url>
-    <loc>https://bigrquery.r-dbi.org/reference/dataset-dep.html</loc>
+    <loc>https://bigrquery.r-dbi.org/reference/bq_token.html</loc>
   </url>
   <url>
-    <loc>https://bigrquery.r-dbi.org/reference/get_access_cred.html</loc>
+    <loc>https://bigrquery.r-dbi.org/reference/dataset-dep.html</loc>
   </url>
   <url>
     <loc>https://bigrquery.r-dbi.org/reference/get_job.html</loc>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BigQuery project methods — api-project • bigrquery</title>
+<title>Edit auth configuration — bq_auth_configure • bigrquery</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,15 @@
 
 
 
-<meta property="og:title" content="BigQuery project methods — api-project" />
+<meta property="og:title" content="Edit auth configuration — bq_auth_configure" />
 
-<meta property="og:description" content="Projects have two primary components: datasets and jobs. Unlike other
-BigQuery objects, is no accompanying bq_project S3 class because a project
-is a simple string." />
+<meta property="og:description" content="These functions give the user more control over auth than what is possible
+with bq_auth(). bq_auth_configure() gives control of:
+The OAuth app, which is used when obtaining a user token.
+" />
+
+<meta property="og:description" content="See the vignette How to get your own API credentials for
+more." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,42 +108,37 @@ is a simple string." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>BigQuery project methods</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-project.R'><code>R/bq-project.R</code></a></small>
-    <div class="hidden name"><code>api-project.Rd</code></div>
+    <h1>Edit auth configuration</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-auth.R'><code>R/bq-auth.R</code></a></small>
+    <div class="hidden name"><code>bq_auth_configure.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Projects have two primary components: datasets and jobs. Unlike other
-BigQuery objects, is no accompanying <code>bq_project</code> S3 class because a project
-is a simple string.</p>
+    <p>These functions give the user more control over auth than what is possible
+with <code><a href='bq_auth.html'>bq_auth()</a></code>. <code>bq_auth_configure()</code> gives control of:</p><ul>
+<li><p>The OAuth app, which is used when obtaining a user token.</p></li>
+</ul>
+
+    <p>See the vignette <a href='https://gargle.r-lib.org/articles/get-api-credentials.html'>How to get your own API credentials</a> for
+more.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>bq_project_datasets</span>(<span class='no'>x</span>, <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>bq_auth_configure</span>(<span class='no'>app</span>, <span class='no'>path</span>)
 
-<span class='fu'>bq_project_jobs</span>(<span class='no'>x</span>, <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>bq_oauth_app</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A string giving a project name.</p></td>
+      <th>app</th>
+      <td><p>OAuth app.</p></td>
     </tr>
     <tr>
-      <th>page_size</th>
-      <td><p>Number of items per page.</p></td>
-    </tr>
-    <tr>
-      <th>max_pages</th>
-      <td><p>Maximum number of pages to retrieve. Use <code>Inf</code> to retrieve
-all pages (this may take a long time!)</p></td>
-    </tr>
-    <tr>
-      <th>warn</th>
-      <td><p>If <code>TRUE</code>, warn when there are unretrieved pages.</p></td>
+      <th>path</th>
+      <td><p>Path to the JSON file.</p></td>
     </tr>
     </table>
     
@@ -147,30 +146,48 @@ all pages (this may take a long time!)</p></td>
 
     
 <ul>
-<li><p><code>bq_project_datasets()</code>: a list of <a href='bq_refs.html'>bq_dataset</a>s</p></li>
-<li><p><code>bq_project_jobs()</code>: a list of <a href='bq_refs.html'>bq_job</a>s.</p></li>
+<li><p><code>bq_auth_configure()</code>: An object of R6 class <a href='https://gargle.r-lib.org/reference/AuthState-class.html'>gargle::AuthState</a>,
+invisibly.</p></li>
+<li><p><code>bq_oauth_app()</code>: the current user-configured <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></li>
 </ul>
 
     
-    <h2 class="hasAnchor" id="api-documentation"><a class="anchor" href="#api-documentation"></a>API documentation</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    
-    <ul>
-<li><p><a href='https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list'>datasets</a></p></li>
-<li><p><a href='https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list'>jobs</a></p></li>
-</ul>
-    <p>One day we might also expose the general <a href='https://cloud.google.com/resource-manager/reference/rest/v1/projects'>project metadata</a>.</p>
+    <div class='dont-index'><p>Other auth functions: <code><a href='bq_auth.html'>bq_auth</a></code>,
+  <code><a href='bq_deauth.html'>bq_deauth</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_authable</a></span>()) {
-<span class='fu'>bq_project_datasets</span>(<span class='st'>"bigquery-public-data"</span>)
-<span class='fu'>bq_project_datasets</span>(<span class='st'>"githubarchive"</span>)
-}
+    <pre class="examples"><div class='input'><span class='co'># see the current user-configured OAuth app (probaby `NULL`)</span>
+<span class='fu'>bq_oauth_app</span>()</div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>require</a></span>(<span class='no'>httr</span>)) {
 
-<span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
-<span class='fu'>bq_project_jobs</span>(<span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>(), <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-}</div></pre>
+  <span class='co'># store current state, so we can restore</span>
+  <span class='no'>original_app</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_oauth_app</span>()
+
+  <span class='co'># bring your own app via client id (aka key) and secret</span>
+  <span class='no'>google_app</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>oauth_app</a></span>(
+    <span class='st'>"my-awesome-google-api-wrapping-package"</span>,
+    <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"123456789.apps.googleusercontent.com"</span>,
+    <span class='kw'>secret</span> <span class='kw'>=</span> <span class='st'>"abcdefghijklmnopqrstuvwxyz"</span>
+  )
+  <span class='fu'>bq_auth_configure</span>(<span class='kw'>app</span> <span class='kw'>=</span> <span class='no'>google_app</span>)
+
+  <span class='co'># confirm current app</span>
+  <span class='fu'>bq_oauth_app</span>()
+
+  <span class='co'># restore original state</span>
+  <span class='fu'>bq_auth_configure</span>(<span class='kw'>app</span> <span class='kw'>=</span> <span class='no'>original_app</span>)
+  <span class='fu'>bq_oauth_app</span>()
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: httr</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='co'># bring your own app via JSON downloaded from Google Developers Console</span>
+<span class='fu'>bq_auth_configure</span>(
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"/path/to/the/JSON/you/downloaded/from/google/dev/console.json"</span>
+)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -179,7 +196,7 @@ all pages (this may take a long time!)</p></td>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#api-documentation">API documentation</a></li>
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

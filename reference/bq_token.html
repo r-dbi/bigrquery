@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BigQuery project methods — api-project • bigrquery</title>
+<title>Produce configured token — bq_token • bigrquery</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,15 @@
 
 
 
-<meta property="og:title" content="BigQuery project methods — api-project" />
+<meta property="og:title" content="Produce configured token — bq_token" />
 
-<meta property="og:description" content="Projects have two primary components: datasets and jobs. Unlike other
-BigQuery objects, is no accompanying bq_project S3 class because a project
-is a simple string." />
+<meta property="og:description" content="For internal use or for those programming around the BigQuery API.
+Returns a token pre-processed with httr::config(). Most users
+do not need to handle tokens &quot;by hand&quot; or, even if they need some
+control, bq_auth() is what they need. If there is no current
+token, bq_auth() is called to either load from cache or
+initiate OAuth2.0 flow. If auth has been deactivated via
+bq_auth_config(), bq_token() returns NULL." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,82 +108,40 @@ is a simple string." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>BigQuery project methods</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-project.R'><code>R/bq-project.R</code></a></small>
-    <div class="hidden name"><code>api-project.Rd</code></div>
+    <h1>Produce configured token</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-auth.R'><code>R/bq-auth.R</code></a></small>
+    <div class="hidden name"><code>bq_token.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Projects have two primary components: datasets and jobs. Unlike other
-BigQuery objects, is no accompanying <code>bq_project</code> S3 class because a project
-is a simple string.</p>
+    <p>For internal use or for those programming around the BigQuery API.
+Returns a token pre-processed with <code><a href='https://www.rdocumentation.org/packages/httr/topics/config'>httr::config()</a></code>. Most users
+do not need to handle tokens "by hand" or, even if they need some
+control, <code><a href='bq_auth.html'>bq_auth()</a></code> is what they need. If there is no current
+token, <code><a href='bq_auth.html'>bq_auth()</a></code> is called to either load from cache or
+initiate OAuth2.0 flow. If auth has been deactivated via
+<code><a href='bq_auth_configure.html'>bq_auth_config()</a></code>, <code>bq_token()</code> returns <code>NULL</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>bq_project_datasets</span>(<span class='no'>x</span>, <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='fu'>bq_project_jobs</span>(<span class='no'>x</span>, <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>A string giving a project name.</p></td>
-    </tr>
-    <tr>
-      <th>page_size</th>
-      <td><p>Number of items per page.</p></td>
-    </tr>
-    <tr>
-      <th>max_pages</th>
-      <td><p>Maximum number of pages to retrieve. Use <code>Inf</code> to retrieve
-all pages (this may take a long time!)</p></td>
-    </tr>
-    <tr>
-      <th>warn</th>
-      <td><p>If <code>TRUE</code>, warn when there are unretrieved pages.</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>bq_token</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-<ul>
-<li><p><code>bq_project_datasets()</code>: a list of <a href='bq_refs.html'>bq_dataset</a>s</p></li>
-<li><p><code>bq_project_jobs()</code>: a list of <a href='bq_refs.html'>bq_job</a>s.</p></li>
-</ul>
-
-    
-    <h2 class="hasAnchor" id="api-documentation"><a class="anchor" href="#api-documentation"></a>API documentation</h2>
-
-    
-    <ul>
-<li><p><a href='https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list'>datasets</a></p></li>
-<li><p><a href='https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list'>jobs</a></p></li>
-</ul>
-    <p>One day we might also expose the general <a href='https://cloud.google.com/resource-manager/reference/rest/v1/projects'>project metadata</a>.</p>
+    <p>A <code>request</code> object (an S3 class provided by <a href='https://www.rdocumentation.org/packages/httr/topics/httr-package'>httr</a>).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_authable</a></span>()) {
-<span class='fu'>bq_project_datasets</span>(<span class='st'>"bigquery-public-data"</span>)
-<span class='fu'>bq_project_datasets</span>(<span class='st'>"githubarchive"</span>)
-}
-
-<span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
-<span class='fu'>bq_project_jobs</span>(<span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>(), <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-}</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>bq_token</span>()
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#api-documentation">API documentation</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

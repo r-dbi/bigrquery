@@ -269,7 +269,7 @@
 <li><p><code><a href="../reference/dataset-dep.html">list_tables()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/108'>#108</a>) and <code><a href="../reference/list_datasets.html">list_datasets()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/141'>#141</a>) are now paginated. By default they retrieve 50 items per page, and will iterate until they get everything.</p></li>
 <li><p><code><a href="../reference/list_tabledata.html">list_tabledata()</a></code> and <code><a href="../reference/query_exec.html">query_exec()</a></code> now give a nicer progress bar, including estimated time remaining (<a href='https://github.com/rstats-db/bigrquery/issues/100'>#100</a>).</p></li>
 <li><p><code><a href="../reference/query_exec.html">query_exec()</a></code> should be considerably faster because profiling revealed that ~40% of the time taken by was a single line inside a function that helps parse BigQuery’s json into an R data frame. I replaced the slow R code with a faster C function.</p></li>
-<li><p><code><a href="../reference/get_access_cred.html">set_oauth2.0_cred()</a></code> allows user to supply their own Google OAuth application when setting credentials (<a href='https://github.com/rstats-db/bigrquery/issues/130'>#130</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>)</p></li>
+<li><p><code><a href="../reference/bigrquery-deprecated.html">set_oauth2.0_cred()</a></code> allows user to supply their own Google OAuth application when setting credentials (<a href='https://github.com/rstats-db/bigrquery/issues/130'>#130</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>)</p></li>
 <li><p><code><a href="../reference/wait_for.html">wait_for()</a></code> uses now reports the query total bytes billed, which is more accurate because it takes into account caching and other factors.</p></li>
 <li><p><code>list_tabledata</code> returns empty table on max_pages=0 (<a href='https://github.com/rstats-db/bigrquery/issues/184'>#184</a>, <a href='https://github.com/ras44'>@ras44</a> <a href='https://github.com/byapparov'>@byapparov</a>)</p></li>
 </ul>
@@ -280,7 +280,7 @@
 <a href="#version-0-3-0" class="anchor"></a>Version 0.3.0<small> 2016-06-28 </small>
 </h1>
 <ul>
-<li><p>New <code><a href="../reference/get_access_cred.html">set_service_token()</a></code> allows you to use OAuth service token instead of interactive authentication.from</p></li>
+<li><p>New <code><a href="../reference/bigrquery-deprecated.html">set_service_token()</a></code> allows you to use OAuth service token instead of interactive authentication.from</p></li>
 <li><p><code>^</code> is correctly translated to <code>pow()</code> (<a href='https://github.com/rstats-db/bigrquery/issues/110'>#110</a>).</p></li>
 <li><p>Provide full DBI compliant interface (<a href='https://github.com/krlmlr'>@krlmlr</a>).</p></li>
 <li><p>Backend now translates <code>iflese()</code> to <code>IF</code> (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/rstats-db/bigrquery/issues/53'>#53</a>).</p></li>
@@ -323,7 +323,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>.</p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Jennifer Bryan, <a href='https://www.rstudio.com'><img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
 </div>
 
 <div class="pkgdown">
