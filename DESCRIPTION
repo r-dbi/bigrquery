@@ -2,10 +2,13 @@ Package: bigrquery
 Title: An Interface to Google's 'BigQuery' 'API'
 Version: 1.1.1.9000
 Authors@R: c(
-    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre")),
+    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre"),
+      comment = c(ORCID = "0000-0003-4757-117X")),
+    person("Jennifer", "Bryan", , "jenny@rstudio.com", "aut",
+      comment = c(ORCID = "0000-0002-6983-2759")),
     person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime implementation"),
     person("The NetBSD Foundation, Inc.", role = "ctb", comment = "gmtime implementation"),
-    person("RStudio", role = "cph")
+    person("RStudio", role = c("cph", "fnd"))
     )
 Description: Easily talk to Google's 'BigQuery' database from R.
 License: GPL-3 | file LICENSE
@@ -19,6 +22,7 @@ Imports:
     bit64,
     DBI,
     curl,
+    gargle (>= 0.2.0),
     glue (>= 1.3.0),
     httr,
     jsonlite,
@@ -26,6 +30,7 @@ Imports:
     prettyunits,
     progress,
     Rcpp,
+    rlang,
     tibble
 Suggests: 
     DBItest,
@@ -46,8 +51,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Collate: 
     'RcppExports.R'
-    'auth.R'
     'bigrquery.R'
+    'bq-auth.R'
     'bq-dataset.R'
     'bq-download.R'
     'bq-field.R'
@@ -68,6 +73,7 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
+    'old-auth.R'
     'old-dataset.R'
     'old-id.R'
     'old-job-extract.R'

@@ -3,6 +3,27 @@
 * `dbConnect` triggers connectionObserver in RStudio which makes BigQuery projects, datasets
   and tables available in Connections pane (@byapparov, #298).
 
+## Auth from gargle
+
+bigrquery's auth functionality now comes from the [gargle package](https://gargle.r-lib.org), which provides R infrastructure to work with Google APIs, in general. The same transition is underway in several other packages, such as [googledrive](https://googledrive.tidyverse.org). This will make user interfaces more consistent and makes two new token flows available in bigrquery:
+
+  * Application Default Credentials
+  * Service account tokens from the metadata server available to VMs running on GCE
+  
+Where to learn more:
+  <!-- TODO: add pkgdown link once this is merged and site is rebuilt -->
+  
+  * Help for `bq_auth()` *all that most users need*
+  * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) *details for advanced users*
+
+### Changes that a user will notice
+
+OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
+
+The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.
+
+If you previously used `set_service_token()` to use a service account token, it still works. But you'll get a deprecation warning. Switch over to `bq_auth(path = "/path/to/your/service-account.json")`. Several other functions are similarly soft-deprecated.
+
 # bigrquery 1.1.1
 
 * Fix test failure with dbplyr 1.4.0.

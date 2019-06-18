@@ -73,7 +73,7 @@ bq_table_download <-
     start_index = start_index
   )
   if (!bq_quiet(quiet)) {
-    message(glue::glue_data(
+    message(glue_data(
       page_info,
       "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
     ))
@@ -198,8 +198,8 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
   url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  token <- get_access_cred()
-  if (!is.null(token)) {
+  if (bq_has_token()) {
+    token <- .auth$get_cred()
     signed <- token$sign("GET", url)
     url <- signed$url
     headers <- signed$headers
