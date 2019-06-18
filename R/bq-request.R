@@ -29,6 +29,8 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
 bq_ua <- function() {
   paste0(
     "bigrquery/", utils::packageVersion("bigrquery"), " ",
+    "(GPN:RStudio; )", " ",
+    "gargle/", utils::packageVersion("gargle"), " ",
     "httr/", utils::packageVersion("httr")
   )
 }
@@ -40,10 +42,10 @@ bq_body <- function(body, ...) {
 
 
 #' @importFrom httr GET config
-bq_get <- function(url, ..., query = NULL, raw = FALSE, token = get_access_cred()) {
+bq_get <- function(url, ..., query = NULL, raw = FALSE, token = bq_token()) {
   req <- GET(
     paste0(base_url, url),
-    config(token = token),
+    token,
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -51,10 +53,10 @@ bq_get <- function(url, ..., query = NULL, raw = FALSE, token = get_access_cred(
   process_request(req, raw = raw)
 }
 
-bq_exists <- function(url, ..., query = NULL, token = get_access_cred()) {
+bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
   req <- GET(
     paste0(base_url, url),
-    config(token = token),
+    token,
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -64,7 +66,7 @@ bq_exists <- function(url, ..., query = NULL, token = get_access_cred()) {
 
 
 #' @importFrom httr GET config
-bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
+bq_get_paginated <- function(url, ..., query = NULL, token = bq_token(),
                              page_size = 50, max_pages = Inf, warn = TRUE) {
 
   assert_that(is.numeric(max_pages), length(max_pages) == 1)
@@ -103,10 +105,10 @@ bq_get_paginated <- function(url, ..., query = NULL, token = get_access_cred(),
 
 
 #' @importFrom httr DELETE config
-bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
+bq_delete <- function(url, ..., query = NULL, token = bq_token()) {
   req <- DELETE(
     paste0(base_url, url),
-    config(token = token),
+    token,
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -115,14 +117,14 @@ bq_delete <- function(url, ..., query = NULL, token = get_access_cred()) {
 }
 
 #' @importFrom httr POST add_headers config
-bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
   json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
 
   req <- POST(
     paste0(base_url, url),
     body = json,
     httr::user_agent(bq_ua()),
-    config(token = token),
+    token,
     add_headers("Content-Type" = "application/json"),
     ...,
     query = prepare_bq_query(query)
@@ -131,13 +133,13 @@ bq_post <- function(url, body, ..., query = NULL, token = get_access_cred()) {
 }
 
 #' @importFrom httr PATCH add_headers config
-bq_patch <- function(url, body, ..., query = NULL, token = get_access_cred()) {
+bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
   json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
   req <- PATCH(
     paste0(base_url, url),
     body = json,
     httr::user_agent(bq_ua()),
-    config(token = token),
+    token,
     add_headers("Content-Type" = "application/json"),
     ...,
     query = prepare_bq_query(query)
@@ -146,12 +148,12 @@ bq_patch <- function(url, body, ..., query = NULL, token = get_access_cred()) {
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = list(), token = get_access_cred()) {
+bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
   url <- paste0(upload_url, url)
   req <- POST_multipart_related(
     url,
     parts = parts,
-    config(token = token),
+    token,
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)

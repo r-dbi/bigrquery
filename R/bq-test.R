@@ -90,7 +90,7 @@ bq_testable <- function() {
 #' @export
 #' @rdname bq_test_project
 bq_authable <- function() {
-  has_access_cred() || (interactive() && !is_testing())
+  bq_has_token() || (interactive() && !is_testing())
 }
 
 #' @export
@@ -127,5 +127,5 @@ random_name <- function(n = 10) {
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")
 
 skip_if_no_auth <- function() {
-  testthat::skip_if_not(has_access_cred(), "Authentication not available")
+  testthat::skip_if_not(bq_has_token(), "Authentication not available")
 }

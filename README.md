@@ -62,16 +62,16 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     1    20          7.87
-#>  2  1969     6    27          8.00
-#>  3  1969     2    14          6.62
-#>  4  1969     2     1          7.56
-#>  5  1969     6     9          7.50
-#>  6  1969    10    21          6.31
-#>  7  1969     1    14          5.69
-#>  8  1969     6     5          7.94
-#>  9  1969     5     8          7.94
-#> 10  1969     1     3          6.31
+#>  1  1969     2     3          8.00
+#>  2  1969     5     4          7.06
+#>  3  1969     7    28          6.25
+#>  4  1969    11    12          8.31
+#>  5  1969     8    15          7.81
+#>  6  1969     8    24          6.31
+#>  7  1969    12     4          6.62
+#>  8  1969     7    28          4.50
+#>  9  1969     6    29          6.39
+#> 10  1969     8    23          6.12
 ```
 
 ## DBI
@@ -98,16 +98,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     1    20          7.87
-#>  2  1969     6    27          8.00
-#>  3  1969     2    14          6.62
-#>  4  1969     2     1          7.56
-#>  5  1969     6     9          7.50
-#>  6  1969    10    21          6.31
-#>  7  1969     1    14          5.69
-#>  8  1969     6     5          7.94
-#>  9  1969     5     8          7.94
-#> 10  1969     1     3          6.31
+#>  1  1969     2     3          8.00
+#>  2  1969     5     4          7.06
+#>  3  1969     7    28          6.25
+#>  4  1969    11    12          8.31
+#>  5  1969     8    15          7.81
+#>  6  1969     8    24          6.31
+#>  7  1969    12     4          6.62
+#>  8  1969     7    28          4.50
+#>  9  1969     6    29          6.39
+#> 10  1969     8    23          6.12
 ```
 
 ### dplyr
@@ -142,9 +142,15 @@ natality %>%
 
 When using bigquery interactively, you’ll be prompted to [authorize
 bigrquery](https://developers.google.com/bigquery/authorization) in the
-browser. Your credentials will be cached across sessions in
-`.httr-oauth`. For non-interactive usage, you’ll need to download a
-service token JSON file and use `set_service_token()`.
+browser. Your token will be cached across sessions in
+`~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you
+can download a service account token as a JSON file and put it into
+force via `bq_auth(path = "/path/to/your/service-account.json")`.
+bigrquery obtains a token with `gargle::token_fetch()`, which supports
+even more token flows. For full details, such as how to take advantage
+of Application Default Credentials or service accounts on GCE VMs, read
+the gargle vignette [How gargle gets
+tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 
 Note that `bigrquery` requests permission to modify your data; but it
 will never do so unless you explicitly request it (e.g. by calling
@@ -181,3 +187,5 @@ sample data; and as the `project` when you work with your own data.
     reference](https://developers.google.com/bigquery/docs/reference/v2/)
   - [Query/job console](https://bigquery.cloud.google.com/)
   - [Billing console](https://console.cloud.google.com/)
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
