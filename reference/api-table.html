@@ -220,13 +220,14 @@ an invisible <a href='bq_refs.html'>bq_table</a></p></li>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
 <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span>()
 
-<span class='no'>bq_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_table</a></span>(
+<span class='no'>bq_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_table_create</span>(
   <span class='no'>ds</span>,
   <span class='st'>"mtcars"</span>,
   <span class='kw'>friendly_name</span> <span class='kw'>=</span> <span class='st'>"Motor Trend Car Road Tests"</span>,
   <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"The data was extracted from the 1974 Motor Trend US magazine"</span>,
   <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='st'>"example"</span>)
 )
+<span class='no'>bq_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='no'>ds</span>, <span class='st'>"mtcars"</span>)
 <span class='fu'>bq_table_exists</span>(<span class='no'>bq_mtcars</span>)
 
 <span class='fu'>bq_table_upload</span>(<span class='no'>bq_mtcars</span>, <span class='no'>mtcars</span>)
