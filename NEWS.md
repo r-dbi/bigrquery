@@ -27,6 +27,9 @@ If you previously used `set_service_token()` to use a service account token, it 
 
 * `bq_field()` can now pass `description` parameter which will be applied
   in `bq_table_create()` call (@byapparov, #272).
+  
+* `bq_table_patch()` - allows to patch table (@byapparov, #253) with new schema.
+
 
 # bigrquery 1.1.0
 
