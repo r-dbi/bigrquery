@@ -13,7 +13,9 @@ bq_oauth_app()
 \arguments{
 \item{app}{OAuth app.}
 
-\item{path}{Path to the JSON file.}
+\item{path}{JSON downloaded from Google Developers Console, containing a
+client id (aka key) and secret, in one of the forms supported for the \code{txt}
+argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
 }
 \value{
 \itemize{
