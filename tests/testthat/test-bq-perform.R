@@ -85,7 +85,6 @@ test_that("can supply parameters", {
   df <- bq_table_download(job_tb)
   expect_equal(nrow(df), 1)
   expect_equal(df$phase, "New Moon")
-
 })
 
 test_that("can supply parameters as array for IN statement", {
