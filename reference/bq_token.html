@@ -38,7 +38,7 @@ do not need to handle tokens &quot;by hand&quot; or, even if they need some
 control, bq_auth() is what they need. If there is no current
 token, bq_auth() is called to either load from cache or
 initiate OAuth2.0 flow. If auth has been deactivated via
-bq_auth_config(), bq_token() returns NULL." />
+bq_deauth(), bq_token() returns NULL." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,7 +121,7 @@ do not need to handle tokens "by hand" or, even if they need some
 control, <code><a href='bq_auth.html'>bq_auth()</a></code> is what they need. If there is no current
 token, <code><a href='bq_auth.html'>bq_auth()</a></code> is called to either load from cache or
 initiate OAuth2.0 flow. If auth has been deactivated via
-<code><a href='bq_auth_configure.html'>bq_auth_config()</a></code>, <code>bq_token()</code> returns <code>NULL</code>.</p>
+<code><a href='bq_deauth.html'>bq_deauth()</a></code>, <code>bq_token()</code> returns <code>NULL</code>.</p>
     
     </div>
 
