@@ -76,7 +76,7 @@ authentication.
 
 For details on the many ways to find a token, see
 \code{\link[gargle:token_fetch]{gargle::token_fetch()}}. For deeper control over auth, use
-\code{\link[=bq_auth_config]{bq_auth_config()}} to bring your own OAuth app or API key.
+\code{\link[=bq_auth_configure]{bq_auth_configure()}} to bring your own OAuth app or API key.
 }
 \examples{
 \dontrun{
