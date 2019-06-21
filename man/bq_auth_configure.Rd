@@ -2,37 +2,41 @@
 % Please edit documentation in R/bq-auth.R
 \name{bq_auth_configure}
 \alias{bq_auth_configure}
-\alias{bq_auth_config}
 \alias{bq_oauth_app}
-\title{Edit auth configuration}
+\title{Edit and view auth configuration}
 \usage{
 bq_auth_configure(app, path)
 
 bq_oauth_app()
 }
 \arguments{
-\item{app}{OAuth app.}
+\item{app}{OAuth app, in the sense of \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
-\item{path}{JSON downloaded from Google Developers Console, containing a
+\item{path}{JSON downloaded from Google Cloud Platform Console, containing a
 client id (aka key) and secret, in one of the forms supported for the \code{txt}
 argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
 }
 \value{
 \itemize{
-\item \code{bq_auth_configure()}: An object of R6 class \link[gargle:AuthState]{gargle::AuthState},
-invisibly.
-\item \code{bq_oauth_app()}: the current user-configured \code{\link[httr:oauth_app]{httr::oauth_app()}}.
+\item \code{bq_auth_configure()}: An object of R6 class
+\link[gargle:AuthState]{gargle::AuthState}, invisibly.
+\item \code{bq_oauth_app()}: the current user-configured
+\code{\link[httr:oauth_app]{httr::oauth_app()}}.
 }
 }
 \description{
-These functions give the user more control over auth than what is possible
-with \code{\link[=bq_auth]{bq_auth()}}. \code{bq_auth_configure()} gives control of:
+These functions give more control over and visibility into the auth
+configuration than \code{\link[=bq_auth]{bq_auth()}} does. \code{bq_auth_configure()}
+lets the user specify their own:
 \itemize{
-\item The OAuth app, which is used when obtaining a user token.
+\item OAuth app, which is used when obtaining a user token.
+See the vignette
+\href{https://gargle.r-lib.org/articles/get-api-credentials.html}{How to get your own API credentials}
+for more.
+If the user does not configure these settings, internal defaults
+are used.
+\code{bq_oauth_app()} retrieves the currently configured OAuth app.
 }
-
-See the vignette \href{https://gargle.r-lib.org/articles/get-api-credentials.html}{How to get your own API credentials} for
-more.
 }
 \examples{
 # see the current user-configured OAuth app (probaby `NULL`)

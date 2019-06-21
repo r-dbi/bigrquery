@@ -14,8 +14,7 @@ gargle_lookup_table <- list(
   YOUR_STUFF  = "your BigQuery projects",
   PRODUCT     = "Google BigQuery",
   API         = "BigQuery API",
-  PREFIX      = "bq",
-  AUTH_CONFIG_SOURCE = "bigrquery"
+  PREFIX      = "bq"
 )
 
 #' Authorize bigrquery
@@ -121,10 +120,10 @@ bq_token <- function() {
 
 #' Is there a token on hand?
 #'
-#' Reports whether bigrquery has stored a token, ready for use in downstream
-#' requests.
+#' @eval gargle:::PREFIX_has_token_description(gargle_lookup_table)
+#' @eval gargle:::PREFIX_has_token_return()
 #'
-#' @return Logical.
+#' @family low-level API functions
 #' @export
 #'
 #' @examples
@@ -133,32 +132,14 @@ bq_has_token <- function() {
   inherits(.auth$cred, "Token2.0")
 }
 
-# TODO(jennybc): update roxygen header below when/if gargle supports
-# THING_auth_configure, instead of or in addition to THING_auth_config.
-# Remove @aliases entry below at same time.
-
-#' Edit auth configuration
+#' Edit and view auth configuration
 #'
-#' @description
-#' These functions give the user more control over auth than what is possible
-#' with [bq_auth()]. `bq_auth_configure()` gives control of:
-#'   * The OAuth app, which is used when obtaining a user token.
-#'
-#' See the vignette [How to get your own API
-#' credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) for
-#' more.
-#'
-#' @param app OAuth app.
-#' @inheritParams gargle::oauth_app_from_json
-#'
-#' @return
-#'   * `bq_auth_configure()`: An object of R6 class [gargle::AuthState],
-#'     invisibly.
-#'   * `bq_oauth_app()`: the current user-configured [httr::oauth_app()].
+#' @eval gargle:::PREFIX_auth_configure_description(gargle_lookup_table, .has_api_key = FALSE)
+#' @eval gargle:::PREFIX_auth_configure_params(.has_api_key = FALSE)
+#' @eval gargle:::PREFIX_auth_configure_return(gargle_lookup_table, .has_api_key = FALSE)
 #'
 #' @family auth functions
 #' @export
-#' @aliases bq_auth_config
 #' @examples
 #' # see the current user-configured OAuth app (probaby `NULL`)
 #' bq_oauth_app()
