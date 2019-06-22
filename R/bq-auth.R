@@ -182,12 +182,7 @@ bq_auth_configure <- function(app, path) {
   }
   stopifnot(is.null(app) || inherits(app, "oauth_app"))
 
-  .auth$app <- app
-  invisible(.auth)
-
-  # switch to this once this is resolved and released
-  # https://github.com/r-lib/gargle/issues/82#issuecomment-502343745
-  #.auth$set_app(app)
+  .auth$set_app(app)
 }
 
 #' @export
