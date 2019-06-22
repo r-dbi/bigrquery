@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Edit auth configuration — bq_auth_configure • bigrquery</title>
+<title>Edit and view auth configuration — bq_auth_configure • bigrquery</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,15 +30,19 @@
 
 
 
-<meta property="og:title" content="Edit auth configuration — bq_auth_configure" />
+<meta property="og:title" content="Edit and view auth configuration — bq_auth_configure" />
 
-<meta property="og:description" content="These functions give the user more control over auth than what is possible
-with bq_auth(). bq_auth_configure() gives control of:
-The OAuth app, which is used when obtaining a user token.
+<meta property="og:description" content="These functions give more control over and visibility into the auth
+configuration than bq_auth() does. bq_auth_configure()
+lets the user specify their own:
+OAuth app, which is used when obtaining a user token.
+See the vignette
+How to get your own API credentials
+for more.
+If the user does not configure these settings, internal defaults
+are used.
+bq_oauth_app() retrieves the currently configured OAuth app.
 " />
-
-<meta property="og:description" content="See the vignette How to get your own API credentials for
-more." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,20 +112,24 @@ more." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Edit auth configuration</h1>
+    <h1>Edit and view auth configuration</h1>
     <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-auth.R'><code>R/bq-auth.R</code></a></small>
     <div class="hidden name"><code>bq_auth_configure.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>These functions give the user more control over auth than what is possible
-with <code><a href='bq_auth.html'>bq_auth()</a></code>. <code>bq_auth_configure()</code> gives control of:</p><ul>
-<li><p>The OAuth app, which is used when obtaining a user token.</p></li>
+    <p>These functions give more control over and visibility into the auth
+configuration than <code><a href='bq_auth.html'>bq_auth()</a></code> does. <code>bq_auth_configure()</code>
+lets the user specify their own:</p><ul>
+<li><p>OAuth app, which is used when obtaining a user token.
+See the vignette
+<a href='https://gargle.r-lib.org/articles/get-api-credentials.html'>How to get your own API credentials</a>
+for more.
+If the user does not configure these settings, internal defaults
+are used.
+<code>bq_oauth_app()</code> retrieves the currently configured OAuth app.</p></li>
 </ul>
-
-    <p>See the vignette <a href='https://gargle.r-lib.org/articles/get-api-credentials.html'>How to get your own API credentials</a> for
-more.</p>
     
     </div>
 
@@ -134,11 +142,11 @@ more.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>app</th>
-      <td><p>OAuth app.</p></td>
+      <td><p>OAuth app, in the sense of <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
     </tr>
     <tr>
       <th>path</th>
-      <td><p>JSON downloaded from Google Developers Console, containing a
+      <td><p>JSON downloaded from Google Cloud Platform Console, containing a
 client id (aka key) and secret, in one of the forms supported for the <code>txt</code>
 argument of <code><a href='https://www.rdocumentation.org/packages/jsonlite/topics/fromJSON'>jsonlite::fromJSON()</a></code> (typically, a file path or JSON string).</p></td>
     </tr>
@@ -148,9 +156,10 @@ argument of <code><a href='https://www.rdocumentation.org/packages/jsonlite/topi
 
     
 <ul>
-<li><p><code>bq_auth_configure()</code>: An object of R6 class <a href='https://gargle.r-lib.org/reference/AuthState-class.html'>gargle::AuthState</a>,
-invisibly.</p></li>
-<li><p><code>bq_oauth_app()</code>: the current user-configured <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></li>
+<li><p><code>bq_auth_configure()</code>: An object of R6 class
+<a href='https://gargle.r-lib.org/reference/AuthState-class.html'>gargle::AuthState</a>, invisibly.</p></li>
+<li><p><code>bq_oauth_app()</code>: the current user-configured
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></li>
 </ul>
 
     
