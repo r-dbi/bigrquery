@@ -8,9 +8,8 @@ bigrquery's auth functionality now comes from the [gargle package](https://gargl
   * Service account tokens from the metadata server available to VMs running on GCE
   
 Where to learn more:
-  <!-- TODO: add pkgdown link once this is merged and site is rebuilt -->
   
-  * Help for `bq_auth()` *all that most users need*
+  * Help for [`bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html) *all that most users need*
   * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) *details for advanced users*
 
 ### Changes that a user will notice
@@ -18,6 +17,8 @@ Where to learn more:
 OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 
 The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.
+
+`bq_user()` is a new function that reveals the email of the user associated with the current token.
 
 If you previously used `set_service_token()` to use a service account token, it still works. But you'll get a deprecation warning. Switch over to `bq_auth(path = "/path/to/your/service-account.json")`. Several other functions are similarly soft-deprecated.
 

@@ -43,7 +43,10 @@ does not appear on the consent screen.}
 the option named "gargle_oob_default", retrieved via
 \code{\link[gargle:gargle_oob_default]{gargle::gargle_oob_default()}}.}
 
-\item{token}{A token with class \link[httr:Token-class]{Token2.0}.}
+\item{token}{A token with class \link[httr:Token-class]{Token2.0} or an object of
+httr's class \code{request}, i.e. a token that has been prepared with
+\code{\link[httr:config]{httr::config()}} and has a \link[httr:Token-class]{Token2.0} in the
+\code{auth_token} component.}
 }
 \description{
 Authorize bigrquery to view and manage your BigQuery projects. This function is a

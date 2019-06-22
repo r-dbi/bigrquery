@@ -188,3 +188,25 @@ bq_auth_configure <- function(app, path) {
 #' @export
 #' @rdname bq_auth_configure
 bq_oauth_app <- function() .auth$app
+
+#' Get info on current user
+#'
+#' Reveals the email address of the user associated with the current token. If
+#' no token has been loaded yet, this function does not initiate auth.
+#'
+#' @seealso [gargle::token_userinfo()], [gargle::token_email()],
+#'   [gargle::token_tokeninfo()]
+#'
+#' @return An email address or, if no token has been loaded, `NULL`.
+#' @export
+#' @examples
+#' \dontrun{
+#' bq_user()
+#' }
+bq_user <- function() {
+  if (bq_has_token()) {
+    gargle::token_email(bq_token())
+  } else {
+    NULL
+  }
+}
