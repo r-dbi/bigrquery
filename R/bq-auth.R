@@ -166,9 +166,9 @@ bq_has_token <- function() {
 #' }
 #'
 #' \dontrun{
-#' # bring your own app via JSON downloaded from Google Developers Console
+#' # bring your own app via JSON downloaded from GCP Console
 #' bq_auth_configure(
-#'   path = "/path/to/the/JSON/you/downloaded/from/google/dev/console.json"
+#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
 #' )
 #' }
 #'
