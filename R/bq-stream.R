@@ -28,7 +28,6 @@ bq_table_stream <- function(x, values, skip_invalid_rows = "false", ignore_unkno
     ignore_unknown_values = ignore_unknown_values,
     template_suffix = template_suffix
   )
-  print(jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE))
   bq_post(url, body)
 }
 
