@@ -22,4 +22,3 @@ test_that("can stream data.frame into bigquery table", {
   expect_length(errors, 3L)
   expect_match(toJSON(errors), "index.*reason.*location")
 })
-
