@@ -42,7 +42,7 @@ bq_table_stream <- function(x,
   invisible(response$insertErrors)
 }
 
-#' Converts data.table to streaming request body
+#' Converts data.frame to streaming request body
 #'
 #' @noRd
 #' @return list that represents json for streaming
