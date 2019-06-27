@@ -10,8 +10,8 @@ bq_user()
 An email address or, if no token has been loaded, \code{NULL}.
 }
 \description{
-Reveals the email address of the user associated with the current token. If
-no token has been loaded yet, this function does not initiate auth.
+Reveals the email address of the user associated with the current token.
+If no token has been loaded yet, this function does not initiate auth.
 }
 \examples{
 \dontrun{
