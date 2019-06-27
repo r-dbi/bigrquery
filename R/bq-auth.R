@@ -47,7 +47,7 @@ gargle_lookup_table <- list(
 #' ## use a service account token
 #' bq_auth(path = "foofy-83ee9e7c9c48.json")
 #' }
-bq_auth <- function(email = NULL,
+bq_auth <- function(email = gargle::gargle_oauth_email(),
                     path = NULL,
                     scopes = c(
                       "https://www.googleapis.com/auth/bigquery",

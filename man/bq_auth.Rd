@@ -4,7 +4,7 @@
 \alias{bq_auth}
 \title{Authorize bigrquery}
 \usage{
-bq_auth(email = NULL, path = NULL,
+bq_auth(email = gargle::gargle_oauth_email(), path = NULL,
   scopes = c("https://www.googleapis.com/auth/bigquery",
   "https://www.googleapis.com/auth/cloud-platform"),
   cache = gargle::gargle_oauth_cache(),
