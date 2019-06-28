@@ -1,17 +1,18 @@
 #' Project to use for testing bigrquery
 #'
-#' @description You'll need to set up the `BIGQUERY_TEST_PROJECT` (name of a
-#'   project) and `BIGQUERY_TEST_BUCKET` (name of bucket) env vars in order to
-#'   run bigrquery tests locally. I recommend creating a new project because the
-#'   tests involve both reading and writing in BigQuery and CloudStorage.
+#' @description
+#' You'll need to set up the `BIGQUERY_TEST_PROJECT` (name of a project) and
+#' `BIGQUERY_TEST_BUCKET` (name of bucket) env vars in order to run bigrquery
+#' tests locally. I recommend creating a new project because the tests involve
+#' both reading and writing in BigQuery and CloudStorage.
 #'
-#'   You will also need to have billing enabled for the project, and to run
-#'   `bq_test_init()` once, while signed in via `bq_auth()` as a  user with the
-#'   necessary permissions on that project.
+#' You will also need to have billing enabled for the project, and to run
+#' `bq_test_init()` once, while signed in via `bq_auth()` as a  user with the
+#' necessary permissions on that project.
 #'
-#' @section Testing: In tests, `bq_test_project()` (and hence
-#'   `bq_test_dataset()`) will automatically skip if auth and a test project are
-#'   not available.
+#' @section
+#' Testing: In tests, `bq_test_project()` (and hence `bq_test_dataset()`) will
+#' automatically skip if auth and a test project are not available.
 #'
 #' @return `bq_test_project()` returns the name of a project suitable for use in
 #'   testing. `bq_test_dataset()` creates a temporary dataset whose lifetime is

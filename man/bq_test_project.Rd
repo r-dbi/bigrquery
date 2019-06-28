@@ -33,10 +33,10 @@ testing. \code{bq_test_dataset()} creates a temporary dataset whose lifetime is
 tied to the lifetime of the object that it returns.
 }
 \description{
-You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a
-project) and \code{BIGQUERY_TEST_BUCKET} (name of bucket) env vars in order to
-run bigrquery tests locally. I recommend creating a new project because the
-tests involve both reading and writing in BigQuery and CloudStorage.
+You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
+\code{BIGQUERY_TEST_BUCKET} (name of bucket) env vars in order to run bigrquery
+tests locally. I recommend creating a new project because the tests involve
+both reading and writing in BigQuery and CloudStorage.
 
 You will also need to have billing enabled for the project, and to run
 \code{bq_test_init()} once, while signed in via \code{bq_auth()} as a  user with the
