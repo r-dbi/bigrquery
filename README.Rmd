@@ -134,4 +134,8 @@ Use your project ID as the `billing` project whenever you work with free sample 
 * [Query/job console](https://bigquery.cloud.google.com/)
 * [Billing console](https://console.cloud.google.com/)
 
+## Policies
+
+Please note that the 'bigrquery' project is released with a [Contributor Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
 [Privacy policy](https://www.tidyverse.org/google_privacy_policy)
