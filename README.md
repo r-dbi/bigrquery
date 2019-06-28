@@ -3,12 +3,15 @@
 
 # bigrquery
 
-[![Build
-Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+<!-- badges: start -->
+
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Coverage
-status](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/github/r-dbi/bigrquery?branch=master)
+[![Travis build
+status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![Codecov test
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+<!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
 BigQuery](https://developers.google.com/bigquery/) by allowing you to
@@ -62,16 +65,16 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2    18          7.56
-#>  2  1969     6     5          5.88
-#>  3  1969     6    15          8.00
-#>  4  1969     3     2          8.50
-#>  5  1969     7     6          7.31
-#>  6  1969     8    16          7.69
-#>  7  1969     3    22          8.44
-#>  8  1969     2    12          6.88
-#>  9  1969     4     2          7.94
-#> 10  1969     7    30          8.50
+#>  1  1969     7    21          6.19
+#>  2  1969     8     4          8.75
+#>  3  1969     2     3          6.62
+#>  4  1969     6    16          8.75
+#>  5  1969     2    10          6.75
+#>  6  1969     8     8          7.81
+#>  7  1969     1    14          7.87
+#>  8  1969     4    21          5.69
+#>  9  1969    11    11          6.62
+#> 10  1969     1     5          8.60
 ```
 
 ## DBI
@@ -88,7 +91,7 @@ con <- dbConnect(
 con 
 #> <BigQueryConnection>
 #>   Dataset: publicdata.samples
-#>   Billing: bigrquery-examples
+#>   Billing: gargle-169921
 
 dbListTables(con)
 #> [1] "github_nested"   "github_timeline" "gsod"            "natality"       
@@ -98,16 +101,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2    18          7.56
-#>  2  1969     6     5          5.88
-#>  3  1969     6    15          8.00
-#>  4  1969     3     2          8.50
-#>  5  1969     7     6          7.31
-#>  6  1969     8    16          7.69
-#>  7  1969     3    22          8.44
-#>  8  1969     2    12          6.88
-#>  9  1969     4     2          7.94
-#> 10  1969     7    30          8.50
+#>  1  1969     7    21          6.19
+#>  2  1969     8     4          8.75
+#>  3  1969     2     3          6.62
+#>  4  1969     6    16          8.75
+#>  5  1969     2    10          6.75
+#>  6  1969     8     8          7.81
+#>  7  1969     1    14          7.87
+#>  8  1969     4    21          5.69
+#>  9  1969    11    11          6.62
+#> 10  1969     1     5          8.60
 ```
 
 ### dplyr
@@ -124,16 +127,16 @@ natality %>%
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     3    12          5.81
-#>  2  1969     2    18          7.23
-#>  3  1969     8    22          7.06
-#>  4  1970     4     1          8.56
-#>  5  1970     2    20          7.87
-#>  6  1970     6    22          6.69
-#>  7  1970     4    27          7.50
-#>  8  1970     6    21          4.81
-#>  9  1969     7     9          6.62
-#> 10  1969     8    16          8.44
+#>  1  1969    11    29          6.00
+#>  2  1969     2     6          8.94
+#>  3  1970     9     4          7.13
+#>  4  1970     1    24          7.63
+#>  5  1970     6     6          9.00
+#>  6  1970    10    30          6.50
+#>  7  1971     3    18          5.75
+#>  8  1971     8    11          6.19
+#>  9  1971     1    23          5.75
+#> 10  1969     5    16          6.88
 ```
 
 ## Important details
@@ -142,7 +145,7 @@ natality %>%
 
 When using bigquery interactively, you’ll be prompted to [authorize
 bigrquery](https://developers.google.com/bigquery/authorization) in the
-browser. Your token will be cached across sessions in
+browser. Your token will be cached across sessions inside the folder
 `~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you
 can download a service account token as a JSON file and put it into
 force via `bq_auth(path = "/path/to/your/service-account.json")`.
@@ -152,14 +155,16 @@ of Application Default Credentials or service accounts on GCE VMs, read
 the gargle vignette [How gargle gets
 tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 
-Note that `bigrquery` requests permission to modify your data; but it
-will never do so unless you explicitly request it (e.g. by calling
-`bq_table_delete()` or `bq_table_upload()`).
+Note that bigrquery requests permission to modify your data; but it will
+never do so unless you explicitly request it (e.g. by calling
+`bq_table_delete()` or `bq_table_upload()`). Our [Privacy
+policy](https://www.tidyverse.org/google_privacy_policy) provides more
+info.
 
 ### Billing project
 
-If you just want to play around with the bigquery API, it’s easiest to
-start with the Google’s free [sample
+If you just want to play around with the BigQuery API, it’s easiest to
+start with Google’s free [sample
 data](https://developers.google.com/bigquery/docs/sample-tables). You’ll
 still need to create a project, but if you’re just playing around, it’s
 unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of
