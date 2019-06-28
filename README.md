@@ -62,16 +62,16 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     3          8.00
-#>  2  1969     5     4          7.06
-#>  3  1969     7    28          6.25
-#>  4  1969    11    12          8.31
-#>  5  1969     8    15          7.81
-#>  6  1969     8    24          6.31
-#>  7  1969    12     4          6.62
-#>  8  1969     7    28          4.50
-#>  9  1969     6    29          6.39
-#> 10  1969     8    23          6.12
+#>  1  1969     2    18          7.56
+#>  2  1969     6     5          5.88
+#>  3  1969     6    15          8.00
+#>  4  1969     3     2          8.50
+#>  5  1969     7     6          7.31
+#>  6  1969     8    16          7.69
+#>  7  1969     3    22          8.44
+#>  8  1969     2    12          6.88
+#>  9  1969     4     2          7.94
+#> 10  1969     7    30          8.50
 ```
 
 ## DBI
@@ -98,16 +98,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     3          8.00
-#>  2  1969     5     4          7.06
-#>  3  1969     7    28          6.25
-#>  4  1969    11    12          8.31
-#>  5  1969     8    15          7.81
-#>  6  1969     8    24          6.31
-#>  7  1969    12     4          6.62
-#>  8  1969     7    28          4.50
-#>  9  1969     6    29          6.39
-#> 10  1969     8    23          6.12
+#>  1  1969     2    18          7.56
+#>  2  1969     6     5          5.88
+#>  3  1969     6    15          8.00
+#>  4  1969     3     2          8.50
+#>  5  1969     7     6          7.31
+#>  6  1969     8    16          7.69
+#>  7  1969     3    22          8.44
+#>  8  1969     2    12          6.88
+#>  9  1969     4     2          7.94
+#> 10  1969     7    30          8.50
 ```
 
 ### dplyr
@@ -124,16 +124,16 @@ natality %>%
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    11    29          6.00
-#>  2  1969     2     6          8.94
-#>  3  1970     9     4          7.13
-#>  4  1970     1    24          7.63
-#>  5  1970     6     6          9.00
-#>  6  1970    10    30          6.50
-#>  7  1971     3    18          5.75
-#>  8  1971     8    11          6.19
-#>  9  1971     1    23          5.75
-#> 10  1969     5    16          6.88
+#>  1  1969     3    12          5.81
+#>  2  1969     2    18          7.23
+#>  3  1969     8    22          7.06
+#>  4  1970     4     1          8.56
+#>  5  1970     2    20          7.87
+#>  6  1970     6    22          6.69
+#>  7  1970     4    27          7.50
+#>  8  1970     6    21          4.81
+#>  9  1969     7     9          6.62
+#> 10  1969     8    16          8.44
 ```
 
 ## Important details
@@ -187,5 +187,11 @@ sample data; and as the `project` when you work with your own data.
     reference](https://developers.google.com/bigquery/docs/reference/v2/)
   - [Query/job console](https://bigquery.cloud.google.com/)
   - [Billing console](https://console.cloud.google.com/)
+
+## Policies
+
+Please note that the ‘bigrquery’ project is released with a [Contributor
+Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
 
 [Privacy policy](https://www.tidyverse.org/google_privacy_policy)

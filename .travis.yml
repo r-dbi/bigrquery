@@ -1,7 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
 cache: packages
 
 addons:
@@ -17,8 +16,8 @@ matrix:
   - r: release
     after_success:
     - Rscript -e 'covr::codecov()'
-    before_deploy:
-      - Rscript -e 'remotes::install_cran("pkgdown")'
+    before_cache:
+    - Rscript -e 'remotes::install_cran("pkgdown")'
     deploy:
       provider: script
       script: Rscript -e 'pkgdown::deploy_site_github()'
@@ -30,10 +29,12 @@ matrix:
     env: BIGRQUERY_PASSWORD=''
   - r: oldrel
     env: BIGRQUERY_PASSWORD=''
+  - r: 3.4
+    env: BIGRQUERY_PASSWORD=''
   - r: 3.3
     env: BIGRQUERY_PASSWORD=''
   - r: 3.2
-# - r: 3.1  # dbplyr fails on 3.1
+    env: BIGRQUERY_PASSWORD=''
 
 env:
   global:
