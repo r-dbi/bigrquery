@@ -24,7 +24,7 @@ matrix:
       skip_cleanup: true
   - r: release
     env: dbplyr="devel"
-    before_cache: Rscript -e 'remotes::install_github("tidyverse/dbplyr")'
+    before_script: Rscript -e 'remotes::install_github("tidyverse/dbplyr")'
   - r: release
     env: BIGRQUERY_PASSWORD=''
   - r: oldrel
