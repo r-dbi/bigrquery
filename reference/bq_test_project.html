@@ -32,13 +32,13 @@
 
 <meta property="og:title" content="Project to use for testing bigrquery — bq_test_project" />
 
-<meta property="og:description" content="You'll need to set up the BIGQUERY_TEST_PROJECT (name of a project) and
+<meta property="og:description" content="You'll need to set the BIGQUERY_TEST_PROJECT (name of a project) and
 BIGQUERY_TEST_BUCKET (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
-both reading and writing in BigQuery and CloudStorage.
-You will also need to have billing enabled for the project, and to run
-bq_test_init() once, while signed in via bq_auth() as a  user with the
-necessary permissions on that project." />
+both reading and writing in BigQuery and Cloud Storage.
+The BIGQUERY_TEST_PROJECT must have billing enabled for the project. While
+logged in, via bq_auth(), as a user with permission to work in
+BIGQUERY_TEST_PROJECT, run bq_test_init() once to perform some setup." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,13 +115,13 @@ necessary permissions on that project." />
 
     <div class="ref-description">
     
-    <p>You'll need to set up the <code>BIGQUERY_TEST_PROJECT</code> (name of a project) and
+    <p>You'll need to set the <code>BIGQUERY_TEST_PROJECT</code> (name of a project) and
 <code>BIGQUERY_TEST_BUCKET</code> (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
-both reading and writing in BigQuery and CloudStorage.</p>
-<p>You will also need to have billing enabled for the project, and to run
-<code>bq_test_init()</code> once, while signed in via <code><a href='bq_auth.html'>bq_auth()</a></code> as a  user with the
-necessary permissions on that project.</p>
+both reading and writing in BigQuery and Cloud Storage.</p>
+<p>The <code>BIGQUERY_TEST_PROJECT</code> must have billing enabled for the project. While
+logged in, via <code><a href='bq_auth.html'>bq_auth()</a></code>, as a user with permission to work in
+<code>BIGQUERY_TEST_PROJECT</code>, run <code>bq_test_init()</code> once to perform some setup.</p>
     
     </div>
 
@@ -156,9 +156,8 @@ tied to the lifetime of the object that it returns.</p>
     
     <h2 class="hasAnchor" id="testing"><a class="anchor" href="#testing"></a>Testing</h2>
 
-    <p>In tests, <code>bq_test_project()</code> (and hence
-<code>bq_test_dataset()</code>) will automatically skip if auth and a test project are
-not available.</p>
+    <p>In tests, <code>bq_test_project()</code> (and hence <code>bq_test_dataset()</code>) will
+automatically skip if auth and a test project are not available.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
