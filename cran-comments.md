@@ -1,7 +1,9 @@
 ## Test environments
-* local OS X install: R 3.4.0
-* travis-ci: R 3.2, 3.3, 3.4, release, devel.
-* win-builder: R devel
+
+* local: OS X + 3.6.0
+* travis: 3.2, 3.3, 3.4, oldrel, release, devel
+* r-hub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
+* win-builder: windows-x86_64-devel
 
 ## R CMD check results
 
