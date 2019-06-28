@@ -26,6 +26,8 @@ If you previously used `set_service_token()` to use a service account token, it 
 
 R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).
 
+rlang is newly Imported.
+
 # bigrquery 1.1.1
 
 * Fix test failure with dbplyr 1.4.0.
