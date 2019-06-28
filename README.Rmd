@@ -21,9 +21,11 @@ if (bigrquery:::secret_can_decrypt("bigrquery")) {
 ```
 # bigrquery
 
-[![Build Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+<!-- badges: start -->
 [![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Coverage status](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/github/r-dbi/bigrquery?branch=master)
+[![Travis build status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+  <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in 
 [Google BigQuery](https://developers.google.com/bigquery/) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
