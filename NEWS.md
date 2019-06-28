@@ -22,6 +22,10 @@ The OAuth2 token key-value store now incorporates the associated Google user whe
 
 If you previously used `set_service_token()` to use a service account token, it still works. But you'll get a deprecation warning. Switch over to `bq_auth(path = "/path/to/your/service-account.json")`. Several other functions are similarly soft-deprecated.
 
+## Dependency changes
+
+R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).
+
 # bigrquery 1.1.1
 
 * Fix test failure with dbplyr 1.4.0.
