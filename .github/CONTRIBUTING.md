@@ -38,6 +38,10 @@ with test cases included are easier to accept.
 current development version header describing the changes made followed by your
 GitHub username, and links to relevant issue(s)/PR(s).
 
+### Test project and bucket
+
+See the internal help for [`bq_test_project()`](https://bigrquery.r-dbi.org/reference/bq_test_project.html) for information about setting up a test project and test bucket.
+
 ### Testing token
 
 The overall approach to managing the service account token used in tests is described in the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
