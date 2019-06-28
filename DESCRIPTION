@@ -14,15 +14,14 @@ Description: Easily talk to Google's 'BigQuery' database from R.
 License: GPL-3 | file LICENSE
 URL: https://github.com/rstats-db/bigrquery
 BugReports: https://github.com/rstats-db/bigrquery/issues
-Encoding: UTF-8
 Depends: 
     R (>= 3.2)
 Imports: 
     assertthat,
     bit64,
-    DBI,
     curl,
-    gargle (>= 0.2.0.9004),
+    DBI,
+    gargle (>= 0.3.0),
     glue (>= 1.3.0),
     httr,
     jsonlite,
@@ -33,24 +32,23 @@ Imports:
     rlang,
     tibble
 Suggests: 
+    covr,
     DBItest,
     dbplyr,
     dplyr (>= 0.7.0),
     hms,
-    testthat (>= 2.1.0),
-    withr,
-    covr,
     readr,
-    sodium
+    sodium,
+    testthat (>= 2.1.0),
+    withr
 LinkingTo: 
     progress,
     rapidjsonr,
     Rcpp
+Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-Remotes:
-    r-lib/gargle
 Collate: 
     'RcppExports.R'
     'bigrquery.R'
