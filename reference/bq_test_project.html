@@ -36,8 +36,9 @@
 BIGQUERY_TEST_BUCKET (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
 both reading and writing in BigQuery and CloudStorage.
-You will also need to have billing enabled for the project, and to
-run bq_test_init() once." />
+You will also need to have billing enabled for the project, and to run
+bq_test_init() once, while signed in via bq_auth() as a  user with the
+necessary permissions on that project." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,8 +119,9 @@ run bq_test_init() once." />
 <code>BIGQUERY_TEST_BUCKET</code> (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
 both reading and writing in BigQuery and CloudStorage.</p>
-<p>You will also need to have billing enabled for the project, and to
-run <code>bq_test_init()</code> once.</p>
+<p>You will also need to have billing enabled for the project, and to run
+<code>bq_test_init()</code> once, while signed in via <code><a href='bq_auth.html'>bq_auth()</a></code> as a  user with the
+necessary permissions on that project.</p>
     
     </div>
 
@@ -148,15 +150,15 @@ run <code>bq_test_init()</code> once.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>bq_test_project()</code> returns the name of a project suitable for
-use in testing. <code>bq_test_dataset()</code> creates a temporary dataset
-whose lifetime is tied to the lifetime of the object that it returns.</p>
+    <p><code>bq_test_project()</code> returns the name of a project suitable for use in
+testing. <code>bq_test_dataset()</code> creates a temporary dataset whose lifetime is
+tied to the lifetime of the object that it returns.</p>
     
     <h2 class="hasAnchor" id="testing"><a class="anchor" href="#testing"></a>Testing</h2>
 
-    
-    <p>In tests, <code>bq_test_project()</code> (and hence <code>bq_test_dataset()</code>) will
-automatically skip if auth and a test project are not available.</p>
+    <p>In tests, <code>bq_test_project()</code> (and hence
+<code>bq_test_dataset()</code>) will automatically skip if auth and a test project are
+not available.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
