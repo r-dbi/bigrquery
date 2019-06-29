@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bigrquery</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -103,6 +103,42 @@
       <small>Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="bigrquery-1-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#bigrquery-1-2-0" class="anchor"></a>bigrquery 1.2.0<small> Unreleased </small>
+</h1>
+<div id="auth-from-gargle" class="section level2">
+<h2 class="hasAnchor">
+<a href="#auth-from-gargle" class="anchor"></a>Auth from gargle</h2>
+<p>bigrquery’s auth functionality now comes from the <a href="https://gargle.r-lib.org">gargle package</a>, which provides R infrastructure to work with Google APIs, in general. The same transition is underway in several other packages, such as <a href="https://googledrive.tidyverse.org">googledrive</a>. This will make user interfaces more consistent and makes two new token flows available in bigrquery:</p>
+<ul>
+<li>Application Default Credentials</li>
+<li>Service account tokens from the metadata server available to VMs running on GCE</li>
+</ul>
+<p>Where to learn more:</p>
+<ul>
+<li>Help for <a href="https://bigrquery.r-dbi.org/reference/bq_auth.html"><code><a href="../reference/bq_auth.html">bq_auth()</a></code></a> <em>all that most users need</em>
+</li>
+<li>
+<a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a> <em>details for advanced users</em>
+</li>
+</ul>
+<div id="changes-that-a-user-will-notice" class="section level3">
+<h3 class="hasAnchor">
+<a href="#changes-that-a-user-will-notice" class="anchor"></a>Changes that a user will notice</h3>
+<p>OAuth2 tokens are now cached at the user level, by default, instead of in <code>.httr-oauth</code> in the current project. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial <code>.httr-oauth</code> files lying around your bigrquery projects.</p>
+<p>The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.</p>
+<p><code><a href="../reference/bq_user.html">bq_user()</a></code> is a new function that reveals the email of the user associated with the current token.</p>
+<p>If you previously used <code><a href="../reference/bigrquery-deprecated.html">set_service_token()</a></code> to use a service account token, it still works. But you’ll get a deprecation warning. Switch over to <code><a href="../reference/bq_auth.html">bq_auth(path = "/path/to/your/service-account.json")</a></code>. Several other functions are similarly soft-deprecated.</p>
+</div>
+</div>
+<div id="dependency-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependency-changes" class="anchor"></a>Dependency changes</h2>
+<p>R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).</p>
+<p>rlang is newly Imported.</p>
+</div>
+</div>
     <div id="bigrquery-1-1-1" class="section level1">
 <h1 class="page-header">
 <a href="#bigrquery-1-1-1" class="anchor"></a>bigrquery 1.1.1<small> 2019-05-16 </small>
@@ -309,6 +345,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#bigrquery-1-2-0">1.2.0</a></li>
         <li><a href="#bigrquery-1-1-1">1.1.1</a></li>
         <li><a href="#bigrquery-1-1-0">1.1.0</a></li>
         <li><a href="#bigrquery-1-0-0">1.0.0</a></li>
