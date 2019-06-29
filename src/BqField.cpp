@@ -20,6 +20,13 @@ char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
 }
 #endif
 
+#if (defined(__sun) || defined(sun))
+extern "C" {
+  time_t timegm(struct tm *tm);
+}
+#endif
+
+
 // This is currently not used in favor of parse_int64(const char* x) .
 long int parse_int(const char* x) {
   errno = 0;

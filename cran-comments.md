@@ -5,6 +5,8 @@
 * r-hub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
 * win-builder: x86_64-w64-mingw32 + devel (2019-06-27 r76748)
 
+This update fixes a problem that prevented installation on Solaris.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
