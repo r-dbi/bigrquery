@@ -5,8 +5,6 @@
   auth_active = TRUE
 )
 
-bq_app <- function() bqoa()
-
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
 gargle_lookup_table <- list(
@@ -58,7 +56,7 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_app() %||% bq_app(),
+    app = bq_oauth_app() %||% gargle::tidyverse_app(),
     email = email,
     path = path,
     package = "bigrquery",
