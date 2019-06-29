@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.2.0
 
 ## Auth from gargle
 
