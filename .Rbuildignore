@@ -14,3 +14,4 @@
 ^CRAN-RELEASE$
 ^\.github$
 ^LICENSE\.md$
+^appveyor\.yml$
