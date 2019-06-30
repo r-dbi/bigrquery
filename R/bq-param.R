@@ -1,5 +1,7 @@
 
 bq_param <- function(value, type = NULL) {
+  assert_that(length(value) > 0)
+
   if (is.null(type)) {
     type <- data_type(value)
   }
@@ -28,29 +30,37 @@ as_bq_params <- function(x) {
 
 #' @export
 as_json.bq_params <- function(x) {
+  param.names <- names(x)
+  setNames(param.names, param.names)
+  lapply(param.names, function(param) {
+    as_json(x[[param]], name = param.names[[param]])
+  })
+}
 
-  out <- vector("list", length(x))
-  for (i in seq_along(x)) {
-    if (length(x[[i]]$value) == 1L) {
-      out[[i]] <- list(
-        name = names(x)[[i]],
-        parameterType = list(type = unbox(x[[i]]$type)),
-        parameterValue = list(value = unbox(x[[i]]$value))
-      )
-    }
-    else {
-      values <- c(x[[i]]$value)
-      values <- lapply(values, function(x) list(value = unbox(x)))
-      out[[i]] <- list(
-        name = names(x)[[i]],
-        parameterType = list(
-          type = "ARRAY",
-          arrayType = list(type = unbox(x[[i]]$type))
-        ),
-        parameterValue = list(arrayValues = values)
-      )
-    }
+#' Not that parameters of STRUCT type are not supported
+#'
+#' @noRd
+as_json.bq_param <- function(x, name) {
+
+  is_value_parameter <- length(x$value) == 1L
+
+  if (is_value_parameter) {
+    list(
+      name = name,
+      parameterType = list(type = unbox(x$type)),
+      parameterValue = list(value = unbox(x$value))
+    )
   }
-
-  out
+  else {
+    values <- c(x$value)
+    values <- lapply(values, function(x) list(value = unbox(x)))
+    list(
+      name = name,
+      parameterType = list(
+        type = "ARRAY",
+        arrayType = list(type = unbox(x$type))
+      ),
+      parameterValue = list(arrayValues = values)
+    )
+  }
 }
