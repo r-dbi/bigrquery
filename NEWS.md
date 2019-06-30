@@ -14,7 +14,7 @@ Where to learn more:
 
 ### Changes that a user will notice
 
-OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
+OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 
 The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.
 
@@ -26,7 +26,7 @@ If you previously used `set_service_token()` to use a service account token, it 
 
 R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).
 
-rlang is newly Imported.
+gargle and rlang are newly Imported.
 
 # bigrquery 1.1.1
 
