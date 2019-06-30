@@ -8,3 +8,47 @@ test_that("can create parameters from list", {
   expect_equal(p[[1]], x[[1]])
   expect_equal(p[[2]], bq_param("x"))
 })
+
+
+test_that("json structure is correct for query parameters", {
+  scalar.param.value <- "a"
+  scalar.param <- bq_param(c(scalar.param.value))
+  vector.param.values <- c("a", "b", "c")
+  vector.param <- bq_param(vector.param.values)
+
+  x <- list(
+    param1 = scalar.param,
+    paramN = vector.param
+  )
+
+  res <- as_json.bq_params(x)
+
+  expectation <- list(
+    list(
+      name = "param1",
+      parameterType = list(
+        type = unbox("STRING")
+      ),
+      parameterValue = list(
+        value = scalar.param.value
+      )
+    ),
+    list(
+      name = "paramN",
+      parameterType = list(
+        type = "ARRAY",
+        arrayType = list(
+          type = unbox("STRING")
+        )
+      ),
+      parameterValue = list(
+        arrayValues = list(
+          list(value = unbox("a")),
+          list(value = unbox("b")),
+          list(value = unbox("c"))
+        )
+      )
+    )
+  )
+  expect_equal(res, expectation)
+})
