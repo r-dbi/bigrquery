@@ -26,7 +26,6 @@ Imports:
     httr,
     jsonlite,
     methods,
-    pillar,
     prettyunits,
     progress,
     Rcpp,
