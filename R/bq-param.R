@@ -35,12 +35,12 @@ as_json.bq_params <- function(x) {
       out[[i]] <- list(
         name = names(x)[[i]],
         parameterType = list(type = unbox(x[[i]]$type)),
-        parameterValue = list(value = x[[i]]$value)
+        parameterValue = list(value = unbox(x[[i]]$value))
       )
     }
     else {
       values <- c(x[[i]]$value)
-      values <- lapply(values, function(x) list(value = x))
+      values <- lapply(values, function(x) list(value = unbox(x)))
       out[[i]] <- list(
         name = names(x)[[i]],
         parameterType = list(

@@ -30,7 +30,7 @@ test_that("json structure is correct for query parameters", {
         type = unbox("STRING")
       ),
       parameterValue = list(
-        value = scalar.param.value
+        value = unbox(scalar.param.value)
       )
     ),
     list(
