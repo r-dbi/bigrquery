@@ -30,21 +30,15 @@ as_bq_params <- function(x) {
 
 #' @export
 as_json.bq_params <- function(x) {
-  param.names <- names(x)
-  setNames(param.names, param.names)
-  lapply(param.names, function(param) {
-    as_json(x[[param]], name = param.names[[param]])
-  })
+  json <- Map(as_json_bq_param, x, names(x))
+  unname(json)
 }
 
 #' Parameters of STRUCT type are not supported
 #'
 #' @noRd
-as_json.bq_param <- function(x, name) {
-
-  is_scalar_parameter <- length(x$value) == 1L
-
-  if (is_scalar_parameter) {
+as_json_bq_param <- function(x, name) {
+  if (bq_param_is_scalar(x)) {
     list(
       name = name,
       parameterType = list(type = unbox(x$type)),
@@ -53,7 +47,7 @@ as_json.bq_param <- function(x, name) {
   }
   else {
     values <- c(x$value)
-    values <- lapply(values, function(x) list(value = unbox(x)))
+    values <- lapply(x$value, function(x) list(value = unbox(x)))
     list(
       name = name,
       parameterType = list(
@@ -63,4 +57,8 @@ as_json.bq_param <- function(x, name) {
       parameterValue = list(arrayValues = values)
     )
   }
+}
+
+bq_param_is_scalar <- function(x) {
+  length(x$value) == 1L
 }

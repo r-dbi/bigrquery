@@ -16,16 +16,18 @@ test_that("json structure is correct for query parameters", {
   vector.param.values <- c("a", "b", "c")
   vector.param <- bq_param(vector.param.values)
 
-  x <- list(
-    param_single = scalar.param,
-    param_vector = vector.param
+  x <- as_bq_params(
+    list(
+      param_scalar = scalar.param,
+      param_vector = vector.param
+    )
   )
 
-  res <- as_json.bq_params(x)
+  res <- as_json(x)
 
   expectation <- list(
     list(
-      name = "param_single",
+      name = "param_scalar",
       parameterType = list(
         type = unbox("STRING")
       ),
