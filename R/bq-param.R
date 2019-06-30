@@ -42,9 +42,9 @@ as_json.bq_params <- function(x) {
 #' @noRd
 as_json.bq_param <- function(x, name) {
 
-  is_value_parameter <- length(x$value) == 1L
+  is_scalar_parameter <- length(x$value) == 1L
 
-  if (is_value_parameter) {
+  if (is_scalar_parameter) {
     list(
       name = name,
       parameterType = list(type = unbox(x$type)),
