@@ -37,7 +37,7 @@ as_json.bq_params <- function(x) {
   })
 }
 
-#' Not that parameters of STRUCT type are not supported
+#' Parameters of STRUCT type are not supported
 #'
 #' @noRd
 as_json.bq_param <- function(x, name) {
