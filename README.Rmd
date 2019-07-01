@@ -108,9 +108,20 @@ natality %>%
 
 ## Important details
 
-### Authentication
+### Authentication and authorization
 
-When using bigquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you can download a service account token as a JSON file and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. bigrquery obtains a token with `gargle::token_fetch()`, which supports even more token flows. For full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs, read the gargle vignette [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+When using bigquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
+about auth:
+
+  * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
+  * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+    - bigrquery obtains a token with `gargle::token_fetch()`, which supports
+      a variety of token flows. This article provides full details, such as how
+      to take advantage of Application Default Credentials or service accounts
+      on GCE VMs.
+  * [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html). Explains
+    how to set up a project when code must run without any user interaction.
+  * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client (or "app") or service account token.
 
 Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://www.tidyverse.org/google_privacy_policy) provides more info.
 

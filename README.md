@@ -67,16 +67,16 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     7    21          6.19
-#>  2  1969     8     4          8.75
-#>  3  1969     2     3          6.62
-#>  4  1969     6    16          8.75
-#>  5  1969     2    10          6.75
-#>  6  1969     8     8          7.81
-#>  7  1969     1    14          7.87
-#>  8  1969     4    21          5.69
-#>  9  1969    11    11          6.62
-#> 10  1969     1     5          8.60
+#>  1  1969     9     3          9.31
+#>  2  1969     1    16          6.19
+#>  3  1969     5     1         10.0 
+#>  4  1969     6    16          7.75
+#>  5  1969     3    22          7.00
+#>  6  1969     2    13          8.25
+#>  7  1969     6     4          6.81
+#>  8  1969     5    13          6.31
+#>  9  1969     1    14          6.06
+#> 10  1969    12     5          8.25
 ```
 
 ## DBI
@@ -103,16 +103,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     7    21          6.19
-#>  2  1969     8     4          8.75
-#>  3  1969     2     3          6.62
-#>  4  1969     6    16          8.75
-#>  5  1969     2    10          6.75
-#>  6  1969     8     8          7.81
-#>  7  1969     1    14          7.87
-#>  8  1969     4    21          5.69
-#>  9  1969    11    11          6.62
-#> 10  1969     1     5          8.60
+#>  1  1969     9     3          9.31
+#>  2  1969     1    16          6.19
+#>  3  1969     5     1         10.0 
+#>  4  1969     6    16          7.75
+#>  5  1969     3    22          7.00
+#>  6  1969     2    13          8.25
+#>  7  1969     6     4          6.81
+#>  8  1969     5    13          6.31
+#>  9  1969     1    14          6.06
+#> 10  1969    12     5          8.25
 ```
 
 ### dplyr
@@ -143,19 +143,32 @@ natality %>%
 
 ## Important details
 
-### Authentication
+### Authentication and authorization
 
 When using bigquery interactively, you’ll be prompted to [authorize
 bigrquery](https://developers.google.com/bigquery/authorization) in the
 browser. Your token will be cached across sessions inside the folder
-`~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you
-can download a service account token as a JSON file and put it into
-force via `bq_auth(path = "/path/to/your/service-account.json")`.
-bigrquery obtains a token with `gargle::token_fetch()`, which supports
-even more token flows. For full details, such as how to take advantage
-of Application Default Credentials or service accounts on GCE VMs, read
-the gargle vignette [How gargle gets
-tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+`~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it
+is preferred to use a service account token and put it into force via
+`bq_auth(path = "/path/to/your/service-account.json")`. More places to
+learn about auth:
+
+  - Help for
+    [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
+  - [How gargle gets
+    tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+      - bigrquery obtains a token with `gargle::token_fetch()`, which
+        supports a variety of token flows. This article provides full
+        details, such as how to take advantage of Application Default
+        Credentials or service accounts on GCE VMs.
+  - [Non-interactive
+    auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
+    Explains how to set up a project when code must run without any user
+    interaction.
+  - [How to get your own API
+    credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
+    Instructions for getting your own OAuth client (or “app”) or service
+    account token.
 
 Note that bigrquery requests permission to modify your data; but it will
 never do so unless you explicitly request it (e.g. by calling

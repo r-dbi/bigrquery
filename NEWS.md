@@ -10,7 +10,10 @@ bigrquery's auth functionality now comes from the [gargle package](https://gargl
 Where to learn more:
   
   * Help for [`bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html) *all that most users need*
-  * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) *details for advanced users*
+  * *details for more advanced users*
+    - [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html)
+    - [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html)
+    - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
 
 ### Changes that a user will notice
 
