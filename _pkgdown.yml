@@ -13,3 +13,7 @@ reference:
 - title: Low-level API
   contents:
   - starts_with("bq")
+
+template:
+  params:
+    ganalytics: UA-115082821-1
