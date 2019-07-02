@@ -110,7 +110,7 @@ natality %>%
 
 ### Authentication and authorization
 
-When using bigquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
+When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
 about auth:
 
   * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).

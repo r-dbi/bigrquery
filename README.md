@@ -145,7 +145,7 @@ natality %>%
 
 ### Authentication and authorization
 
-When using bigquery interactively, you’ll be prompted to [authorize
+When using bigrquery interactively, you’ll be prompted to [authorize
 bigrquery](https://developers.google.com/bigquery/authorization) in the
 browser. Your token will be cached across sessions inside the folder
 `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it
