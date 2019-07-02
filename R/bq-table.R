@@ -25,13 +25,14 @@
 #' if (bq_testable()) {
 #' ds <- bq_test_dataset()
 #'
-#' bq_mtcars <- bq_table(
+#' bq_mtcars <- bq_table_create(
 #'   ds,
 #'   "mtcars",
 #'   friendly_name = "Motor Trend Car Road Tests",
 #'   description = "The data was extracted from the 1974 Motor Trend US magazine",
 #'   labels = list(category = "example")
 #' )
+#' bq_mtcars <- bq_table(ds, "mtcars")
 #' bq_table_exists(bq_mtcars)
 #'
 #' bq_table_upload(bq_mtcars, mtcars)
@@ -166,4 +167,18 @@ bq_table_load <- function(x, source_uris, ..., quiet = NA) {
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
+}
+
+#' @export
+#' @rdname api-table
+bq_table_patch <- function(x, fields) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, x$dataset, x$table)
+  body <- list(
+    tableReference = tableReference(x)
+  )
+  fields <- as_bq_fields(fields)
+  body$schema <- list(fields = as_json(fields))
+  bq_patch(url, body)
 }

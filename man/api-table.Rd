@@ -13,6 +13,7 @@
 \alias{bq_table_upload}
 \alias{bq_table_save}
 \alias{bq_table_load}
+\alias{bq_table_patch}
 \title{BigQuery tables}
 \usage{
 bq_table_create(x, fields = NULL, ...)
@@ -36,6 +37,8 @@ bq_table_upload(x, values, ..., quiet = NA)
 bq_table_save(x, destination_uris, ..., quiet = NA)
 
 bq_table_load(x, source_uris, ..., quiet = NA)
+
+bq_table_patch(x, fields)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -100,13 +103,14 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 if (bq_testable()) {
 ds <- bq_test_dataset()
 
-bq_mtcars <- bq_table(
+bq_mtcars <- bq_table_create(
   ds,
   "mtcars",
   friendly_name = "Motor Trend Car Road Tests",
   description = "The data was extracted from the 1974 Motor Trend US magazine",
   labels = list(category = "example")
 )
+bq_mtcars <- bq_table(ds, "mtcars")
 bq_table_exists(bq_mtcars)
 
 bq_table_upload(bq_mtcars, mtcars)

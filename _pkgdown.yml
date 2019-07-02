@@ -1,5 +1,8 @@
 url: https://bigrquery.r-dbi.org
-destination: docs
+
+authors:
+  Jennifer Bryan:
+    href: https://jennybryan.org
 
 reference:
 - title: DBI and dplyr
@@ -10,3 +13,7 @@ reference:
 - title: Low-level API
   contents:
   - starts_with("bq")
+
+template:
+  params:
+    ganalytics: UA-115082821-1
