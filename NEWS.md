@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* `bq_table_stream()` - allows to stream data.frame into BigQuery table using [insertAll API endpoint](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll). 
+
 ## Auth from gargle
 
 bigrquery's auth functionality now comes from the [gargle package](https://gargle.r-lib.org), which provides R infrastructure to work with Google APIs, in general. The same transition is underway in several other packages, such as [googledrive](https://googledrive.tidyverse.org). This will make user interfaces more consistent and makes two new token flows available in bigrquery:
