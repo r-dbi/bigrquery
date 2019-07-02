@@ -1,7 +1,11 @@
 ## Test environments
-* local OS X install: R 3.4.0
-* travis-ci: R 3.2, 3.3, 3.4, release, devel.
-* win-builder: R devel
+
+* local: macOS Mojave 10.14.4 + 3.6.0
+* travis: Ubuntu 14.04.5 LTS (trusty) + 3.2, 3.3, 3.4, oldrel, release, devel
+* r-hub: windows-x86_64-devel, ubuntu-gcc-release, fedora-clang-devel
+* win-builder: x86_64-w64-mingw32 + devel (2019-06-27 r76748)
+
+This update fixes a problem that prevented installation on Solaris.
 
 ## R CMD check results
 
@@ -9,4 +13,4 @@
 
 ## revdepcheck results
 
-This is a patch release to fix a failing CRAN test, so I did not test revdeps.
+There is one reverse dependency (condusco), which passes R CMD check cleanly.
