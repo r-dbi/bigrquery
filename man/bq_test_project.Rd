@@ -28,22 +28,22 @@ gs_test_object(name = random_name())
 \item{name}{Dataset name - used only for testing.}
 }
 \value{
-\code{bq_test_project()} returns the name of a project suitable for
-use in testing. \code{bq_test_dataset()} creates a temporary dataset
-whose lifetime is tied to the lifetime of the object that it returns.
+\code{bq_test_project()} returns the name of a project suitable for use in
+testing. \code{bq_test_dataset()} creates a temporary dataset whose lifetime is
+tied to the lifetime of the object that it returns.
 }
 \description{
-You'll need to set up the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
+You'll need to set the \code{BIGQUERY_TEST_PROJECT} (name of a project) and
 \code{BIGQUERY_TEST_BUCKET} (name of bucket) env vars in order to run bigrquery
 tests locally. I recommend creating a new project because the tests involve
-both reading and writing in BigQuery and CloudStorage.
+both reading and writing in BigQuery and Cloud Storage.
 
-You will also need to have billing enabled for the project, and to
-run \code{bq_test_init()} once.
+The \code{BIGQUERY_TEST_PROJECT} must have billing enabled for the project. While
+logged in, via \code{bq_auth()}, as a user with permission to work in
+\code{BIGQUERY_TEST_PROJECT}, run \code{bq_test_init()} once to perform some setup.
 }
 \section{Testing}{
-
-In tests, \code{bq_test_project()} (and hence \code{bq_test_dataset()}) will
+ In tests, \code{bq_test_project()} (and hence \code{bq_test_dataset()}) will
 automatically skip if auth and a test project are not available.
 }
 

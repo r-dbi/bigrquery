@@ -3,12 +3,17 @@
 
 # bigrquery
 
-[![Build
-Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+<!-- badges: start -->
+
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Coverage
-status](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/github/r-dbi/bigrquery?branch=master)
+[![Travis build
+status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/r-dbi/bigrquery?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/bigrquery)
+[![Codecov test
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+<!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
 BigQuery](https://developers.google.com/bigquery/) by allowing you to
@@ -62,16 +67,16 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     3          8.00
-#>  2  1969     5     4          7.06
-#>  3  1969     7    28          6.25
-#>  4  1969    11    12          8.31
-#>  5  1969     8    15          7.81
-#>  6  1969     8    24          6.31
-#>  7  1969    12     4          6.62
-#>  8  1969     7    28          4.50
-#>  9  1969     6    29          6.39
-#> 10  1969     8    23          6.12
+#>  1  1969     9     3          9.31
+#>  2  1969     1    16          6.19
+#>  3  1969     5     1         10.0 
+#>  4  1969     6    16          7.75
+#>  5  1969     3    22          7.00
+#>  6  1969     2    13          8.25
+#>  7  1969     6     4          6.81
+#>  8  1969     5    13          6.31
+#>  9  1969     1    14          6.06
+#> 10  1969    12     5          8.25
 ```
 
 ## DBI
@@ -88,7 +93,7 @@ con <- dbConnect(
 con 
 #> <BigQueryConnection>
 #>   Dataset: publicdata.samples
-#>   Billing: bigrquery-examples
+#>   Billing: gargle-169921
 
 dbListTables(con)
 #> [1] "github_nested"   "github_timeline" "gsod"            "natality"       
@@ -98,16 +103,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     3          8.00
-#>  2  1969     5     4          7.06
-#>  3  1969     7    28          6.25
-#>  4  1969    11    12          8.31
-#>  5  1969     8    15          7.81
-#>  6  1969     8    24          6.31
-#>  7  1969    12     4          6.62
-#>  8  1969     7    28          4.50
-#>  9  1969     6    29          6.39
-#> 10  1969     8    23          6.12
+#>  1  1969     9     3          9.31
+#>  2  1969     1    16          6.19
+#>  3  1969     5     1         10.0 
+#>  4  1969     6    16          7.75
+#>  5  1969     3    22          7.00
+#>  6  1969     2    13          8.25
+#>  7  1969     6     4          6.81
+#>  8  1969     5    13          6.31
+#>  9  1969     1    14          6.06
+#> 10  1969    12     5          8.25
 ```
 
 ### dplyr
@@ -138,28 +143,43 @@ natality %>%
 
 ## Important details
 
-### Authentication
+### Authentication and authorization
 
-When using bigquery interactively, you’ll be prompted to [authorize
+When using bigrquery interactively, you’ll be prompted to [authorize
 bigrquery](https://developers.google.com/bigquery/authorization) in the
-browser. Your token will be cached across sessions in
-`~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you
-can download a service account token as a JSON file and put it into
-force via `bq_auth(path = "/path/to/your/service-account.json")`.
-bigrquery obtains a token with `gargle::token_fetch()`, which supports
-even more token flows. For full details, such as how to take advantage
-of Application Default Credentials or service accounts on GCE VMs, read
-the gargle vignette [How gargle gets
-tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+browser. Your token will be cached across sessions inside the folder
+`~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it
+is preferred to use a service account token and put it into force via
+`bq_auth(path = "/path/to/your/service-account.json")`. More places to
+learn about auth:
 
-Note that `bigrquery` requests permission to modify your data; but it
-will never do so unless you explicitly request it (e.g. by calling
-`bq_table_delete()` or `bq_table_upload()`).
+  - Help for
+    [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
+  - [How gargle gets
+    tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+      - bigrquery obtains a token with `gargle::token_fetch()`, which
+        supports a variety of token flows. This article provides full
+        details, such as how to take advantage of Application Default
+        Credentials or service accounts on GCE VMs.
+  - [Non-interactive
+    auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
+    Explains how to set up a project when code must run without any user
+    interaction.
+  - [How to get your own API
+    credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
+    Instructions for getting your own OAuth client (or “app”) or service
+    account token.
+
+Note that bigrquery requests permission to modify your data; but it will
+never do so unless you explicitly request it (e.g. by calling
+`bq_table_delete()` or `bq_table_upload()`). Our [Privacy
+policy](https://www.tidyverse.org/google_privacy_policy) provides more
+info.
 
 ### Billing project
 
-If you just want to play around with the bigquery API, it’s easiest to
-start with the Google’s free [sample
+If you just want to play around with the BigQuery API, it’s easiest to
+start with Google’s free [sample
 data](https://developers.google.com/bigquery/docs/sample-tables). You’ll
 still need to create a project, but if you’re just playing around, it’s
 unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of
@@ -187,5 +207,11 @@ sample data; and as the `project` when you work with your own data.
     reference](https://developers.google.com/bigquery/docs/reference/v2/)
   - [Query/job console](https://bigquery.cloud.google.com/)
   - [Billing console](https://console.cloud.google.com/)
+
+## Policies
+
+Please note that the ‘bigrquery’ project is released with a [Contributor
+Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
 
 [Privacy policy](https://www.tidyverse.org/google_privacy_policy)

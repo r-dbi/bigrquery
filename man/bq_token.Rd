@@ -15,12 +15,16 @@ Returns a token pre-processed with \code{\link[httr:config]{httr::config()}}. Mo
 do not need to handle tokens "by hand" or, even if they need some
 control, \code{\link[=bq_auth]{bq_auth()}} is what they need. If there is no current
 token, \code{\link[=bq_auth]{bq_auth()}} is called to either load from cache or
-initiate OAuth2.0 flow. If auth has been deactivated via
-\code{\link[=bq_auth_config]{bq_auth_config()}}, \code{bq_token()} returns \code{NULL}.
+initiate OAuth2.0 flow.
+If auth has been deactivated via \code{\link[=bq_deauth]{bq_deauth()}}, \code{bq_token()}
+returns \code{NULL}.
 }
 \examples{
 \dontrun{
 bq_token()
 }
+}
+\seealso{
+Other low-level API functions: \code{\link{bq_has_token}}
 }
 \concept{low-level API functions}

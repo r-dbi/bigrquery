@@ -153,3 +153,19 @@ test_that("can create table field description", {
   meta <- bq_table_meta(partition_table)
   expect_equal(meta$schema$fields[[1]]$description, "Key field")
 })
+
+test_that("can patch table with new fields in the schema", {
+  ds <- bq_test_dataset()
+  tb <- bq_table(ds, "table_to_patch")
+  df <- data.frame(id = 1)
+  bq_table_create(tb, fields = df)
+
+  df.patch <- data.frame(id = 1, title = "record name")
+  bq_table_patch(tb, fields = df.patch)
+
+  tb.meta <- bq_table_meta(tb)
+  expect_equal(
+    tb.meta$schema$fields[[2]]$name,
+    "title"
+  )
+})

@@ -1,2 +1,4 @@
 R/old-*.R
 R/zzz.R
+R/deprec-*.R
+R/compat-*.R
