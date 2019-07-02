@@ -96,9 +96,12 @@ test_that("can supply parameters as array for IN statement", {
      FROM
        moon_phases
      WHERE
-       EXTRACT(YEAR FROM peak_datetime) = 2000 AND
+       EXTRACT(YEAR FROM peak_datetime) = @year AND
        phase IN UNNEST(@phases)",
-    parameters = list(phases = c("First Quarter", "Last Quarter")),
+    parameters = list(
+      year = c(2000L),
+      phases = c("First Quarter", "Last Quarter")
+    ),
     billing = bq_test_project(),
     default_dataset = ds
   )
