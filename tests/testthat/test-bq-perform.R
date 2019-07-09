@@ -85,6 +85,34 @@ test_that("can supply parameters", {
   df <- bq_table_download(job_tb)
   expect_equal(nrow(df), 1)
   expect_equal(df$phase, "New Moon")
+
+})
+
+test_that("can supply parameters as array for IN statement", {
+  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
+  job <- bq_perform_query(
+    "#StandardSql
+     SELECT
+       COUNT(*) half_moons
+     FROM
+       moon_phases
+     WHERE
+       EXTRACT(YEAR FROM peak_datetime) = 2000 AND
+       phase IN UNNEST(@phases)",
+    parameters = list(phases = c("First Quarter", "Last Quarter")),
+    billing = bq_test_project(),
+    default_dataset = ds
+  )
+  job <- bq_job_wait(job)
+  job_tb <- bq_job_table(job)
+
+  df <- bq_table_download(job_tb)
+
+  expect_equal(
+    df$half_moons,
+    24,
+    label = "Query gets expected number of half moons"
+  )
 })
 
 test_that("can supply parameters as array for IN statement", {

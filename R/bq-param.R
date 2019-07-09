@@ -34,6 +34,7 @@ as_json.bq_params <- function(x) {
   unname(json)
 }
 
+
 #' Parameters of STRUCT type are not supported
 #'
 #' @noRd
