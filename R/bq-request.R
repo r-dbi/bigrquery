@@ -118,7 +118,7 @@ bq_delete <- function(url, ..., query = NULL, token = bq_token()) {
 
 #' @importFrom httr POST add_headers config
 bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
-  json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
+  json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE, na = "null")
 
   req <- POST(
     paste0(base_url, url),

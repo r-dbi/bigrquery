@@ -4,13 +4,18 @@
 \alias{bq_table_stream}
 \title{Streams data from data.from into BigQUery}
 \usage{
-bq_table_stream(x, values, skip_invalid_rows = "false",
-  ignore_unknown_values = "false", template_suffix = NULL)
+bq_table_stream(x, values,
+  insert_ids = bq_stream_random_id(nrow(values)),
+  skip_invalid_rows = "false", ignore_unknown_values = "false",
+  template_suffix = NULL)
 }
 \arguments{
 \item{x}{bq_table where values will be streamed to}
 
 \item{values}{data.frame that will be streamed}
+
+\item{insert_ids}{(optional) Unique ids, one per row being inserted.
+If omitted, unique IDs are created.}
 
 \item{skip_invalid_rows}{(optional) Insert all valid rows of a request,
 even if invalid rows exist. The default value is False, which
@@ -24,6 +29,9 @@ treats unknown values as errors.}
 BigQuery will create the table \code{<name> + <template_suffix>} based
 on the schema of the template table. See
 https://cloud.google.com/bigquery/streaming-data-into-bigquery#template-tables}
+}
+\value{
+NULL if there are no errors, otherwise list of errors with reasons
 }
 \description{
 Streams data from data.from into BigQUery
