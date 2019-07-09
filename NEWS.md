@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of ARRAY type (@byapparov, #303).
+
 # bigrquery 1.2.0
 
 ## Auth from gargle

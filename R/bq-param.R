@@ -1,5 +1,7 @@
 
 bq_param <- function(value, type = NULL) {
+  assert_that(length(value) > 0)
+
   if (is.null(type)) {
     type <- data_type(value)
   }
@@ -28,15 +30,35 @@ as_bq_params <- function(x) {
 
 #' @export
 as_json.bq_params <- function(x) {
+  json <- Map(as_json_bq_param, x, names(x))
+  unname(json)
+}
 
-  out <- vector("list", length(x))
-  for (i in seq_along(x)) {
-    out[[i]] <- list(
-      name = names(x)[[i]],
-      parameterType = list(type = unbox(x[[i]]$type)),
-      parameterValue = list(value = x[[i]]$value)
+#' Parameters of STRUCT type are not supported
+#'
+#' @noRd
+as_json_bq_param <- function(x, name) {
+  if (bq_param_is_scalar(x)) {
+    list(
+      name = name,
+      parameterType = list(type = unbox(x$type)),
+      parameterValue = list(value = unbox(x$value))
     )
   }
+  else {
+    values <- c(x$value)
+    values <- lapply(x$value, function(x) list(value = unbox(x)))
+    list(
+      name = name,
+      parameterType = list(
+        type = "ARRAY",
+        arrayType = list(type = unbox(x$type))
+      ),
+      parameterValue = list(arrayValues = values)
+    )
+  }
+}
 
-  out
+bq_param_is_scalar <- function(x) {
+  length(x$value) == 1L
 }
