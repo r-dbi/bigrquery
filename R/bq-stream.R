@@ -38,6 +38,7 @@ bq_table_stream <- function(x,
     ignore_unknown_values = ignore_unknown_values,
     template_suffix = template_suffix
   )
+
   response <- bq_post(url, body)
   invisible(response$insertErrors)
 }

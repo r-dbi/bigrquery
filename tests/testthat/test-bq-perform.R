@@ -74,8 +74,8 @@ test_that("bq_perform_query creates job that succeeds", {
 test_that("can supply parameters", {
   ds <- as_bq_dataset("bigquery-public-data.moon_phases")
   job <- bq_perform_query(
-    "SELECT * FROM moon_phases WHERE peak_datetime = @date",
-    parameters = list(date = bq_param("1889-07-28 00:00:00", "DATETIME")),
+    "SELECT * FROM moon_phases WHERE peak_datetime = CAST(@date AS DATETIME)",
+    parameters = list(date = as.Date("1889-07-28 00:00:00")),
     billing = bq_test_project(),
     default_dataset = ds
   )
@@ -85,4 +85,62 @@ test_that("can supply parameters", {
   df <- bq_table_download(job_tb)
   expect_equal(nrow(df), 1)
   expect_equal(df$phase, "New Moon")
+
+})
+
+test_that("can supply parameters as array for IN statement", {
+  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
+  job <- bq_perform_query(
+    "#StandardSql
+     SELECT
+       COUNT(*) half_moons
+     FROM
+       moon_phases
+     WHERE
+       EXTRACT(YEAR FROM peak_datetime) = 2000 AND
+       phase IN UNNEST(@phases)",
+    parameters = list(phases = c("First Quarter", "Last Quarter")),
+    billing = bq_test_project(),
+    default_dataset = ds
+  )
+  job <- bq_job_wait(job)
+  job_tb <- bq_job_table(job)
+
+  df <- bq_table_download(job_tb)
+
+  expect_equal(
+    df$half_moons,
+    24,
+    label = "Query gets expected number of half moons"
+  )
+})
+
+test_that("can supply parameters as array for IN statement", {
+  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
+  job <- bq_perform_query(
+    "#StandardSql
+     SELECT
+       COUNT(*) half_moons
+     FROM
+       moon_phases
+     WHERE
+       EXTRACT(YEAR FROM peak_datetime) = @year AND
+       phase IN UNNEST(@phases)",
+    parameters = list(
+      year = c(2000L),
+      phases = c("First Quarter", "Last Quarter")
+    ),
+    billing = bq_test_project(),
+    default_dataset = ds
+  )
+  job <- bq_job_wait(job)
+  job_tb <- bq_job_table(job)
+
+  df <- bq_table_download(job_tb)
+
+  expect_equal(
+    df$half_moons,
+    24,
+    label = "Query gets expected number of half moons"
+  )
 })
