@@ -5,8 +5,6 @@
   auth_active = TRUE
 )
 
-bq_app <- function() bqoa()
-
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
 gargle_lookup_table <- list(
@@ -47,7 +45,7 @@ gargle_lookup_table <- list(
 #' ## use a service account token
 #' bq_auth(path = "foofy-83ee9e7c9c48.json")
 #' }
-bq_auth <- function(email = NULL,
+bq_auth <- function(email = gargle::gargle_oauth_email(),
                     path = NULL,
                     scopes = c(
                       "https://www.googleapis.com/auth/bigquery",
@@ -58,7 +56,7 @@ bq_auth <- function(email = NULL,
                     token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_app() %||% bq_app(),
+    app = bq_oauth_app() %||% gargle::tidyverse_app(),
     email = email,
     path = path,
     package = "bigrquery",
@@ -166,9 +164,9 @@ bq_has_token <- function() {
 #' }
 #'
 #' \dontrun{
-#' # bring your own app via JSON downloaded from Google Developers Console
+#' # bring your own app via JSON downloaded from GCP Console
 #' bq_auth_configure(
-#'   path = "/path/to/the/JSON/you/downloaded/from/google/dev/console.json"
+#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
 #' )
 #' }
 #'
@@ -182,14 +180,28 @@ bq_auth_configure <- function(app, path) {
   }
   stopifnot(is.null(app) || inherits(app, "oauth_app"))
 
-  .auth$app <- app
-  invisible(.auth)
-
-  # switch to this once this is resolved and released
-  # https://github.com/r-lib/gargle/issues/82#issuecomment-502343745
-  #.auth$set_app(app)
+  .auth$set_app(app)
 }
 
 #' @export
 #' @rdname bq_auth_configure
 bq_oauth_app <- function() .auth$app
+
+#' Get info on current user
+#'
+#' @eval gargle:::PREFIX_user_description()
+#' @eval gargle:::PREFIX_user_seealso()
+#' @eval gargle:::PREFIX_user_return()
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' bq_user()
+#' }
+bq_user <- function() {
+  if (bq_has_token()) {
+    gargle::token_email(bq_token())
+  } else {
+    NULL
+  }
+}

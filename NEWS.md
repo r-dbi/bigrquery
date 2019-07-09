@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+# bigrquery 1.2.0
+
 ## Auth from gargle
 
 bigrquery's auth functionality now comes from the [gargle package](https://gargle.r-lib.org), which provides R infrastructure to work with Google APIs, in general. The same transition is underway in several other packages, such as [googledrive](https://googledrive.tidyverse.org). This will make user interfaces more consistent and makes two new token flows available in bigrquery:
@@ -8,18 +10,28 @@ bigrquery's auth functionality now comes from the [gargle package](https://gargl
   * Service account tokens from the metadata server available to VMs running on GCE
   
 Where to learn more:
-  <!-- TODO: add pkgdown link once this is merged and site is rebuilt -->
   
-  * Help for `bq_auth()` *all that most users need*
-  * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) *details for advanced users*
+  * Help for [`bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html) *all that most users need*
+  * *details for more advanced users*
+    - [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html)
+    - [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html)
+    - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
 
 ### Changes that a user will notice
 
-OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
+OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 
 The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.
 
+`bq_user()` is a new function that reveals the email of the user associated with the current token.
+
 If you previously used `set_service_token()` to use a service account token, it still works. But you'll get a deprecation warning. Switch over to `bq_auth(path = "/path/to/your/service-account.json")`. Several other functions are similarly soft-deprecated.
+
+## Dependency changes
+
+R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).
+
+gargle and rlang are newly Imported.
 
 # bigrquery 1.1.1
 

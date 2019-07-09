@@ -12,8 +12,8 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
-if (bigrquery:::secret_can_decrypt("bigrquery")) {
-  json <- bigrquery:::secret_read("bigrquery", "service-token.json")
+if (gargle:::secret_can_decrypt("bigrquery")) {
+  json <- gargle:::secret_read("bigrquery", "bigrquery-testing.json")
   bigrquery::bq_auth(path = rawToChar(json))
 } else {
   knitr::opts_chunk$set(eval = FALSE)
@@ -21,9 +21,12 @@ if (bigrquery:::secret_can_decrypt("bigrquery")) {
 ```
 # bigrquery
 
-[![Build Status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+<!-- badges: start -->
 [![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Coverage status](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/github/r-dbi/bigrquery?branch=master)
+[![Travis build status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/r-dbi/bigrquery?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/bigrquery)
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+<!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in 
 [Google BigQuery](https://developers.google.com/bigquery/) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
@@ -105,15 +108,26 @@ natality %>%
 
 ## Important details
 
-### Authentication
+### Authentication and authorization
 
-When using bigquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions in `~/.R/gargle/gargle-oauth`, by default. For non-interactive usage, you can download a service account token as a JSON file and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. bigrquery obtains a token with `gargle::token_fetch()`, which supports even more token flows. For full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs, read the gargle vignette [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
+about auth:
 
-Note that `bigrquery` requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`).
+  * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
+  * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+    - bigrquery obtains a token with `gargle::token_fetch()`, which supports
+      a variety of token flows. This article provides full details, such as how
+      to take advantage of Application Default Credentials or service accounts
+      on GCE VMs.
+  * [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html). Explains
+    how to set up a project when code must run without any user interaction.
+  * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client (or "app") or service account token.
+
+Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://www.tidyverse.org/google_privacy_policy) provides more info.
 
 ### Billing project
 
-If you just want to play around with the bigquery API, it's easiest to start with the Google's free [sample data](https://developers.google.com/bigquery/docs/sample-tables). You'll still need to create a project, but if you're just playing around, it's unlikely that you'll go over the free limit (1 TB of queries / 10 GB of storage).
+If you just want to play around with the BigQuery API, it's easiest to start with Google's free [sample data](https://developers.google.com/bigquery/docs/sample-tables). You'll still need to create a project, but if you're just playing around, it's unlikely that you'll go over the free limit (1 TB of queries / 10 GB of storage).
 
 To create a project:
 
@@ -133,5 +147,9 @@ Use your project ID as the `billing` project whenever you work with free sample 
 * [API reference](https://developers.google.com/bigquery/docs/reference/v2/)
 * [Query/job console](https://bigquery.cloud.google.com/)
 * [Billing console](https://console.cloud.google.com/)
+
+## Policies
+
+Please note that the 'bigrquery' project is released with a [Contributor Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
 [Privacy policy](https://www.tidyverse.org/google_privacy_policy)
