@@ -6,16 +6,16 @@
 \alias{bq_param_array}
 \title{Defines parameter that can be passed to the query}
 \usage{
-bq_param_scalar(value, name = NULL, type = NULL)
+bq_param_scalar(value, type = NULL, name = NULL)
 
-bq_param_array(value, name = NULL, type = NULL)
+bq_param_array(value, type = NULL, name = NULL)
 }
 \arguments{
 \item{value}{vector of parameter values}
 
-\item{name}{name of the parameter in the query, omitting the \code{@}}
-
 \item{type}{BigQuery type of the parameter}
+
+\item{name}{name of the parameter in the query, omitting the \code{@}}
 }
 \description{
 Defines parameter that can be passed to the query
