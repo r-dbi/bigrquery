@@ -5,8 +5,8 @@ test_that("can create parameters from list", {
   p <- as_bq_params(x)
 
   expect_length(p, 2)
-  expect_equal(p[[1]], x[[1]])
-  expect_equal(p[[2]], bq_param("x"))
+  expect_equal(p[[1]], bq_param_scalar(1, "integer", name = "a"))
+  expect_equal(p[[2]], bq_param_scalar("x", name = "b"))
 })
 
 

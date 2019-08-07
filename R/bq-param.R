@@ -5,9 +5,9 @@ bq_param <- function(value, type = NULL, name = NULL) {
   }
 
   if (length(value) > 1) {
-    bq_param_array(value, name, type)
+    bq_param_array(value, type, name)
   } else {
-    bq_param_scalar(value, name, type)
+    bq_param_scalar(value, type, name)
   }
 }
 
