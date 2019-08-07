@@ -1,5 +1,5 @@
 
-bq_param <- function(value, name = NULL, type = NULL) {
+bq_param <- function(value, type = NULL, name = NULL) {
   if (is.null(type)) {
     type <- data_type(value)
   }
@@ -19,7 +19,7 @@ bq_param <- function(value, name = NULL, type = NULL) {
 #' @param value vector of parameter values
 #' @param name name of the parameter in the query, omitting the `@`
 #' @param type BigQuery type of the parameter
-bq_param_scalar <- function(value, name = NULL, type = NULL) {
+bq_param_scalar <- function(value, type = NULL, name = NULL) {
   assert_that(length(value) == 1)
 
   if (is.null(type)) {
@@ -34,7 +34,7 @@ bq_param_scalar <- function(value, name = NULL, type = NULL) {
 
 #' @name bq-param
 #' @export
-bq_param_array <- function(value, name = NULL, type = NULL) {
+bq_param_array <- function(value, type = NULL, name = NULL) {
   assert_that(length(value) > 0)
 
   if (is.null(type)) {
