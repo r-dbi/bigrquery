@@ -48,7 +48,9 @@ bq_param_array <- function(value, type = NULL, name = NULL) {
 
 as_bq_param <- function(x, name) {
   if (inherits(x, "bq_param")) {
-    x$name <- name
+    if (!is.null(name) & is.null(x$name)) {
+      x$name <- name
+    }
     x
   } else {
     bq_param(name = name, x)
