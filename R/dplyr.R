@@ -92,8 +92,8 @@ collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TR
 
   if (op_can_download(x$ops)) {
     name <- op_table(x$ops, x$src$con)
-    tb <- as_bq_table(x$src$con, name)
-    n <- min(op_rows(x$ops), n)
+    tb   <- as_bq_table(x$src$con, name)
+    n    <- min(op_rows(x$ops), n)
   } else {
     sql <- dbplyr::db_sql_render(x$src$con, x)
 
@@ -107,7 +107,7 @@ collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TR
   }
 
   quiet <- if (n < 100) TRUE else x$src$con@quiet
-  out <- bq_table_download(tb, max_results = n, quiet = quiet)
+  out <- bq_table_download(tb, max_results = n, quiet = quiet, ...)
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
 
