@@ -39,6 +39,8 @@ gargle and rlang are newly Imported.
 # bigrquery 1.1.1
 
 * Fix test failure with dbplyr 1.4.0.
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of ARRAY type (@byapparov, #303).
 
 * `bq_field()` can now pass `description` parameter which will be applied
   in `bq_table_create()` call (@byapparov, #272).
