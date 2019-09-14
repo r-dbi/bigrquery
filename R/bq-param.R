@@ -1,4 +1,5 @@
 
+
 bq_param <- function(value, type = NULL, name = NULL) {
   if (is.null(type)) {
     type <- data_type(value)
