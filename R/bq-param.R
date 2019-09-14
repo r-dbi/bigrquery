@@ -87,9 +87,8 @@ as_json.bq_param_scalar <- function(x) {
 
 #' @export
 as_json.bq_param_array <- function(x) {
-
-  values <- c(x$value)
-  values <- lapply(x$value, function(x) list(value = unbox(x)))
+  values <- unname(c(x$value))
+  values <- lapply(values, function(x) list(value = unbox(x)))
   list(
     name = x$name,
     parameterType = list(
