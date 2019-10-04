@@ -71,9 +71,17 @@
 
 \S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
 
-\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(conn,
-  name, value, overwrite = FALSE, append = FALSE, ...,
-  field.types = NULL, temporary = FALSE, row.names = NA)
+\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(
+  conn,
+  name,
+  value,
+  overwrite = FALSE,
+  append = FALSE,
+  ...,
+  field.types = NULL,
+  temporary = FALSE,
+  row.names = NA
+)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 
@@ -134,7 +142,7 @@ or a \linkS4class{DBIResult}}
 \item{name}{A character string specifying the unquoted DBMS table name,
 or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
 
-\item{value}{a \link{data.frame} (or coercible to data.frame).}
+\item{value}{a \link[DBI]{data.frame} (or coercible to data.frame).}
 
 \item{overwrite}{a logical specifying whether to overwrite an existing table
 or not. Its default is \code{FALSE}.}
