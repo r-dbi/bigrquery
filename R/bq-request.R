@@ -204,7 +204,7 @@ signal_reason <- function(reason, message) {
     # it to the error message.
     advice <- ""
     if (reason == "responseTooLarge") {
-        if (!stringr::str_detect(message, "allowLargeResults")) {
+        if (!any(grepl("allowLargeResults", message, fixed = TRUE))) {
             # When the advice returned by BigQuery mentions "allowLargeResults",
             # it is the right advice to follow. But other times we get error
             # "responseTooLarge" because the size of a single page of results
