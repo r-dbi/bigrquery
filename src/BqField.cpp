@@ -81,6 +81,8 @@ BqType parse_bq_type(std::string x) {
     return BQ_DATETIME;
   } else if (x == "RECORD") {
     return BQ_RECORD;
+  } else if (x == "GEOGRAPHY") {
+    return BQ_STRING;
   } else {
     Rcpp::stop("Unknown type %s", x);
   }

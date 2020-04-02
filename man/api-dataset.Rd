@@ -20,8 +20,7 @@ bq_dataset_update(x, ...)
 
 bq_dataset_delete(x, delete_contents = FALSE)
 
-bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE,
-  ...)
+bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
 }
 \arguments{
 \item{x}{A \link{bq_dataset}}

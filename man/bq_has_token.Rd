@@ -17,6 +17,7 @@ requests.
 bq_has_token()
 }
 \seealso{
-Other low-level API functions: \code{\link{bq_token}}
+Other low-level API functions: 
+\code{\link{bq_token}()}
 }
 \concept{low-level API functions}

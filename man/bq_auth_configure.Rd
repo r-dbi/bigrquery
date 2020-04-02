@@ -72,7 +72,8 @@ bq_auth_configure(
 
 }
 \seealso{
-Other auth functions: \code{\link{bq_auth}},
-  \code{\link{bq_deauth}}
+Other auth functions: 
+\code{\link{bq_auth}()},
+\code{\link{bq_deauth}()}
 }
 \concept{auth functions}
