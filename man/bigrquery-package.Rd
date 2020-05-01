@@ -30,11 +30,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (0000-0003-4757-117X)
+\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID})
 
 Authors:
 \itemize{
-  \item Jennifer Bryan \email{jenny@rstudio.com} (0000-0002-6983-2759)
+  \item Jennifer Bryan \email{jenny@rstudio.com} (\href{https://orcid.org/0000-0002-6983-2759}{ORCID})
 }
 
 Other contributors:

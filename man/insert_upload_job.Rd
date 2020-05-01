@@ -4,9 +4,16 @@
 \alias{insert_upload_job}
 \title{Create a new upload job \link{deprecated}}
 \usage{
-insert_upload_job(project, dataset, table, values, billing = project,
+insert_upload_job(
+  project,
+  dataset,
+  table,
+  values,
+  billing = project,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_APPEND", ...)
+  write_disposition = "WRITE_APPEND",
+  ...
+)
 }
 \arguments{
 \item{project, dataset}{Project and dataset identifiers}
@@ -49,9 +56,11 @@ delete_table("193487687779", "houston", "mtcars")
 Google API documentation:
 \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
 
-Other jobs: \code{\link{get_job}},
-  \code{\link{insert_extract_job}},
-  \code{\link{insert_query_job}}, \code{\link{wait_for}}
+Other jobs: 
+\code{\link{get_job}()},
+\code{\link{insert_extract_job}()},
+\code{\link{insert_query_job}()},
+\code{\link{wait_for}()}
 }
 \concept{jobs}
 \keyword{internal}

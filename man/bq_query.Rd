@@ -8,8 +8,14 @@
 \usage{
 bq_project_query(x, query, destination_table = NULL, ..., quiet = NA)
 
-bq_dataset_query(x, query, destination_table = NULL, ...,
-  billing = NULL, quiet = NA)
+bq_dataset_query(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  billing = NULL,
+  quiet = NA
+)
 }
 \arguments{
 \item{x}{Either a project (a string) or a \link{bq_dataset}.}
