@@ -200,34 +200,29 @@ signal_reason <- function(reason, message) {
     stop(message, call. = FALSE)
   } else {
     cl <- c(paste0("bigrquery_", reason), "error", "condition")
-    # Bring attention to the actionable advice by both messaging it and adding
-    # it to the error message.
-    advice <- ""
-    if (reason == "responseTooLarge") {
-        if (!any(grepl("allowLargeResults", message, fixed = TRUE))) {
-            # When the advice returned by BigQuery mentions "allowLargeResults",
-            # it is the right advice to follow. But other times we get error
-            # "responseTooLarge" because the size of a single page of results
-            # is too large. This can happen for tables with many, many columns.
-            # By decreasing the page size, a single page of results is now small
-            # enough to return.
-            advice <- paste0("Decrease the value of the bigrquery::",
-                             "bq_table_download page_size parameter and retry.")
-            message(advice)
-        }
-    } else if (reason == "rateLimitExceeded") {
-        # bigrquery pulls results in parallel using multiple threads to increase
-        # total throughput. Error "rateLimitExceeded" can happen when those
-        # threads are making too many requests within a brief time interval. We
-        # can slow those threads down by telling them to ask for bigger pages.
-        advice <- paste0("Increase the value of the bigrquery::",
-                         "bq_table_download page_size parameter and retry.")
-        message(advice)
-    }
-    message <- paste0(message, " [", reason, "] ", advice)
 
-    cond <- structure(list(message = message), class = cl)
-    stop(cond)
+    advice <- NULL
+    if (reason == "responseTooLarge") {
+      # If message mentions "allowLargeResults", that's the right advice to
+      # follow. But other times we get the error when a single page of results
+      # is too large (e.g. for tables with many columns). By decreasing page
+      # size, a single page of results is now small enough to return.
+      if (!any(grepl("allowLargeResults", message, fixed = TRUE))) {
+        advice <- "Try decreasing the `page_size` value of `bq_table_download()`"
+      }
+    } else if (reason == "rateLimitExceeded") {
+      # bigrquery pulls results in parallel to increase throughput.
+      # "rateLimitExceeded" can happen when those threads are making too many
+      # requests within a brief time interval. Can slow threads down by asking
+      # for bigger pages.
+      advice <- "Try increasing the `page_size` value of `bq_table_download()`"
+    }
+    message <- c(
+      paste0(message, " [", reason, "] "),
+      i = advice
+    )
+
+    rlang::abort(message, cl)
   }
 }
 
