@@ -9,7 +9,7 @@ on:
 name: live-api
 
 jobs:
-  postgres:
+  live-api:
     runs-on: macOS-latest
 
     steps:
