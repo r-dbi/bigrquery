@@ -133,9 +133,9 @@
 <li><p><code><a href="../reference/api-perform.html">bq_perform_upload()</a></code> works once again (<a href='https://github.com/rstats-db/bigrquery/issues/361'>#361</a>). It seems like the generated JSON was always incorrect, but Google’s type checking only recently become strict enough to detect the problem.</p></li>
 </ul>
 </div>
-    <div id="bigrquery-1-2-0" class="section level1">
+    <div id="bigrquery-120" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.0">
-<a href="#bigrquery-1-2-0" class="anchor"></a>bigrquery 1.2.0<small> 2019-07-02 </small>
+<a href="#bigrquery-120" class="anchor"></a>bigrquery 1.2.0<small> 2019-07-02 </small>
 </h1>
 <div id="auth-from-gargle" class="section level2">
 <h2 class="hasAnchor">
@@ -175,9 +175,9 @@
 <p>gargle and rlang are newly Imported.</p>
 </div>
 </div>
-    <div id="bigrquery-1-1-1" class="section level1">
+    <div id="bigrquery-111" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.1">
-<a href="#bigrquery-1-1-1" class="anchor"></a>bigrquery 1.1.1<small> 2019-05-16 </small>
+<a href="#bigrquery-111" class="anchor"></a>bigrquery 1.1.1<small> 2019-05-16 </small>
 </h1>
 <ul>
 <li><p>Fix test failure with dbplyr 1.4.0.</p></li>
@@ -185,9 +185,9 @@
 <li><p><code><a href="../reference/api-table.html">bq_table_patch()</a></code> - allows to patch table (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/253'>#253</a>) with new schema.</p></li>
 </ul>
 </div>
-    <div id="bigrquery-1-1-0" class="section level1">
+    <div id="bigrquery-110" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.0">
-<a href="#bigrquery-1-1-0" class="anchor"></a>bigrquery 1.1.0<small> 2019-02-05 </small>
+<a href="#bigrquery-110" class="anchor"></a>bigrquery 1.1.0<small> 2019-02-05 </small>
 </h1>
 <div id="improved-type-support" class="section level2">
 <h2 class="hasAnchor">
@@ -218,9 +218,9 @@
 </ul>
 </div>
 </div>
-    <div id="bigrquery-1-0-0" class="section level1">
+    <div id="bigrquery-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
-<a href="#bigrquery-1-0-0" class="anchor"></a>bigrquery 1.0.0<small> 2018-04-24 </small>
+<a href="#bigrquery-100" class="anchor"></a>bigrquery 1.0.0<small> 2018-04-24 </small>
 </h1>
 <div id="improved-downloads" class="section level2">
 <h2 class="hasAnchor">
@@ -267,7 +267,7 @@
 <a href="#low-level-api" class="anchor"></a>Low-level API</h3>
 <p>The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.</p>
 <ul>
-<li><p><strong>Consistent naming scheme</strong>: All API functions now have the form <code>bq_object_verb()</code>, e.g. <code><a href="../reference/api-table.html">bq_table_create()</a></code>, or <code><a href="../reference/api-dataset.html">bq_dataset_delete()</a></code>.</p></li>
+<li><p><strong>Consistent naming scheme</strong>: All API functions now have the form <code>bq_object_verb()</code>, e.g.  <code><a href="../reference/api-table.html">bq_table_create()</a></code>, or <code><a href="../reference/api-dataset.html">bq_dataset_delete()</a></code>.</p></li>
 <li><p><strong>S3 classes</strong>: <code><a href="../reference/bq_refs.html">bq_table()</a></code>, <code><a href="../reference/bq_refs.html">bq_dataset()</a></code>, <code><a href="../reference/bq_refs.html">bq_job()</a></code>, <code><a href="../reference/bq_field.html">bq_field()</a></code> and <code><a href="../reference/bq_field.html">bq_fields()</a></code> constructor functions create S3 objects corresponding to important BigQuery objects (<a href='https://github.com/rstats-db/bigrquery/issues/150'>#150</a>). These are paired with <code>as_</code> coercion functions and used throughout the new API.</p></li>
 <li><p><strong>Easier local testing</strong>: New <code><a href="../reference/bq_test_project.html">bq_test_project()</a></code> and <code><a href="../reference/bq_test_project.html">bq_test_dataset()</a></code> make it easier to run bigrquery tests locally. To run the tests yourself, you need to create a BigQuery project, and then follow the instructions in <code><a href="../reference/bq_test_project.html">?bq_test_project</a></code>.</p></li>
 <li><p><strong>More efficient data transfer</strong>: The new API makes extensive use of the <code>fields</code> query parameter, ensuring that functions only download data that they actually use (<a href='https://github.com/rstats-db/bigrquery/issues/153'>#153</a>).</p></li>
@@ -299,17 +299,17 @@
 </div>
 </div>
 </div>
-    <div id="version-0-4-1" class="section level1">
+    <div id="version-041" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.1">
-<a href="#version-0-4-1" class="anchor"></a>Version 0.4.1<small> 2017-06-26 </small>
+<a href="#version-041" class="anchor"></a>Version 0.4.1<small> 2017-06-26 </small>
 </h1>
 <ul>
 <li>Fix SQL translation omissions discovered by dbplyr 1.1.0</li>
 </ul>
 </div>
-    <div id="version-0-4-0" class="section level1">
+    <div id="version-040" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.0">
-<a href="#version-0-4-0" class="anchor"></a>Version 0.4.0<small> 2017-06-23 </small>
+<a href="#version-040" class="anchor"></a>Version 0.4.0<small> 2017-06-23 </small>
 </h1>
 <div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
@@ -348,9 +348,9 @@
 </ul>
 </div>
 </div>
-    <div id="version-0-3-0" class="section level1">
+    <div id="version-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
-<a href="#version-0-3-0" class="anchor"></a>Version 0.3.0<small> 2016-06-28 </small>
+<a href="#version-030" class="anchor"></a>Version 0.3.0<small> 2016-06-28 </small>
 </h1>
 <ul>
 <li><p>New <code><a href="../reference/bigrquery-deprecated.html">set_service_token()</a></code> allows you to use OAuth service token instead of interactive authentication.from</p></li>
@@ -359,9 +359,9 @@
 <li><p>Backend now translates <code>iflese()</code> to <code>IF</code> (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/rstats-db/bigrquery/issues/53'>#53</a>).</p></li>
 </ul>
 </div>
-    <div id="version-0-2-0-" class="section level1">
+    <div id="version-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#version-0-2-0-" class="anchor"></a>Version 0.2.0.<small> 2016-03-03 </small>
+<a href="#version-020" class="anchor"></a>Version 0.2.0.<small> 2016-03-03 </small>
 </h1>
 <ul>
 <li><p>Compatiable with latest httr.</p></li>
@@ -392,7 +392,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
