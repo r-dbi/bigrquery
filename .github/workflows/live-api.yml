@@ -41,11 +41,10 @@ jobs:
 
       - name: Check
         env:
+          BIGRQUERY_PASSWORD: ${{ secrets.BIGRQUERY_PASSWORD }}
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
-        env:
-          BIGRQUERY_PASSWORD: ${{ secrets.BIGRQUERY_PASSWORD }}
 
       - name: Upload check results
         if: failure()
