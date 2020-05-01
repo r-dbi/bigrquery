@@ -52,3 +52,6 @@ jobs:
         with:
           name: live-api-results
           path: check
+
+      - name: Reveal testthat details
+        run: find . -name testthat.Rout -exec cat '{}' ';'
