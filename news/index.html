@@ -161,6 +161,7 @@
 <div id="changes-that-a-user-will-notice" class="section level3">
 <h3 class="hasAnchor">
 <a href="#changes-that-a-user-will-notice" class="anchor"></a>Changes that a user will notice</h3>
+<p>Temporary files are now deleted after table download. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstats-db/bigrquery/issues/343'>#343</a>)</p>
 <p>OAuth2 tokens are now cached at the user level, by default, instead of in <code>.httr-oauth</code> in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial <code>.httr-oauth</code> files lying around your bigrquery projects.</p>
 <p>The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.</p>
 <p><code><a href="../reference/bq_user.html">bq_user()</a></code> is a new function that reveals the email of the user associated with the current token.</p>

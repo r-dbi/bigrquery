@@ -83,7 +83,7 @@
 <p>The bigrquery package makes it easy to work with data stored in <a href="https://developers.google.com/bigquery/">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
 <ul>
 <li><p>The low-level API provides thin wrappers over the underlying REST API. All the low-level functions start with <code>bq_</code>, and mostly have the form <code>bq_noun_verb()</code>. This level of abstraction is most appropriate if you’re familiar with the REST API and you want do something not supported in the higher-level APIs.</p></li>
-<li><p>The <a href="http://www.r-dbi.org">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
+<li><p>The <a href="http://www.r-dbi.org">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
 <li><p>The <a href="http://dbplyr.tidyverse.org/">dplyr interface</a> lets you treat BigQuery tables as if they are in-memory data frames. This is the most convenient layer if you don’t want to write SQL, but instead want dbplyr to write it for you.</p></li>
 </ul>
 <div id="installation" class="section level2">
@@ -110,21 +110,20 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     9     3          9.31</span>
-<span class="co">#&gt;  2  1969     1    16          6.19</span>
-<span class="co">#&gt;  3  1969     5     1         10.0 </span>
-<span class="co">#&gt;  4  1969     6    16          7.75</span>
-<span class="co">#&gt;  5  1969     3    22          7.00</span>
-<span class="co">#&gt;  6  1969     2    13          8.25</span>
-<span class="co">#&gt;  7  1969     6     4          6.81</span>
-<span class="co">#&gt;  8  1969     5    13          6.31</span>
-<span class="co">#&gt;  9  1969     1    14          6.06</span>
-<span class="co">#&gt; 10  1969    12     5          8.25</span></pre></div>
+<span class="co">#&gt;  1  1969     7     9          8.62</span>
+<span class="co">#&gt;  2  1969     2    25          7.06</span>
+<span class="co">#&gt;  3  1969     3    28          8.06</span>
+<span class="co">#&gt;  4  1969     5    11          5.94</span>
+<span class="co">#&gt;  5  1969    11    13          7.00</span>
+<span class="co">#&gt;  6  1969     5     5          5.94</span>
+<span class="co">#&gt;  7  1969     4     4          7.19</span>
+<span class="co">#&gt;  8  1969    10    27          6.50</span>
+<span class="co">#&gt;  9  1969     9     8          7.19</span>
+<span class="co">#&gt; 10  1969     2    17          8.50</span></pre></div>
 </div>
-</div>
-<div id="dbi" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dbi" class="anchor"></a>DBI</h2>
+<div id="dbi" class="section level3">
+<h3 class="hasAnchor">
+<a href="#dbi" class="anchor"></a>DBI</h3>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">DBI</span>)
 
 <span class="no">con</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(
@@ -146,16 +145,17 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     9     3          9.31</span>
-<span class="co">#&gt;  2  1969     1    16          6.19</span>
-<span class="co">#&gt;  3  1969     5     1         10.0 </span>
-<span class="co">#&gt;  4  1969     6    16          7.75</span>
-<span class="co">#&gt;  5  1969     3    22          7.00</span>
-<span class="co">#&gt;  6  1969     2    13          8.25</span>
-<span class="co">#&gt;  7  1969     6     4          6.81</span>
-<span class="co">#&gt;  8  1969     5    13          6.31</span>
-<span class="co">#&gt;  9  1969     1    14          6.06</span>
-<span class="co">#&gt; 10  1969    12     5          8.25</span></pre></div>
+<span class="co">#&gt;  1  1969     7     9          8.62</span>
+<span class="co">#&gt;  2  1969     2    25          7.06</span>
+<span class="co">#&gt;  3  1969     3    28          8.06</span>
+<span class="co">#&gt;  4  1969     5    11          5.94</span>
+<span class="co">#&gt;  5  1969    11    13          7.00</span>
+<span class="co">#&gt;  6  1969     5     5          5.94</span>
+<span class="co">#&gt;  7  1969     4     4          7.19</span>
+<span class="co">#&gt;  8  1969    10    27          6.50</span>
+<span class="co">#&gt;  9  1969     9     8          7.19</span>
+<span class="co">#&gt; 10  1969     2    17          8.50</span></pre></div>
+</div>
 <div id="dplyr" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dplyr" class="anchor"></a>dplyr</h3>
@@ -170,16 +170,16 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969    11    29          6.00</span>
-<span class="co">#&gt;  2  1969     2     6          8.94</span>
-<span class="co">#&gt;  3  1970     9     4          7.13</span>
-<span class="co">#&gt;  4  1970     1    24          7.63</span>
-<span class="co">#&gt;  5  1970     6     6          9.00</span>
-<span class="co">#&gt;  6  1970    10    30          6.50</span>
-<span class="co">#&gt;  7  1971     3    18          5.75</span>
-<span class="co">#&gt;  8  1971     8    11          6.19</span>
-<span class="co">#&gt;  9  1971     1    23          5.75</span>
-<span class="co">#&gt; 10  1969     5    16          6.88</span></pre></div>
+<span class="co">#&gt;  1  1969    10     6          3.25</span>
+<span class="co">#&gt;  2  1969     5    11          5.75</span>
+<span class="co">#&gt;  3  1969     6    29          7.94</span>
+<span class="co">#&gt;  4  1969     3     7          8.38</span>
+<span class="co">#&gt;  5  1970     4    26          6.38</span>
+<span class="co">#&gt;  6  1971    10     6          6.69</span>
+<span class="co">#&gt;  7  1971     2    23          6.69</span>
+<span class="co">#&gt;  8  1971     8    12          7.37</span>
+<span class="co">#&gt;  9  1969     9     3          5.25</span>
+<span class="co">#&gt; 10  1969     4    25          6.62</span></pre></div>
 </div>
 </div>
 <div id="important-details" class="section level2">
