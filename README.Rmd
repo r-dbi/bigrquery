@@ -75,7 +75,7 @@ tb <- bq_project_query(billing, sql)
 bq_table_download(tb, max_results = 10)
 ```
 
-## DBI
+### DBI
 
 ```{r, warning = FALSE}
 library(DBI)
