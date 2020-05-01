@@ -8,7 +8,7 @@ BigQueryResult <- function(conn, sql) {
     ds <- as_bq_dataset(conn)
     tb <- bq_dataset_query(ds, sql, quiet = conn@quiet, billing = conn@billing)
   }
-  if (attributes(tb)$statementType == "DROP_TABLE") {
+  if (attributes(tb)$statementType %in% c("DROP_TABLE", "DROP_VIEW")) {
     nrow <- 0L
   } else {
     nrow <- bq_table_nrow(tb)
