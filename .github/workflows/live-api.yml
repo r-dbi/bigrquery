@@ -42,6 +42,8 @@ jobs:
       - name: Check
         env:
           BIGRQUERY_PASSWORD: ${{ secrets.BIGRQUERY_PASSWORD }}
+          BIGQUERY_TEST_PROJECT: gargle-169921
+          BIGQUERY_TEST_BUCKET: bigrquery-test-bucket-calliope
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
