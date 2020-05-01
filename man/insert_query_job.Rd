@@ -4,9 +4,16 @@
 \alias{insert_query_job}
 \title{Create a new query job \link{deprecated}}
 \usage{
-insert_query_job(query, project, destination_table = NULL,
-  default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
+insert_query_job(
+  query,
+  project,
+  destination_table = NULL,
+  default_dataset = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  use_legacy_sql = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -44,9 +51,11 @@ Please use \link{api-job} instead.
 API documentation for insert method:
 \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
 
-Other jobs: \code{\link{get_job}},
-  \code{\link{insert_extract_job}},
-  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
+Other jobs: 
+\code{\link{get_job}()},
+\code{\link{insert_extract_job}()},
+\code{\link{insert_upload_job}()},
+\code{\link{wait_for}()}
 }
 \concept{jobs}
 \keyword{internal}

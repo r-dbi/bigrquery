@@ -71,9 +71,17 @@
 
 \S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
 
-\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(conn,
-  name, value, overwrite = FALSE, append = FALSE, ...,
-  field.types = NULL, temporary = FALSE, row.names = NA)
+\S4method{dbWriteTable}{BigQueryConnection,character,data.frame}(
+  conn,
+  name,
+  value,
+  overwrite = FALSE,
+  append = FALSE,
+  ...,
+  field.types = NULL,
+  temporary = FALSE,
+  row.names = NA
+)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 
@@ -125,14 +133,14 @@ or a \linkS4class{DBIResult}}
 \item{obj}{An R object whose SQL type we want to determine.}
 
 \item{conn}{A \linkS4class{DBIConnection} object, as returned by
-\code{\link[=dbConnect]{dbConnect()}}.}
+\code{\link[DBI:dbConnect]{dbConnect()}}.}
 
 \item{statement}{a character string containing SQL.}
 
 \item{x}{A character vector to quote as string.}
 
 \item{name}{A character string specifying the unquoted DBMS table name,
-or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
+or the result of a call to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
 
 \item{value}{a \link{data.frame} (or coercible to data.frame).}
 

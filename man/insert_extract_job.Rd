@@ -4,9 +4,17 @@
 \alias{insert_extract_job}
 \title{Create a new extract job \link{deprecated}}
 \usage{
-insert_extract_job(project, dataset, table, destination_uris,
-  compression = "NONE", destination_format = "NEWLINE_DELIMITED_JSON",
-  ..., print_header = TRUE, billing = project)
+insert_extract_job(
+  project,
+  dataset,
+  table,
+  destination_uris,
+  compression = "NONE",
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  ...,
+  print_header = TRUE,
+  billing = project
+)
 }
 \arguments{
 \item{project}{Project and dataset identifiers}
@@ -38,9 +46,11 @@ a job resource list, as documented at
 Please use \link{api-job} instead.
 }
 \seealso{
-Other jobs: \code{\link{get_job}},
-  \code{\link{insert_query_job}},
-  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
+Other jobs: 
+\code{\link{get_job}()},
+\code{\link{insert_query_job}()},
+\code{\link{insert_upload_job}()},
+\code{\link{wait_for}()}
 }
 \concept{jobs}
 \keyword{internal}
