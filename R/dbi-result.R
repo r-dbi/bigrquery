@@ -8,7 +8,11 @@ BigQueryResult <- function(conn, sql) {
     ds <- as_bq_dataset(conn)
     tb <- bq_dataset_query(ds, sql, quiet = conn@quiet, billing = conn@billing)
   }
-  nrow <- bq_table_nrow(tb)
+  if (attributes(tb)$statementType == "DROP_TABLE") {
+    nrow <- 0L
+  } else {
+    nrow <- bq_table_nrow(tb)
+  }
 
   res <- new(
     "BigQueryResult",

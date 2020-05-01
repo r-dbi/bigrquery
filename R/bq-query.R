@@ -76,8 +76,10 @@ bq_dataset_query <- function(x, query,
   )
   bq_job_wait(job, quiet = quiet)
 
-  meta <- bq_job_meta(job, "configuration(query(destinationTable))")
-  as_bq_table(meta$configuration$query$destinationTable)
+  meta <- bq_job_meta(job, "configuration(query(destinationTable)),statistics(query(statementType))")
+  tb <- as_bq_table(meta$configuration$query$destinationTable)
+  attr(tb, "statementType") <- meta$statistics$query$statementType
+  tb
 }
 
 # Similar to bq_perform_query: except uses dryRun, and hence result
