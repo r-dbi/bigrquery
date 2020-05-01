@@ -19,7 +19,7 @@ Where to learn more:
 
 ### Changes that a user will notice
 
-Temporary files are now deleted after table download. (@meztze, #343)
+Temporary files are now deleted after table download. (@meztez, #343)
 
 OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 
