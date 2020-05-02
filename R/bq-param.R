@@ -75,6 +75,8 @@ as_json.bq_params <- function(x) {
   unname(json)
 }
 
+
+#' @details
 #' Parameters of STRUCT type are not supported
 #'
 #' @export
