@@ -3,6 +3,9 @@
 * `bq_perform_query()` can now execute parameterised query with parameters 
   of ARRAY type (@byapparov, #303).
 
+* Error messages inlude hints for common problems (@deflaux, #353).
+
+
 # bigrquery 1.2.0
 
 ## Auth from gargle
@@ -21,6 +24,8 @@ Where to learn more:
     - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
 
 ### Changes that a user will notice
+
+Temporary files are now deleted after table download. (@meztez, #343)
 
 OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 

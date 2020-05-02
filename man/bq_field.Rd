@@ -7,8 +7,7 @@
 \alias{as_bq_fields}
 \title{BiqQuery field (and fields) class}
 \usage{
-bq_field(name, type, mode = "NULLABLE", fields = list(),
-  description = NULL)
+bq_field(name, type, mode = "NULLABLE", fields = list(), description = NULL)
 
 bq_fields(x)
 

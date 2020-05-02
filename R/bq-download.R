@@ -85,6 +85,8 @@ bq_table_download <-
     quiet = quiet
   )
 
+  on.exit(file.remove(c(schema_path, page_paths)))
+    
   table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
   convert_bigint(table_data, bigint)
 }
