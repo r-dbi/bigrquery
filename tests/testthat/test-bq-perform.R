@@ -97,25 +97,23 @@ test_that("can supply parameters as array for IN statement", {
        COUNT(*) values
      FROM
        (
-        SELECT 2000 year, 'a' value
+        SELECT 'a' value
         UNION ALL
-        SELECT 2001 year, 'b' value
+        SELECT 'b' value
         UNION ALL
-        SELECT 2000 year, 'c' value
+        SELECT 'c' value
         UNION ALL
-        SELECT 2002 year, 'a' value
+        SELECT 'a' value
         UNION ALL
-        SELECT 2000 year, 'b' value
+        SELECT 'b' value
        ) mock
      WHERE
-       year = @year AND
-       value IN UNNEST(@phases)"
+       value IN UNNEST(@values)"
 
   job <- bq_perform_query(
     query_template,
     parameters = list(
-      year = bq_param_scalar(2000L),
-      phases = bq_param_array(c("a", "b"))
+      values = bq_param_array(c("a", "b"))
     ),
     billing = bq_test_project(),
     default_dataset = bq_test_dataset()
@@ -126,7 +124,7 @@ test_that("can supply parameters as array for IN statement", {
 
   expect_equal(
     df$values,
-    2,
+    4,
     label = "Query gets expected number of half moons"
   )
 
@@ -134,8 +132,7 @@ test_that("can supply parameters as array for IN statement", {
   job <- bq_perform_query(
     query_template,
     parameters = list(
-      year = 2000L,
-      phases = c("a", "b")
+      values = c("a", "b")
     ),
     billing = bq_test_project(),
     default_dataset = bq_test_dataset()
@@ -146,16 +143,15 @@ test_that("can supply parameters as array for IN statement", {
 
   expect_equal(
     df$values,
-    2,
-    label = "Query gets expected number of half moons"
+    4,
+    label = "Query counts expected number of records"
   )
 
   # Try the same but with scalar value for the array param
   job <- bq_perform_query(
     query_template,
     parameters = list(
-      year = bq_param_scalar(2000L),
-      phases = bq_param_array(c("c"))
+      values = bq_param_array(c("c"))
     ),
     billing = bq_test_project(),
     default_dataset = bq_test_dataset()
@@ -167,7 +163,7 @@ test_that("can supply parameters as array for IN statement", {
   expect_equal(
     df$values,
     1,
-    label = "Query gets expected number of half moons"
+    label = "Query counts expected number records"
   )
 
 })
