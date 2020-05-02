@@ -90,7 +90,6 @@ test_that("can supply parameters", {
 })
 
 test_that("can supply parameters as array for IN statement", {
-  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
 
   query_template <-
   "#StandardSql
@@ -119,7 +118,7 @@ test_that("can supply parameters as array for IN statement", {
       phases = bq_param_array(c("a", "b"))
     ),
     billing = bq_test_project(),
-    default_dataset = ds
+    default_dataset = bq_test_dataset()
   )
   job <- bq_job_wait(job)
   job_tb <- bq_job_table(job)
@@ -139,7 +138,7 @@ test_that("can supply parameters as array for IN statement", {
       phases = c("a", "b")
     ),
     billing = bq_test_project(),
-    default_dataset = ds
+    default_dataset = bq_test_dataset()
   )
   job <- bq_job_wait(job)
   job_tb <- bq_job_table(job)
@@ -159,7 +158,7 @@ test_that("can supply parameters as array for IN statement", {
       phases = bq_param_array(c("c"))
     ),
     billing = bq_test_project(),
-    default_dataset = ds
+    default_dataset = bq_test_dataset()
   )
   job <- bq_job_wait(job)
   job_tb <- bq_job_table(job)
