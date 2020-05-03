@@ -23,8 +23,7 @@ if (gargle:::secret_can_decrypt("bigrquery")) {
 
 <!-- badges: start -->
 [![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Travis build status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/r-dbi/bigrquery?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/bigrquery)
+[![R build status](https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg)](https://github.com/r-dbi/bigrquery/actions)
 [![Codecov test coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
 <!-- badges: end -->
 
@@ -75,7 +74,7 @@ tb <- bq_project_query(billing, sql)
 bq_table_download(tb, max_results = 10)
 ```
 
-## DBI
+### DBI
 
 ```{r, warning = FALSE}
 library(DBI)
