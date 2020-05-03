@@ -7,10 +7,8 @@
 
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![Travis build
-status](https://travis-ci.org/r-dbi/bigrquery.svg?branch=master)](https://travis-ci.org/r-dbi/bigrquery)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/r-dbi/bigrquery?branch=master&svg=true)](https://ci.appveyor.com/project/r-dbi/bigrquery)
+[![R build
+status](https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg)](https://github.com/r-dbi/bigrquery/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
 <!-- badges: end -->
@@ -30,7 +28,7 @@ of abstraction on top of BigQuery:
   - The [DBI interface](http://www.r-dbi.org) wraps the low-level API
     and makes working with BigQuery like working with any other database
     system. This is most convenient layer if you want to execute SQL
-    queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of
+    queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of
     data.
 
   - The [dplyr interface](http://dbplyr.tidyverse.org/) lets you treat
@@ -67,19 +65,19 @@ bq_table_download(tb, max_results = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     9     3          9.31
-#>  2  1969     1    16          6.19
-#>  3  1969     5     1         10.0 
-#>  4  1969     6    16          7.75
-#>  5  1969     3    22          7.00
-#>  6  1969     2    13          8.25
-#>  7  1969     6     4          6.81
-#>  8  1969     5    13          6.31
-#>  9  1969     1    14          6.06
-#> 10  1969    12     5          8.25
+#>  1  1969     7     9          8.62
+#>  2  1969     2    25          7.06
+#>  3  1969     3    28          8.06
+#>  4  1969     5    11          5.94
+#>  5  1969    11    13          7.00
+#>  6  1969     5     5          5.94
+#>  7  1969     4     4          7.19
+#>  8  1969    10    27          6.50
+#>  9  1969     9     8          7.19
+#> 10  1969     2    17          8.50
 ```
 
-## DBI
+### DBI
 
 ``` r
 library(DBI)
@@ -103,16 +101,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     9     3          9.31
-#>  2  1969     1    16          6.19
-#>  3  1969     5     1         10.0 
-#>  4  1969     6    16          7.75
-#>  5  1969     3    22          7.00
-#>  6  1969     2    13          8.25
-#>  7  1969     6     4          6.81
-#>  8  1969     5    13          6.31
-#>  9  1969     1    14          6.06
-#> 10  1969    12     5          8.25
+#>  1  1969     7     9          8.62
+#>  2  1969     2    25          7.06
+#>  3  1969     3    28          8.06
+#>  4  1969     5    11          5.94
+#>  5  1969    11    13          7.00
+#>  6  1969     5     5          5.94
+#>  7  1969     4     4          7.19
+#>  8  1969    10    27          6.50
+#>  9  1969     9     8          7.19
+#> 10  1969     2    17          8.50
 ```
 
 ### dplyr
@@ -129,16 +127,16 @@ natality %>%
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    11    29          6.00
-#>  2  1969     2     6          8.94
-#>  3  1970     9     4          7.13
-#>  4  1970     1    24          7.63
-#>  5  1970     6     6          9.00
-#>  6  1970    10    30          6.50
-#>  7  1971     3    18          5.75
-#>  8  1971     8    11          6.19
-#>  9  1971     1    23          5.75
-#> 10  1969     5    16          6.88
+#>  1  1969    10     6          3.25
+#>  2  1969     5    11          5.75
+#>  3  1969     6    29          7.94
+#>  4  1969     3     7          8.38
+#>  5  1970     4    26          6.38
+#>  6  1971    10     6          6.69
+#>  7  1971     2    23          6.69
+#>  8  1971     8    12          7.37
+#>  9  1969     9     3          5.25
+#> 10  1969     4    25          6.62
 ```
 
 ## Important details

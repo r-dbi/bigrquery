@@ -4,9 +4,15 @@
 \alias{bq_table_download}
 \title{Download table data}
 \usage{
-bq_table_download(x, max_results = Inf, page_size = 10000,
-  start_index = 0L, max_connections = 6L, quiet = NA,
-  bigint = c("integer", "integer64", "numeric", "character"))
+bq_table_download(
+  x,
+  max_results = Inf,
+  page_size = 10000,
+  start_index = 0L,
+  max_connections = 6L,
+  quiet = NA,
+  bigint = c("integer", "integer64", "numeric", "character")
+)
 }
 \arguments{
 \item{x}{A \link{bq_table}}

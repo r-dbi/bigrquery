@@ -3,6 +3,13 @@
 * `dbConnect` triggers connectionObserver in RStudio which makes BigQuery projects, datasets
   and tables available in Connections pane (@byapparov, #298).
 
+* Error messages inlude hints for common problems (@deflaux, #353).
+
+* `bq_perform_upload()` works once again (#361). It seems like the generated
+  JSON was always incorrect, but Google's type checking only recently become
+  strict enough to detect the problem.
+
+
 # bigrquery 1.2.0
 
 
@@ -22,6 +29,8 @@ Where to learn more:
     - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
 
 ### Changes that a user will notice
+
+Temporary files are now deleted after table download. (@meztez, #343)
 
 OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
 

@@ -9,27 +9,59 @@
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
-bq_perform_extract(x, destination_uris,
-  destination_format = "NEWLINE_DELIMITED_JSON", compression = "NONE",
-  ..., print_header = TRUE, billing = x$project)
+bq_perform_extract(
+  x,
+  destination_uris,
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  compression = "NONE",
+  ...,
+  print_header = TRUE,
+  billing = x$project
+)
 
-bq_perform_upload(x, values, fields = NULL,
+bq_perform_upload(
+  x,
+  values,
+  fields = NULL,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", ..., billing = x$project)
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = x$project
+)
 
-bq_perform_load(x, source_uris, billing = x$project,
-  source_format = "NEWLINE_DELIMITED_JSON", fields = NULL, nskip = 0,
+bq_perform_load(
+  x,
+  source_uris,
+  billing = x$project,
+  source_format = "NEWLINE_DELIMITED_JSON",
+  fields = NULL,
+  nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", ...)
+  write_disposition = "WRITE_EMPTY",
+  ...
+)
 
-bq_perform_query(query, billing, ..., parameters = NULL,
-  destination_table = NULL, default_dataset = NULL,
+bq_perform_query(
+  query,
+  billing,
+  ...,
+  parameters = NULL,
+  destination_table = NULL,
+  default_dataset = NULL,
   create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = FALSE,
-  priority = "INTERACTIVE")
+  write_disposition = "WRITE_EMPTY",
+  use_legacy_sql = FALSE,
+  priority = "INTERACTIVE"
+)
 
-bq_perform_copy(src, dest, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", ..., billing = NULL)
+bq_perform_copy(
+  src,
+  dest,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = NULL
+)
 }
 \arguments{
 \item{x}{A \link{bq_table}}
@@ -37,7 +69,7 @@ bq_perform_copy(src, dest, create_disposition = "CREATE_IF_NEEDED",
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export
 up to 1 Gb of data per file. Use a wild card URI (e.g.
-\code{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
+\verb{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
 number of files.}
 
 \item{destination_format}{The exported file format. Possible values
@@ -110,7 +142,7 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 \item{query}{SQL query string.}
 
 \item{parameters}{Named list of parameters match to query parameters.
-Parameter \code{x} will be matched to placeholder \code{@x}. See
+Parameter \code{x} will be matched to placeholder \verb{@x}. See
 \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}
 

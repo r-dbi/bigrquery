@@ -131,7 +131,7 @@ bq_perform_upload <- function(x, values,
     fields <- as_bq_fields(fields)
     load$schema <- list(fields = as_json(fields))
   } else if (!bq_table_exists(x)) {
-    load$autodetect <- TRUE
+    load$autodetect <- unbox(TRUE)
   }
 
   config <- list(configuration = list(load = load))

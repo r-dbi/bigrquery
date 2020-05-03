@@ -25,6 +25,7 @@ bq_token()
 }
 }
 \seealso{
-Other low-level API functions: \code{\link{bq_has_token}}
+Other low-level API functions: 
+\code{\link{bq_has_token}()}
 }
 \concept{low-level API functions}

@@ -6,13 +6,28 @@
 \alias{list_tabledata_iter}
 \title{Retrieve data from a table \link{deprecated}}
 \usage{
-list_tabledata(project, dataset, table, page_size = 10000,
-  table_info = NULL, max_pages = 10, warn = TRUE,
-  quiet = getOption("bigrquery.quiet"))
+list_tabledata(
+  project,
+  dataset,
+  table,
+  page_size = 10000,
+  table_info = NULL,
+  max_pages = 10,
+  warn = TRUE,
+  quiet = getOption("bigrquery.quiet")
+)
 
-list_tabledata_callback(project, dataset, table, callback,
-  table_info = NULL, page_size = getOption("bigrquery.page.size"),
-  max_pages = 10, warn = TRUE, quiet = getOption("bigrquery.quiet"))
+list_tabledata_callback(
+  project,
+  dataset,
+  table,
+  callback,
+  table_info = NULL,
+  page_size = getOption("bigrquery.page.size"),
+  max_pages = 10,
+  warn = TRUE,
+  quiet = getOption("bigrquery.quiet")
+)
 
 list_tabledata_iter(project, dataset, table, table_info = NULL)
 }
