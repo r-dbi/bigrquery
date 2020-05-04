@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* `bq_stream()` allows streaming data into BigQuery table.
+
 * Error messages inlude hints for common problems (@deflaux, #353).
 
 * `bq_perform_upload()` works once again (#361). It seems like the generated

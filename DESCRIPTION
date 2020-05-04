@@ -65,6 +65,7 @@ Collate:
     'bq-query.R'
     'bq-refs.R'
     'bq-request.R'
+    'bq-stream.R'
     'bq-table.R'
     'bq-test.R'
     'camelCase.R'
