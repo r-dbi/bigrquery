@@ -1,6 +1,6 @@
 #' Create a new query job [deprecated]
 #'
-#' Please use [api-job] instead.
+#' Please use [api-job] and [api-perform] instead.
 #'
 #' @keywords internal
 #' @inheritParams insert_dataset
@@ -36,6 +36,9 @@ insert_query_job <- function(query, project,
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
                              ...) {
+
+  .Deprecated("bq_perform_query", package = "bigrquery")
+
   assert_that(is.string(project), is.string(query))
 
   url <- bq_path(project, jobs = "")

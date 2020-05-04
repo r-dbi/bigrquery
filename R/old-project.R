@@ -5,6 +5,9 @@
 #' @keywords internal
 #' @export
 list_datasets <- function(project, page_size = 50, max_pages = Inf) {
+
+  .Deprecated("bq_project_datasets", package = "bigrquery")
+
   assert_that(is.string(project))
 
   pages <- bq_get_paginated(
