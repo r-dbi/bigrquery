@@ -129,6 +129,7 @@
 <a href="#bigrquery-development-version" class="anchor"></a>bigrquery (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>dbExecute()</code> is better supported. It no longer fails with a spurious error for DDL queries, and it returns the number of affected rows for DML queries (<a href='https://github.com/rstats-db/bigrquery/issues/375'>#375</a>).</p></li>
 <li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code><br>
 (<a href='https://github.com/jimmyg3g'>@jimmyg3g</a>, <a href='https://github.com/rstats-db/bigrquery/issues/369'>#369</a>).</p></li>
 <li><p>Error messages inlude hints for common problems (<a href='https://github.com/deflaux'>@deflaux</a>, <a href='https://github.com/rstats-db/bigrquery/issues/353'>#353</a>).</p></li>
