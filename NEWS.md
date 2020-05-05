@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
+  (@jimmyg3g, #369).
+
 * Error messages inlude hints for common problems (@deflaux, #353).
 
 * `bq_perform_upload()` works once again (#361). It seems like the generated
