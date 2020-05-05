@@ -1,5 +1,9 @@
 # bigrquery (development version)
 
+* `dbExecute()` is better supported. It no longer fails with a spurious
+  error for DDL queries, and it returns the number of affected rows for
+  DML queries (#375).
+
 * `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
   (@jimmyg3g, #369).
 
