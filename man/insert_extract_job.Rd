@@ -43,7 +43,7 @@ a job resource list, as documented at
 \url{https://cloud.google.com/bigquery/docs/reference/v2/jobs}
 }
 \description{
-Please use \link{api-job} instead.
+Please use \link{api-job} and \link{api-perform} instead.
 }
 \seealso{
 Other jobs: 

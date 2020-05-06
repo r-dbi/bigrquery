@@ -32,6 +32,7 @@ list_tabledata <- function(project, dataset, table,
                            quiet = getOption("bigrquery.quiet")
                            ) {
 
+  .Deprecated("bq_table_download", package = "bigrquery")
 
   if (!requireNamespace("readr", quietly = TRUE)) {
     stop("Must install readr package to use `list_tabledata", call. = FALSE)

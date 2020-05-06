@@ -34,6 +34,8 @@ query_exec <- function(query, project,
                        quiet = getOption("bigrquery.quiet"),
                        ...) {
 
+  .Deprecated("bq_perform_query", package = "bigrquery")
+
   dest <- run_query_job(
     query = query,
     project = project,
@@ -68,6 +70,9 @@ run_query_job <- function(query,
                           use_legacy_sql = TRUE,
                           quiet = getOption("bigrquery.quiet"),
                           ...) {
+
+  .Deprecated("bq_perform_query", package = "bigrquery")
+
   assert_that(is.string(query), is.string(project))
 
   job <- insert_query_job(

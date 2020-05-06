@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+
+* Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
+
 * `dbExecute()` is better supported. It no longer fails with a spurious
   error for DDL queries, and it returns the number of affected rows for
   DML queries (#375).
