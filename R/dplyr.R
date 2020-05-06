@@ -174,7 +174,7 @@ sql_translate_env.BigQueryConnection <- function(x) {
       paste0 = sql_prefix("CONCAT"),
 
       # stringr equivalents
-      str_detect =  sql_prefix("REGEXP_MATCH", 2),
+      str_detect =  sql_prefix("REGEXP_CONTAINS", 2),
       str_extract = sql_prefix("REGEXP_EXTRACT", 2),
       str_replace = sql_prefix("REGEXP_REPLACE", 3),
 

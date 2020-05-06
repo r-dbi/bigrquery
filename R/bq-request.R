@@ -197,10 +197,8 @@ bq_check_response <- function(status, type, content) {
 
 signal_reason <- function(reason, message) {
   if (is.null(reason)) {
-    stop(message, call. = FALSE)
+    rlang::abort(message)
   } else {
-    cl <- c(paste0("bigrquery_", reason), "error", "condition")
-
     advice <- NULL
     if (reason == "responseTooLarge") {
       # If message mentions "allowLargeResults", that's the right advice to
@@ -222,7 +220,7 @@ signal_reason <- function(reason, message) {
       i = advice
     )
 
-    rlang::abort(message, cl)
+    rlang::abort(message, class = paste0("bigrquery_", reason))
   }
 }
 
