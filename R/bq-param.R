@@ -1,4 +1,4 @@
-#' Explicitly define queriy parameter
+#' Explicitly define query parameters
 #'
 #' By default, bigrquery will assume vectors of length 1 are scalars,
 #' and longer vectors are arrays. If you need to pass a length-1 array,

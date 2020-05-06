@@ -4,7 +4,7 @@
 \alias{bq_param}
 \alias{bq_param_scalar}
 \alias{bq_param_array}
-\title{Explicitly define queriy parameter}
+\title{Explicitly define query parameters}
 \usage{
 bq_param(value, type = NULL, name = NULL)
 
