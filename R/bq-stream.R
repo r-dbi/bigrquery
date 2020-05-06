@@ -1,4 +1,4 @@
-#' Streams data from data.from into BigQUery
+#' Stream data.frame into into BigQUery
 #'
 #' @param x bq_table where values will be streamed to
 #' @param values data.frame that will be streamed
