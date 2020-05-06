@@ -37,6 +37,9 @@ insert_upload_job <- function(project, dataset, table, values,
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_APPEND",
                               ...) {
+
+  .Deprecated("bq_perform_upload", package = "bigrquery")
+
   assert_that(
     is.string(project),
     is.string(dataset),

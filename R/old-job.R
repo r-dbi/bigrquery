@@ -14,6 +14,9 @@
 #' @export
 #' @keywords internal
 get_job <- function(project, job) {
+
+  .Deprecated("bq_job_meta", package = "bigrquery")
+
   assert_that(is.string(project), is.string(job))
   bq_get(bq_path(project, jobs = job))
 }
@@ -34,6 +37,9 @@ get_job <- function(project, job) {
 #' @export
 #' @keywords internal
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
+
+  .Deprecated("bq_job_wait", package = "bigrquery")
+
   progress <- bq_progress(
     "Running job :spin: :elapsed:",
     total = 1e7,
