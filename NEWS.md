@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `copy_to()` now works with BigQuery (although it doesn't support temporary
+  tables so application is somewhat limited) (#337).
+
 * `dbSendQuery()` (and hence `dbGetQuery()`) and `collect()` passes on `...` 
   to `bq_perform_query()`. `collect()` gains `page_size` and `max_connection` 
   arguments that are passed on to `bq_table_download()` (#374).

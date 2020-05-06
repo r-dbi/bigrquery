@@ -21,6 +21,16 @@ test_that("can work with literal SQL", {
   expect_true("fips_code" %in% dbplyr::op_vars(x))
 })
 
+test_that("can copy_to", {
+  ds <- bq_test_dataset()
+  con <- DBI::dbConnect(ds)
+
+  expect_error(dplyr::copy_to(con, mtcars), "temporary tables")
+  bq_mtcars <- dplyr::copy_to(con, mtcars, temporary = FALSE)
+
+  expect_s3_class(bq_mtcars, "tbl_BigQueryConnection")
+})
+
 test_that("can collect and compute (no dataset)", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
   bq_mtcars <- dplyr::tbl(con, "basedata.mtcars") %>% dplyr::filter(cyl == 4)

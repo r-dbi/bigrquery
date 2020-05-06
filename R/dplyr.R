@@ -83,6 +83,22 @@ db_analyze.BigQueryConnection <- function(con, table, ...) {
   TRUE
 }
 
+# registered onLoad
+db_copy_to.BigQueryConnection <- function(con, table, values,
+                            overwrite = FALSE, types = NULL, temporary = TRUE,
+                            unique_indexes = NULL, indexes = NULL,
+                            analyze = TRUE, ...) {
+
+  if (temporary) {
+    rlang::abort("BigQuery does not support temporary tables")
+  }
+
+  tb <- bq_table(con@project, con@dataset, table)
+  write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
+  bq_table_upload(tb, values, fields = types, write_disposition = write)
+
+  table
+}
 
 # Efficient downloads -----------------------------------------------
 
