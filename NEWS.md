@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
+
 * Error messages inlude hints for common problems (@deflaux, #353).
 
 * `bq_perform_upload()` works once again (#361). It seems like the generated
