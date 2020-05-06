@@ -142,8 +142,13 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 \item{query}{SQL query string.}
 
 \item{parameters}{Named list of parameters match to query parameters.
-Parameter \code{x} will be matched to placeholder \verb{@x}. See
-\url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+Parameter \code{x} will be matched to placeholder \verb{@x}.
+
+Generally, you can supply R vectors and they will be automatically
+converted to the correct type. If you need greater control, you can call
+\code{\link[=bq_param_scalar]{bq_param_scalar()}} or \code{\link[=bq_param_array]{bq_param_array()}} explicitly.
+
+See \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.

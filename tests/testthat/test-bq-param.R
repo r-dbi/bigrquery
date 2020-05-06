@@ -12,10 +12,9 @@ test_that("can create parameters from list", {
 
 test_that("parameter json doesn't change without notice", {
   verify_output(test_path("test-bq-param-json.txt"), {
-    params <- as_bq_params(list(
+    as_bq_params(list(
       scalar = "a",
       vector = c("a", "b", "c")
     ))
-    show_json(as_json(params))
   })
 })

@@ -1,5 +1,4 @@
-> params <- as_bq_params(list(scalar = "a", vector = c("a", "b", "c")))
-> show_json(as_json(params))
+> as_bq_params(list(scalar = "a", vector = c("a", "b", "c")))
 [
   {
     "name": "scalar",
@@ -32,5 +31,5 @@
       ]
     }
   }
-] 
+]
 

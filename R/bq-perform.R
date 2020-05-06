@@ -224,13 +224,17 @@ bq_perform_load <- function(x,
   as_bq_job(res$jobReference)
 }
 
-
 #' @export
 #' @rdname api-perform
 #' @param query SQL query string.
 #' @param parameters Named list of parameters match to query parameters.
-#'   Parameter `x` will be matched to placeholder `@x`. See
-#'   <https://cloud.google.com/bigquery/docs/parameterized-queries>
+#'   Parameter `x` will be matched to placeholder `@x`.
+#'
+#'   Generally, you can supply R vectors and they will be automatically
+#'   converted to the correct type. If you need greater control, you can call
+#'   [bq_param_scalar()] or [bq_param_array()] explicitly.
+#'
+#'   See <https://cloud.google.com/bigquery/docs/parameterized-queries>
 #'   for more details.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
