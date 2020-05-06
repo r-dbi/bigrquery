@@ -22,7 +22,7 @@ bq_param_array(value, type = NULL, name = NULL)
 \description{
 By default, bigrquery will assume vectors of length 1 are scalars,
 and longer vectors are arrays. If you need to pass a length-1 array,
-you'll need to explicitly use \code{bq_param_arary()}.
+you'll need to explicitly use \code{bq_param_array()}.
 }
 \examples{
 # bq_param() automatically picks scalar vs array based on length
