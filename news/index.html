@@ -129,6 +129,7 @@
 <a href="#bigrquery-development-version" class="anchor"></a>bigrquery (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code><a href="../reference/api-perform.html">bq_perform_query()</a></code> can now execute parameterised query with parameters of <code>ARRAY</code> type (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/303'>#303</a>). Vectors of length &gt; 1 will be automatically converted to <code>ARRAY</code> type, or use <code><a href="../reference/bq_param.html">bq_param_array()</a></code> to be explicit.</p></li>
 <li><p>Old functions (not starting with <code>bq_</code>) are deprecated (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/335'>#335</a>)</p></li>
 <li><p><code>dbExecute()</code> is better supported. It no longer fails with a spurious error for DDL queries, and it returns the number of affected rows for DML queries (<a href='https://github.com/rstats-db/bigrquery/issues/375'>#375</a>).</p></li>
 <li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code><br>

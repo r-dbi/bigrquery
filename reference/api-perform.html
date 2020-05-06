@@ -309,8 +309,11 @@ can be specified. Also, the '*' wildcard character is not allowed.</p></td>
     <tr>
       <th>parameters</th>
       <td><p>Named list of parameters match to query parameters.
-Parameter <code>x</code> will be matched to placeholder <code>@x</code>. See
-<a href='https://cloud.google.com/bigquery/docs/parameterized-queries'>https://cloud.google.com/bigquery/docs/parameterized-queries</a>
+Parameter <code>x</code> will be matched to placeholder <code>@x</code>.</p>
+<p>Generally, you can supply R vectors and they will be automatically
+converted to the correct type. If you need greater control, you can call
+<code><a href='bq_param.html'>bq_param_scalar()</a></code> or <code><a href='bq_param.html'>bq_param_array()</a></code> explicitly.</p>
+<p>See <a href='https://cloud.google.com/bigquery/docs/parameterized-queries'>https://cloud.google.com/bigquery/docs/parameterized-queries</a>
 for more details.</p></td>
     </tr>
     <tr>
