@@ -5,6 +5,9 @@
 
 * Error messages inlude hints for common problems (@deflaux, #353).
 
+* `bq_perform_upload()` works once again (#361). It seems like the generated
+  JSON was always incorrect, but Google's type checking only recently become
+  strict enough to detect the problem.
 
 # bigrquery 1.2.0
 
