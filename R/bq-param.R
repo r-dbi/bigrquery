@@ -2,7 +2,7 @@
 #'
 #' By default, bigrquery will assume vectors of length 1 are scalars,
 #' and longer vectors are arrays. If you need to pass a length-1 array,
-#' you'll need to explicitly use `bq_param_arary()`.
+#' you'll need to explicitly use `bq_param_array()`.
 #'
 #' @param value vector of parameter values
 #' @param name name of the parameter in the query, omitting the `@`
