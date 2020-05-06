@@ -70,7 +70,7 @@ bq_stream_body <- function(x,
   )
 
   if (!is.null(template_suffix)) {
-    body["templateSuffix"] <- template_suffix
+    body$templateSuffix <- template_suffix
   }
   body
 }
