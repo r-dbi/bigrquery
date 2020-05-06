@@ -1,7 +1,9 @@
 # bigrquery (development version)
 
 * `bq_perform_query()` can now execute parameterised query with parameters 
-  of ARRAY type (@byapparov, #303).
+  of `ARRAY` type (@byapparov, #303). Vectors of length > 1 will be
+  automatically converted to `ARRAY` type, or use `bq_param_array()` to
+  be explicit.
 
 * `dbExecute()` is better supported. It no longer fails with a spurious
   error for DDL queries, and it returns the number of affected rows for
