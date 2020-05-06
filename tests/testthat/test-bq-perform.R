@@ -91,24 +91,8 @@ test_that("can supply parameters", {
 
 test_that("can supply parameters as array for IN statement", {
 
-  query_template <-
-  "#StandardSql
-     SELECT
-       COUNT(*) values
-     FROM
-       (
-        SELECT 'a' value
-        UNION ALL
-        SELECT 'b' value
-        UNION ALL
-        SELECT 'c' value
-        UNION ALL
-        SELECT 'a' value
-        UNION ALL
-        SELECT 'b' value
-       ) mock
-     WHERE
-       value IN UNNEST(@values)"
+  query_template <- "#StandardSql
+  SELECT values FROM UNNEST(@values) values"
 
   job <- bq_perform_query(
     query_template,
@@ -123,8 +107,8 @@ test_that("can supply parameters as array for IN statement", {
   df <- bq_table_download(job_tb)
 
   expect_equal(
-    df$values,
-    4,
+    setdiff(df$values, c("a", "b")),
+    0L,
     label = "Query gets expected number of half moons"
   )
 
@@ -142,8 +126,8 @@ test_that("can supply parameters as array for IN statement", {
   df <- bq_table_download(job_tb)
 
   expect_equal(
-    df$values,
-    4,
+    setdiff(df$values, c("a", "b")),
+    0L,
     label = "Query counts expected number of records"
   )
 
@@ -162,7 +146,7 @@ test_that("can supply parameters as array for IN statement", {
 
   expect_equal(
     df$values,
-    1,
+    c("c"),
     label = "Query counts expected number records"
   )
 
