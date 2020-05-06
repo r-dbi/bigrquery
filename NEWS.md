@@ -1,5 +1,9 @@
 # bigrquery (development version)
 
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of `ARRAY` type (@byapparov, #303). Vectors of length > 1 will be
+  automatically converted to `ARRAY` type, or use `bq_param_array()` to
+  be explicit.
 
 * Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
 

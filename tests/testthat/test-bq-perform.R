@@ -71,18 +71,22 @@ test_that("bq_perform_query creates job that succeeds", {
   expect_true(bq_table_exists(job_tb))
 })
 
-test_that("can supply parameters", {
-  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
-  job <- bq_perform_query(
-    "SELECT * FROM moon_phases WHERE peak_datetime = @date",
-    parameters = list(date = bq_param("1889-07-28 00:00:00", "DATETIME")),
-    billing = bq_test_project(),
-    default_dataset = ds
+test_that("can supply scalar parameters", {
+  job <- bq_project_query(
+    bq_test_project(),
+    "SELECT 1 + @x",
+    parameters = list(x = bq_param_scalar(1))
   )
-  job <- bq_job_wait(job)
-  job_tb <- bq_job_table(job)
+  df <- bq_table_download(job)
+  expect_setequal(df[[1]], 2)
+})
 
-  df <- bq_table_download(job_tb)
-  expect_equal(nrow(df), 1)
-  expect_equal(df$phase, "New Moon")
+test_that("can supply array parameters", {
+  job <- bq_project_query(
+    bq_test_project(),
+    "SELECT values FROM UNNEST(@x) values",
+    parameters = list(x = bq_param_array(c("a", "b")))
+  )
+  df <- bq_table_download(job)
+  expect_setequal(df$values, c("a", "b"))
 })
