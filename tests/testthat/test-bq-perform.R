@@ -71,83 +71,22 @@ test_that("bq_perform_query creates job that succeeds", {
   expect_true(bq_table_exists(job_tb))
 })
 
-test_that("can supply parameters", {
-  ds <- as_bq_dataset("bigquery-public-data.moon_phases")
-
-  job <- bq_perform_query(
-    "SELECT * FROM moon_phases WHERE peak_datetime = CAST(@date AS DATETIME)",
-    parameters = list(date = as.Date("1889-07-28 00:00:00")),
-    billing = bq_test_project(),
-    default_dataset = ds
+test_that("can supply scalar parameters", {
+  job <- bq_project_query(
+    bq_test_project(),
+    "SELECT 1 + @x",
+    parameters = list(x = bq_param_scalar(1))
   )
-  job <- bq_job_wait(job)
-  job_tb <- bq_job_table(job)
-
-  df <- bq_table_download(job_tb)
-  expect_equal(nrow(df), 1)
-  expect_equal(df$phase, "New Moon")
-
+  df <- bq_table_download(job)
+  expect_setequal(df[[1]], 2)
 })
 
-test_that("can supply parameters as array for IN statement", {
-
-  query_template <- "#StandardSql
-  SELECT values FROM UNNEST(@values) values"
-
-  job <- bq_perform_query(
-    query_template,
-    parameters = list(
-      values = bq_param_array(c("a", "b"))
-    ),
-    billing = bq_test_project(),
-    default_dataset = bq_test_dataset()
+test_that("can supply array parameters", {
+  job <- bq_project_query(
+    bq_test_project(),
+    "SELECT values FROM UNNEST(@x) values",
+    parameters = list(x = bq_param_array(c("a", "b")))
   )
-  job <- bq_job_wait(job)
-  job_tb <- bq_job_table(job)
-  df <- bq_table_download(job_tb)
-
-  expect_equal(
-    setdiff(df$values, c("a", "b")),
-    0L,
-    label = "Query gets expected number of half moons"
-  )
-
-  # Same works with scalar and vector
-  job <- bq_perform_query(
-    query_template,
-    parameters = list(
-      values = c("a", "b")
-    ),
-    billing = bq_test_project(),
-    default_dataset = bq_test_dataset()
-  )
-  job <- bq_job_wait(job)
-  job_tb <- bq_job_table(job)
-  df <- bq_table_download(job_tb)
-
-  expect_equal(
-    setdiff(df$values, c("a", "b")),
-    0L,
-    label = "Query counts expected number of records"
-  )
-
-  # Try the same but with scalar value for the array param
-  job <- bq_perform_query(
-    query_template,
-    parameters = list(
-      values = bq_param_array(c("c"))
-    ),
-    billing = bq_test_project(),
-    default_dataset = bq_test_dataset()
-  )
-  job <- bq_job_wait(job)
-  job_tb <- bq_job_table(job)
-  df <- bq_table_download(job_tb)
-
-  expect_equal(
-    df$values,
-    c("c"),
-    label = "Query counts expected number records"
-  )
-
+  df <- bq_table_download(job)
+  expect_setequal(df$values, c("a", "b"))
 })
