@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Now requires gargle 0.5.0
+
 # bigrquery 1.3.0
 
 * Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
