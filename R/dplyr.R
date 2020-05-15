@@ -31,9 +31,6 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   if (!requireNamespace("dplyr", quietly = TRUE)) {
     stop("dplyr is required to use src_bigquery", call. = FALSE)
   }
-  if (utils::packageVersion("dplyr") < "0.6.0") {
-    stop("dplyr 0.6.0 and dbplyr required to use src_bigquery", call. = FALSE)
-  }
 
   con <- DBI::dbConnect(
     bigquery(),

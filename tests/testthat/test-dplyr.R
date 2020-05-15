@@ -115,7 +115,6 @@ test_that("collect can identify directly download tables", {
   bq3 <- dplyr::filter(bq1, cyl == 1)
   expect_false(op_can_download(bq3$ops))
 
-  skip_if_not_installed("dbplyr", "1.2.1.9001")
   x <- dplyr::collect(bq1)
   expect_s3_class(x, "tbl")
 })
@@ -127,13 +126,8 @@ test_that("casting uses bigquery types", {
     dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  if (utils::packageVersion("dbplyr") > "1.3.0") {
-    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
-    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
-  } else {
-    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64) AS `y`')
-    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64) AS `z`')
-  }
+  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
+  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
 })
 
 test_that("%||% translates to IFNULL", {
@@ -143,9 +137,5 @@ test_that("%||% translates to IFNULL", {
     dplyr::mutate(y = x %||% 2L) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  if (utils::packageVersion("dbplyr") > "1.3.0") {
-    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
-  } else {
-    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2) AS `y`')
-  }
+  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
 })
