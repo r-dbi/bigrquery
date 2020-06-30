@@ -57,7 +57,8 @@ enum BqType {
   BQ_TIME,
   BQ_DATE,
   BQ_DATETIME,
-  BQ_RECORD
+  BQ_RECORD,
+  BQ_GEOGRAPHY
 };
 
 BqType parse_bq_type(std::string x) {
@@ -81,6 +82,8 @@ BqType parse_bq_type(std::string x) {
     return BQ_DATETIME;
   } else if (x == "RECORD") {
     return BQ_RECORD;
+  } else if (x == "GEOGRAPHY") {
+    return BQ_GEOGRAPHY;
   } else {
     Rcpp::stop("Unknown type %s", x);
   }
@@ -140,10 +143,10 @@ public:
 
     switch(type_) {
     case BQ_INTEGER: {
-      Rcpp::DoubleVector out(n);
-      out.attr("class") = "integer64";
-      return out;
-    }
+        Rcpp::DoubleVector out(n);
+        out.attr("class") = "integer64";
+        return out;
+      }
     case BQ_FLOAT:
       return Rcpp::DoubleVector(n);
     case BQ_BOOLEAN:
@@ -155,8 +158,7 @@ public:
       return Rcpp::DatetimeVector(n, "UTC");
     case BQ_DATE:
       return Rcpp::DateVector(n);
-    case BQ_TIME:
-      {
+    case BQ_TIME: {
         Rcpp::DoubleVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
         out.attr("units") = "secs";
@@ -164,6 +166,11 @@ public:
       }
     case BQ_RECORD:
       return Rcpp::List(n);
+    case BQ_GEOGRAPHY: {
+        Rcpp::CharacterVector out(n);
+        out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr");
+        return out;
+      }
     }
 
     Rcpp::stop("Unknown type");
@@ -252,6 +259,14 @@ public:
       break;
     case BQ_RECORD:
       SET_VECTOR_ELT(x, i, recordValue(v));
+      break;
+    case BQ_GEOGRAPHY:
+      if (v.IsString()) {
+        Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
+        SET_STRING_ELT(x, i, chr);
+      } else {
+        SET_STRING_ELT(x, i, NA_STRING);
+      }
       break;
     }
   }

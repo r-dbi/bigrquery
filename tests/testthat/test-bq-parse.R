@@ -175,3 +175,11 @@ test_that("can parse empty arrays", {
   df <- bq_table_download(tb)
   expect_equal(df$x, list(tibble::tibble(a = integer(length = 0), b = character())))
 })
+
+test_that("can parse geography", {
+  skip_if_not_installed("wk")
+
+  wkt <- wk::wkt("POINT (30 10)")
+  expect_identical(bq_parse_single(as.character(wkt), "geography"), wkt)
+  expect_identical(bq_parse_single(NA_character_, "geography"), wk::wkt(NA_character_))
+})

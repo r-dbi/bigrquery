@@ -102,3 +102,12 @@ test_that("the return type of integer columns is set by the bigint argument", {
   out_chr <- bq_table_download(qry, bigint = "character")$x
   expect_identical(out_chr, x)
 })
+
+test_that("can convert geography type", {
+  skip_if_not_installed("wk")
+  sql <- "SELECT ST_GEOGFROMTEXT('POINT (30 10)') as geography"
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb)
+
+  expect_identical(tb$geography, wk::wkt("POINT (30 10)"))
+})
