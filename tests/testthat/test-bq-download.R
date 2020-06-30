@@ -111,3 +111,14 @@ test_that("can convert geography type", {
 
   expect_identical(tb$geography, wk::wkt("POINT (30 10)"))
 })
+
+test_that("can convert bytes type", {
+  sql <- "SELECT ST_ASBINARY(ST_GEOGFROMTEXT('POINT (30 10)')) as bytes"
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb)
+
+  expect_identical(
+    tb$geography,
+    structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character"))
+  )
+})

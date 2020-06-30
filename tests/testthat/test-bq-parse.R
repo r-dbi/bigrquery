@@ -183,3 +183,13 @@ test_that("can parse geography", {
   expect_identical(bq_parse_single(as.character(wkt), "geography"), wkt)
   expect_identical(bq_parse_single(NA_character_, "geography"), wk::wkt(NA_character_))
 })
+
+test_that("can parse bytes", {
+  bytes <- structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character"))
+  expect_identical(bq_parse_single(bytes, "bytes"), bytes)
+  expect_identical(
+    bq_parse_single(NA_character_, "bytes"),
+    structure(NA_character_, class = c("bq_bytes", "character"))
+  )
+})
+

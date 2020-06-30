@@ -58,7 +58,8 @@ enum BqType {
   BQ_DATE,
   BQ_DATETIME,
   BQ_RECORD,
-  BQ_GEOGRAPHY
+  BQ_GEOGRAPHY,
+  BQ_BYTES,
 };
 
 BqType parse_bq_type(std::string x) {
@@ -84,6 +85,8 @@ BqType parse_bq_type(std::string x) {
     return BQ_RECORD;
   } else if (x == "GEOGRAPHY") {
     return BQ_GEOGRAPHY;
+  } else if (x == "BYTES") {
+    return BQ_BYTES;
   } else {
     Rcpp::stop("Unknown type %s", x);
   }
@@ -169,6 +172,11 @@ public:
     case BQ_GEOGRAPHY: {
         Rcpp::CharacterVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr", "geovctr");
+        return out;
+      }
+    case BQ_BYTES: {
+        Rcpp::CharacterVector out(n);
+        out.attr("class") = Rcpp::CharacterVector::create("bq_bytes", "character");
         return out;
       }
     }
@@ -261,6 +269,14 @@ public:
       SET_VECTOR_ELT(x, i, recordValue(v));
       break;
     case BQ_GEOGRAPHY:
+      if (v.IsString()) {
+        Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
+        SET_STRING_ELT(x, i, chr);
+      } else {
+        SET_STRING_ELT(x, i, NA_STRING);
+      }
+      break;
+    case BQ_BYTES:
       if (v.IsString()) {
         Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
         SET_STRING_ELT(x, i, chr);

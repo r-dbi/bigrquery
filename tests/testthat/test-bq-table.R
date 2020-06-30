@@ -184,3 +184,16 @@ test_that("can round-trip GEOGRAPHY", {
   df1 <- bq_table_download(tb1)
   expect_equal(df1, df)
 })
+
+test_that("can round-trip BYTES", {
+  ds <- bq_test_dataset()
+  df <- tibble(bytes = structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character")))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "bytes"),
+    as_bq_fields(df)
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
+})
