@@ -67,4 +67,3 @@ print.bq_bytes <- function(x, ...) {
   cat_line(prettyunits::pretty_bytes(unclass(x)))
 }
 # nocov end
-# nocov end
