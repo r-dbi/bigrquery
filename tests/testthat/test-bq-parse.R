@@ -191,7 +191,7 @@ test_that("can parse bytes", {
              0x40))
   )
 
-  expect_identical(bq_parse_single(bytes, "bytes"), bytes)
+  expect_identical(bq_parse_single(bytes[[1]], "bytes"), bytes)
   expect_identical(
     bq_parse_single(NA_character_, "bytes"),
     blob::blob(NULL)
