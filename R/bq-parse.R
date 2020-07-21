@@ -1,11 +1,7 @@
 bq_parse_single <- function(value, type, ...) {
   field <- bq_field("", type, ...)
   field_j <- jsonlite::toJSON(as_json(field))
-  if (inherits(value, "blob")) {
-    value_j <- jsonlite::toJSON(value[[1]], auto_unbox = TRUE)
-  } else {
-    value_j <- jsonlite::toJSON(value, auto_unbox = TRUE)
-  }
+  value_j <- jsonlite::toJSON(value, auto_unbox = TRUE)
 
   bq_field_init(field_j, value_j)
 }
