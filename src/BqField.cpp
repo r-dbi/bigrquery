@@ -172,7 +172,7 @@ public:
       return Rcpp::List(n);
     case BQ_GEOGRAPHY: {
         Rcpp::CharacterVector out(n);
-        out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr", "geovctr");
+        out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr");
         return out;
       }
     case BQ_BYTES: {
