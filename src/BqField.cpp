@@ -178,6 +178,7 @@ public:
     case BQ_BYTES: {
         Rcpp::List out(n);
         out.attr("class") = Rcpp::CharacterVector::create("blob", "vctrs_list_of", "vctrs_vctr", "list");
+        out.attr("ptype") = Rcpp::RawVector::create();
         return out;
       }
     }
