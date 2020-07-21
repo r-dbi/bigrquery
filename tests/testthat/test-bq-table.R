@@ -187,7 +187,13 @@ test_that("can round-trip GEOGRAPHY", {
 
 test_that("can round-trip BYTES", {
   ds <- bq_test_dataset()
-  df <- tibble(bytes = structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character")))
+  df <- tibble(
+    bytes = blob::blob(
+        as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+                 0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
+                 0x40))
+    )
+  )
 
   tb1 <- bq_table_create(
     bq_table(ds, "bytes"),

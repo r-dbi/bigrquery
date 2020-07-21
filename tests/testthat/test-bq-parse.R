@@ -185,11 +185,19 @@ test_that("can parse geography", {
 })
 
 test_that("can parse bytes", {
-  bytes <- structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character"))
+  bytes <- structure(
+    list(
+      as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+               0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
+               0x40))
+    ),
+    class = c("blob", "vctrs_list_of", "vctrs_vctr", "list")
+  )
+
   expect_identical(bq_parse_single(bytes, "bytes"), bytes)
   expect_identical(
     bq_parse_single(NA_character_, "bytes"),
-    structure(NA_character_, class = c("bq_bytes", "character"))
+    structure(list(NULL), class = c("blob", "vctrs_list_of", "vctrs_vctr", "list"))
   )
 })
 

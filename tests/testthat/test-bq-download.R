@@ -118,7 +118,14 @@ test_that("can convert bytes type", {
   df <- bq_table_download(tb)
 
   expect_identical(
-    tb$geography,
-    structure("AQEAAAD///////89QAAAAAAAACRA", class = c("bq_bytes", "character"))
+    tb$bytes,
+    structure(
+      list(
+        as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+                 0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
+                 0x40))
+      ),
+      class = "blob"
+    )
   )
 })

@@ -5,6 +5,7 @@
 #include "rapidjson/filereadstream.h"
 #include <RProgress.h>
 #include "integer64.h"
+#include "base64.h"
 
 #include <ctime>
 #include <cstdio>
@@ -175,8 +176,8 @@ public:
         return out;
       }
     case BQ_BYTES: {
-        Rcpp::CharacterVector out(n);
-        out.attr("class") = Rcpp::CharacterVector::create("bq_bytes", "character");
+        Rcpp::List out(n);
+        out.attr("class") = Rcpp::CharacterVector::create("blob", "vctrs_list_of", "vctrs_vctr", "list");
         return out;
       }
     }
@@ -278,10 +279,18 @@ public:
       break;
     case BQ_BYTES:
       if (v.IsString()) {
-        Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
-        SET_STRING_ELT(x, i, chr);
+        size_t outlen = 0;
+        const unsigned char* buf = reinterpret_cast<const unsigned char*>(v.GetString());
+        unsigned char* out = base64_decode(buf, v.GetStringLength(), &outlen);
+        if (out == NULL) {
+          Rcpp::stop("Error parsing base64-encoded bytes");
+        }
+
+        Rcpp::RawVector raw(outlen);
+        memcpy(&(raw[0]), out, outlen);
+        SET_VECTOR_ELT(x, i, raw);
       } else {
-        SET_STRING_ELT(x, i, NA_STRING);
+        SET_VECTOR_ELT(x, i, R_NilValue);
       }
       break;
     }

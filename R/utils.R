@@ -61,9 +61,4 @@ as_json.NULL <- function(x) NULL
 show_json <- function(x) {
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
 }
-
-#' @export
-print.bq_bytes <- function(x, ...) {
-  cat_line(prettyunits::pretty_bytes(unclass(x)))
-}
 # nocov end
