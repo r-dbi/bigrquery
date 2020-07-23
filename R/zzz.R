@@ -17,6 +17,11 @@
   toset <- !(names(defaults) %in% names(op))
   if (any(toset)) options(defaults[toset])
 
+  # Namespaces for objects created in Rcpp ---------------------------------
+  requireNamespace("hms", quietly = TRUE)
+  requireNamespace("blob", quietly = TRUE)
+  requireNamespace("wk", quietly = TRUE)
+
   invisible()
 }
 
