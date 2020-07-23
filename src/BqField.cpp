@@ -60,7 +60,7 @@ enum BqType {
   BQ_DATETIME,
   BQ_RECORD,
   BQ_GEOGRAPHY,
-  BQ_BYTES,
+  BQ_BYTES
 };
 
 BqType parse_bq_type(std::string x) {
