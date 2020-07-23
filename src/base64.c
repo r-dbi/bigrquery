@@ -1,142 +1,193 @@
-/*
- * Based off: http://src.gnu-darwin.org/src/contrib/wpa_supplicant/base64.c
- * BSD Licensed.
- */
 
-#include <stdlib.h>
+// implementation by Gábor Csárdi from the processx package:
+// https://github.com/r-lib/processx/blob/master/src/base64.c
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+
+#include <Rinternals.h>
 #include <string.h>
 
-#include "base64.h"
+#define BASE64_ENCODE_OUT_SIZE(s) ((unsigned int)((((s) + 2) / 3) * 4))
+#define BASE64_DECODE_OUT_SIZE(s) ((unsigned int)(((s) / 4) * 3))
 
-static const unsigned char base64_table[64] =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+#define BASE64_PAD '='
 
-/**
- * base64_encode - Base64 encode
- * @src: Data to be encoded
- * @len: Length of the data to be encoded
- * @out_len: Pointer to output length variable, or %NULL if not used
- * Returns: Allocated buffer of out_len bytes of encoded data,
- * or %NULL on failure
- *
- * Caller is responsible for freeing the returned buffer. Returned buffer is
- * nul terminated to make it easier to use as a C string. The nul terminator is
- * not included in out_len.
- */
-unsigned char * base64_encode(const unsigned char *src, size_t len,
-                              size_t *out_len)
-{
-  unsigned char *out, *pos;
-  const unsigned char *end, *in;
-  size_t olen;
-  int line_len;
+/* BASE 64 encode table */
+static const char base64en[] = {
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+  'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+  'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+  'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+  'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+  'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+  'w', 'x', 'y', 'z', '0', '1', '2', '3',
+  '4', '5', '6', '7', '8', '9', '+', '/',
+};
 
-  olen = len * 4 / 3 + 4; /* 3-byte blocks to 4-byte */
-olen += olen / 72; /* line feeds */
-olen++; /* nul termination */
-out = malloc(olen);
-if (out == NULL)
-  return NULL;
+/* ASCII order for BASE 64 decode, 255 in unused character */
+static const unsigned char base64de[] = {
+  /* nul, soh, stx, etx, eot, enq, ack, bel, */
+  255, 255, 255, 255, 255, 255, 255, 255,
 
-end = src + len;
-in = src;
-pos = out;
-line_len = 0;
-while (end - in >= 3) {
-  *pos++ = base64_table[in[0] >> 2];
-  *pos++ = base64_table[((in[0] & 0x03) << 4) | (in[1] >> 4)];
-  *pos++ = base64_table[((in[1] & 0x0f) << 2) | (in[2] >> 6)];
-  *pos++ = base64_table[in[2] & 0x3f];
-  in += 3;
-  line_len += 4;
-  if (line_len >= 72) {
-    *pos++ = '\n';
-    line_len = 0;
+  /*  bs,  ht,  nl,  vt,  np,  cr,  so,  si, */
+  255, 255, 255, 255, 255, 255, 255, 255,
+
+  /* dle, dc1, dc2, dc3, dc4, nak, syn, etb, */
+  255, 255, 255, 255, 255, 255, 255, 255,
+
+  /* can,  em, sub, esc,  fs,  gs,  rs,  us, */
+  255, 255, 255, 255, 255, 255, 255, 255,
+
+  /*  sp, '!', '"', '#', '$', '%', '&', ''', */
+  255, 255, 255, 255, 255, 255, 255, 255,
+
+  /* '(', ')', '*', '+', ',', '-', '.', '/', */
+  255, 255, 255,  62, 255, 255, 255,  63,
+
+  /* '0', '1', '2', '3', '4', '5', '6', '7', */
+  52,  53,  54,  55,  56,  57,  58,  59,
+
+  /* '8', '9', ':', ';', '<', '=', '>', '?', */
+  60,  61, 255, 255, 255, 255, 255, 255,
+
+  /* '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', */
+  255,   0,   1,  2,   3,   4,   5,    6,
+
+  /* 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', */
+  7,   8,   9,  10,  11,  12,  13,  14,
+
+  /* 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', */
+  15,  16,  17,  18,  19,  20,  21,  22,
+
+  /* 'X', 'Y', 'Z', '[', '\', ']', '^', '_', */
+  23,  24,  25, 255, 255, 255, 255, 255,
+
+  /* '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', */
+  255,  26,  27,  28,  29,  30,  31,  32,
+
+  /* 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', */
+  33,  34,  35,  36,  37,  38,  39,  40,
+
+  /* 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', */
+  41,  42,  43,  44,  45,  46,  47,  48,
+
+  /* 'x', 'y', 'z', '{', '|', '}', '~', del, */
+  49,  50,  51, 255, 255, 255, 255, 255
+};
+
+SEXP base64_encode(SEXP array) {
+
+  const unsigned char *in = RAW(array);
+  unsigned int inlen = LENGTH(array);
+  unsigned int outlen = BASE64_ENCODE_OUT_SIZE(inlen);
+  SEXP rout = PROTECT(allocVector(RAWSXP, outlen));
+  unsigned char *out = (unsigned char*) RAW(rout);
+
+  int s;
+  unsigned int i;
+  unsigned int j;
+  unsigned char c;
+  unsigned char l;
+
+  s = 0;
+  l = 0;
+  for (i = j = 0; i < inlen; i++) {
+    c = in[i];
+
+    switch (s) {
+    case 0:
+      s = 1;
+      out[j++] = base64en[(c >> 2) & 0x3F];
+      break;
+    case 1:
+      s = 2;
+      out[j++] = base64en[((l & 0x3) << 4) | ((c >> 4) & 0xF)];
+      break;
+    case 2:
+      s = 0;
+      out[j++] = base64en[((l & 0xF) << 2) | ((c >> 6) & 0x3)];
+      out[j++] = base64en[c & 0x3F];
+      break;
+    }
+    l = c;
   }
+
+  switch (s) {
+  case 1:
+    out[j++] = base64en[(l & 0x3) << 4];
+    out[j++] = BASE64_PAD;
+    out[j++] = BASE64_PAD;
+    break;
+  case 2:
+    out[j++] = base64en[(l & 0xF) << 2];
+    out[j++] = BASE64_PAD;
+    break;
+  }
+
+
+  UNPROTECT(1);
+  return rout;
 }
 
-if (end - in) {
-  *pos++ = base64_table[in[0] >> 2];
-  if (end - in == 1) {
-    *pos++ = base64_table[(in[0] & 0x03) << 4];
-    *pos++ = '=';
-  } else {
-    *pos++ = base64_table[((in[0] & 0x03) << 4) |
-      (in[1] >> 4)];
-    *pos++ = base64_table[(in[1] & 0x0f) << 2];
-  }
-  *pos++ = '=';
-  line_len += 4;
-}
+SEXP base64_decode(SEXP array) {
+  const unsigned char *in = (const unsigned char*) RAW(array);
+  unsigned int inlen = LENGTH(array);
+  unsigned int outlen = BASE64_DECODE_OUT_SIZE(inlen);
+  SEXP rout = PROTECT(allocVector(RAWSXP, outlen));
+  unsigned char *out = RAW(rout);
 
-//if (line_len)
-//	*pos++ = '\n';
+  unsigned int i;
+  unsigned int j;
+  unsigned char c;
 
-*pos = '\0';
-if (out_len)
-  *out_len = pos - out;
-return out;
-}
-
-
-/**
- * base64_decode - Base64 decode
- * @src: Data to be decoded
- * @len: Length of the data to be decoded
- * @out_len: Pointer to output length variable
- * Returns: Allocated buffer of out_len bytes of decoded data,
- * or %NULL on failure
- *
- * Caller is responsible for freeing the returned buffer.
- */
-unsigned char * base64_decode(const unsigned char *src, size_t len,
-                              size_t *out_len)
-{
-  unsigned char dtable[256], *out, *pos, in[4], block[4], tmp;
-  size_t i, count;
-
-  memset(dtable, 0x80, 256);
-  for (i = 0; i < sizeof(base64_table); i++)
-    dtable[base64_table[i]] = i;
-  dtable['='] = 0;
-
-  count = 0;
-  for (i = 0; i < len; i++) {
-    if (dtable[src[i]] != 0x80)
-      count++;
+  if (inlen & 0x3) {
+    UNPROTECT(1);
+    return rout;
   }
 
-  if (count % 4)
-    return NULL;
+  for (i = j = 0; i < inlen; i++) {
+    if (in[i] == BASE64_PAD) {
+      break;
+    }
+    if (in[i] < 0) {
+      UNPROTECT(1);
+      return rout;
+    }
 
-  pos = out = malloc(count);
-  if (out == NULL)
-    return NULL;
+    c = base64de[in[i]];
+    if (c == 255) {
+      UNPROTECT(1);
+      return rout;
+    }
 
-  count = 0;
-  for (i = 0; i < len; i++) {
-    tmp = dtable[src[i]];
-    if (tmp == 0x80)
-      continue;
-
-    in[count] = src[i];
-    block[count] = tmp;
-    count++;
-    if (count == 4) {
-      *pos++ = (block[0] << 2) | (block[1] >> 4);
-      *pos++ = (block[1] << 4) | (block[2] >> 2);
-      *pos++ = (block[2] << 6) | block[3];
-      count = 0;
+    switch (i & 0x3) {
+    case 0:
+      out[j] = (c << 2) & 0xFF;
+      break;
+    case 1:
+      out[j++] |= (c >> 4) & 0x3;
+      out[j] = (unsigned char)((c & 0xF) << 4);
+      break;
+    case 2:
+      out[j++] |= (c >> 2) & 0xF;
+      out[j] = (unsigned char)((c & 0x3) << 6);
+      break;
+    case 3:
+      out[j++] |= c;
+      break;
     }
   }
 
-  if (pos > out) {
-    if (in[2] == '=')
-      pos -= 2;
-    else if (in[3] == '=')
-      pos--;
+  /* We might have allocated to much space, because of the padding... */
+  if (j + 1 < outlen) {
+    SEXP rout2 = PROTECT(allocVector(RAWSXP, j));
+    memcpy(RAW(rout2), RAW(rout), j);
+    UNPROTECT(2);
+    return rout2;
+  } else {
+    UNPROTECT(1);
+    return rout;
   }
-
-  *out_len = pos - out;
-  return out;
 }

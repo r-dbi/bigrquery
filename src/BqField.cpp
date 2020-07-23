@@ -280,16 +280,9 @@ public:
       break;
     case BQ_BYTES:
       if (v.IsString()) {
-        size_t outlen = 0;
-        const unsigned char* buf = reinterpret_cast<const unsigned char*>(v.GetString());
-        unsigned char* out = base64_decode(buf, v.GetStringLength(), &outlen);
-        if (out == NULL) {
-          Rcpp::stop("Error parsing base64-encoded bytes");
-        }
-
-        Rcpp::RawVector raw(outlen);
-        memcpy(&(raw[0]), out, outlen);
-        SET_VECTOR_ELT(x, i, raw);
+        Rcpp::RawVector chr(v.GetStringLength());
+        memcpy(&(chr[0]), v.GetString(), v.GetStringLength());
+        SET_VECTOR_ELT(x, i, base64_decode(chr));
       } else {
         SET_VECTOR_ELT(x, i, R_NilValue);
       }
