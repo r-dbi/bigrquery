@@ -244,12 +244,16 @@ bq_perform_load <- function(x,
 #'   "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 #'   but are not rate-limited in the same way as interactive queries.
 #' @param default_dataset A [bq_dataset] used to automatically qualify table names.
+#' @param time_partitioning A [TimePartitioning] object or a list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step.
+#' @param clustering A [Clustering] object or a list of one element named fields, which is a vector of strings.
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
 bq_perform_query <- function(query, billing,
                              ...,
                              parameters = NULL,
                              destination_table = NULL,
                              default_dataset = NULL,
+                             time_partitioning = NULL,
+                             clustering = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = FALSE,
@@ -274,6 +278,14 @@ bq_perform_query <- function(query, billing,
     query$writeDisposition <- unbox(write_disposition)
     if (use_legacy_sql)
       query$allowLargeResults <- unbox(TRUE)
+  }
+
+  if (!is.null(time_partitioning)) {
+    query$timePartitioning <- time_partitioning
+  }
+
+  if (!is.null(clustering)) {
+    query$clustering <- clustering
   }
 
   if (!is.null(default_dataset)) {
