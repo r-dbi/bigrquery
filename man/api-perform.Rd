@@ -160,9 +160,9 @@ queries (> 128 MB compressed).}
 
 \item{default_dataset}{A \link{bq_dataset} used to automatically qualify table names.}
 
-\item{time_partitioning}{A \link{TimePartitioning} object or a list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step.}
+\item{time_partitioning}{A list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step.}
 
-\item{clustering}{A \link{Clustering} object or a list of one element named fields, which is a vector of strings.}
+\item{clustering}{A list of one element named fields, which is a vector of strings.}
 
 \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
 
