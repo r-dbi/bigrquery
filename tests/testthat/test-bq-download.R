@@ -28,6 +28,18 @@ test_that("can retrieve zero rows", {
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
 
+test_that("can specify large integers in page params", {
+  skip_if_no_auth()
+
+  # Use scipen to nudge R to prefer scientific formatting for very small numbers
+  # to allow this test to exercise issue #395 with small datasets.
+  old <- options(scipen=-4)
+  on.exit(options(old))
+
+  tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
+  df <- bq_table_download(tb, max_results = 100, page_size = 20)
+  expect_equal(nrow(df), 100)
+})
 
 # bq_table_info -----------------------------------------------------------
 

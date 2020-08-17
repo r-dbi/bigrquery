@@ -192,9 +192,11 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   assert_that(is.numeric(begin), length(begin) == 1)
   assert_that(is.numeric(end), length(end) == 1)
 
+  # Pre-format query params with forced non-scientific notation, since the BQ
+  # API doesn't accept numbers like 1e5. See issue #395 for details.
   query <- list(
-    startIndex = begin,
-    maxResults = end - begin
+    startIndex = format(begin, scientific = FALSE),
+    maxResults = format(end - begin, scientific = FALSE)
   )
 
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
