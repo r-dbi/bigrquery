@@ -131,116 +131,116 @@
     </div>
 
     <pre class="usage"><span class='co'># S4 method for bq_dataset</span>
-<span class='fu'>dbConnect</span>(<span class='no'>drv</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw'>drv</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryDriver</span>
-<span class='fu'>show</span>(<span class='no'>object</span>)
+<span class='fu'>show</span>(<span class='kw'>object</span>)
 
 <span class='co'># S4 method for BigQueryDriver</span>
-<span class='fu'>dbGetInfo</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetInfo.html'>dbGetInfo</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryDriver</span>
-<span class='fu'>dbIsValid</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbIsValid.html'>dbIsValid</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryDriver</span>
-<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>dbDataType</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>obj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>show</span>(<span class='no'>object</span>)
+<span class='fu'>show</span>(<span class='kw'>object</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbIsValid</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbIsValid.html'>dbIsValid</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbSendQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span>(<span class='kw'>conn</span>, <span class='kw'>statement</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbQuoteString</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span>(<span class='kw'>conn</span>, <span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,SQL</span>
-<span class='fu'>dbQuoteString</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteString.html'>dbQuoteString</a></span>(<span class='kw'>conn</span>, <span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span>(<span class='kw'>conn</span>, <span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,SQL</span>
-<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html'>dbQuoteIdentifier</a></span>(<span class='kw'>conn</span>, <span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDataType.html'>dbDataType</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>obj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character,data.frame</span>
-<span class='fu'>dbWriteTable</span>(
-  <span class='no'>conn</span>,
-  <span class='no'>name</span>,
-  <span class='no'>value</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>field.types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>temporary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(
+  <span class='kw'>conn</span>,
+  <span class='kw'>name</span>,
+  <span class='kw'>value</span>,
+  overwrite = <span class='fl'>FALSE</span>,
+  append = <span class='fl'>FALSE</span>,
+  <span class='kw'>...</span>,
+  field.types = <span class='kw'>NULL</span>,
+  temporary = <span class='fl'>FALSE</span>,
+  row.names = <span class='fl'>NA</span>
 )
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbReadTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbListTables</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbExistsTable.html'>dbExistsTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbListFields</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListFields.html'>dbListFields</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection,character</span>
-<span class='fu'>dbRemoveTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbRemoveTable.html'>dbRemoveTable</a></span>(<span class='kw'>conn</span>, <span class='kw'>name</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbGetInfo</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetInfo.html'>dbGetInfo</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbBegin</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbBegin</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbCommit</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbCommit</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryConnection</span>
-<span class='fu'>dbRollback</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/transactions.html'>dbRollback</a></span>(<span class='kw'>conn</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>show</span>(<span class='no'>object</span>)
+<span class='fu'>show</span>(<span class='kw'>object</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbIsValid</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbIsValid.html'>dbIsValid</a></span>(<span class='kw'>dbObj</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbClearResult</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbClearResult.html'>dbClearResult</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbFetch</span>(<span class='no'>res</span>, <span class='kw'>n</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span>(<span class='kw'>res</span>, n = <span class='op'>-</span><span class='fl'>1</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbHasCompleted</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbHasCompleted.html'>dbHasCompleted</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbGetStatement</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetStatement.html'>dbGetStatement</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbColumnInfo</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbColumnInfo.html'>dbColumnInfo</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbGetRowCount</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetRowCount.html'>dbGetRowCount</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbGetRowsAffected</span>(<span class='no'>res</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetRowsAffected.html'>dbGetRowsAffected</a></span>(<span class='kw'>res</span>, <span class='kw'>...</span>)
 
 <span class='co'># S4 method for BigQueryResult</span>
-<span class='fu'>dbBind</span>(<span class='no'>res</span>, <span class='no'>params</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbBind.html'>dbBind</a></span>(<span class='kw'>res</span>, <span class='kw'>params</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -255,9 +255,9 @@
     </tr>
     <tr>
       <th>dbObj</th>
-      <td><p>An object inheriting from DBIObject,
-i.e. DBIDriver, DBIConnection,
-or a DBIResult</p></td>
+      <td><p>An object inheriting from <a href='https://dbi.r-dbi.org/reference/DBIObject-class.html'>DBIObject</a>,
+i.e. <a href='https://dbi.r-dbi.org/reference/DBIDriver-class.html'>DBIDriver</a>, <a href='https://dbi.r-dbi.org/reference/DBIConnection-class.html'>DBIConnection</a>,
+or a <a href='https://dbi.r-dbi.org/reference/DBIResult-class.html'>DBIResult</a></p></td>
     </tr>
     <tr>
       <th>obj</th>
@@ -265,7 +265,7 @@ or a DBIResult</p></td>
     </tr>
     <tr>
       <th>conn</th>
-      <td><p>A DBIConnection object, as returned by
+      <td><p>A <a href='https://dbi.r-dbi.org/reference/DBIConnection-class.html'>DBIConnection</a> object, as returned by
 <code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect()</a></code>.</p></td>
     </tr>
     <tr>
@@ -310,7 +310,7 @@ they are characters, otherwise will ignore.</p></td>
     </tr>
     <tr>
       <th>res</th>
-      <td><p>An object inheriting from DBIResult.</p></td>
+      <td><p>An object inheriting from <a href='https://dbi.r-dbi.org/reference/DBIResult-class.html'>DBIResult</a>.</p></td>
     </tr>
     <tr>
       <th>n</th>

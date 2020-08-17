@@ -130,17 +130,17 @@
     <p>Basic create-read-update-delete verbs for datasets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_dataset_create</span>(<span class='no'>x</span>, <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"US"</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>bq_dataset_create</span>(<span class='kw'>x</span>, location = <span class='st'>"US"</span>, <span class='kw'>...</span>)
 
-<span class='fu'>bq_dataset_meta</span>(<span class='no'>x</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>bq_dataset_meta</span>(<span class='kw'>x</span>, fields = <span class='kw'>NULL</span>)
 
-<span class='fu'>bq_dataset_exists</span>(<span class='no'>x</span>)
+<span class='fu'>bq_dataset_exists</span>(<span class='kw'>x</span>)
 
-<span class='fu'>bq_dataset_update</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>bq_dataset_update</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>bq_dataset_delete</span>(<span class='no'>x</span>, <span class='kw'>delete_contents</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>bq_dataset_delete</span>(<span class='kw'>x</span>, delete_contents = <span class='fl'>FALSE</span>)
 
-<span class='fu'>bq_dataset_tables</span>(<span class='no'>x</span>, <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>Inf</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>bq_dataset_tables</span>(<span class='kw'>x</span>, page_size = <span class='fl'>50</span>, max_pages = <span class='fl'>Inf</span>, warn = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,24 +196,24 @@ all pages (this may take a long time!)</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span>(<span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>(), <span class='st'>"dataset_api"</span>)
-<span class='fu'>bq_dataset_exists</span>(<span class='no'>ds</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
+<span class='kw'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span>(<span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>(), <span class='st'>"dataset_api"</span>)
+<span class='fu'>bq_dataset_exists</span>(<span class='kw'>ds</span>)
 
-<span class='fu'>bq_dataset_create</span>(<span class='no'>ds</span>)
-<span class='fu'>bq_dataset_exists</span>(<span class='no'>ds</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>bq_dataset_meta</span>(<span class='no'>ds</span>))
+<span class='fu'>bq_dataset_create</span>(<span class='kw'>ds</span>)
+<span class='fu'>bq_dataset_exists</span>(<span class='kw'>ds</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='fu'>bq_dataset_meta</span>(<span class='kw'>ds</span>))
 
-<span class='fu'>bq_dataset_delete</span>(<span class='no'>ds</span>)
-<span class='fu'>bq_dataset_exists</span>(<span class='no'>ds</span>)
+<span class='fu'>bq_dataset_delete</span>(<span class='kw'>ds</span>)
+<span class='fu'>bq_dataset_exists</span>(<span class='kw'>ds</span>)
 
 <span class='co'># Use bq_test_dataset() to create a temporary dataset that will</span>
 <span class='co'># be automatically deleted</span>
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span>()
-<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='no'>ds</span>, <span class='st'>"x1"</span>))
-<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='no'>ds</span>, <span class='st'>"x2"</span>))
-<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='no'>ds</span>, <span class='st'>"x3"</span>))
-<span class='fu'>bq_dataset_tables</span>(<span class='no'>ds</span>)
+<span class='kw'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span>()
+<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='kw'>ds</span>, <span class='st'>"x1"</span>))
+<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='kw'>ds</span>, <span class='st'>"x2"</span>))
+<span class='fu'><a href='api-table.html'>bq_table_create</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='kw'>ds</span>, <span class='st'>"x3"</span>))
+<span class='fu'>bq_dataset_tables</span>(<span class='kw'>ds</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

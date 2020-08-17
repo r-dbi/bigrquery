@@ -136,15 +136,15 @@ into a table (temporary or otherwise), so these functions return a <a href='bq_r
 which you can then query for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_project_query</span>(<span class='no'>x</span>, <span class='no'>query</span>, <span class='kw'>destination_table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>NA</span>)
+    <pre class="usage"><span class='fu'>bq_project_query</span>(<span class='kw'>x</span>, <span class='kw'>query</span>, destination_table = <span class='kw'>NULL</span>, <span class='kw'>...</span>, quiet = <span class='fl'>NA</span>)
 
 <span class='fu'>bq_dataset_query</span>(
-  <span class='no'>x</span>,
-  <span class='no'>query</span>,
-  <span class='kw'>destination_table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>query</span>,
+  destination_table = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>,
+  billing = <span class='kw'>NULL</span>,
+  quiet = <span class='fl'>NA</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -186,30 +186,30 @@ for, such as a public dataset, you must also submit a <code>billing</code> proje
     <p>A <a href='bq_refs.html'>bq_table</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
 <span class='co'># Querying a project requires full name in query</span>
-<span class='no'>tb</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_project_query</span>(
+<span class='kw'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_project_query</span>(
   <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>(),
   <span class='st'>"SELECT count(*) FROM publicdata.samples.natality"</span>
 )
-<span class='fu'><a href='api-table.html'>bq_table_fields</a></span>(<span class='no'>tb</span>)
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='no'>tb</span>)
+<span class='fu'><a href='api-table.html'>bq_table_fields</a></span>(<span class='kw'>tb</span>)
+<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='kw'>tb</span>)
 
 <span class='co'># Querying a dataset sets default dataset so you can use bare table name,</span>
 <span class='co'># but for public data, you'll need to set a project to bill.</span>
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>)
-<span class='no'>tb</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_dataset_query</span>(<span class='no'>ds</span>,
-  <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT count(*) FROM natality"</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>()
+<span class='kw'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>)
+<span class='kw'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span>(<span class='kw'>ds</span>,
+  query = <span class='st'>"SELECT count(*) FROM natality"</span>,
+  billing = <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>()
 )
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='no'>tb</span>)
+<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='kw'>tb</span>)
 
-<span class='no'>tb</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_dataset_query</span>(<span class='no'>ds</span>,
-  <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT count(*) FROM natality WHERE state = @state"</span>,
-  <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>state</span> <span class='kw'>=</span> <span class='st'>"KS"</span>),
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>()
+<span class='kw'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span>(<span class='kw'>ds</span>,
+  query = <span class='st'>"SELECT count(*) FROM natality WHERE state = @state"</span>,
+  parameters = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(state = <span class='st'>"KS"</span>),
+  billing = <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>()
 )
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='no'>tb</span>)
+<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='kw'>tb</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

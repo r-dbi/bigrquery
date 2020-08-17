@@ -132,13 +132,13 @@ coerce from lists." />
 coerce from lists.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_field</span>(<span class='no'>name</span>, <span class='no'>type</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"NULLABLE"</span>, <span class='kw'>fields</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>bq_field</span>(<span class='kw'>name</span>, <span class='kw'>type</span>, mode = <span class='st'>"NULLABLE"</span>, fields = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), description = <span class='kw'>NULL</span>)
 
-<span class='fu'>bq_fields</span>(<span class='no'>x</span>)
+<span class='fu'>bq_fields</span>(<span class='kw'>x</span>)
 
-<span class='fu'>as_bq_field</span>(<span class='no'>x</span>)
+<span class='fu'>as_bq_field</span>(<span class='kw'>x</span>)
 
-<span class='fu'>as_bq_fields</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>as_bq_fields</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,14 +174,14 @@ coerce from lists.</p>
     <pre class="examples"><div class='input'><span class='fu'>bq_field</span>(<span class='st'>"name"</span>, <span class='st'>"string"</span>)</div><div class='output co'>#&gt; &lt;bq_field&gt; name &lt;STRING&gt;
 #&gt; </div><div class='input'>
 <span class='fu'>as_bq_fields</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"name"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"string"</span>),
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(name = <span class='st'>"name"</span>, type = <span class='st'>"string"</span>),
   <span class='fu'>bq_field</span>(<span class='st'>"age"</span>, <span class='st'>"integer"</span>)
 ))</div><div class='output co'>#&gt; &lt;bq_fields&gt;
 #&gt;   name &lt;STRING&gt;
 #&gt;   age &lt;INTEGER&gt;
 #&gt; </div><div class='input'>
 <span class='co'># as_bq_fields() can also take a data frame</span>
-<span class='fu'>as_bq_fields</span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; &lt;bq_fields&gt;
+<span class='fu'>as_bq_fields</span>(<span class='kw'>mtcars</span>)</div><div class='output co'>#&gt; &lt;bq_fields&gt;
 #&gt;   mpg &lt;FLOAT&gt;
 #&gt;   cyl &lt;FLOAT&gt;
 #&gt;   disp &lt;FLOAT&gt;

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run a asynchronous query and retrieve results <a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a> — query_exec • bigrquery</title>
+<title>Run a asynchronous query and retrieve results deprecated — query_exec • bigrquery</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Run a asynchronous query and retrieve results <a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a> — query_exec" />
+<meta property="og:title" content="Run a asynchronous query and retrieve results deprecated — query_exec" />
 <meta property="og:description" content="Please use bq_project_query() instead." />
 
 
@@ -131,18 +131,18 @@
     </div>
 
     <pre class="usage"><span class='fu'>query_exec</span>(
-  <span class='no'>query</span>,
-  <span class='no'>project</span>,
-  <span class='kw'>destination_table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>default_dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>create_disposition</span> <span class='kw'>=</span> <span class='st'>"CREATE_IF_NEEDED"</span>,
-  <span class='kw'>write_disposition</span> <span class='kw'>=</span> <span class='st'>"WRITE_EMPTY"</span>,
-  <span class='kw'>use_legacy_sql</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>),
-  <span class='no'>...</span>
+  <span class='kw'>query</span>,
+  <span class='kw'>project</span>,
+  destination_table = <span class='kw'>NULL</span>,
+  default_dataset = <span class='kw'>NULL</span>,
+  page_size = <span class='fl'>10000</span>,
+  max_pages = <span class='fl'>10</span>,
+  warn = <span class='fl'>TRUE</span>,
+  create_disposition = <span class='st'>"CREATE_IF_NEEDED"</span>,
+  write_disposition = <span class='st'>"WRITE_EMPTY"</span>,
+  use_legacy_sql = <span class='fl'>TRUE</span>,
+  quiet = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>),
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -212,15 +212,15 @@ snake_case names are automatically converted to camelCase.</p></td>
 <a href='https://developers.google.com/bigquery/querying-data#largequeryresults'>https://developers.google.com/bigquery/querying-data#largequeryresults</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>project</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>() <span class='co'># put your project ID here</span>
-<span class='no'>sql</span> <span class='kw'>&lt;-</span> <span class='st'>"SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"</span>
-<span class='fu'>query_exec</span>(<span class='no'>sql</span>, <span class='kw'>project</span> <span class='kw'>=</span> <span class='no'>project</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>project</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span>() <span class='co'># put your project ID here</span>
+<span class='kw'>sql</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT year, month, day, weight_pounds FROM [publicdata:samples.natality] LIMIT 5"</span>
+<span class='fu'>query_exec</span>(<span class='kw'>sql</span>, project = <span class='kw'>project</span>)
 <span class='co'># Put the results in a table you own (which uses project by default)</span>
-<span class='fu'>query_exec</span>(<span class='no'>sql</span>, <span class='kw'>project</span> <span class='kw'>=</span> <span class='no'>project</span>, <span class='kw'>destination_table</span> <span class='kw'>=</span> <span class='st'>"my_dataset.results"</span>)
+<span class='fu'>query_exec</span>(<span class='kw'>sql</span>, project = <span class='kw'>project</span>, destination_table = <span class='st'>"my_dataset.results"</span>)
 <span class='co'># Use a default dataset for the query</span>
-<span class='no'>sql</span> <span class='kw'>&lt;-</span> <span class='st'>"SELECT year, month, day, weight_pounds FROM natality LIMIT 5"</span>
-<span class='fu'>query_exec</span>(<span class='no'>sql</span>, <span class='kw'>project</span> <span class='kw'>=</span> <span class='no'>project</span>, <span class='kw'>default_dataset</span> <span class='kw'>=</span> <span class='st'>"publicdata:samples"</span>)
+<span class='kw'>sql</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT year, month, day, weight_pounds FROM natality LIMIT 5"</span>
+<span class='fu'>query_exec</span>(<span class='kw'>sql</span>, project = <span class='kw'>project</span>, default_dataset = <span class='st'>"publicdata:samples"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -149,57 +149,57 @@ you should use instead:</p><ul>
     </div>
 
     <pre class="usage"><span class='fu'>bq_perform_extract</span>(
-  <span class='no'>x</span>,
-  <span class='no'>destination_uris</span>,
-  <span class='kw'>destination_format</span> <span class='kw'>=</span> <span class='st'>"NEWLINE_DELIMITED_JSON"</span>,
-  <span class='kw'>compression</span> <span class='kw'>=</span> <span class='st'>"NONE"</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>print_header</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>project</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>destination_uris</span>,
+  destination_format = <span class='st'>"NEWLINE_DELIMITED_JSON"</span>,
+  compression = <span class='st'>"NONE"</span>,
+  <span class='kw'>...</span>,
+  print_header = <span class='fl'>TRUE</span>,
+  billing = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>project</span>
 )
 
 <span class='fu'>bq_perform_upload</span>(
-  <span class='no'>x</span>,
-  <span class='no'>values</span>,
-  <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>create_disposition</span> <span class='kw'>=</span> <span class='st'>"CREATE_IF_NEEDED"</span>,
-  <span class='kw'>write_disposition</span> <span class='kw'>=</span> <span class='st'>"WRITE_EMPTY"</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>project</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>values</span>,
+  fields = <span class='kw'>NULL</span>,
+  create_disposition = <span class='st'>"CREATE_IF_NEEDED"</span>,
+  write_disposition = <span class='st'>"WRITE_EMPTY"</span>,
+  <span class='kw'>...</span>,
+  billing = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>project</span>
 )
 
 <span class='fu'>bq_perform_load</span>(
-  <span class='no'>x</span>,
-  <span class='no'>source_uris</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>project</span>,
-  <span class='kw'>source_format</span> <span class='kw'>=</span> <span class='st'>"NEWLINE_DELIMITED_JSON"</span>,
-  <span class='kw'>fields</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nskip</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>create_disposition</span> <span class='kw'>=</span> <span class='st'>"CREATE_IF_NEEDED"</span>,
-  <span class='kw'>write_disposition</span> <span class='kw'>=</span> <span class='st'>"WRITE_EMPTY"</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>source_uris</span>,
+  billing = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>project</span>,
+  source_format = <span class='st'>"NEWLINE_DELIMITED_JSON"</span>,
+  fields = <span class='kw'>NULL</span>,
+  nskip = <span class='fl'>0</span>,
+  create_disposition = <span class='st'>"CREATE_IF_NEEDED"</span>,
+  write_disposition = <span class='st'>"WRITE_EMPTY"</span>,
+  <span class='kw'>...</span>
 )
 
 <span class='fu'>bq_perform_query</span>(
-  <span class='no'>query</span>,
-  <span class='no'>billing</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>destination_table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>default_dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>create_disposition</span> <span class='kw'>=</span> <span class='st'>"CREATE_IF_NEEDED"</span>,
-  <span class='kw'>write_disposition</span> <span class='kw'>=</span> <span class='st'>"WRITE_EMPTY"</span>,
-  <span class='kw'>use_legacy_sql</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>priority</span> <span class='kw'>=</span> <span class='st'>"INTERACTIVE"</span>
+  <span class='kw'>query</span>,
+  <span class='kw'>billing</span>,
+  <span class='kw'>...</span>,
+  parameters = <span class='kw'>NULL</span>,
+  destination_table = <span class='kw'>NULL</span>,
+  default_dataset = <span class='kw'>NULL</span>,
+  create_disposition = <span class='st'>"CREATE_IF_NEEDED"</span>,
+  write_disposition = <span class='st'>"WRITE_EMPTY"</span>,
+  use_legacy_sql = <span class='fl'>FALSE</span>,
+  priority = <span class='st'>"INTERACTIVE"</span>
 )
 
 <span class='fu'>bq_perform_copy</span>(
-  <span class='no'>src</span>,
-  <span class='no'>dest</span>,
-  <span class='kw'>create_disposition</span> <span class='kw'>=</span> <span class='st'>"CREATE_IF_NEEDED"</span>,
-  <span class='kw'>write_disposition</span> <span class='kw'>=</span> <span class='st'>"WRITE_EMPTY"</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>billing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>src</span>,
+  <span class='kw'>dest</span>,
+  create_disposition = <span class='st'>"CREATE_IF_NEEDED"</span>,
+  write_disposition = <span class='st'>"WRITE_EMPTY"</span>,
+  <span class='kw'>...</span>,
+  billing = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -359,15 +359,15 @@ but are not rate-limited in the same way as interactive queries.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span>()
-<span class='no'>bq_mtcars</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='no'>ds</span>, <span class='st'>"mtcars"</span>)
-<span class='no'>job</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_perform_upload</span>(<span class='no'>bq_mtcars</span>, <span class='no'>mtcars</span>)
-<span class='fu'><a href='api-table.html'>bq_table_exists</a></span>(<span class='no'>bq_mtcars</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_testable</a></span>()) {
+<span class='kw'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span>()
+<span class='kw'>bq_mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='kw'>ds</span>, <span class='st'>"mtcars"</span>)
+<span class='kw'>job</span> <span class='op'>&lt;-</span> <span class='fu'>bq_perform_upload</span>(<span class='kw'>bq_mtcars</span>, <span class='kw'>mtcars</span>)
+<span class='fu'><a href='api-table.html'>bq_table_exists</a></span>(<span class='kw'>bq_mtcars</span>)
 
-<span class='fu'><a href='api-job.html'>bq_job_wait</a></span>(<span class='no'>job</span>)
-<span class='fu'><a href='api-table.html'>bq_table_exists</a></span>(<span class='no'>bq_mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='no'>bq_mtcars</span>))
+<span class='fu'><a href='api-job.html'>bq_job_wait</a></span>(<span class='kw'>job</span>)
+<span class='fu'><a href='api-table.html'>bq_table_exists</a></span>(<span class='kw'>bq_mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span>(<span class='kw'>bq_mtcars</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

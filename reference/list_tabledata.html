@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve data from a table <a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a> — list_tabledata • bigrquery</title>
+<title>Retrieve data from a table deprecated — list_tabledata • bigrquery</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Retrieve data from a table <a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a> — list_tabledata" />
+<meta property="og:title" content="Retrieve data from a table deprecated — list_tabledata" />
 <meta property="og:description" content="Please use bq_table_download instead.
 list_tabledata_callback calls the supplied callback with each page
 of data." />
@@ -135,29 +135,29 @@ of data.</p>
     </div>
 
     <pre class="usage"><span class='fu'>list_tabledata</span>(
-  <span class='no'>project</span>,
-  <span class='no'>dataset</span>,
-  <span class='no'>table</span>,
-  <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>table_info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>)
+  <span class='kw'>project</span>,
+  <span class='kw'>dataset</span>,
+  <span class='kw'>table</span>,
+  page_size = <span class='fl'>10000</span>,
+  table_info = <span class='kw'>NULL</span>,
+  max_pages = <span class='fl'>10</span>,
+  warn = <span class='fl'>TRUE</span>,
+  quiet = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>)
 )
 
 <span class='fu'>list_tabledata_callback</span>(
-  <span class='no'>project</span>,
-  <span class='no'>dataset</span>,
-  <span class='no'>table</span>,
-  <span class='no'>callback</span>,
-  <span class='kw'>table_info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.page.size"</span>),
-  <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>)
+  <span class='kw'>project</span>,
+  <span class='kw'>dataset</span>,
+  <span class='kw'>table</span>,
+  <span class='kw'>callback</span>,
+  table_info = <span class='kw'>NULL</span>,
+  page_size = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.page.size"</span>),
+  max_pages = <span class='fl'>10</span>,
+  warn = <span class='fl'>TRUE</span>,
+  quiet = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"bigrquery.quiet"</span>)
 )
 
-<span class='fu'>list_tabledata_iter</span>(<span class='no'>project</span>, <span class='no'>dataset</span>, <span class='no'>table</span>, <span class='kw'>table_info</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>list_tabledata_iter</span>(<span class='kw'>project</span>, <span class='kw'>dataset</span>, <span class='kw'>table</span>, table_info = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,11 +210,11 @@ current page of data</p></td>
 <a href='https://developers.google.com/bigquery/docs/reference/v2/tabledata/list'>https://developers.google.com/bigquery/docs/reference/v2/tabledata/list</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>billing_project</span> <span class='kw'>&lt;-</span> <span class='st'>"341409650721"</span> <span class='co'># put your project number here</span>
-<span class='no'>natal</span> <span class='kw'>&lt;-</span> <span class='fu'>list_tabledata</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>, <span class='kw'>max_pages</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>page_size</span> <span class='kw'>=</span> <span class='fl'>10</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='no'>natal</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>billing_project</span> <span class='op'>&lt;-</span> <span class='st'>"341409650721"</span> <span class='co'># put your project number here</span>
+<span class='kw'>natal</span> <span class='op'>&lt;-</span> <span class='fu'>list_tabledata</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>, max_pages = <span class='fl'>2</span>,
+  page_size = <span class='fl'>10</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='kw'>natal</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

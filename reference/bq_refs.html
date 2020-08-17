@@ -146,17 +146,17 @@ coercion functions on their first argument, allowing you to flexible specify
 their inputs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_dataset</span>(<span class='no'>project</span>, <span class='no'>dataset</span>)
+    <pre class="usage"><span class='fu'>bq_dataset</span>(<span class='kw'>project</span>, <span class='kw'>dataset</span>)
 
-<span class='fu'>as_bq_dataset</span>(<span class='no'>x</span>)
+<span class='fu'>as_bq_dataset</span>(<span class='kw'>x</span>)
 
-<span class='fu'>bq_table</span>(<span class='no'>project</span>, <span class='no'>dataset</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>bq_table</span>(<span class='kw'>project</span>, <span class='kw'>dataset</span>, table = <span class='kw'>NULL</span>)
 
-<span class='fu'>as_bq_table</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>as_bq_table</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>bq_job</span>(<span class='no'>project</span>, <span class='no'>job</span>, <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"US"</span>)
+<span class='fu'>bq_job</span>(<span class='kw'>project</span>, <span class='kw'>job</span>, location = <span class='st'>"US"</span>)
 
-<span class='fu'>as_bq_job</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>as_bq_job</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,25 +190,24 @@ functions that work with these objects.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Creation ------------------------------------------------</span>
-<span class='no'>samples</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_dataset</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>)
-<span class='no'>natality</span> <span class='kw'>&lt;-</span> <span class='fu'>bq_table</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>)
-<span class='no'>natality</span></div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
+<span class='kw'>samples</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>)
+<span class='kw'>natality</span> <span class='op'>&lt;-</span> <span class='fu'>bq_table</span>(<span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>)
+<span class='kw'>natality</span></div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
 <span class='co'># Or</span>
-<span class='fu'>bq_table</span>(<span class='no'>samples</span>, <span class='st'>"natality"</span>)</div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
+<span class='fu'>bq_table</span>(<span class='kw'>samples</span>, <span class='st'>"natality"</span>)</div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
 <span class='fu'>bq_job</span>(<span class='st'>"bigrquery-examples"</span>, <span class='st'>"m0SgFu2ycbbge6jgcvzvflBJ_Wft"</span>)</div><div class='output co'>#&gt; &lt;bq_job&gt; bigrquery-examples.m0SgFu2ycbbge6jgcvzvflBJ_Wft.US</div><div class='input'>
 <span class='co'># Coercion ------------------------------------------------</span>
 <span class='fu'>as_bq_dataset</span>(<span class='st'>"publicdata.shakespeare"</span>)</div><div class='output co'>#&gt; &lt;bq_dataset&gt; publicdata.shakespeare</div><div class='input'><span class='fu'>as_bq_table</span>(<span class='st'>"publicdata.samples.natality"</span>)</div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
 <span class='fu'>as_bq_table</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>project_id</span> <span class='kw'>=</span> <span class='st'>"publicdata"</span>,
-  <span class='kw'>dataset_id</span> <span class='kw'>=</span> <span class='st'>"samples"</span>,
-  <span class='kw'>table_id</span> <span class='kw'>=</span> <span class='st'>"natality"</span>
+  project_id = <span class='st'>"publicdata"</span>,
+  dataset_id = <span class='st'>"samples"</span>,
+  table_id = <span class='st'>"natality"</span>
 ))</div><div class='output co'>#&gt; &lt;bq_table&gt; publicdata.samples.natality</div><div class='input'>
 <span class='fu'>as_bq_job</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>projectId</span> <span class='kw'>=</span> <span class='st'>"bigrquery-examples"</span>,
-  <span class='kw'>jobId</span> <span class='kw'>=</span> <span class='st'>"job_m0SgFu2ycbbge6jgcvzvflBJ_Wft"</span>,
-  <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"US"</span>
-))</div><div class='output co'>#&gt; &lt;bq_job&gt; bigrquery-examples.job_m0SgFu2ycbbge6jgcvzvflBJ_Wft.US</div><div class='input'>
-</div></pre>
+  projectId = <span class='st'>"bigrquery-examples"</span>,
+  jobId = <span class='st'>"job_m0SgFu2ycbbge6jgcvzvflBJ_Wft"</span>,
+  location = <span class='st'>"US"</span>
+))</div><div class='output co'>#&gt; &lt;bq_job&gt; bigrquery-examples.job_m0SgFu2ycbbge6jgcvzvflBJ_Wft.US</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
