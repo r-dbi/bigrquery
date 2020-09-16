@@ -30,13 +30,13 @@ Imports:
     progress,
     Rcpp,
     rlang,
-    tibble,
-    blob
+    tibble
 Suggests: 
     covr,
     DBItest,
     dbplyr (>= 1.3.0),
     dplyr (>= 0.7.0),
+    blob,
     hms,
     wk,
     readr,

@@ -17,15 +17,6 @@
   toset <- !(names(defaults) %in% names(op))
   if (any(toset)) options(defaults[toset])
 
-  # Load namespaces for S3 objects created in Rcpp -------------------------
-  # if these objects are created but the namespaces are not loaded, tibble()
-  # may complain that the objects are not vectors and/or the formatting
-  # will be incorrect because the format() and pillar_shaft() methods will not be
-  # loaded
-  requireNamespace("hms", quietly = TRUE)
-  requireNamespace("blob", quietly = TRUE)
-  requireNamespace("wk", quietly = TRUE)
-
   invisible()
 }
 

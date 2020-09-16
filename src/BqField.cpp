@@ -49,6 +49,14 @@ int64_t parse_int64(const char* x) {
   return y;
 }
 
+// loads the namespace for a package via bq_check_namespace()
+// this will throw an exception with the appropriate error message
+// if the package is not installed
+void check_namespace(const char* pkg, const char* bq_type) {
+  Rcpp::Function checkNamespaceFun("bq_check_namespace", "bigrquery");
+  checkNamespaceFun(pkg, bq_type);
+}
+
 enum BqType {
   BQ_INTEGER,
   BQ_FLOAT,
@@ -163,6 +171,7 @@ public:
     case BQ_DATE:
       return Rcpp::DateVector(n);
     case BQ_TIME: {
+        check_namespace("hms", "TIME");
         Rcpp::DoubleVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
         out.attr("units") = "secs";
@@ -171,11 +180,13 @@ public:
     case BQ_RECORD:
       return Rcpp::List(n);
     case BQ_GEOGRAPHY: {
+        check_namespace("wk", "GEOGRAPHY");
         Rcpp::CharacterVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr");
         return out;
       }
     case BQ_BYTES: {
+        check_namespace("blob", "BYTES");
         Rcpp::List out(n);
         out.attr("class") = Rcpp::CharacterVector::create("blob", "vctrs_list_of", "vctrs_vctr", "list");
         out.attr("ptype") = Rcpp::RawVector::create();
