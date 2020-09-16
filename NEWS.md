@@ -5,6 +5,11 @@
   [wk package](https://paleolimbot.github.io/wk/), respectively 
   (@paleolimbot, #393).
 
+* `bq_table_download()` works once again with large row counts
+  (@gjuggler, #395). Google's API has stopped accepting `startIndex`
+  parameters with scientific formatting, which was happening for large
+  values (>1e5) by default.
+
 # bigrquery 1.3.1
 
 * Now requires gargle 0.5.0
