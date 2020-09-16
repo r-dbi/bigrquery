@@ -1,5 +1,10 @@
 # bigrquery (development version)
 
+* BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
+  the [blob package](https://blob.tidyverse.org/) and the 
+  [wk package](https://paleolimbot.github.io/wk/), respectively 
+  (@paleolimbot, #393).
+
 # bigrquery 1.3.1
 
 * Now requires gargle 0.5.0
