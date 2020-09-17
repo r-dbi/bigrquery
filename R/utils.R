@@ -31,14 +31,13 @@ bq_progress <- function(..., quiet = NA) {
 }
 
 bq_check_namespace <- function(pkg, bq_type) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(
-      glue::glue("Package '{ pkg }' must be installed to load BigQuery field with type '{ bq_type }'"),
-      call. = FALSE
-    )
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    return()
   }
 
-  invisible(pkg)
+  rlang::abort(glue::glue(
+    "Package '{pkg}' must be installed to load BigQuery field with type '{bq_type}'"
+  ))
 }
 
 isFALSE <- function(x) identical(x, FALSE)
