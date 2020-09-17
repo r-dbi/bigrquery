@@ -167,7 +167,7 @@ are used.
       <th>path</th>
       <td><p>JSON downloaded from Google Cloud Platform Console, containing a
 client id (aka key) and secret, in one of the forms supported for the <code>txt</code>
-argument of <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::fromJSON()</a></code> (typically, a file path or JSON string).</p></td>
+argument of <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::fromJSON()</a></code> (typically, a file path or JSON string).</p></td>
     </tr>
     </table>
 
@@ -189,7 +189,8 @@ argument of <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.h
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># see the current user-configured OAuth app (probaby `NULL`)</span>
-<span class='fu'>bq_oauth_app</span>()</div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='fu'>bq_oauth_app</span>()
+</div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://httr.r-lib.org'>httr</a></span>)) {
 
   <span class='co'># store current state, so we can restore</span>
@@ -209,13 +210,15 @@ argument of <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.h
   <span class='co'># restore original state</span>
   <span class='fu'>bq_auth_configure</span>(app = <span class='kw'>original_app</span>)
   <span class='fu'>bq_oauth_app</span>()
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: httr</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+}
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: httr</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># bring your own app via JSON downloaded from GCP Console</span>
 <span class='fu'>bq_auth_configure</span>(
   path = <span class='st'>"/path/to/the/JSON/you/downloaded/from/gcp/console.json"</span>
 )
 }
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -232,7 +235,7 @@ argument of <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

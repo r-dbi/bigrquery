@@ -129,8 +129,8 @@
 <a href="#bigrquery-development-version" class="anchor"></a>bigrquery (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>
-<code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> works once again with large row counts (<a href='https://github.com/gjuggler'>@gjuggler</a>, <a href='https://github.com/rstats-db/bigrquery/issues/395'>#395</a>). Google’s API has stopped accepting <code>startIndex</code> parameters with scientific formatting, which was happening for large values (&gt;1e5) by default.</li>
+<li><p>BigQuery <code>BYTES</code> and <code>GEOGRAPHY</code> column types are now supported via the <a href="https://blob.tidyverse.org/">blob package</a> and the <a href="https://paleolimbot.github.io/wk/">wk package</a>, respectively (<a href='https://github.com/paleolimbot'>@paleolimbot</a>, <a href='https://github.com/rstats-db/bigrquery/issues/354'>#354</a>, <a href='https://github.com/rstats-db/bigrquery/issues/388'>#388</a>).</p></li>
+<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> works once again with large row counts (<a href='https://github.com/gjuggler'>@gjuggler</a>, <a href='https://github.com/rstats-db/bigrquery/issues/395'>#395</a>). Google’s API has stopped accepting <code>startIndex</code> parameters with scientific formatting, which was happening for large values (&gt;1e5) by default.</p></li>
 </ul>
 </div>
     <div id="bigrquery-131" class="section level1">
@@ -417,7 +417,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

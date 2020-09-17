@@ -160,7 +160,8 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># bq_param() automatically picks scalar vs array based on length</span>
-<span class='fu'>bq_param</span>(<span class='st'>"a"</span>)</div><div class='output co'>#&gt; {
+<span class='fu'>bq_param</span>(<span class='st'>"a"</span>)
+</div><div class='output co'>#&gt; {
 #&gt;   "name": {},
 #&gt;   "parameterType": {
 #&gt;     "type": "STRING"
@@ -168,7 +169,8 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 #&gt;   "parameterValue": {
 #&gt;     "value": "a"
 #&gt;   }
-#&gt; }</div><div class='input'><span class='fu'>bq_param</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>))</div><div class='output co'>#&gt; {
+#&gt; }</div><div class='input'><span class='fu'>bq_param</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>))
+</div><div class='output co'>#&gt; {
 #&gt;   "name": {},
 #&gt;   "parameterType": {
 #&gt;     "type": "ARRAY",
@@ -191,7 +193,8 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 #&gt;   }
 #&gt; }</div><div class='input'>
 <span class='co'># use bq_param_array() to create a length-1 array</span>
-<span class='fu'>bq_param_array</span>(<span class='st'>"a"</span>)</div><div class='output co'>#&gt; {
+<span class='fu'>bq_param_array</span>(<span class='st'>"a"</span>)
+</div><div class='output co'>#&gt; {
 #&gt;   "name": {},
 #&gt;   "parameterType": {
 #&gt;     "type": "ARRAY",
@@ -222,7 +225,7 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
