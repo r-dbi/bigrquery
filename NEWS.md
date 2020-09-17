@@ -1,5 +1,10 @@
 # bigrquery (development version)
 
+* BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
+  the [blob package](https://blob.tidyverse.org/) and the 
+  [wk package](https://paleolimbot.github.io/wk/), respectively 
+  (@paleolimbot, #354, #388).
+
 * `bq_table_download()` works once again with large row counts
   (@gjuggler, #395). Google's API has stopped accepting `startIndex`
   parameters with scientific formatting, which was happening for large

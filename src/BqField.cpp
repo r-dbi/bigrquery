@@ -5,6 +5,7 @@
 #include "rapidjson/filereadstream.h"
 #include <RProgress.h>
 #include "integer64.h"
+#include "base64.h"
 
 #include <ctime>
 #include <cstdio>
@@ -48,6 +49,14 @@ int64_t parse_int64(const char* x) {
   return y;
 }
 
+// loads the namespace for a package via bq_check_namespace()
+// this will throw an exception with the appropriate error message
+// if the package is not installed
+void check_namespace(const char* pkg, const char* bq_type) {
+  Rcpp::Function checkNamespaceFun("bq_check_namespace", "bigrquery");
+  checkNamespaceFun(pkg, bq_type);
+}
+
 enum BqType {
   BQ_INTEGER,
   BQ_FLOAT,
@@ -57,7 +66,9 @@ enum BqType {
   BQ_TIME,
   BQ_DATE,
   BQ_DATETIME,
-  BQ_RECORD
+  BQ_RECORD,
+  BQ_GEOGRAPHY,
+  BQ_BYTES
 };
 
 BqType parse_bq_type(std::string x) {
@@ -81,6 +92,10 @@ BqType parse_bq_type(std::string x) {
     return BQ_DATETIME;
   } else if (x == "RECORD") {
     return BQ_RECORD;
+  } else if (x == "GEOGRAPHY") {
+    return BQ_GEOGRAPHY;
+  } else if (x == "BYTES") {
+    return BQ_BYTES;
   } else {
     Rcpp::stop("Unknown type %s", x);
   }
@@ -140,10 +155,10 @@ public:
 
     switch(type_) {
     case BQ_INTEGER: {
-      Rcpp::DoubleVector out(n);
-      out.attr("class") = "integer64";
-      return out;
-    }
+        Rcpp::DoubleVector out(n);
+        out.attr("class") = "integer64";
+        return out;
+      }
     case BQ_FLOAT:
       return Rcpp::DoubleVector(n);
     case BQ_BOOLEAN:
@@ -155,8 +170,8 @@ public:
       return Rcpp::DatetimeVector(n, "UTC");
     case BQ_DATE:
       return Rcpp::DateVector(n);
-    case BQ_TIME:
-      {
+    case BQ_TIME: {
+        check_namespace("hms", "TIME");
         Rcpp::DoubleVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
         out.attr("units") = "secs";
@@ -164,6 +179,19 @@ public:
       }
     case BQ_RECORD:
       return Rcpp::List(n);
+    case BQ_GEOGRAPHY: {
+        check_namespace("wk", "GEOGRAPHY");
+        Rcpp::CharacterVector out(n);
+        out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr");
+        return out;
+      }
+    case BQ_BYTES: {
+        check_namespace("blob", "BYTES");
+        Rcpp::List out(n);
+        out.attr("class") = Rcpp::CharacterVector::create("blob", "vctrs_list_of", "vctrs_vctr", "list");
+        out.attr("ptype") = Rcpp::RawVector::create();
+        return out;
+      }
     }
 
     Rcpp::stop("Unknown type");
@@ -252,6 +280,23 @@ public:
       break;
     case BQ_RECORD:
       SET_VECTOR_ELT(x, i, recordValue(v));
+      break;
+    case BQ_GEOGRAPHY:
+      if (v.IsString()) {
+        Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
+        SET_STRING_ELT(x, i, chr);
+      } else {
+        SET_STRING_ELT(x, i, NA_STRING);
+      }
+      break;
+    case BQ_BYTES:
+      if (v.IsString()) {
+        Rcpp::RawVector chr(v.GetStringLength());
+        memcpy(&(chr[0]), v.GetString(), v.GetStringLength());
+        SET_VECTOR_ELT(x, i, base64_decode(chr));
+      } else {
+        SET_VECTOR_ELT(x, i, R_NilValue);
+      }
       break;
     }
   }
