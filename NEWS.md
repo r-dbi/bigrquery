@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* `bq_perform_query()` can now execute query with time partitioning and clustering (@SeagleLiu, #398) 
+
 # bigrquery 1.3.1
 
 * Now requires gargle 0.5.0

@@ -244,8 +244,8 @@ bq_perform_load <- function(x,
 #'   "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 #'   but are not rate-limited in the same way as interactive queries.
 #' @param default_dataset A [bq_dataset] used to automatically qualify table names.
-#' @param time_partitioning A list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step.
-#' @param clustering A list of one element named fields, which is a vector of strings.
+#' @param time_partitioning A list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step. See https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TimePartitioning
+#' @param clustering A list of one element named fields, which is a vector of strings. See https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#Clustering
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
 bq_perform_query <- function(query, billing,
                              ...,
