@@ -7,6 +7,7 @@
 \alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_copy}
+\alias{bq_perform_query_dry_run}
 \title{BigQuery jobs: perform a job}
 \usage{
 bq_perform_extract(
@@ -61,6 +62,15 @@ bq_perform_copy(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = NULL
+)
+
+bq_perform_query_dry_run(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE
 )
 }
 \arguments{
