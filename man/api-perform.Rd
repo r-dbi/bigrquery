@@ -6,8 +6,8 @@
 \alias{bq_perform_upload}
 \alias{bq_perform_load}
 \alias{bq_perform_query}
-\alias{bq_perform_copy}
 \alias{bq_perform_query_dry_run}
+\alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
 bq_perform_extract(
@@ -55,15 +55,6 @@ bq_perform_query(
   priority = "INTERACTIVE"
 )
 
-bq_perform_copy(
-  src,
-  dest,
-  create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY",
-  ...,
-  billing = NULL
-)
-
 bq_perform_query_dry_run(
   query,
   billing,
@@ -71,6 +62,15 @@ bq_perform_query_dry_run(
   default_dataset = NULL,
   parameters = NULL,
   use_legacy_sql = FALSE
+)
+
+bq_perform_copy(
+  src,
+  dest,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = NULL
 )
 }
 \arguments{
