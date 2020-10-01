@@ -8,6 +8,10 @@
   register_s3_method("dplyr", "sql_translate_env", "BigQueryConnection")
   register_s3_method("dbplyr", "db_copy_to", "BigQueryConnection")
 
+  if (rlang::is_installed("dbplyr") && utils::packageVersion("dbplyr") > "1.99") {
+    register_s3_method("dbplyr", "sql_join_suffix", "BigQueryConnection")
+  }
+
   # Default options --------------------------------------------------------
   op <- options()
   defaults <- list(
