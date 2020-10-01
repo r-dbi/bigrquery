@@ -1,5 +1,3 @@
-context("test-bq-job.R")
-
 test_that("can control chattiness of bq_job_wait", {
   job <- bq_perform_query("SELECT 1 + 1", bq_test_project())
 

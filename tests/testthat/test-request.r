@@ -1,5 +1,3 @@
-context("request.R")
-
 test_that("api keys are added when present", {
   key <- "my.secret.key"
   withr::local_envvar(list(BIGRQUERY_API_KEY = key))

@@ -1,5 +1,3 @@
-context("test-bq-download.R")
-
 test_that("same results regardless of page size", {
   skip_if_no_auth()
 

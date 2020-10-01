@@ -1,5 +1,3 @@
-context("test-bq-parse.R")
-
 # Individual values -------------------------------------------------------
 
 test_that("can parse atomic vectors", {

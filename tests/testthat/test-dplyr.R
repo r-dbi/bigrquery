@@ -1,5 +1,3 @@
-context("dplyr.R")
-
 test_that("historical API continues to work", {
   src <- src_bigquery(bq_test_project(), "basedata")
   x <- dplyr::tbl(src, "mtcars")

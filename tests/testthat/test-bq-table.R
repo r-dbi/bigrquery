@@ -1,5 +1,3 @@
-context("bq-table.R")
-
 test_that("can create and delete tables", {
   ds <- bq_test_dataset()
 

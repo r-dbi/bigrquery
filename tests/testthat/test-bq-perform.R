@@ -1,5 +1,3 @@
-context("test-bq-perform.R")
-
 test_that("bq_perform_upload creates job that succeeds", {
   ds <- bq_test_dataset()
   bq_mtcars <- bq_table(ds, "mtcars")
