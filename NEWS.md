@@ -5,6 +5,10 @@
   [wk package](https://paleolimbot.github.io/wk/), respectively 
   (@paleolimbot, #354, #388).
 
+* When used with dbplyr >= 2.0.0, amibiguous variables in joins will get
+  suffixes `_x` and `_y` (instead of `.x` and `.y` which don't work with
+  BigQuery) (#403).
+
 * `bq_table_download()` works once again with large row counts
   (@gjuggler, #395). Google's API has stopped accepting `startIndex`
   parameters with scientific formatting, which was happening for large

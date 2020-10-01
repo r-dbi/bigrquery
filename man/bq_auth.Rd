@@ -24,7 +24,7 @@ always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
 found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by \code{\link[gargle:gargle_oauth_email]{gargle::gargle_oauth_email()}}.}
+retrieved by \code{\link[gargle:gargle_options]{gargle::gargle_oauth_email()}}.}
 
 \item{path}{JSON identifying the service account, in one of the forms
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
@@ -41,11 +41,11 @@ permission to view or send email. It is considered a low value scope and
 does not appear on the consent screen.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle::gargle_oauth_cache()}}.}
+"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_options]{gargle::gargle_oauth_cache()}}.}
 
 \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
-\code{\link[gargle:gargle_oob_default]{gargle::gargle_oob_default()}}.}
+\code{\link[gargle:gargle_options]{gargle::gargle_oob_default()}}.}
 
 \item{token}{A token with class \link[httr:Token-class]{Token2.0} or an object of
 httr's class \code{request}, i.e. a token that has been prepared with

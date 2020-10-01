@@ -165,6 +165,11 @@ sql_prefix <- function(f, n = NULL) {
 }
 
 # registered onLoad
+sql_join_suffix.BigQueryConnection <- function(con, ...) {
+  c("_x", "_y")
+}
+
+# registered onLoad
 sql_translate_env.BigQueryConnection <- function(x) {
   dbplyr::sql_variant(
     dbplyr::sql_translator(.parent = dbplyr::base_scalar,
