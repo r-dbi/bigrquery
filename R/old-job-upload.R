@@ -81,14 +81,24 @@ insert_upload_job <- function(project, dataset, table, values,
 }
 
 
+# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
 export_json <- function(values) {
   # Eliminate row names
   rownames(values) <- NULL
 
   # Convert times to canonical format
-  # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#canonical-format_1
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
   values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+
+  # Convert wk_wkt to text
+  is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
+  values[is_wk] <- lapply(values[is_wk], as.character)
+
+  # Unbox blobs
+  is_blob <- vapply(values, function(x) inherits(x, "blob"), logical(1))
+  values[is_blob] <- lapply(values[is_blob], function(x) {
+    vapply(x, jsonlite::base64_enc, character(1))
+  })
 
   con <- rawConnection(raw(0), "r+")
   on.exit(close(con))
