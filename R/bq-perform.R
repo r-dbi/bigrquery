@@ -293,6 +293,40 @@ bq_perform_query <- function(query, billing,
 
 #' @export
 #' @rdname api-perform
+bq_perform_query_dry_run <- function(query, billing,
+                                     ...,
+                                     default_dataset = NULL,
+                                     parameters = NULL,
+                                     use_legacy_sql = FALSE) {
+
+  assert_that(is.string(query), is.string(billing))
+
+  query <- list(
+    query = unbox(query),
+    useLegacySql = unbox(use_legacy_sql)
+  )
+  if (!is.null(parameters)) {
+    parameters <- as_bq_params(parameters)
+    query$queryParameters <- as_json(parameters)
+  }
+  if (!is.null(default_dataset)) {
+    query$defaultDataset <- datasetReference(default_dataset)
+  }
+
+  url <- bq_path(billing, jobs = "")
+  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+
+  res <- bq_post(
+    url,
+    body = bq_body(body, ...),
+    query = list(fields = "statistics")
+  )
+  bytes <- as.numeric(res$statistics$query$totalBytesProcessed)
+  structure(bytes, class = "bq_bytes")
+}
+
+#' @export
+#' @rdname api-perform
 bq_perform_copy <- function(src, dest,
                             create_disposition = "CREATE_IF_NEEDED",
                             write_disposition = "WRITE_EMPTY",
@@ -320,3 +354,4 @@ bq_perform_copy <- function(src, dest,
   )
   as_bq_job(res$jobReference)
 }
+

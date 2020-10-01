@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
+  performing a query (@Ka2wei, #316).
+
 * BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
   the [blob package](https://blob.tidyverse.org/) and the 
   [wk package](https://paleolimbot.github.io/wk/), respectively 
