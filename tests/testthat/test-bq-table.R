@@ -182,7 +182,7 @@ test_that("can round-trip GEOGRAPHY", {
   df1 <- bq_table_download(tb1)
   expect_equal(df1, df)
 })
-se
+
 test_that("can round-trip BYTES", {
   ds <- bq_test_dataset()
   df <- tibble(x = blob::blob(charToRaw("hi!"), charToRaw("bye")))
