@@ -38,7 +38,7 @@ Suggests:
     dplyr (>= 0.7.0),
     blob,
     hms,
-    wk,
+    wk (>= 0.3.2),
     readr,
     sodium,
     testthat (>= 2.1.0),
