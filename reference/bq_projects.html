@@ -92,12 +92,6 @@ any non-free operation." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -136,7 +130,7 @@ but you will need to provide a <code>billing</code> project whenever you perform
 any non-free operation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_projects</span>(page_size = <span class='fl'>100</span>, max_pages = <span class='fl'>1</span>, warn = <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>bq_projects</span><span class='op'>(</span>page_size <span class='op'>=</span> <span class='fl'>100</span>, max_pages <span class='op'>=</span> <span class='fl'>1</span>, warn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,9 +163,9 @@ all pages (this may take a long time!)</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='bq_test_project.html'>bq_authable</a></span>()) {
-<span class='fu'>bq_projects</span>()
-}
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_authable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>bq_projects</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

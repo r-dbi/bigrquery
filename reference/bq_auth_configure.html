@@ -100,12 +100,6 @@ bq_oauth_app() retrieves the currently configured OAuth app.
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -152,9 +146,9 @@ are used.
 
     </div>
 
-    <pre class="usage"><span class='fu'>bq_auth_configure</span>(<span class='kw'>app</span>, <span class='kw'>path</span>)
+    <pre class="usage"><span class='fu'>bq_auth_configure</span><span class='op'>(</span><span class='va'>app</span>, <span class='va'>path</span><span class='op'>)</span>
 
-<span class='fu'>bq_oauth_app</span>()</pre>
+<span class='fu'>bq_oauth_app</span><span class='op'>(</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,35 +183,35 @@ argument of <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonl
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># see the current user-configured OAuth app (probaby `NULL`)</span>
-<span class='fu'>bq_oauth_app</span>()
+<span class='fu'>bq_oauth_app</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; NULL</div><div class='input'>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://httr.r-lib.org'>httr</a></span>)) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://httr.r-lib.org/'>httr</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
   <span class='co'># store current state, so we can restore</span>
-  <span class='kw'>original_app</span> <span class='op'>&lt;-</span> <span class='fu'>bq_oauth_app</span>()
+  <span class='va'>original_app</span> <span class='op'>&lt;-</span> <span class='fu'>bq_oauth_app</span><span class='op'>(</span><span class='op'>)</span>
 
   <span class='co'># bring your own app via client id (aka key) and secret</span>
-  <span class='kw'>google_app</span> <span class='op'>&lt;-</span> <span class='kw'>httr</span>::<span class='fu'><a href='https://httr.r-lib.org/reference/oauth_app.html'>oauth_app</a></span>(
+  <span class='va'>google_app</span> <span class='op'>&lt;-</span> <span class='fu'>httr</span><span class='fu'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/oauth_app.html'>oauth_app</a></span><span class='op'>(</span>
     <span class='st'>"my-awesome-google-api-wrapping-package"</span>,
-    key = <span class='st'>"123456789.apps.googleusercontent.com"</span>,
-    secret = <span class='st'>"abcdefghijklmnopqrstuvwxyz"</span>
-  )
-  <span class='fu'>bq_auth_configure</span>(app = <span class='kw'>google_app</span>)
+    key <span class='op'>=</span> <span class='st'>"123456789.apps.googleusercontent.com"</span>,
+    secret <span class='op'>=</span> <span class='st'>"abcdefghijklmnopqrstuvwxyz"</span>
+  <span class='op'>)</span>
+  <span class='fu'>bq_auth_configure</span><span class='op'>(</span>app <span class='op'>=</span> <span class='va'>google_app</span><span class='op'>)</span>
 
   <span class='co'># confirm current app</span>
-  <span class='fu'>bq_oauth_app</span>()
+  <span class='fu'>bq_oauth_app</span><span class='op'>(</span><span class='op'>)</span>
 
   <span class='co'># restore original state</span>
-  <span class='fu'>bq_auth_configure</span>(app = <span class='kw'>original_app</span>)
-  <span class='fu'>bq_oauth_app</span>()
-}
+  <span class='fu'>bq_auth_configure</span><span class='op'>(</span>app <span class='op'>=</span> <span class='va'>original_app</span><span class='op'>)</span>
+  <span class='fu'>bq_oauth_app</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: httr</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># bring your own app via JSON downloaded from GCP Console</span>
-<span class='fu'>bq_auth_configure</span>(
-  path = <span class='st'>"/path/to/the/JSON/you/downloaded/from/gcp/console.json"</span>
-)
-}
+<span class='fu'>bq_auth_configure</span><span class='op'>(</span>
+  path <span class='op'>=</span> <span class='st'>"/path/to/the/JSON/you/downloaded/from/gcp/console.json"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

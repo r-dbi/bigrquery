@@ -102,12 +102,6 @@ setting an option via options(gargle_oob_default = TRUE)." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -156,15 +150,15 @@ can request it yourself with <code>use_oob = TRUE</code> or, more persistently, 
 setting an option via <code><a href='https://rdrr.io/r/base/options.html'>options(gargle_oob_default = TRUE)</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_auth</span>(
-  email = <span class='kw'>gargle</span>::<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span>(),
-  path = <span class='kw'>NULL</span>,
-  scopes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://www.googleapis.com/auth/bigquery"</span>,
-    <span class='st'>"https://www.googleapis.com/auth/cloud-platform"</span>),
-  cache = <span class='kw'>gargle</span>::<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span>(),
-  use_oob = <span class='kw'>gargle</span>::<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default</a></span>(),
-  token = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>bq_auth</span><span class='op'>(</span>
+  email <span class='op'>=</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span><span class='op'>(</span><span class='op'>)</span>,
+  path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  scopes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"https://www.googleapis.com/auth/bigquery"</span>,
+    <span class='st'>"https://www.googleapis.com/auth/cloud-platform"</span><span class='op'>)</span>,
+  cache <span class='op'>=</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span><span class='op'>(</span><span class='op'>)</span>,
+  use_oob <span class='op'>=</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default</a></span><span class='op'>(</span><span class='op'>)</span>,
+  token <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -247,26 +241,26 @@ Read more about gargle options, see <a href='https://gargle.r-lib.org/reference/
 <code><a href='bq_deauth.html'>bq_deauth</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>## load/refresh existing credentials, if available</span>
 <span class='co'>## otherwise, go to browser for authentication and authorization</span>
-<span class='fu'>bq_auth</span>()
+<span class='fu'>bq_auth</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'>## force use of a token associated with a specific email</span>
-<span class='fu'>bq_auth</span>(email = <span class='st'>"jenny@example.com"</span>)
+<span class='fu'>bq_auth</span><span class='op'>(</span>email <span class='op'>=</span> <span class='st'>"jenny@example.com"</span><span class='op'>)</span>
 
 <span class='co'>## force a menu where you can choose from existing tokens or</span>
 <span class='co'>## choose to get a new one</span>
-<span class='fu'>bq_auth</span>(email = <span class='fl'>NA</span>)
+<span class='fu'>bq_auth</span><span class='op'>(</span>email <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
 
 <span class='co'>## use a 'read only' scope, so it's impossible to change data</span>
-<span class='fu'>bq_auth</span>(
-  scopes = <span class='st'>"https://www.googleapis.com/auth/devstorage.read_only"</span>
-)
+<span class='fu'>bq_auth</span><span class='op'>(</span>
+  scopes <span class='op'>=</span> <span class='st'>"https://www.googleapis.com/auth/devstorage.read_only"</span>
+<span class='op'>)</span>
 
 <span class='co'>## use a service account token</span>
-<span class='fu'>bq_auth</span>(path = <span class='st'>"foofy-83ee9e7c9c48.json"</span>)
-}
+<span class='fu'>bq_auth</span><span class='op'>(</span>path <span class='op'>=</span> <span class='st'>"foofy-83ee9e7c9c48.json"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

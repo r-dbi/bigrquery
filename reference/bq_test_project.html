@@ -95,12 +95,6 @@ BIGQUERY_TEST_PROJECT, run bq_test_init() once to perform some setup." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -142,19 +136,19 @@ logged in, via <code><a href='bq_auth.html'>bq_auth()</a></code>, as a user with
 <code>BIGQUERY_TEST_PROJECT</code>, run <code>bq_test_init()</code> once to perform some setup.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_test_project</span>()
+    <pre class="usage"><span class='fu'>bq_test_project</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>bq_test_init</span>(name = <span class='st'>"basedata"</span>)
+<span class='fu'>bq_test_init</span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"basedata"</span><span class='op'>)</span>
 
-<span class='fu'>bq_test_dataset</span>(name = <span class='fu'>random_name</span>(), location = <span class='st'>"US"</span>)
+<span class='fu'>bq_test_dataset</span><span class='op'>(</span>name <span class='op'>=</span> <span class='fu'>random_name</span><span class='op'>(</span><span class='op'>)</span>, location <span class='op'>=</span> <span class='st'>"US"</span><span class='op'>)</span>
 
-<span class='fu'>bq_testable</span>()
+<span class='fu'>bq_testable</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>bq_authable</span>()
+<span class='fu'>bq_authable</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>gs_test_bucket</span>()
+<span class='fu'>gs_test_bucket</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>gs_test_object</span>(name = <span class='fu'>random_name</span>())</pre>
+<span class='fu'>gs_test_object</span><span class='op'>(</span>name <span class='op'>=</span> <span class='fu'>random_name</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,12 +170,12 @@ tied to the lifetime of the object that it returns.</p>
 automatically skip if auth and a test project are not available.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'>bq_testable</span>()) {
-  <span class='kw'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>bq_test_dataset</span>()
-  <span class='kw'>bq_mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='api-table.html'>bq_table_upload</a></span>(<span class='fu'><a href='bq_refs.html'>bq_table</a></span>(<span class='kw'>ds</span>, <span class='st'>"mtcars"</span>), <span class='kw'>mtcars</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'>bq_testable</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>bq_test_dataset</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='va'>bq_mtcars</span> <span class='op'>&lt;-</span> <span class='fu'><a href='api-table.html'>bq_table_upload</a></span><span class='op'>(</span><span class='fu'><a href='bq_refs.html'>bq_table</a></span><span class='op'>(</span><span class='va'>ds</span>, <span class='st'>"mtcars"</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
 
   <span class='co'># dataset and table will be automatically deleted when ds is GC'd</span>
-}
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -90,12 +90,6 @@ coerce from lists." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -132,13 +126,13 @@ coerce from lists." />
 coerce from lists.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_field</span>(<span class='kw'>name</span>, <span class='kw'>type</span>, mode = <span class='st'>"NULLABLE"</span>, fields = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), description = <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>bq_field</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>type</span>, mode <span class='op'>=</span> <span class='st'>"NULLABLE"</span>, fields <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, description <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>bq_fields</span>(<span class='kw'>x</span>)
+<span class='fu'>bq_fields</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>as_bq_field</span>(<span class='kw'>x</span>)
+<span class='fu'>as_bq_field</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>as_bq_fields</span>(<span class='kw'>x</span>)</pre>
+<span class='fu'>as_bq_fields</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,19 +165,19 @@ coerce from lists.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>bq_field</span>(<span class='st'>"name"</span>, <span class='st'>"string"</span>)
+    <pre class="examples"><div class='input'><span class='fu'>bq_field</span><span class='op'>(</span><span class='st'>"name"</span>, <span class='st'>"string"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; &lt;bq_field&gt; name &lt;STRING&gt;
 #&gt; </div><div class='input'>
-<span class='fu'>as_bq_fields</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(name = <span class='st'>"name"</span>, type = <span class='st'>"string"</span>),
-  <span class='fu'>bq_field</span>(<span class='st'>"age"</span>, <span class='st'>"integer"</span>)
-))
+<span class='fu'>as_bq_fields</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"name"</span>, type <span class='op'>=</span> <span class='st'>"string"</span><span class='op'>)</span>,
+  <span class='fu'>bq_field</span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"integer"</span><span class='op'>)</span>
+<span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; &lt;bq_fields&gt;
 #&gt;   name &lt;STRING&gt;
 #&gt;   age &lt;INTEGER&gt;
 #&gt; </div><div class='input'>
 <span class='co'># as_bq_fields() can also take a data frame</span>
-<span class='fu'>as_bq_fields</span>(<span class='kw'>mtcars</span>)
+<span class='fu'>as_bq_fields</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; &lt;bq_fields&gt;
 #&gt;   mpg &lt;FLOAT&gt;
 #&gt;   cyl &lt;FLOAT&gt;

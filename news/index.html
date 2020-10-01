@@ -88,12 +88,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -130,6 +124,7 @@
 </h1>
 <ul>
 <li><p>BigQuery <code>BYTES</code> and <code>GEOGRAPHY</code> column types are now supported via the <a href="https://blob.tidyverse.org/">blob package</a> and the <a href="https://paleolimbot.github.io/wk/">wk package</a>, respectively (<a href='https://github.com/paleolimbot'>@paleolimbot</a>, <a href='https://github.com/rstats-db/bigrquery/issues/354'>#354</a>, <a href='https://github.com/rstats-db/bigrquery/issues/388'>#388</a>).</p></li>
+<li><p>When used with dbplyr &gt;= 2.0.0, amibiguous variables in joins will get suffixes <code>_x</code> and <code>_y</code> (instead of <code>.x</code> and <code>.y</code> which don’t work with BigQuery) (<a href='https://github.com/rstats-db/bigrquery/issues/403'>#403</a>).</p></li>
 <li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> works once again with large row counts (<a href='https://github.com/gjuggler'>@gjuggler</a>, <a href='https://github.com/rstats-db/bigrquery/issues/395'>#395</a>). Google’s API has stopped accepting <code>startIndex</code> parameters with scientific formatting, which was happening for large values (&gt;1e5) by default.</p></li>
 </ul>
 </div>
