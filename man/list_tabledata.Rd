@@ -77,6 +77,6 @@ dim(natal)
 }
 \seealso{
 API documentation at
-\url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}
 }
 \keyword{internal}

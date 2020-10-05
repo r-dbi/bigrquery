@@ -93,9 +93,9 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 \section{API documentation}{
 
 \itemize{
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}{insert}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/get}{get}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete}{delete}
 }
 }
 

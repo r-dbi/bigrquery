@@ -40,13 +40,13 @@ all pages (this may take a long time!)}
 \item{create_disposition}{behavior for table creation.
 defaults to \code{"CREATE_IF_NEEDED"},
 the only other supported value is \code{"CREATE_NEVER"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.createDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.createDisposition}{the API documentation}
 for more information}
 
 \item{write_disposition}{behavior for writing data.
 defaults to \code{"WRITE_EMPTY"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
@@ -71,9 +71,9 @@ query_exec(sql, project = project, default_dataset = "publicdata:samples")
 }
 \seealso{
 Google documentation describing asynchronous queries:
-\url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+\url{https://cloud.google.com/bigquery/docs/running-queries}
 
 Google documentation for handling large results:
-\url{https://developers.google.com/bigquery/querying-data#largequeryresults}
+\url{https://cloud.google.com/bigquery/docs/writing-results}
 }
 \keyword{internal}

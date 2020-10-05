@@ -4,7 +4,7 @@
 #' (in various forms) about an existing job.
 #'
 #' @section API documentation:
-#' * [get](https://developers.google.com/bigquery/docs/reference/v2/jobs/get)
+#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
 #' @examples
 #' if (bq_testable()) {

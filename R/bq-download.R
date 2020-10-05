@@ -44,7 +44,7 @@
 #'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
 #'   which allows the full range of 64 bit integers.
 #' @section API documentation:
-#' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
+#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examples
 #' if (bq_testable()) {
@@ -86,7 +86,7 @@ bq_table_download <-
   )
 
   on.exit(file.remove(c(schema_path, page_paths)))
-    
+
   table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
   convert_bigint(table_data, bigint)
 }

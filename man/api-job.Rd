@@ -34,7 +34,7 @@ To perform a job, see \link{api-perform}. These functions all retrieve metadata
 \section{API documentation}{
 
 \itemize{
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}{get}
 }
 }
 

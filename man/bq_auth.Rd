@@ -30,15 +30,8 @@ retrieved by \code{\link[gargle:gargle_options]{gargle::gargle_oauth_email()}}.}
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
 file path or JSON string).}
 
-\item{scopes}{A character vector of scopes to request. Pick from those listed
-at \url{https://developers.google.com/identity/protocols/googlescopes}.
-
-For certain token flows, the
-\code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
-included. This grants permission to retrieve the email address associated
-with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.}
+\item{scopes}{A character vector of scopes to request.
+Pick from those listed at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
 "gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_options]{gargle::gargle_oauth_cache()}}.}

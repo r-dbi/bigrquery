@@ -12,7 +12,7 @@
 #' @param print_header Include row of column headers in the results?
 #' @family jobs
 #' @return a job resource list, as documented at
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/jobs}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 #' @export
 insert_extract_job <- function(project, dataset, table,
                                destination_uris,

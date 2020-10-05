@@ -27,13 +27,13 @@ insert_upload_job(
 \item{create_disposition}{behavior for table creation if the destination
 already exists. defaults to \code{"CREATE_IF_NEEDED"},
 the only other supported value is \code{"CREATE_NEVER"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.load.createDisposition}{the API documentation}
 for more information}
 
 \item{write_disposition}{behavior for writing data if the destination already
 exists. defaults to \code{"WRITE_APPEND"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_EMPTY"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 for more information}
 
 \item{...}{Additional arguments passed on to the underlying API call.
@@ -54,7 +54,7 @@ delete_table("193487687779", "houston", "mtcars")
 }
 \seealso{
 Google API documentation:
-\url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
+\url{https://cloud.google.com/bigquery/docs/loading-data}
 
 Other jobs: 
 \code{\link{get_job}()},

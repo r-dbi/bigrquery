@@ -78,7 +78,7 @@ nested/repeated values, are not well supported in R.
 \section{API documentation}{
 
 \itemize{
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}{list}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}{list}
 }
 }
 

@@ -13,7 +13,7 @@
 #' @param max_pages maximum number of pages to retrieve. Use `Inf`
 #'  to retrieve the complete dataset.
 #' @seealso API documentation at
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/tabledata/list}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}
 #' @return `list_tabledata` returns a single dataframe.
 #' @keywords internal
 #' @export

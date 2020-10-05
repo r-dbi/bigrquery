@@ -6,9 +6,9 @@
 #' @param project project name
 #' @param job job id
 #' @return a job resource list, as documented at
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 #' @seealso API documentation for get method:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}
 #' @seealso [wait_for()] to wait for a job to complete
 #' @family jobs
 #' @export

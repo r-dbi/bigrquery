@@ -20,6 +20,8 @@ gargle_lookup_table <- list(
 #' @eval gargle:::PREFIX_auth_description(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_details(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_params()
+#' @param scopes A character vector of scopes to request.
+#'   Pick from those listed at <https://developers.google.com/identity/protocols/oauth2/scopes>.
 #'
 #' @family auth functions
 #' @export

@@ -49,10 +49,10 @@ Basic create-read-update-delete verbs for datasets.
 \section{API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}{get}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}{insert}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}{delete}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/tables/list}{list}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert}{insert}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list}{list}
 }
 }
 

@@ -5,10 +5,10 @@
 #' @inheritParams insert_query_job
 #' @inheritParams bq_dataset_tables
 #' @seealso Google documentation describing asynchronous queries:
-#'  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+#'  \url{https://cloud.google.com/bigquery/docs/running-queries}
 #'
 #'  Google documentation for handling large results:
-#'  \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
+#'  \url{https://cloud.google.com/bigquery/docs/writing-results}
 #' @export
 #' @examples
 #' \dontrun{

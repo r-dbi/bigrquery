@@ -10,16 +10,16 @@
 #' @param create_disposition behavior for table creation if the destination
 #'   already exists. defaults to `"CREATE_IF_NEEDED"`,
 #'   the only other supported value is `"CREATE_NEVER"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.createDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.load.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data if the destination already
 #'   exists. defaults to `"WRITE_APPEND"`, other possible values are
 #'   `"WRITE_TRUNCATE"` and `"WRITE_EMPTY"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.load.writeDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.load.writeDisposition}{the API documentation}
 #'   for more information
 #' @inheritParams bq_dataset_create
 #' @seealso Google API documentation:
-#' \url{https://developers.google.com/bigquery/loading-data-into-bigquery#loaddatapostrequest}
+#' \url{https://cloud.google.com/bigquery/docs/loading-data}
 #' @family jobs
 #' @export
 #' @keywords internal

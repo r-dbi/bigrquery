@@ -26,7 +26,7 @@ any non-free operation.
 \section{API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/projects/list}{list}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/list}{list}
 }
 }
 
