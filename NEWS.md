@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.3.2
 
 * BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
   the [blob](https://blob.tidyverse.org/) and 
