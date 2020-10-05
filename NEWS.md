@@ -1,14 +1,11 @@
 # bigrquery (development version)
 
-* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
-  performing a query (@Ka2wei, #316).
-
 * BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
-  the [blob package](https://blob.tidyverse.org/) and the 
-  [wk package](https://paleolimbot.github.io/wk/), respectively 
+  the [blob](https://blob.tidyverse.org/) and 
+  [wk](https://paleolimbot.github.io/wk/) packages, respectively
   (@paleolimbot, #354, #388).
 
-* When used with dbplyr >= 2.0.0, amibiguous variables in joins will get
+* When used with dbplyr >= 2.0.0, ambiguous variables in joins will get
   suffixes `_x` and `_y` (instead of `.x` and `.y` which don't work with
   BigQuery) (#403).
 
@@ -16,6 +13,9 @@
   (@gjuggler, #395). Google's API has stopped accepting `startIndex`
   parameters with scientific formatting, which was happening for large
   values (>1e5) by default.
+
+* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
+  performing a query (@Ka2wei, #316).
 
 # bigrquery 1.3.1
 
