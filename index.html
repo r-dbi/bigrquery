@@ -52,7 +52,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstats-db/bigrquery/">
+  <a href="https://github.com/r-dbi/bigrquery/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -74,11 +74,11 @@
 <a href="#bigrquery" class="anchor"></a>bigrquery</h1></div>
 <!-- badges: start -->
 
-<p>The bigrquery package makes it easy to work with data stored in <a href="https://developers.google.com/bigquery/">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
+<p>The bigrquery package makes it easy to work with data stored in <a href="https://cloud.google.com/bigquery/docs">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
 <ul>
 <li><p>The low-level API provides thin wrappers over the underlying REST API. All the low-level functions start with <code>bq_</code>, and mostly have the form <code>bq_noun_verb()</code>. This level of abstraction is most appropriate if you’re familiar with the REST API and you want do something not supported in the higher-level APIs.</p></li>
-<li><p>The <a href="http://www.r-dbi.org">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
-<li><p>The <a href="http://dbplyr.tidyverse.org/">dplyr interface</a> lets you treat BigQuery tables as if they are in-memory data frames. This is the most convenient layer if you don’t want to write SQL, but instead want dbplyr to write it for you.</p></li>
+<li><p>The <a href="https://www.r-dbi.org">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
+<li><p>The <a href="https://dbplyr.tidyverse.org/">dplyr interface</a> lets you treat BigQuery tables as if they are in-memory data frames. This is the most convenient layer if you don’t want to write SQL, but instead want dbplyr to write it for you.</p></li>
 </ul>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -98,7 +98,7 @@
 <h3 class="hasAnchor">
 <a href="#low-level-api" class="anchor"></a>Low-level API</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstats-db/bigrquery">bigrquery</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-dbi/bigrquery">bigrquery</a></span><span class="op">)</span>
 <span class="va">billing</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># replace this with your project ID </span>
 <span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span>
 
@@ -107,16 +107,16 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     7     9          8.62</span>
-<span class="co">#&gt;  2  1969     2    25          7.06</span>
-<span class="co">#&gt;  3  1969     3    28          8.06</span>
-<span class="co">#&gt;  4  1969     5    11          5.94</span>
-<span class="co">#&gt;  5  1969    11    13          7.00</span>
-<span class="co">#&gt;  6  1969     5     5          5.94</span>
-<span class="co">#&gt;  7  1969     4     4          7.19</span>
-<span class="co">#&gt;  8  1969    10    27          6.50</span>
-<span class="co">#&gt;  9  1969     9     8          7.19</span>
-<span class="co">#&gt; 10  1969     2    17          8.50</span></pre></div>
+<span class="co">#&gt;  1  1969     2     4          6.12</span>
+<span class="co">#&gt;  2  1969     4    15          6.44</span>
+<span class="co">#&gt;  3  1969     4     8          8.88</span>
+<span class="co">#&gt;  4  1969     8    15          6.44</span>
+<span class="co">#&gt;  5  1969     1    21          7.50</span>
+<span class="co">#&gt;  6  1969     4    14          7.06</span>
+<span class="co">#&gt;  7  1969    11     3          6.56</span>
+<span class="co">#&gt;  8  1969     2     3          8.13</span>
+<span class="co">#&gt;  9  1969    11    20          8.19</span>
+<span class="co">#&gt; 10  1969     9     1          6.25</span></pre></div>
 </div>
 <div id="dbi" class="section level3">
 <h3 class="hasAnchor">
@@ -143,16 +143,16 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     7     9          8.62</span>
-<span class="co">#&gt;  2  1969     2    25          7.06</span>
-<span class="co">#&gt;  3  1969     3    28          8.06</span>
-<span class="co">#&gt;  4  1969     5    11          5.94</span>
-<span class="co">#&gt;  5  1969    11    13          7.00</span>
-<span class="co">#&gt;  6  1969     5     5          5.94</span>
-<span class="co">#&gt;  7  1969     4     4          7.19</span>
-<span class="co">#&gt;  8  1969    10    27          6.50</span>
-<span class="co">#&gt;  9  1969     9     8          7.19</span>
-<span class="co">#&gt; 10  1969     2    17          8.50</span></pre></div>
+<span class="co">#&gt;  1  1969     2     4          6.12</span>
+<span class="co">#&gt;  2  1969     4    15          6.44</span>
+<span class="co">#&gt;  3  1969     4     8          8.88</span>
+<span class="co">#&gt;  4  1969     8    15          6.44</span>
+<span class="co">#&gt;  5  1969     1    21          7.50</span>
+<span class="co">#&gt;  6  1969     4    14          7.06</span>
+<span class="co">#&gt;  7  1969    11     3          6.56</span>
+<span class="co">#&gt;  8  1969     2     3          8.13</span>
+<span class="co">#&gt;  9  1969    11    20          8.19</span>
+<span class="co">#&gt; 10  1969     9     1          6.25</span></pre></div>
 </div>
 <div id="dplyr" class="section level3">
 <h3 class="hasAnchor">
@@ -169,16 +169,16 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969    10     6          3.25</span>
-<span class="co">#&gt;  2  1969     5    11          5.75</span>
-<span class="co">#&gt;  3  1969     6    29          7.94</span>
-<span class="co">#&gt;  4  1969     3     7          8.38</span>
-<span class="co">#&gt;  5  1970     4    26          6.38</span>
-<span class="co">#&gt;  6  1971    10     6          6.69</span>
-<span class="co">#&gt;  7  1971     2    23          6.69</span>
-<span class="co">#&gt;  8  1971     8    12          7.37</span>
-<span class="co">#&gt;  9  1969     9     3          5.25</span>
-<span class="co">#&gt; 10  1969     4    25          6.62</span></pre></div>
+<span class="co">#&gt;  1  1969     3    12          5.81</span>
+<span class="co">#&gt;  2  1969     2    18          7.23</span>
+<span class="co">#&gt;  3  1969     8    22          7.06</span>
+<span class="co">#&gt;  4  1970     4     1          8.56</span>
+<span class="co">#&gt;  5  1970     2    20          7.87</span>
+<span class="co">#&gt;  6  1970     6    22          6.69</span>
+<span class="co">#&gt;  7  1970     4    27          7.50</span>
+<span class="co">#&gt;  8  1970     6    21          4.81</span>
+<span class="co">#&gt;  9  1969     7     9          6.62</span>
+<span class="co">#&gt; 10  1969     8    16          8.44</span></pre></div>
 </div>
 </div>
 <div id="important-details" class="section level2">
@@ -187,7 +187,7 @@
 <div id="authentication-and-authorization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#authentication-and-authorization" class="anchor"></a>Authentication and authorization</h3>
-<p>When using bigrquery interactively, you’ll be prompted to <a href="https://developers.google.com/bigquery/authorization">authorize bigrquery</a> in the browser. Your token will be cached across sessions inside the folder <code>~/.R/gargle/gargle-oauth/</code>, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via <code><a href="reference/bq_auth.html">bq_auth(path = "/path/to/your/service-account.json")</a></code>. More places to learn about auth:</p>
+<p>When using bigrquery interactively, you’ll be prompted to <a href="https://cloud.google.com/bigquery/docs/authorization">authorize bigrquery</a> in the browser. Your token will be cached across sessions inside the folder <code>~/.R/gargle/gargle-oauth/</code>, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via <code><a href="reference/bq_auth.html">bq_auth(path = "/path/to/your/service-account.json")</a></code>. More places to learn about auth:</p>
 <ul>
 <li>Help for <a href="https://bigrquery.r-dbi.org/reference/bq_auth.html"><code>bigrquery::bq_auth()</code></a>.</li>
 <li>
@@ -206,7 +206,7 @@
 <div id="billing-project" class="section level3">
 <h3 class="hasAnchor">
 <a href="#billing-project" class="anchor"></a>Billing project</h3>
-<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://developers.google.com/bigquery/docs/sample-tables">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
+<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
 <p>To create a project:</p>
 <ol>
 <li><p>Open <a href="https://console.cloud.google.com/" class="uri">https://console.cloud.google.com/</a> and create a project. Make a note of the “Project ID” in the “Project info” box.</p></li>
@@ -220,8 +220,8 @@
 <h2 class="hasAnchor">
 <a href="#useful-links" class="anchor"></a>Useful links</h2>
 <ul>
-<li><a href="https://developers.google.com/bigquery/query-reference">SQL reference</a></li>
-<li><a href="https://developers.google.com/bigquery/docs/reference/v2/">API reference</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators">SQL reference</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/rest">API reference</a></li>
 <li><a href="https://bigquery.cloud.google.com/">Query/job console</a></li>
 <li><a href="https://console.cloud.google.com/">Billing console</a></li>
 </ul>
@@ -241,9 +241,9 @@
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=bigrquery">https://​cloud.r-project.org/​package=bigrquery</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/rstats-db/bigrquery/">https://​github.com/​rstats-db/​bigrquery/​</a>
+<li>Browse source code at <br><a href="https://github.com/r-dbi/bigrquery/">https://​github.com/​r-dbi/​bigrquery/​</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/rstats-db/bigrquery/issues">https://​github.com/​rstats-db/​bigrquery/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/r-dbi/bigrquery/issues">https://​github.com/​r-dbi/​bigrquery/​issues</a>
 </li>
 </ul>
 </div>

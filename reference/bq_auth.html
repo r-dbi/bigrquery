@@ -110,7 +110,7 @@ setting an option via options(gargle_oob_default = TRUE)." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/rstats-db/bigrquery/">
+  <a href="https://github.com/r-dbi/bigrquery/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -129,7 +129,7 @@ setting an option via options(gargle_oob_default = TRUE)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Authorize bigrquery</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/R/bq-auth.R'><code>R/bq-auth.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-dbi/bigrquery/blob/master/R/bq-auth.R'><code>R/bq-auth.R</code></a></small>
     <div class="hidden name"><code>bq_auth.Rd</code></div>
     </div>
 
@@ -184,14 +184,8 @@ file path or JSON string).</p></td>
     </tr>
     <tr>
       <th>scopes</th>
-      <td><p>A character vector of scopes to request. Pick from those listed
-at <a href='https://developers.google.com/identity/protocols/googlescopes'>https://developers.google.com/identity/protocols/googlescopes</a>.</p>
-<p>For certain token flows, the
-<code>"https://www.googleapis.com/auth/userinfo.email"</code> scope is unconditionally
-included. This grants permission to retrieve the email address associated
-with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.</p></td>
+      <td><p>A character vector of scopes to request.
+Pick from those listed at <a href='https://developers.google.com/identity/protocols/oauth2/scopes'>https://developers.google.com/identity/protocols/oauth2/scopes</a>.</p></td>
     </tr>
     <tr>
       <th>cache</th>

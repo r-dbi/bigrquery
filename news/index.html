@@ -96,7 +96,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/rstats-db/bigrquery/">
+  <a href="https://github.com/r-dbi/bigrquery/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -115,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/rstats-db/bigrquery/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/r-dbi/bigrquery/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="bigrquery-development-version" class="section level1">
@@ -123,10 +123,10 @@
 <a href="#bigrquery-development-version" class="anchor"></a>bigrquery (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>New <code><a href="../reference/api-perform.html">bq_perform_query_dry_run()</a></code> to retrieve the estimated cost of performing a query (<a href='https://github.com/Ka2wei'>@Ka2wei</a>, <a href='https://github.com/rstats-db/bigrquery/issues/316'>#316</a>).</p></li>
-<li><p>BigQuery <code>BYTES</code> and <code>GEOGRAPHY</code> column types are now supported via the <a href="https://blob.tidyverse.org/">blob package</a> and the <a href="https://paleolimbot.github.io/wk/">wk package</a>, respectively (<a href='https://github.com/paleolimbot'>@paleolimbot</a>, <a href='https://github.com/rstats-db/bigrquery/issues/354'>#354</a>, <a href='https://github.com/rstats-db/bigrquery/issues/388'>#388</a>).</p></li>
-<li><p>When used with dbplyr &gt;= 2.0.0, amibiguous variables in joins will get suffixes <code>_x</code> and <code>_y</code> (instead of <code>.x</code> and <code>.y</code> which don’t work with BigQuery) (<a href='https://github.com/rstats-db/bigrquery/issues/403'>#403</a>).</p></li>
-<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> works once again with large row counts (<a href='https://github.com/gjuggler'>@gjuggler</a>, <a href='https://github.com/rstats-db/bigrquery/issues/395'>#395</a>). Google’s API has stopped accepting <code>startIndex</code> parameters with scientific formatting, which was happening for large values (&gt;1e5) by default.</p></li>
+<li><p>BigQuery <code>BYTES</code> and <code>GEOGRAPHY</code> column types are now supported via the <a href="https://blob.tidyverse.org/">blob</a> and <a href="https://paleolimbot.github.io/wk/">wk</a> packages, respectively (<a href='https://github.com/paleolimbot'>@paleolimbot</a>, <a href='https://github.com/r-dbi/bigrquery/issues/354'>#354</a>, <a href='https://github.com/r-dbi/bigrquery/issues/388'>#388</a>).</p></li>
+<li><p>When used with dbplyr &gt;= 2.0.0, ambiguous variables in joins will get suffixes <code>_x</code> and <code>_y</code> (instead of <code>.x</code> and <code>.y</code> which don’t work with BigQuery) (<a href='https://github.com/r-dbi/bigrquery/issues/403'>#403</a>).</p></li>
+<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> works once again with large row counts (<a href='https://github.com/gjuggler'>@gjuggler</a>, <a href='https://github.com/r-dbi/bigrquery/issues/395'>#395</a>). Google’s API has stopped accepting <code>startIndex</code> parameters with scientific formatting, which was happening for large values (&gt;1e5) by default.</p></li>
+<li><p>New <code><a href="../reference/api-perform.html">bq_perform_query_dry_run()</a></code> to retrieve the estimated cost of performing a query (<a href='https://github.com/Ka2wei'>@Ka2wei</a>, <a href='https://github.com/r-dbi/bigrquery/issues/316'>#316</a>).</p></li>
 </ul>
 </div>
     <div id="bigrquery-131" class="section level1">
@@ -142,16 +142,16 @@
 <a href="#bigrquery-130" class="anchor"></a>bigrquery 1.3.0<small> 2020-05-08 </small>
 </h1>
 <ul>
-<li><p>Old functions (not starting with <code>bq_</code>) are deprecated (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/335'>#335</a>)</p></li>
-<li><p>When <code>bq_perform_*()</code> fails, you now see all errors, not just the first (<a href='https://github.com/rstats-db/bigrquery/issues/355'>#355</a>).</p></li>
-<li><p><code><a href="../reference/api-perform.html">bq_perform_query()</a></code> can now execute parameterised query with parameters of <code>ARRAY</code> type (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/303'>#303</a>). Vectors of length &gt; 1 will be automatically converted to <code>ARRAY</code> type, or use <code><a href="../reference/bq_param.html">bq_param_array()</a></code> to be explicit.</p></li>
-<li><p><code><a href="../reference/api-perform.html">bq_perform_upload()</a></code> works once again (<a href='https://github.com/rstats-db/bigrquery/issues/361'>#361</a>). It seems like the generated JSON was always incorrect, but Google’s type checking only recently become strict enough to detect the problem.</p></li>
-<li><p><code><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute()</a></code> is better supported. It no longer fails with a spurious error for DDL queries, and it returns the number of affected rows for DML queries (<a href='https://github.com/rstats-db/bigrquery/issues/375'>#375</a>).</p></li>
-<li><p><code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery()</a></code> (and hence <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code>) and <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> passes on <code>...</code> to <code><a href="../reference/api-perform.html">bq_perform_query()</a></code>. <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> gains <code>page_size</code> and <code>max_connection</code> arguments that are passed on to <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/374'>#374</a>).</p></li>
-<li><p><code><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to()</a></code> now works with BigQuery (although it doesn’t support temporary tables so application is somewhat limited) (<a href='https://github.com/rstats-db/bigrquery/issues/337'>#337</a>).</p></li>
+<li><p>Old functions (not starting with <code>bq_</code>) are deprecated (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/r-dbi/bigrquery/issues/335'>#335</a>)</p></li>
+<li><p>When <code>bq_perform_*()</code> fails, you now see all errors, not just the first (<a href='https://github.com/r-dbi/bigrquery/issues/355'>#355</a>).</p></li>
+<li><p><code><a href="../reference/api-perform.html">bq_perform_query()</a></code> can now execute parameterised query with parameters of <code>ARRAY</code> type (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/r-dbi/bigrquery/issues/303'>#303</a>). Vectors of length &gt; 1 will be automatically converted to <code>ARRAY</code> type, or use <code><a href="../reference/bq_param.html">bq_param_array()</a></code> to be explicit.</p></li>
+<li><p><code><a href="../reference/api-perform.html">bq_perform_upload()</a></code> works once again (<a href='https://github.com/r-dbi/bigrquery/issues/361'>#361</a>). It seems like the generated JSON was always incorrect, but Google’s type checking only recently become strict enough to detect the problem.</p></li>
+<li><p><code><a href="https://dbi.r-dbi.org/reference/dbExecute.html">dbExecute()</a></code> is better supported. It no longer fails with a spurious error for DDL queries, and it returns the number of affected rows for DML queries (<a href='https://github.com/r-dbi/bigrquery/issues/375'>#375</a>).</p></li>
+<li><p><code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html">dbSendQuery()</a></code> (and hence <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code>) and <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> passes on <code>...</code> to <code><a href="../reference/api-perform.html">bq_perform_query()</a></code>. <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> gains <code>page_size</code> and <code>max_connection</code> arguments that are passed on to <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> (<a href='https://github.com/r-dbi/bigrquery/issues/374'>#374</a>).</p></li>
+<li><p><code><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to()</a></code> now works with BigQuery (although it doesn’t support temporary tables so application is somewhat limited) (<a href='https://github.com/r-dbi/bigrquery/issues/337'>#337</a>).</p></li>
 <li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code><br>
-(<a href='https://github.com/jimmyg3g'>@jimmyg3g</a>, <a href='https://github.com/rstats-db/bigrquery/issues/369'>#369</a>).</p></li>
-<li><p>Error messages inlude hints for common problems (<a href='https://github.com/deflaux'>@deflaux</a>, <a href='https://github.com/rstats-db/bigrquery/issues/353'>#353</a>).</p></li>
+(<a href='https://github.com/jimmyg3g'>@jimmyg3g</a>, <a href='https://github.com/r-dbi/bigrquery/issues/369'>#369</a>).</p></li>
+<li><p>Error messages inlude hints for common problems (<a href='https://github.com/deflaux'>@deflaux</a>, <a href='https://github.com/r-dbi/bigrquery/issues/353'>#353</a>).</p></li>
 </ul>
 </div>
     <div id="bigrquery-120" class="section level1">
@@ -182,7 +182,7 @@
 <div id="changes-that-a-user-will-notice" class="section level3">
 <h3 class="hasAnchor">
 <a href="#changes-that-a-user-will-notice" class="anchor"></a>Changes that a user will notice</h3>
-<p>Temporary files are now deleted after table download. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstats-db/bigrquery/issues/343'>#343</a>)</p>
+<p>Temporary files are now deleted after table download. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/r-dbi/bigrquery/issues/343'>#343</a>)</p>
 <p>OAuth2 tokens are now cached at the user level, by default, instead of in <code>.httr-oauth</code> in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial <code>.httr-oauth</code> files lying around your bigrquery projects.</p>
 <p>The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.</p>
 <p><code><a href="../reference/bq_user.html">bq_user()</a></code> is a new function that reveals the email of the user associated with the current token.</p>
@@ -202,8 +202,8 @@
 </h1>
 <ul>
 <li><p>Fix test failure with dbplyr 1.4.0.</p></li>
-<li><p><code><a href="../reference/bq_field.html">bq_field()</a></code> can now pass <code>description</code> parameter which will be applied in <code><a href="../reference/api-table.html">bq_table_create()</a></code> call (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/272'>#272</a>).</p></li>
-<li><p><code><a href="../reference/api-table.html">bq_table_patch()</a></code> - allows to patch table (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/253'>#253</a>) with new schema.</p></li>
+<li><p><code><a href="../reference/bq_field.html">bq_field()</a></code> can now pass <code>description</code> parameter which will be applied in <code><a href="../reference/api-table.html">bq_table_create()</a></code> call (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/r-dbi/bigrquery/issues/272'>#272</a>).</p></li>
+<li><p><code><a href="../reference/api-table.html">bq_table_patch()</a></code> - allows to patch table (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/r-dbi/bigrquery/issues/253'>#253</a>) with new schema.</p></li>
 </ul>
 </div>
     <div id="bigrquery-110" class="section level1">
@@ -214,28 +214,28 @@
 <h2 class="hasAnchor">
 <a href="#improved-type-support" class="anchor"></a>Improved type support</h2>
 <ul>
-<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> and the <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect</a></code> method now has a <code>bigint</code> argument which governs how BigQuery integer columns are imported into R. As before, the default is <code>bigint = "integer"</code>. You can set <code>bigint = "integer64"</code> to import BigQuery integer columns as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html">bit64::integer64</a></code> columns in R which allows for values outside the range of <code>integer</code> (<code>-2147483647</code> to <code>2147483647</code>) (<a href='https://github.com/rasmusab'>@rasmusab</a>, <a href='https://github.com/rstats-db/bigrquery/issues/94'>#94</a>).</p></li>
-<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now treats NUMERIC columns the same was as FLOAT columns (<a href='https://github.com/paulsendavidjay'>@paulsendavidjay</a>, <a href='https://github.com/rstats-db/bigrquery/issues/282'>#282</a>).</p></li>
-<li><p><code><a href="../reference/api-table.html">bq_table_upload()</a></code> works with POSIXct/POSIXct varibles (<a href='https://github.com/rstats-db/bigrquery/issues/251'>#251</a>)</p></li>
+<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> and the <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect</a></code> method now has a <code>bigint</code> argument which governs how BigQuery integer columns are imported into R. As before, the default is <code>bigint = "integer"</code>. You can set <code>bigint = "integer64"</code> to import BigQuery integer columns as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html">bit64::integer64</a></code> columns in R which allows for values outside the range of <code>integer</code> (<code>-2147483647</code> to <code>2147483647</code>) (<a href='https://github.com/rasmusab'>@rasmusab</a>, <a href='https://github.com/r-dbi/bigrquery/issues/94'>#94</a>).</p></li>
+<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now treats NUMERIC columns the same was as FLOAT columns (<a href='https://github.com/paulsendavidjay'>@paulsendavidjay</a>, <a href='https://github.com/r-dbi/bigrquery/issues/282'>#282</a>).</p></li>
+<li><p><code><a href="../reference/api-table.html">bq_table_upload()</a></code> works with POSIXct/POSIXct varibles (<a href='https://github.com/r-dbi/bigrquery/issues/251'>#251</a>)</p></li>
 </ul>
 </div>
 <div id="sql-translation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sql-translation" class="anchor"></a>SQL translation</h2>
 <ul>
-<li><p><code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> now translated to <code>SAFE_CAST(x AS STRING)</code> (<a href='https://github.com/rstats-db/bigrquery/issues/268'>#268</a>).</p></li>
-<li><p><code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> now translates to <code>APPROX_QUANTILES(x, 2)[SAFE_ORDINAL(2)]</code> (<a href='https://github.com/valentinumbach'>@valentinumbach</a>, <a href='https://github.com/rstats-db/bigrquery/issues/267'>#267</a>).</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> now translated to <code>SAFE_CAST(x AS STRING)</code> (<a href='https://github.com/r-dbi/bigrquery/issues/268'>#268</a>).</p></li>
+<li><p><code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> now translates to <code>APPROX_QUANTILES(x, 2)[SAFE_ORDINAL(2)]</code> (<a href='https://github.com/valentinumbach'>@valentinumbach</a>, <a href='https://github.com/r-dbi/bigrquery/issues/267'>#267</a>).</p></li>
 </ul>
 </div>
 <div id="minor-bug-fixes-and-improvements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#minor-bug-fixes-and-improvements" class="anchor"></a>Minor bug fixes and improvements</h2>
 <ul>
-<li><p>Jobs now print their ids while running (<a href='https://github.com/rstats-db/bigrquery/issues/252'>#252</a>)</p></li>
-<li><p><code><a href="../reference/bq_refs.html">bq_job()</a></code> tracks location so bigrquery now works painlessly with non-US/EU locations (<a href='https://github.com/rstats-db/bigrquery/issues/274'>#274</a>).</p></li>
+<li><p>Jobs now print their ids while running (<a href='https://github.com/r-dbi/bigrquery/issues/252'>#252</a>)</p></li>
+<li><p><code><a href="../reference/bq_refs.html">bq_job()</a></code> tracks location so bigrquery now works painlessly with non-US/EU locations (<a href='https://github.com/r-dbi/bigrquery/issues/274'>#274</a>).</p></li>
 <li><p><code><a href="../reference/api-perform.html">bq_perform_upload()</a></code> will only autodetect a schema if the table does not already exist.</p></li>
-<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> correctly computes page ranges if both <code>max_results</code> and <code>start_index</code> are supplied (<a href='https://github.com/rstats-db/bigrquery/issues/248'>#248</a>)</p></li>
-<li><p>Unparseable date times return NA (<a href='https://github.com/rstats-db/bigrquery/issues/285'>#285</a>)</p></li>
+<li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> correctly computes page ranges if both <code>max_results</code> and <code>start_index</code> are supplied (<a href='https://github.com/r-dbi/bigrquery/issues/248'>#248</a>)</p></li>
+<li><p>Unparseable date times return NA (<a href='https://github.com/r-dbi/bigrquery/issues/285'>#285</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -251,7 +251,7 @@
 <li><p>The two steps, downloading and parsing, now happen in sequence, rather than interleaved. This means that you’ll now see two progress bars: one for downloading JSON from BigQuery and one for parsing that JSON into a data frame.</p></li>
 <li><p>Downloads now occur in parallel, using up to 6 simultaneous connections by default.</p></li>
 <li>
-<p>The parsing code has been rewritten in C++. As well as considerably improving performance, this also adds support for nested (record/struct) and repeated (array) columns (<a href='https://github.com/rstats-db/bigrquery/issues/145'>#145</a>). These columns will yield list-columns in the following forms:</p>
+<p>The parsing code has been rewritten in C++. As well as considerably improving performance, this also adds support for nested (record/struct) and repeated (array) columns (<a href='https://github.com/r-dbi/bigrquery/issues/145'>#145</a>). These columns will yield list-columns in the following forms:</p>
 <ul>
 <li>Repeated values become list-columns containing vectors.</li>
 <li>Nested values become list-columns containing named lists.</li>
@@ -269,15 +269,15 @@
 <h3 class="hasAnchor">
 <a href="#dplyr" class="anchor"></a>dplyr</h3>
 <ul>
-<li><p><code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute()</a></code> now works (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/rstats-db/bigrquery/issues/52'>#52</a>).</p></li>
-<li><p><code><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl()</a></code> now accepts fully (or partially) qualified table names, like “publicdata.samples.shakespeare” or “samples.shakespeare”. This makes it possible to join tables across datasets (<a href='https://github.com/rstats-db/bigrquery/issues/219'>#219</a>).</p></li>
+<li><p><code><a href="https://dplyr.tidyverse.org/reference/compute.html">dplyr::compute()</a></code> now works (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/r-dbi/bigrquery/issues/52'>#52</a>).</p></li>
+<li><p><code><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl()</a></code> now accepts fully (or partially) qualified table names, like “publicdata.samples.shakespeare” or “samples.shakespeare”. This makes it possible to join tables across datasets (<a href='https://github.com/r-dbi/bigrquery/issues/219'>#219</a>).</p></li>
 </ul>
 </div>
 <div id="dbi" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dbi" class="anchor"></a>DBI</h3>
 <ul>
-<li><p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> now defaults to standard SQL, rather than legacy SQL. Use <code>use_legacy_sql = TRUE</code> if you need the previous behaviour (<a href='https://github.com/rstats-db/bigrquery/issues/147'>#147</a>).</p></li>
+<li><p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> now defaults to standard SQL, rather than legacy SQL. Use <code>use_legacy_sql = TRUE</code> if you need the previous behaviour (<a href='https://github.com/r-dbi/bigrquery/issues/147'>#147</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> now allows <code>dataset</code> to be omitted; this is natural when you want to use tables from multiple datasets.</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable()</a></code> now accept fully (or partially) qualified table names.</p></li>
 <li><p><code><a href="../reference/bigquery.html">dbi_driver()</a></code> is deprecated; please use <code><a href="../reference/bigquery.html">bigquery()</a></code> instead.</p></li>
@@ -289,10 +289,10 @@
 <p>The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.</p>
 <ul>
 <li><p><strong>Consistent naming scheme</strong>: All API functions now have the form <code>bq_object_verb()</code>, e.g.  <code><a href="../reference/api-table.html">bq_table_create()</a></code>, or <code><a href="../reference/api-dataset.html">bq_dataset_delete()</a></code>.</p></li>
-<li><p><strong>S3 classes</strong>: <code><a href="../reference/bq_refs.html">bq_table()</a></code>, <code><a href="../reference/bq_refs.html">bq_dataset()</a></code>, <code><a href="../reference/bq_refs.html">bq_job()</a></code>, <code><a href="../reference/bq_field.html">bq_field()</a></code> and <code><a href="../reference/bq_field.html">bq_fields()</a></code> constructor functions create S3 objects corresponding to important BigQuery objects (<a href='https://github.com/rstats-db/bigrquery/issues/150'>#150</a>). These are paired with <code>as_</code> coercion functions and used throughout the new API.</p></li>
+<li><p><strong>S3 classes</strong>: <code><a href="../reference/bq_refs.html">bq_table()</a></code>, <code><a href="../reference/bq_refs.html">bq_dataset()</a></code>, <code><a href="../reference/bq_refs.html">bq_job()</a></code>, <code><a href="../reference/bq_field.html">bq_field()</a></code> and <code><a href="../reference/bq_field.html">bq_fields()</a></code> constructor functions create S3 objects corresponding to important BigQuery objects (<a href='https://github.com/r-dbi/bigrquery/issues/150'>#150</a>). These are paired with <code>as_</code> coercion functions and used throughout the new API.</p></li>
 <li><p><strong>Easier local testing</strong>: New <code><a href="../reference/bq_test_project.html">bq_test_project()</a></code> and <code><a href="../reference/bq_test_project.html">bq_test_dataset()</a></code> make it easier to run bigrquery tests locally. To run the tests yourself, you need to create a BigQuery project, and then follow the instructions in <code><a href="../reference/bq_test_project.html">?bq_test_project</a></code>.</p></li>
-<li><p><strong>More efficient data transfer</strong>: The new API makes extensive use of the <code>fields</code> query parameter, ensuring that functions only download data that they actually use (<a href='https://github.com/rstats-db/bigrquery/issues/153'>#153</a>).</p></li>
-<li><p><strong>Tighter GCS connection</strong>: New <code><a href="../reference/api-table.html">bq_table_load()</a></code> loads data from a Google Cloud Storage URI, pairing with <code><a href="../reference/api-table.html">bq_table_save()</a></code> which saves data to a GCS URI (<a href='https://github.com/rstats-db/bigrquery/issues/155'>#155</a>).</p></li>
+<li><p><strong>More efficient data transfer</strong>: The new API makes extensive use of the <code>fields</code> query parameter, ensuring that functions only download data that they actually use (<a href='https://github.com/r-dbi/bigrquery/issues/153'>#153</a>).</p></li>
+<li><p><strong>Tighter GCS connection</strong>: New <code><a href="../reference/api-table.html">bq_table_load()</a></code> loads data from a Google Cloud Storage URI, pairing with <code><a href="../reference/api-table.html">bq_table_save()</a></code> which saves data to a GCS URI (<a href='https://github.com/r-dbi/bigrquery/issues/155'>#155</a>).</p></li>
 </ul>
 </div>
 </div>
@@ -303,19 +303,19 @@
 <h3 class="hasAnchor">
 <a href="#dplyr-1" class="anchor"></a>dplyr</h3>
 <ul>
-<li><p>The dplyr interface can work with literal SQL once more (<a href='https://github.com/rstats-db/bigrquery/issues/218'>#218</a>).</p></li>
-<li><p>Improved SQL translation for <code><a href="https://rdrr.io/r/base/Extremes.html">pmax()</a></code>, <code><a href="https://rdrr.io/r/base/Extremes.html">pmin()</a></code>, <code><a href="https://rdrr.io/r/stats/sd.html">sd()</a></code>, <code><a href="https://rdrr.io/r/base/all.html">all()</a></code>, and <code><a href="https://rdrr.io/r/base/any.html">any()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/176'>#176</a>, <a href='https://github.com/rstats-db/bigrquery/issues/179'>#179</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>). And for <code><a href="https://rdrr.io/r/base/paste.html">paste0()</a></code>, <code><a href="https://rdrr.io/r/stats/cor.html">cor()</a></code> and <code><a href="https://rdrr.io/r/stats/cor.html">cov()</a></code> (<a href='https://github.com/edgararuiz'>@edgararuiz</a>).</p></li>
-<li><p>If you have the development version of dbplyr installed, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>ing a BigQuery table will not perform an unneeded query, but will instead download directly from the table (<a href='https://github.com/rstats-db/bigrquery/issues/226'>#226</a>).</p></li>
+<li><p>The dplyr interface can work with literal SQL once more (<a href='https://github.com/r-dbi/bigrquery/issues/218'>#218</a>).</p></li>
+<li><p>Improved SQL translation for <code><a href="https://rdrr.io/r/base/Extremes.html">pmax()</a></code>, <code><a href="https://rdrr.io/r/base/Extremes.html">pmin()</a></code>, <code><a href="https://rdrr.io/r/stats/sd.html">sd()</a></code>, <code><a href="https://rdrr.io/r/base/all.html">all()</a></code>, and <code><a href="https://rdrr.io/r/base/any.html">any()</a></code> (<a href='https://github.com/r-dbi/bigrquery/issues/176'>#176</a>, <a href='https://github.com/r-dbi/bigrquery/issues/179'>#179</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>). And for <code><a href="https://rdrr.io/r/base/paste.html">paste0()</a></code>, <code><a href="https://rdrr.io/r/stats/cor.html">cor()</a></code> and <code><a href="https://rdrr.io/r/stats/cor.html">cov()</a></code> (<a href='https://github.com/edgararuiz'>@edgararuiz</a>).</p></li>
+<li><p>If you have the development version of dbplyr installed, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>ing a BigQuery table will not perform an unneeded query, but will instead download directly from the table (<a href='https://github.com/r-dbi/bigrquery/issues/226'>#226</a>).</p></li>
 </ul>
 </div>
 <div id="low-level" class="section level3">
 <h3 class="hasAnchor">
 <a href="#low-level" class="anchor"></a>Low-level</h3>
 <ul>
-<li><p>Request error messages now contain the “reason”, which can contain useful information for debugging (<a href='https://github.com/rstats-db/bigrquery/issues/209'>#209</a>).</p></li>
-<li><p><code><a href="../reference/bq_query.html">bq_dataset_query()</a></code> and <code><a href="../reference/bq_query.html">bq_project_query()</a></code> can now supply query parameters (<a href='https://github.com/rstats-db/bigrquery/issues/191'>#191</a>).</p></li>
-<li><p><code><a href="../reference/api-table.html">bq_table_create()</a></code> can now specify <code>fields</code> (<a href='https://github.com/rstats-db/bigrquery/issues/204'>#204</a>).</p></li>
-<li><p><code><a href="../reference/api-perform.html">bq_perform_query()</a></code> no longer fails with empty results (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/rstats-db/bigrquery/issues/206'>#206</a>).</p></li>
+<li><p>Request error messages now contain the “reason”, which can contain useful information for debugging (<a href='https://github.com/r-dbi/bigrquery/issues/209'>#209</a>).</p></li>
+<li><p><code><a href="../reference/bq_query.html">bq_dataset_query()</a></code> and <code><a href="../reference/bq_query.html">bq_project_query()</a></code> can now supply query parameters (<a href='https://github.com/r-dbi/bigrquery/issues/191'>#191</a>).</p></li>
+<li><p><code><a href="../reference/api-table.html">bq_table_create()</a></code> can now specify <code>fields</code> (<a href='https://github.com/r-dbi/bigrquery/issues/204'>#204</a>).</p></li>
+<li><p><code><a href="../reference/api-perform.html">bq_perform_query()</a></code> no longer fails with empty results (<a href='https://github.com/byapparov'>@byapparov</a>, <a href='https://github.com/r-dbi/bigrquery/issues/206'>#206</a>).</p></li>
 </ul>
 </div>
 </div>
@@ -336,36 +336,36 @@
 <h2 class="hasAnchor">
 <a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
-<li><p>dplyr support has been updated to require dplyr 0.7.0 and use dbplyr. This means that you can now more naturally work directly with DBI connections. dplyr now also uses modern BigQuery SQL which supports a broader set of translations. Along the way I’ve also fixed some SQL generation bugs (<a href='https://github.com/rstats-db/bigrquery/issues/48'>#48</a>).</p></li>
+<li><p>dplyr support has been updated to require dplyr 0.7.0 and use dbplyr. This means that you can now more naturally work directly with DBI connections. dplyr now also uses modern BigQuery SQL which supports a broader set of translations. Along the way I’ve also fixed some SQL generation bugs (<a href='https://github.com/r-dbi/bigrquery/issues/48'>#48</a>).</p></li>
 <li><p>The DBI driver gets a new name: <code><a href="../reference/bigquery.html">bigquery()</a></code>.</p></li>
-<li><p>New <code><a href="../reference/insert_extract_job.html">insert_extract_job()</a></code> make it possible to extract data and save in google storage (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/rstats-db/bigrquery/issues/119'>#119</a>).</p></li>
+<li><p>New <code><a href="../reference/insert_extract_job.html">insert_extract_job()</a></code> make it possible to extract data and save in google storage (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/r-dbi/bigrquery/issues/119'>#119</a>).</p></li>
 <li><p>New <code><a href="../reference/table-dep.html">insert_table()</a></code> allows you to insert empty tables into a dataset.</p></li>
-<li><p>All POST requests (inserts, updates, copies and <code>query_exec</code>) now take <code>...</code>. This allows you to add arbitrary additional data to the request body making it possible to use parts of the BigQuery API that are otherwise not exposed (<a href='https://github.com/rstats-db/bigrquery/issues/149'>#149</a>). <code>snake_case</code> argument names are automatically converted to <code>camelCase</code> so you can stick consistently to snake case in your R code.</p></li>
-<li><p>Full support for DATE, TIME, and DATETIME types (<a href='https://github.com/rstats-db/bigrquery/issues/128'>#128</a>).</p></li>
+<li><p>All POST requests (inserts, updates, copies and <code>query_exec</code>) now take <code>...</code>. This allows you to add arbitrary additional data to the request body making it possible to use parts of the BigQuery API that are otherwise not exposed (<a href='https://github.com/r-dbi/bigrquery/issues/149'>#149</a>). <code>snake_case</code> argument names are automatically converted to <code>camelCase</code> so you can stick consistently to snake case in your R code.</p></li>
+<li><p>Full support for DATE, TIME, and DATETIME types (<a href='https://github.com/r-dbi/bigrquery/issues/128'>#128</a>).</p></li>
 </ul>
 </div>
 <div id="big-fixes-and-minor-improvements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#big-fixes-and-minor-improvements" class="anchor"></a>Big fixes and minor improvements</h2>
 <ul>
-<li><p>All bigrquery requests now have a custom user agent that specifies the versions of bigrquery and httr that are used (<a href='https://github.com/rstats-db/bigrquery/issues/151'>#151</a>).</p></li>
+<li><p>All bigrquery requests now have a custom user agent that specifies the versions of bigrquery and httr that are used (<a href='https://github.com/r-dbi/bigrquery/issues/151'>#151</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect()</a></code> gains new <code>use_legacy_sql</code>, <code>page_size</code>, and <code>quiet</code> arguments that are passed onto <code><a href="../reference/query_exec.html">query_exec()</a></code>. These allow you to control query options at the connection level.</p></li>
-<li><p><code><a href="../reference/insert_upload_job.html">insert_upload_job()</a></code> now sends data in newline-delimited JSON instead of csv (<a href='https://github.com/rstats-db/bigrquery/issues/97'>#97</a>). This should be considerably faster and avoids character encoding issues (<a href='https://github.com/rstats-db/bigrquery/issues/45'>#45</a>). <code>POSIXlt</code> columns are now also correctly coerced to TIMESTAMPS (<a href='https://github.com/rstats-db/bigrquery/issues/98'>#98</a>).</p></li>
+<li><p><code><a href="../reference/insert_upload_job.html">insert_upload_job()</a></code> now sends data in newline-delimited JSON instead of csv (<a href='https://github.com/r-dbi/bigrquery/issues/97'>#97</a>). This should be considerably faster and avoids character encoding issues (<a href='https://github.com/r-dbi/bigrquery/issues/45'>#45</a>). <code>POSIXlt</code> columns are now also correctly coerced to TIMESTAMPS (<a href='https://github.com/r-dbi/bigrquery/issues/98'>#98</a>).</p></li>
 <li>
 <p><code><a href="../reference/insert_query_job.html">insert_query_job()</a></code> and <code><a href="../reference/query_exec.html">query_exec()</a></code> gain new arguments:</p>
 <ul>
 <li>
 <code>quiet = TRUE</code> will suppress the progress bars if needed.</li>
 <li>
-<code>use_legacy_sql = FALSE</code> option allows you to opt-out of the legacy SQL system (<a href='https://github.com/rstats-db/bigrquery/issues/124'>#124</a>, <a href='https://github.com/backlin'>@backlin</a>)</li>
+<code>use_legacy_sql = FALSE</code> option allows you to opt-out of the legacy SQL system (<a href='https://github.com/r-dbi/bigrquery/issues/124'>#124</a>, <a href='https://github.com/backlin'>@backlin</a>)</li>
 </ul>
 </li>
-<li><p><code><a href="../reference/dataset-dep.html">list_tables()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/108'>#108</a>) and <code><a href="../reference/list_datasets.html">list_datasets()</a></code> (<a href='https://github.com/rstats-db/bigrquery/issues/141'>#141</a>) are now paginated. By default they retrieve 50 items per page, and will iterate until they get everything.</p></li>
-<li><p><code><a href="../reference/list_tabledata.html">list_tabledata()</a></code> and <code><a href="../reference/query_exec.html">query_exec()</a></code> now give a nicer progress bar, including estimated time remaining (<a href='https://github.com/rstats-db/bigrquery/issues/100'>#100</a>).</p></li>
+<li><p><code><a href="../reference/dataset-dep.html">list_tables()</a></code> (<a href='https://github.com/r-dbi/bigrquery/issues/108'>#108</a>) and <code><a href="../reference/list_datasets.html">list_datasets()</a></code> (<a href='https://github.com/r-dbi/bigrquery/issues/141'>#141</a>) are now paginated. By default they retrieve 50 items per page, and will iterate until they get everything.</p></li>
+<li><p><code><a href="../reference/list_tabledata.html">list_tabledata()</a></code> and <code><a href="../reference/query_exec.html">query_exec()</a></code> now give a nicer progress bar, including estimated time remaining (<a href='https://github.com/r-dbi/bigrquery/issues/100'>#100</a>).</p></li>
 <li><p><code><a href="../reference/query_exec.html">query_exec()</a></code> should be considerably faster because profiling revealed that ~40% of the time taken by was a single line inside a function that helps parse BigQuery’s json into an R data frame. I replaced the slow R code with a faster C function.</p></li>
-<li><p><code><a href="../reference/bigrquery-deprecated.html">set_oauth2.0_cred()</a></code> allows user to supply their own Google OAuth application when setting credentials (<a href='https://github.com/rstats-db/bigrquery/issues/130'>#130</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>)</p></li>
+<li><p><code><a href="../reference/bigrquery-deprecated.html">set_oauth2.0_cred()</a></code> allows user to supply their own Google OAuth application when setting credentials (<a href='https://github.com/r-dbi/bigrquery/issues/130'>#130</a>, <a href='https://github.com/jarodmeng'>@jarodmeng</a>)</p></li>
 <li><p><code><a href="../reference/wait_for.html">wait_for()</a></code> uses now reports the query total bytes billed, which is more accurate because it takes into account caching and other factors.</p></li>
-<li><p><code>list_tabledata</code> returns empty table on max_pages=0 (<a href='https://github.com/rstats-db/bigrquery/issues/184'>#184</a>, <a href='https://github.com/ras44'>@ras44</a> <a href='https://github.com/byapparov'>@byapparov</a>)</p></li>
+<li><p><code>list_tabledata</code> returns empty table on max_pages=0 (<a href='https://github.com/r-dbi/bigrquery/issues/184'>#184</a>, <a href='https://github.com/ras44'>@ras44</a> <a href='https://github.com/byapparov'>@byapparov</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -375,9 +375,9 @@
 </h1>
 <ul>
 <li><p>New <code><a href="../reference/bigrquery-deprecated.html">set_service_token()</a></code> allows you to use OAuth service token instead of interactive authentication.from</p></li>
-<li><p><code><a href="https://rdrr.io/r/base/Arithmetic.html">^</a></code> is correctly translated to <code>pow()</code> (<a href='https://github.com/rstats-db/bigrquery/issues/110'>#110</a>).</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/Arithmetic.html">^</a></code> is correctly translated to <code>pow()</code> (<a href='https://github.com/r-dbi/bigrquery/issues/110'>#110</a>).</p></li>
 <li><p>Provide full DBI compliant interface (<a href='https://github.com/krlmlr'>@krlmlr</a>).</p></li>
-<li><p>Backend now translates <code>iflese()</code> to <code>IF</code> (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/rstats-db/bigrquery/issues/53'>#53</a>).</p></li>
+<li><p>Backend now translates <code>iflese()</code> to <code>IF</code> (<a href='https://github.com/realAkhmed'>@realAkhmed</a>, <a href='https://github.com/r-dbi/bigrquery/issues/53'>#53</a>).</p></li>
 </ul>
 </div>
     <div id="version-020" class="section level1">
@@ -386,14 +386,14 @@
 </h1>
 <ul>
 <li><p>Compatiable with latest httr.</p></li>
-<li><p>Computation of the SQL data type that corresponds to a given R object is now more robust against unknown classes. (<a href='https://github.com/rstats-db/bigrquery/issues/95'>#95</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>A data frame with full schema information is returned for zero-row results. (<a href='https://github.com/rstats-db/bigrquery/issues/88'>#88</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>New <code><a href="../reference/table-dep.html">exists_table()</a></code>. (<a href='https://github.com/rstats-db/bigrquery/issues/91'>#91</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>New arguments <code>create_disposition</code> and <code>write_disposition</code> to <code><a href="../reference/insert_upload_job.html">insert_upload_job()</a></code>. (<a href='https://github.com/rstats-db/bigrquery/issues/92'>#92</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>Renamed option <code>bigquery.quiet</code> to <code>bigrquery.quiet</code>. (<a href='https://github.com/rstats-db/bigrquery/issues/89'>#89</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>New <code><a href="../reference/id-dep.html">format_dataset()</a></code> and <code><a href="../reference/id-dep.html">format_table()</a></code>. (<a href='https://github.com/rstats-db/bigrquery/issues/81'>#81</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>New <code><a href="../reference/list_tabledata.html">list_tabledata_iter()</a></code> that allows fetching a table in chunks of varying size. (<a href='https://github.com/rstats-db/bigrquery/issues/77'>#77</a>, <a href='https://github.com/rstats-db/bigrquery/issues/87'>#87</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
-<li><p>Add support for API keys via the <code>BIGRQUERY_API_KEY</code> environment variable. (<a href='https://github.com/rstats-db/bigrquery/issues/49'>#49</a>)</p></li>
+<li><p>Computation of the SQL data type that corresponds to a given R object is now more robust against unknown classes. (<a href='https://github.com/r-dbi/bigrquery/issues/95'>#95</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>A data frame with full schema information is returned for zero-row results. (<a href='https://github.com/r-dbi/bigrquery/issues/88'>#88</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>New <code><a href="../reference/table-dep.html">exists_table()</a></code>. (<a href='https://github.com/r-dbi/bigrquery/issues/91'>#91</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>New arguments <code>create_disposition</code> and <code>write_disposition</code> to <code><a href="../reference/insert_upload_job.html">insert_upload_job()</a></code>. (<a href='https://github.com/r-dbi/bigrquery/issues/92'>#92</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>Renamed option <code>bigquery.quiet</code> to <code>bigrquery.quiet</code>. (<a href='https://github.com/r-dbi/bigrquery/issues/89'>#89</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>New <code><a href="../reference/id-dep.html">format_dataset()</a></code> and <code><a href="../reference/id-dep.html">format_table()</a></code>. (<a href='https://github.com/r-dbi/bigrquery/issues/81'>#81</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>New <code><a href="../reference/list_tabledata.html">list_tabledata_iter()</a></code> that allows fetching a table in chunks of varying size. (<a href='https://github.com/r-dbi/bigrquery/issues/77'>#77</a>, <a href='https://github.com/r-dbi/bigrquery/issues/87'>#87</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
+<li><p>Add support for API keys via the <code>BIGRQUERY_API_KEY</code> environment variable. (<a href='https://github.com/r-dbi/bigrquery/issues/49'>#49</a>)</p></li>
 </ul>
 </div>
   </div>
