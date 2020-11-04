@@ -189,7 +189,9 @@ sql_translate_env.BigQueryConnection <- function(x) {
       Sys.time = sql_prefix("current_time"),
 
       # Regular expressions
-      grepl = sql_prefix("REGEXP_CONTAINS", 2),
+      grepl = function(pattern, x) {
+        dbplyr::build_sql("REGEXP_CONTAINS", list(x, pattern))
+      },
       gsub = function(match, replace, x) {
         dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
       },
