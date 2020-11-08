@@ -11,7 +11,7 @@
 #' * `bq_perform_load()`:    [bq_table_load()].
 #' * `bq_perform_extract()`: [bq_table_save()].
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 #'
 #' Additional information at:
@@ -354,4 +354,3 @@ bq_perform_copy <- function(src, dest,
   )
   as_bq_job(res$jobReference)
 }
-
