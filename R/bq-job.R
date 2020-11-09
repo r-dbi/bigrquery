@@ -3,7 +3,7 @@
 #' To perform a job, see [api-perform]. These functions all retrieve metadata
 #' (in various forms) about an existing job.
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
 #' @examples

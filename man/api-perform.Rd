@@ -189,7 +189,7 @@ you should use instead:
 \item \code{bq_perform_extract()}: \code{\link[=bq_table_save]{bq_table_save()}}.
 }
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}

@@ -7,7 +7,7 @@
 #' @inheritParams api-perform
 #' @inheritParams bq_projects
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get)
 #' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
 #' * [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
