@@ -84,12 +84,12 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The current bigrquery release can be installed from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"bigrquery"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"bigrquery"</span><span class="op">)</span></code></pre></div>
 <p>The newest development release can be installed from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages('devtools')</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-dbi/bigrquery"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages('devtools')</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-dbi/bigrquery"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -97,8 +97,8 @@
 <div id="low-level-api" class="section level3">
 <h3 class="hasAnchor">
 <a href="#low-level-api" class="anchor"></a>Low-level API</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-dbi/bigrquery">bigrquery</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-dbi/bigrquery">bigrquery</a></span><span class="op">)</span>
 <span class="va">billing</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># replace this with your project ID </span>
 <span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span>
 
@@ -116,13 +116,13 @@
 <span class="co">#&gt;  7  1969    11     3          6.56</span>
 <span class="co">#&gt;  8  1969     2     3          8.13</span>
 <span class="co">#&gt;  9  1969    11    20          8.19</span>
-<span class="co">#&gt; 10  1969     9     1          6.25</span></pre></div>
+<span class="co">#&gt; 10  1969     9     1          6.25</span></code></pre></div>
 </div>
 <div id="dbi" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dbi" class="anchor"></a>DBI</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-dbi.github.io/DBI">DBI</a></span><span class="op">)</span>
 
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span>
   <span class="fu">bigrquery</span><span class="fu">::</span><span class="fu"><a href="reference/bigquery.html">bigquery</a></span><span class="op">(</span><span class="op">)</span>,
@@ -152,13 +152,13 @@
 <span class="co">#&gt;  7  1969    11     3          6.56</span>
 <span class="co">#&gt;  8  1969     2     3          8.13</span>
 <span class="co">#&gt;  9  1969    11    20          8.19</span>
-<span class="co">#&gt; 10  1969     9     1          6.25</span></pre></div>
+<span class="co">#&gt; 10  1969     9     1          6.25</span></code></pre></div>
 </div>
 <div id="dplyr" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dplyr" class="anchor"></a>dplyr</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span>
 
@@ -178,7 +178,7 @@
 <span class="co">#&gt;  7  1970     4    27          7.50</span>
 <span class="co">#&gt;  8  1970     6    21          4.81</span>
 <span class="co">#&gt;  9  1969     7     9          6.62</span>
-<span class="co">#&gt; 10  1969     8    16          8.44</span></pre></div>
+<span class="co">#&gt; 10  1969     8    16          8.44</span></code></pre></div>
 </div>
 </div>
 <div id="important-details" class="section level2">
