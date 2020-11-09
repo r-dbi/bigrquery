@@ -46,7 +46,7 @@ all pages (this may take a long time!)}
 \description{
 Basic create-read-update-delete verbs for datasets.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get}{get}

@@ -23,7 +23,7 @@ List all projects that you have access to. You can also work with
 but you will need to provide a \code{billing} project whenever you perform
 any non-free operation.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/list}{list}

@@ -87,10 +87,10 @@ an invisible \link{bq_table}
 \description{
 Basic create-read-update-delete verbs for tables, as well as functions
 for uploading and downloading data in to/from memory (\code{bq_table_upload()},
-(\code{bq_table_download()})), and saving to/loading from Google CloudStorage
+\code{bq_table_download()}), and saving to/loading from Google Cloud Storage
 (\code{bq_table_load()}, \code{bq_table_save()}).
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}

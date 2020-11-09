@@ -75,7 +75,7 @@ the formats that BigQuery supports (arvn and ndjson) that allow for
 nested/repeated values, are not well supported in R.
 }
 
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}{list}
