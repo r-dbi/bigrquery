@@ -1,5 +1,10 @@
 .onLoad <- function(libname, pkgname) {
 
+  .auth <<- gargle::init_AuthState(
+    package     = "bigrquery",
+    auth_active = TRUE
+  )
+
   # S3 methods --------------------------------------------------------------
   register_s3_method("dplyr", "collect", "tbl_BigQueryConnection")
   register_s3_method("dplyr", "db_analyze", "BigQueryConnection")
