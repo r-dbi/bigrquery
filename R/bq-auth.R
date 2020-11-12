@@ -1,9 +1,8 @@
 ## This file is the interface between bigrquery and the
 ## auth functionality in gargle.
-.auth <- gargle::init_AuthState(
-  package     = "bigrquery",
-  auth_active = TRUE
-)
+
+# Initialization happens in .onLoad
+.auth <- NULL
 
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
