@@ -24,7 +24,7 @@
 #' @seealso https://cloud.google.com/bigquery/streaming-data-into-bigquery
 bq_table_stream <- function(x,
                             values,
-                            insert_ids = bq_stream_random_id(nrow(values)),
+                            insert_ids,
                             skip_invalid_rows = "false",
                             ignore_unknown_values = "false",
                             template_suffix = NULL) {
@@ -39,7 +39,7 @@ bq_table_stream <- function(x,
   )
 
   response <- bq_post(url, body)
-  invisible(response$insertErrors)
+  response$insertErrors
 }
 
 #' Converts data.frame to streaming request body
@@ -73,16 +73,4 @@ bq_stream_body <- function(x,
     body$templateSuffix <- template_suffix
   }
   body
-}
-
-#' Generates random string that BigQuery uses do de-duplicate records
-#'
-#' @noRd
-bq_stream_random_id <- function(n = 1) {
- assert_that(n > 0)
- vapply(
-   1:n,
-   FUN = function(x) paste(sample(c(letters[1:6], 0:9), 30, replace = TRUE), collapse = ""),
-   FUN.VALUE = character(1)
-  )
 }
