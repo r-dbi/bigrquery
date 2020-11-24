@@ -38,7 +38,7 @@ bq_table_stream <- function(x,
                             ignore_unknown_values = FALSE,
                             template_suffix = NULL) {
   x <- as_bq_table(x)
-  url <- bq_path(x$project, x$dataset, x$table, "insertAll")
+  url <- paste0(bq_path(x$project, x$dataset, x$table), "/", "insertAll")
   body <- bq_stream_body(
     x = values,
     insert_ids = insert_ids,
