@@ -63,12 +63,12 @@ bq_stream_body <- function(x,
                            template_suffix
                            ) {
 
-
   rows <- lapply(1:nrow(x), function(row.index) {
-    list(
-      insertId = insert_ids[row.index],
+    row <- list(
+      insertId = get_insert_id(insert_ids, row.index),
       json = as.list(x[row.index, ])
     )
+    Filter(Negate(is.null), row)
   })
 
   body <- list(
@@ -82,4 +82,13 @@ bq_stream_body <- function(x,
     body$templateSuffix <- template_suffix
   }
   body
+}
+
+get_insert_id <- function(x, i) {
+  if (is.null(x)) {
+    NULL
+  }
+  else {
+    x[i]
+  }
 }
