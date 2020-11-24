@@ -2,12 +2,12 @@
 % Please edit documentation in R/bq-stream.R
 \name{bq_table_stream}
 \alias{bq_table_stream}
-\title{Streams data from data.from into BigQUery}
+\title{Stream data.frame into BigQUery}
 \usage{
 bq_table_stream(
   x,
   values,
-  insert_ids = bq_stream_random_id(nrow(values)),
+  insert_ids = NULL,
   skip_invalid_rows = "false",
   ignore_unknown_values = "false",
   template_suffix = NULL
@@ -38,7 +38,27 @@ https://cloud.google.com/bigquery/streaming-data-into-bigquery#template-tables}
 NULL if there are no errors, otherwise list of errors with reasons
 }
 \description{
-Streams data from data.from into BigQUery
+Stream data.frame into BigQUery
+}
+\examples{
+\dontrun{
+ds <- bq_test_dataset()
+
+schema = list(
+  bq_field("speed", "NUMERIC"),
+  bq_field("dist", "NUMERIC")
+)
+
+bq_mtcars <- bq_table_create(
+  x = bq_table(ds$project, ds$dataset, "mtcars"),
+  fields = bq_fields(schema)
+)
+
+bq_table_stream(
+  x = bq_mtcars,
+  cars
+)
+}
 }
 \seealso{
 https://cloud.google.com/bigquery/streaming-data-into-bigquery

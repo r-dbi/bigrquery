@@ -1,4 +1,4 @@
-#' Stream data.frame into into BigQUery
+#' Stream data.frame into BigQUery
 #'
 #' @param x bq_table where values will be streamed to
 #' @param values data.frame that will be streamed
@@ -22,9 +22,28 @@
 #' @export
 #' @rdname bq-streaming
 #' @seealso https://cloud.google.com/bigquery/streaming-data-into-bigquery
+#' @examples
+#' \dontrun{
+#' ds <- bq_test_dataset()
+#'
+#' schema = list(
+#'   bq_field("speed", "NUMERIC"),
+#'   bq_field("dist", "NUMERIC")
+#' )
+#'
+#' bq_mtcars <- bq_table_create(
+#'   x = bq_table(ds$project, ds$dataset, "mtcars"),
+#'   fields = bq_fields(schema)
+#' )
+#'
+#' bq_table_stream(
+#'   x = bq_mtcars,
+#'   cars
+#' )
+#'}
 bq_table_stream <- function(x,
                             values,
-                            insert_ids,
+                            insert_ids = NULL,
                             skip_invalid_rows = "false",
                             ignore_unknown_values = "false",
                             template_suffix = NULL) {
