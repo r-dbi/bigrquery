@@ -1,6 +1,6 @@
 # bigrquery (development version)
 
-* `bq_stream()` allows streaming data into BigQuery table.
+* `bq_stream()` allows streaming data into BigQuery table (@byapparov, #383)
 
 # bigrquery 1.3.2
 
