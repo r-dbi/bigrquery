@@ -28,7 +28,7 @@ if (gargle:::secret_can_decrypt("bigrquery")) {
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in 
-[Google BigQuery](https://developers.google.com/bigquery/) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
+[Google BigQuery](https://cloud.google.com/bigquery/docs) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
 
 * The low-level API provides thin wrappers over the underlying REST API. All 
   the low-level functions start with `bq_`, and mostly have the form 
@@ -36,12 +36,12 @@ The bigrquery package makes it easy to work with data stored in
   familiar with the REST API and you want do something not supported in the 
   higher-level APIs.
   
-* The [DBI interface](http://www.r-dbi.org) wraps the low-level API and
+* The [DBI interface](https://www.r-dbi.org) wraps the low-level API and
   makes working with BigQuery like working with any other database system.
   This is most convenient layer if you want to execute SQL queries in 
   BigQuery or upload smaller amounts (i.e. <100 MB) of data.
 
-* The [dplyr interface](http://dbplyr.tidyverse.org/) lets you treat BigQuery 
+* The [dplyr interface](https://dbplyr.tidyverse.org/) lets you treat BigQuery 
   tables as if they are in-memory data frames. This is the most convenient 
   layer if you don't want to write SQL, but instead want dbplyr to write it 
   for you.
@@ -109,7 +109,7 @@ natality %>%
 
 ### Authentication and authorization
 
-When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://developers.google.com/bigquery/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
+When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
 about auth:
 
   * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
@@ -126,7 +126,7 @@ Note that bigrquery requests permission to modify your data; but it will never d
 
 ### Billing project
 
-If you just want to play around with the BigQuery API, it's easiest to start with Google's free [sample data](https://developers.google.com/bigquery/docs/sample-tables). You'll still need to create a project, but if you're just playing around, it's unlikely that you'll go over the free limit (1 TB of queries / 10 GB of storage).
+If you just want to play around with the BigQuery API, it's easiest to start with Google's free [sample data](https://cloud.google.com/bigquery/public-data). You'll still need to create a project, but if you're just playing around, it's unlikely that you'll go over the free limit (1 TB of queries / 10 GB of storage).
 
 To create a project:
 
@@ -142,8 +142,8 @@ Use your project ID as the `billing` project whenever you work with free sample 
 
 ## Useful links
 
-* [SQL reference](https://developers.google.com/bigquery/query-reference)
-* [API reference](https://developers.google.com/bigquery/docs/reference/v2/)
+* [SQL reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
+* [API reference](https://cloud.google.com/bigquery/docs/reference/rest)
 * [Query/job console](https://bigquery.cloud.google.com/)
 * [Billing console](https://console.cloud.google.com/)
 

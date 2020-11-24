@@ -1,9 +1,8 @@
 ## This file is the interface between bigrquery and the
 ## auth functionality in gargle.
-.auth <- gargle::init_AuthState(
-  package     = "bigrquery",
-  auth_active = TRUE
-)
+
+# Initialization happens in .onLoad
+.auth <- NULL
 
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
@@ -20,6 +19,8 @@ gargle_lookup_table <- list(
 #' @eval gargle:::PREFIX_auth_description(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_details(gargle_lookup_table)
 #' @eval gargle:::PREFIX_auth_params()
+#' @param scopes A character vector of scopes to request.
+#'   Pick from those listed at <https://developers.google.com/identity/protocols/oauth2/scopes>.
 #'
 #' @family auth functions
 #' @export

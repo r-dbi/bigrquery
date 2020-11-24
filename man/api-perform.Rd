@@ -6,6 +6,7 @@
 \alias{bq_perform_upload}
 \alias{bq_perform_load}
 \alias{bq_perform_query}
+\alias{bq_perform_query_dry_run}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
@@ -52,6 +53,15 @@ bq_perform_query(
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
   priority = "INTERACTIVE"
+)
+
+bq_perform_query_dry_run(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE
 )
 
 bq_perform_copy(
@@ -142,8 +152,13 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 \item{query}{SQL query string.}
 
 \item{parameters}{Named list of parameters match to query parameters.
-Parameter \code{x} will be matched to placeholder \verb{@x}. See
-\url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+Parameter \code{x} will be matched to placeholder \verb{@x}.
+
+Generally, you can supply R vectors and they will be automatically
+converted to the correct type. If you need greater control, you can call
+\code{\link[=bq_param_scalar]{bq_param_scalar()}} or \code{\link[=bq_param_array]{bq_param_array()}} explicitly.
+
+See \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.
@@ -174,7 +189,7 @@ you should use instead:
 \item \code{bq_perform_extract()}: \code{\link[=bq_table_save]{bq_table_save()}}.
 }
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}

@@ -1,6 +1,6 @@
 #' Create a new extract job [deprecated]
 #'
-#' Please use [api-job] instead.
+#' Please use [api-job] and [api-perform] instead.
 #'
 #' @keywords internal
 #' @inheritParams insert_upload_job
@@ -12,7 +12,7 @@
 #' @param print_header Include row of column headers in the results?
 #' @family jobs
 #' @return a job resource list, as documented at
-#'   \url{https://cloud.google.com/bigquery/docs/reference/v2/jobs}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 #' @export
 insert_extract_job <- function(project, dataset, table,
                                destination_uris,
@@ -21,6 +21,9 @@ insert_extract_job <- function(project, dataset, table,
                                ...,
                                print_header = TRUE,
                                billing = project) {
+
+  .Deprecated("bq_perform_load", package = "bigrquery")
+
   assert_that(
     is.string(project),
     is.string(dataset),

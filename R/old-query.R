@@ -5,10 +5,10 @@
 #' @inheritParams insert_query_job
 #' @inheritParams bq_dataset_tables
 #' @seealso Google documentation describing asynchronous queries:
-#'  \url{https://developers.google.com/bigquery/docs/queries#asyncqueries}
+#'  \url{https://cloud.google.com/bigquery/docs/running-queries}
 #'
 #'  Google documentation for handling large results:
-#'  \url{https://developers.google.com/bigquery/querying-data#largequeryresults}
+#'  \url{https://cloud.google.com/bigquery/docs/writing-results}
 #' @export
 #' @examples
 #' \dontrun{
@@ -33,6 +33,8 @@ query_exec <- function(query, project,
                        use_legacy_sql = TRUE,
                        quiet = getOption("bigrquery.quiet"),
                        ...) {
+
+  .Deprecated("bq_perform_query", package = "bigrquery")
 
   dest <- run_query_job(
     query = query,
@@ -68,6 +70,9 @@ run_query_job <- function(query,
                           use_legacy_sql = TRUE,
                           quiet = getOption("bigrquery.quiet"),
                           ...) {
+
+  .Deprecated("bq_perform_query", package = "bigrquery")
+
   assert_that(is.string(query), is.string(project))
 
   job <- insert_query_job(
