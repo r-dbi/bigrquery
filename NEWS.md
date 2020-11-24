@@ -1,19 +1,60 @@
 # bigrquery (development version)
 
-* `bq_stream()` allows streaming data into BigQuery table.
+* `bq_stream()` allows streaming data into BigQuery table (@byapparov, #383)
+
+# bigrquery 1.3.2
+
+* BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
+  the [blob](https://blob.tidyverse.org/) and 
+  [wk](https://paleolimbot.github.io/wk/) packages, respectively
+  (@paleolimbot, #354, #388).
+
+* When used with dbplyr >= 2.0.0, ambiguous variables in joins will get
+  suffixes `_x` and `_y` (instead of `.x` and `.y` which don't work with
+  BigQuery) (#403).
+
+* `bq_table_download()` works once again with large row counts
+  (@gjuggler, #395). Google's API has stopped accepting `startIndex`
+  parameters with scientific formatting, which was happening for large
+  values (>1e5) by default.
+
+* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
+  performing a query (@Ka2wei, #316).
+
+# bigrquery 1.3.1
+
+* Now requires gargle 0.5.0
+
+# bigrquery 1.3.0
+
+* Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
+
+* When `bq_perform_*()` fails, you now see all errors, not just the first (#355).
+
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of `ARRAY` type (@byapparov, #303). Vectors of length > 1 will be
+  automatically converted to `ARRAY` type, or use `bq_param_array()` to
+  be explicit.
+
+* `bq_perform_upload()` works once again (#361). It seems like the generated
+  JSON was always incorrect, but Google's type checking only recently become
+  strict enough to detect the problem.
 
 * `dbExecute()` is better supported. It no longer fails with a spurious
   error for DDL queries, and it returns the number of affected rows for
   DML queries (#375).
 
+* `dbSendQuery()` (and hence `dbGetQuery()`) and `collect()` passes on `...` 
+  to `bq_perform_query()`. `collect()` gains `page_size` and `max_connection` 
+  arguments that are passed on to `bq_table_download()` (#374).
+
+* `copy_to()` now works with BigQuery (although it doesn't support temporary
+  tables so application is somewhat limited) (#337).
+  
 * `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
   (@jimmyg3g, #369).
 
 * Error messages inlude hints for common problems (@deflaux, #353).
-
-* `bq_perform_upload()` works once again (#361). It seems like the generated
-  JSON was always incorrect, but Google's type checking only recently become
-  strict enough to detect the problem.
 
 # bigrquery 1.2.0
 

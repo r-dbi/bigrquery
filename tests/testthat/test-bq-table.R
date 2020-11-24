@@ -1,5 +1,3 @@
-context("bq-table.R")
-
 test_that("can create and delete tables", {
   ds <- bq_test_dataset()
 
@@ -44,7 +42,7 @@ test_that("can round trip to non-default location", {
   bq_table_upload(bq_df, df1)
 
   df2 <- bq_table_download(bq_df)
-  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
+  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't guarantee order
   rownames(df2) <- NULL
 
   expect_equal(df1, df2)
@@ -168,4 +166,32 @@ test_that("can patch table with new fields in the schema", {
     tb.meta$schema$fields[[2]]$name,
     "title"
   )
+})
+
+test_that("can round-trip GEOGRAPHY", {
+  skip_if_not_installed("wk")
+
+  ds <- bq_test_dataset()
+  df <- tibble(geography = wk::wkt("POINT(30 10)"))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "geography"),
+    as_bq_fields(df)
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
+})
+
+test_that("can round-trip BYTES", {
+  ds <- bq_test_dataset()
+  df <- tibble(x = blob::blob(charToRaw("hi!"), charToRaw("bye")))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "bytes"),
+    as_bq_fields(df)
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
 })

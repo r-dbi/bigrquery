@@ -1,5 +1,3 @@
-context("test-dbi-result.R")
-
 test_that("can retrieve full query results", {
   con <- DBI::dbConnect(
     bigquery(),

@@ -1,5 +1,3 @@
-context("test-dbi-driver.R")
-
 test_that("driver is always valid", {
   expect_true(DBI::dbIsValid(bigquery()))
 })

@@ -19,7 +19,7 @@ argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a 
 \value{
 \itemize{
 \item \code{bq_auth_configure()}: An object of R6 class
-\link[gargle:AuthState]{gargle::AuthState}, invisibly.
+\link[gargle:AuthState-class]{gargle::AuthState}, invisibly.
 \item \code{bq_oauth_app()}: the current user-configured
 \code{\link[httr:oauth_app]{httr::oauth_app()}}.
 }

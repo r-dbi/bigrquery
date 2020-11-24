@@ -1,9 +1,7 @@
-context("test-bq-project-api.R")
-
 test_that("public datasets includes baseball", {
   skip_if_not(bq_authable())
 
-  public <- bq_project_datasets("bigquery-public-data")
+  public <- suppressWarnings(bq_project_datasets("bigquery-public-data"))
   names <- map_chr(public, function(x) x$dataset)
 
   expect_true("baseball" %in% names)

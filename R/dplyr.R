@@ -31,9 +31,6 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
   if (!requireNamespace("dplyr", quietly = TRUE)) {
     stop("dplyr is required to use src_bigquery", call. = FALSE)
   }
-  if (utils::packageVersion("dplyr") < "0.6.0") {
-    stop("dplyr 0.6.0 and dbplyr required to use src_bigquery", call. = FALSE)
-  }
 
   con <- DBI::dbConnect(
     bigquery(),
@@ -83,11 +80,31 @@ db_analyze.BigQueryConnection <- function(con, table, ...) {
   TRUE
 }
 
+# registered onLoad
+db_copy_to.BigQueryConnection <- function(con, table, values,
+                            overwrite = FALSE, types = NULL, temporary = TRUE,
+                            unique_indexes = NULL, indexes = NULL,
+                            analyze = TRUE, ...) {
+
+  if (temporary) {
+    rlang::abort("BigQuery does not support temporary tables")
+  }
+
+  tb <- bq_table(con@project, con@dataset, table)
+  write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
+  bq_table_upload(tb, values, fields = types, write_disposition = write)
+
+  table
+}
 
 # Efficient downloads -----------------------------------------------
 
 # registered onLoad
-collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TRUE) {
+collect.tbl_BigQueryConnection <- function(x, ...,
+                                           page_size = 1e4,
+                                           max_connections = 6L,
+                                           n = Inf,
+                                           warn_incomplete = TRUE) {
   assert_that(length(n) == 1, n > 0L)
 
   if (op_can_download(x$ops)) {
@@ -99,15 +116,20 @@ collect.tbl_BigQueryConnection <- function(x, ..., n = Inf, warn_incomplete = TR
 
     billing <- x$src$con@billing
     if (is.null(x$src$con@dataset)) {
-      tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet)
+      tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet, ...)
     } else {
       ds <- as_bq_dataset(x$src$con)
-      tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing)
+      tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing, ...)
     }
   }
 
   quiet <- if (n < 100) TRUE else x$src$con@quiet
-  out <- bq_table_download(tb, max_results = n, quiet = quiet)
+  out <- bq_table_download(tb,
+    max_results = n,
+    page_size = page_size,
+    quiet = quiet,
+    max_connections = max_connections
+  )
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
 
@@ -140,6 +162,11 @@ op_table.op_base_remote <- function(x, con) {
 # Don't import to avoid build-time dependency
 sql_prefix <- function(f, n = NULL) {
   dbplyr::sql_prefix(f = f, n = n)
+}
+
+# registered onLoad
+sql_join_suffix.BigQueryConnection <- function(con, ...) {
+  c("_x", "_y")
 }
 
 # registered onLoad

@@ -74,7 +74,7 @@ setMethod(
 setMethod(
   "dbSendQuery", c("BigQueryConnection", "character"),
   function(conn, statement, ...) {
-    BigQueryResult(conn, statement)
+    BigQueryResult(conn, statement, ...)
   })
 
 #' @rdname DBI

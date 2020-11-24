@@ -1,0 +1,11 @@
+> # One error
+> bq_dataset_query(ds, "SELECT 1 +", quiet = TRUE)
+Error: Job '' failed
+x Syntax error: Unexpected end of script at [1:11] [invalidQuery]
+
+> # Multiple erros
+> bq_table_upload(tb, data.frame(x = 1, y = 1:5), quiet = TRUE)
+Error: Job '' failed
+x Error while reading data, error message: JSON processing encountered too many errors, giving up. Rows: 1; errors: 1; max bad: 0; error percent: 0 [invalid]
+x Error while reading data, error message: JSON parsing error in row starting at position 0: Could not convert value to string. Field: y; Value: 1 [invalid]
+

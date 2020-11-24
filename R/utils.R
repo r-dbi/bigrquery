@@ -30,6 +30,16 @@ bq_progress <- function(..., quiet = NA) {
   }
 }
 
+bq_check_namespace <- function(pkg, bq_type) {
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    return()
+  }
+
+  rlang::abort(glue::glue(
+    "Package '{pkg}' must be installed to load BigQuery field with type '{bq_type}'"
+  ))
+}
+
 isFALSE <- function(x) identical(x, FALSE)
 
 is_string <- function(x) length(x) == 1L && is.character(x)
@@ -64,6 +74,6 @@ show_json <- function(x) {
 
 #' @export
 print.bq_bytes <- function(x, ...) {
-  cat_line(prettyunits::pretty_bytes(x))
+  cat_line(prettyunits::pretty_bytes(unclass(x)))
 }
 # nocov end
