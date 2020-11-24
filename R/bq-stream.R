@@ -7,11 +7,11 @@
 #'   If omitted, unique IDs are created.
 #' @param skip_invalid_rows
 #'   (optional) Insert all valid rows of a request,
-#'   even if invalid rows exist. The default value is False, which
+#'   even if invalid rows exist. The default value is FALSE, which
 #'   causes the entire request to fail if any invalid rows exist.
 #' @param ignore_unknown_values
 #'   (optional) Accept rows that contain values that do not match the
-#'   schema. The unknown values are ignored. Default is False, which
+#'   schema. The unknown values are ignored. Default is FALSE, which
 #'   treats unknown values as errors.
 #' @param template_suffix
 #'   (optional) treat `name` as a template table and provide a suffix.
@@ -34,8 +34,8 @@
 bq_table_stream <- function(x,
                             values,
                             insert_ids = NULL,
-                            skip_invalid_rows = "false",
-                            ignore_unknown_values = "false",
+                            skip_invalid_rows = FALSE,
+                            ignore_unknown_values = FALSE,
                             template_suffix = NULL) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table, "insertAll")
