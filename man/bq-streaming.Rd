@@ -43,21 +43,11 @@ Stream data.frame into BigQUery
 \examples{
 \dontrun{
 ds <- bq_test_dataset()
+tb <- bq_table(ds, "cars")
+# create an empty table with schema for `cars` data.frame
+bq_table_create(tb, cars)
 
-schema = list(
-  bq_field("speed", "NUMERIC"),
-  bq_field("dist", "NUMERIC")
-)
-
-bq_mtcars <- bq_table_create(
-  x = bq_table(ds$project, ds$dataset, "mtcars"),
-  fields = bq_fields(schema)
-)
-
-bq_table_stream(
-  x = bq_mtcars,
-  cars
-)
+bq_table_stream(tb, cars))
 }
 }
 \seealso{
