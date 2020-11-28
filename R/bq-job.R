@@ -3,8 +3,8 @@
 #' To perform a job, see [api-perform]. These functions all retrieve metadata
 #' (in various forms) about an existing job.
 #'
-#' @section API documentation:
-#' * [get](https://developers.google.com/bigquery/docs/reference/v2/jobs/get)
+#' @section Google BigQuery API documentation:
+#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
 #' @examples
 #' if (bq_testable()) {
@@ -91,9 +91,20 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   }
   progress$update(1)
 
-  err <- status$errorResult
-  if (!is.null(err)) {
-    signal_reason(err$reason, err$message)
+  errors <- status$errors
+  if (length(errors) > 0) {
+    if (length(errors) > 1) {
+      # First error says to look in errors[]
+      errors <- errors[-1]
+    }
+
+    bullets <- vapply(errors,
+      function(x) paste0(x$message, " [", x$reason, "]"),
+      character(1)
+    )
+    names(bullets) <- rep("x", length(bullets))
+
+    rlang::abort(c(paste0("Job '", if (!isTRUE(quiet)) x, "' failed"), bullets))
   }
 
   if (isFALSE(quiet) || (is.na(quiet) && interactive())) {

@@ -1,20 +1,45 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql) {
+BigQueryResult <- function(conn, sql, ...) {
   if (is.null(conn@dataset)) {
-    tb <- bq_project_query(conn@billing, sql, quiet = conn@quiet)
+    job <- bq_perform_query(sql,
+      billing = conn@billing,
+      quiet = conn@quiet,
+      ...
+    )
   } else {
     ds <- as_bq_dataset(conn)
-    tb <- bq_dataset_query(ds, sql, quiet = conn@quiet, billing = conn@billing)
+    job <- bq_perform_query(sql,
+      billing = conn@billing,
+      default_dataset = ds,
+      quiet = conn@quiet,
+      ...
+    )
   }
-  nrow <- bq_table_nrow(tb)
+
+  bq_job_wait(job, quiet = conn@quiet)
+  meta <- bq_job_meta(job, paste0(
+    "configuration(query(destinationTable)),",
+    "statistics(query(statementType,numDmlAffectedRows))"
+  ))
+
+  tb <- as_bq_table(meta$configuration$query$destinationTable)
+
+  if (meta$statistics$query$statementType == "SELECT") {
+    nrow <- bq_table_nrow(tb)
+  } else {
+    nrow <- 0
+  }
+
+  affected <- as.numeric(meta$statistics$query$numDmlAffectedRows %||% 0)
 
   res <- new(
     "BigQueryResult",
     bq_table = tb,
     statement = sql,
     nrow = nrow,
+    affected = affected,
     page_size = conn@page_size,
     quiet = conn@quiet,
     cursor = cursor(nrow),
@@ -32,6 +57,7 @@ setClass(
     bq_table = "bq_table",
     statement = "character",
     nrow = "numeric",
+    affected = "numeric",
     page_size = "numeric",
     quiet = "logical",
     cursor = "list",
@@ -143,7 +169,7 @@ setMethod(
 setMethod(
   "dbGetRowsAffected", "BigQueryResult",
   function(res, ...) {
-    0L
+    res@affected
   })
 
 #' @rdname DBI

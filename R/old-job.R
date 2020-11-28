@@ -6,14 +6,17 @@
 #' @param project project name
 #' @param job job id
 #' @return a job resource list, as documented at
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 #' @seealso API documentation for get method:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}
 #' @seealso [wait_for()] to wait for a job to complete
 #' @family jobs
 #' @export
 #' @keywords internal
 get_job <- function(project, job) {
+
+  .Deprecated("bq_job_meta", package = "bigrquery")
+
   assert_that(is.string(project), is.string(job))
   bq_get(bq_path(project, jobs = job))
 }
@@ -34,6 +37,9 @@ get_job <- function(project, job) {
 #' @export
 #' @keywords internal
 wait_for <- function(job, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
+
+  .Deprecated("bq_job_wait", package = "bigrquery")
+
   progress <- bq_progress(
     "Running job :spin: :elapsed:",
     total = 1e7,

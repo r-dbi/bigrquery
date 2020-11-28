@@ -1,5 +1,3 @@
-context("dplyr.R")
-
 test_that("historical API continues to work", {
   src <- src_bigquery(bq_test_project(), "basedata")
   x <- dplyr::tbl(src, "mtcars")
@@ -19,6 +17,16 @@ test_that("can work with literal SQL", {
 
   expect_s3_class(x, "tbl")
   expect_true("fips_code" %in% dbplyr::op_vars(x))
+})
+
+test_that("can copy_to", {
+  ds <- bq_test_dataset()
+  con <- DBI::dbConnect(ds)
+
+  expect_error(dplyr::copy_to(con, mtcars), "temporary tables")
+  bq_mtcars <- dplyr::copy_to(con, mtcars, temporary = FALSE)
+
+  expect_s3_class(bq_mtcars, "tbl_BigQueryConnection")
 })
 
 test_that("can collect and compute (no dataset)", {
@@ -105,7 +113,6 @@ test_that("collect can identify directly download tables", {
   bq3 <- dplyr::filter(bq1, cyl == 1)
   expect_false(op_can_download(bq3$ops))
 
-  skip_if_not_installed("dbplyr", "1.2.1.9001")
   x <- dplyr::collect(bq1)
   expect_s3_class(x, "tbl")
 })
@@ -117,13 +124,8 @@ test_that("casting uses bigquery types", {
     dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  if (utils::packageVersion("dbplyr") > "1.3.0") {
-    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
-    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
-  } else {
-    expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64) AS `y`')
-    expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64) AS `z`')
-  }
+  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
+  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
 })
 
 test_that("%||% translates to IFNULL", {
@@ -133,9 +135,11 @@ test_that("%||% translates to IFNULL", {
     dplyr::mutate(y = x %||% 2L) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  if (utils::packageVersion("dbplyr") > "1.3.0") {
-    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
-  } else {
-    expect_equal(sql$select[[2]], 'IFNULL(`x`, 2) AS `y`')
-  }
+  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
+})
+
+test_that("suffixes use _", {
+  skip_if_not_installed("dbplyr", "1.99")
+
+  expect_equal(dbplyr::sql_join_suffix(simulate_bigrquery()), c("_x", "_y"))
 })

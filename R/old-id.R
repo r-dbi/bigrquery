@@ -9,6 +9,9 @@ NULL
 #' @export
 #' @rdname id-dep
 parse_dataset <- function(dataset, project_id = NULL) {
+
+  .Deprecated("bq_dataset", package = "bigrquery")
+
   assert_that(is.string(dataset), is.null(project_id) || is.string(project_id))
   first_split <- rsplit_one(dataset, ":")
   dataset_id <- first_split$right
@@ -19,6 +22,9 @@ parse_dataset <- function(dataset, project_id = NULL) {
 #' @export
 #' @rdname id-dep
 format_dataset <- function(project_id, dataset) {
+
+  .Deprecated("bq_dataset", package = "bigrquery")
+
   if (!is.null(project_id)) {
     dataset <- paste0(project_id, ":", dataset)
   }
@@ -28,6 +34,9 @@ format_dataset <- function(project_id, dataset) {
 #' @export
 #' @rdname id-dep
 parse_table <- function(table, project_id = NULL) {
+
+  .Deprecated("bq_table", package = "bigrquery")
+
   assert_that(is.string(table), is.null(project_id) || is.string(project_id))
   dataset_id <- NULL
   first_split <- rsplit_one(table, ".")

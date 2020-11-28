@@ -1,6 +1,6 @@
 #' Create a new query job [deprecated]
 #'
-#' Please use [api-job] instead.
+#' Please use [api-job] and [api-perform] instead.
 #'
 #' @keywords internal
 #' @inheritParams insert_dataset
@@ -11,12 +11,12 @@
 #' @param create_disposition behavior for table creation.
 #'   defaults to `"CREATE_IF_NEEDED"`,
 #'   the only other supported value is `"CREATE_NEVER"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.createDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.createDisposition}{the API documentation}
 #'   for more information
 #' @param write_disposition behavior for writing data.
 #'   defaults to `"WRITE_EMPTY"`, other possible values are
 #'   `"WRITE_TRUNCATE"` and `"WRITE_APPEND"`; see
-#'   \href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
+#'   \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 #'   for more information
 #' @param default_dataset (optional) default dataset for any table references in
 #'   `query`, either as a string in the format used by BigQuery or as a
@@ -24,9 +24,9 @@
 #' @param use_legacy_sql (optional) set to `FALSE` to enable BigQuery's standard SQL.
 #' @family jobs
 #' @return a job resource list, as documented at
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 #' @seealso API documentation for insert method:
-#'   \url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
+#'   \url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/insert}
 #' @export
 #' @keywords internal
 insert_query_job <- function(query, project,
@@ -36,6 +36,9 @@ insert_query_job <- function(query, project,
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = TRUE,
                              ...) {
+
+  .Deprecated("bq_perform_query", package = "bigrquery")
+
   assert_that(is.string(project), is.string(query))
 
   url <- bq_path(project, jobs = "")

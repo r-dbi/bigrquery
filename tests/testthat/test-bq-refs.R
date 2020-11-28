@@ -1,5 +1,3 @@
-context("test-bq-job.R")
-
 test_that("job coercion equivalent to construction", {
   ref <- bq_job("a", "b", "c")
 

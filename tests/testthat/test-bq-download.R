@@ -1,5 +1,3 @@
-context("test-bq-download.R")
-
 test_that("same results regardless of page size", {
   skip_if_no_auth()
 
@@ -28,6 +26,18 @@ test_that("can retrieve zero rows", {
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
 
+test_that("can specify large integers in page params", {
+  skip_if_no_auth()
+
+  # Use scipen to nudge R to prefer scientific formatting for very small numbers
+  # to allow this test to exercise issue #395 with small datasets.
+  old <- options(scipen=-4)
+  on.exit(options(old))
+
+  tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
+  df <- bq_table_download(tb, max_results = 100, page_size = 20)
+  expect_equal(nrow(df), 100)
+})
 
 # bq_table_info -----------------------------------------------------------
 
@@ -101,4 +111,28 @@ test_that("the return type of integer columns is set by the bigint argument", {
 
   out_chr <- bq_table_download(qry, bigint = "character")$x
   expect_identical(out_chr, x)
+})
+
+test_that("can convert geography type", {
+  skip_if_not_installed("wk")
+  sql <- "SELECT ST_GEOGFROMTEXT('POINT (30 10)') as geography"
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb)
+
+  expect_identical(df$geography, wk::wkt("POINT(30 10)"))
+})
+
+test_that("can convert bytes type", {
+  sql <- "SELECT ST_ASBINARY(ST_GEOGFROMTEXT('POINT (30 10)')) as bytes"
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb)
+
+  expect_identical(
+    df$bytes,
+    blob::blob(
+      as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+               0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
+               0x40))
+    )
+  )
 })

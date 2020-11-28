@@ -24,8 +24,8 @@ defaults to 1e4.}
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/rstats-db/bigrquery}
-  \item Report bugs at \url{https://github.com/rstats-db/bigrquery/issues}
+  \item \url{https://github.com/r-dbi/bigrquery}
+  \item Report bugs at \url{https://github.com/r-dbi/bigrquery/issues}
 }
 
 }

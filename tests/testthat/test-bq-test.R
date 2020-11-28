@@ -1,5 +1,3 @@
-context("test-bq-test.R")
-
 test_that("can init new dataset", {
   ds <- bq_test_dataset()
   bq_test_init(ds$dataset)

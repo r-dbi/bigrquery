@@ -1,5 +1,3 @@
-context("test-dbi-result.R")
-
 test_that("can retrieve full query results", {
   con <- DBI::dbConnect(
     bigquery(),
@@ -58,4 +56,14 @@ test_that("can get metadata", {
 
   expect_equal(DBI::dbGetStatement(res), sql)
 
+})
+
+test_that("dbExecute returns modified rows", {
+  ds <- bq_test_dataset()
+  con <- DBI::dbConnect(ds)
+
+  DBI::dbExecute(con, "CREATE TABLE foo (a INT64)")
+  expect_equal(DBI::dbExecute(con, "INSERT INTO foo VALUES (1), (2), (3)"), 3)
+  expect_equal(DBI::dbExecute(con, "DELETE FROM foo WHERE a >= 2"), 2)
+  DBI::dbExecute(con, "DROP TABLE foo")
 })

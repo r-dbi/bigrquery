@@ -31,7 +31,7 @@ Projects have two primary components: datasets and jobs. Unlike other
 BigQuery objects, is no accompanying \code{bq_project} S3 class because a project
 is a simple string.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list}{datasets}
