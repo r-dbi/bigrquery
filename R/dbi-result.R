@@ -110,8 +110,6 @@ setMethod(
 
     if (n == -1 || n == Inf) {
       n <- res@cursor$left()
-    } else {
-      bqs = FALSE
     }
 
     if (res@cursor$cur() != 0 || bqs == FALSE) {

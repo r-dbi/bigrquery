@@ -239,7 +239,7 @@ bqs_table_download <-
     token <- ""
   }
 
-  root_certificate = Sys.getenv("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", grpc_mingw_root_pem_path_detect)
+  root_certificate = Sys.getenv("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", grpc_mingw_root_pem_path_detect())
 
   bigint <- match.arg(bigint)
 
@@ -248,6 +248,9 @@ bqs_table_download <-
   } else {
     quiet
   }
+
+  # Setup grpc execution environment
+  bqs_initiate()
 
   if (!quiet) {
     bqs_set_log_verbosity(1L)
@@ -262,7 +265,7 @@ bqs_table_download <-
     table = bqs_table_name[3],
     parent = billing,
     n = max_results,
-    client_info = bqs_ua(),
+    client_info = bq_ua(),
     service_configuration = system.file(
       "bqs_config/bigquerystorage_grpc_service_config.json",
       package = "bigrquery",
@@ -335,16 +338,17 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
 }
 
 # grpc default root certificates on windows --------------------------------
-grpc_mingw_root_pem_path_detect <-
-  if (Sys.info()[["sysname"]] == "Windows") {
+grpc_mingw_root_pem_path_detect <- function() {
+  if (.Platform$OS.type == "windows") {
     file.path(Sys.getenv("RTOOLS40_HOME"),
-              if (Sys.info()[["machine"]] == "x86-64") {"mingw64"} else {"mingw32"},
+              if (.Platform$r_arch == "x64") {"mingw64"} else {"mingw32"},
               "share",
               "grpc",
               "roots.pem")
   } else {
     ""
   }
+}
 
 # Helpers for testing -----------------------------------------------------
 

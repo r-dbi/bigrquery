@@ -14,9 +14,22 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
-      - uses: abelfodil/protoc-action@v1
-        with:
-          enable-grpc: true
+      - name: Install grpc/protoc
+        if: runner.os == 'MacOS'
+        run: |
+          sudo brew install openssl
+          sudo brew install grpc
+
+      - name: Install grpc/protoc
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install build-essential autoconf libtool pkg-config
+          git clone -b v1.33.2 https://github.com/grpc/grpc
+          cd grpc
+          git submodule update --init
+          sudo ./test/distrib/cpp/run_distrib_test_cmake_module_install_pkgconfig.sh
+          cd ..
+          rm -R grpc
 
       - name: Query dependencies
         run: |

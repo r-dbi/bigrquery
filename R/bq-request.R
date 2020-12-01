@@ -31,7 +31,8 @@ bq_ua <- function() {
     "bigrquery/", utils::packageVersion("bigrquery"), " ",
     "(GPN:RStudio; )", " ",
     "gargle/", utils::packageVersion("gargle"), " ",
-    "httr/", utils::packageVersion("httr")
+    "httr/", utils::packageVersion("httr"), " ",
+    "grpc/", paste0(grpc_version(), collapse = "_")
   )
 }
 

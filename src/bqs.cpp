@@ -38,7 +38,7 @@ void bqs_set_log_verbosity(int severity) {
   gpr_set_log_verbosity(static_cast<gpr_log_severity>(severity));
 }
 
-//' Check gRPC version
+// Check gRPC version
 // [[Rcpp::export]]
 std::string grpc_version() {
   std::string version;

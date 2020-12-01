@@ -26,19 +26,6 @@
   toset <- !(names(defaults) %in% names(op))
   if (any(toset)) options(defaults[toset])
 
-  # BigQuery storage --------------------------------------------------------
-
-  if (!isTRUE(Sys.getenv("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", TRUE))) {
-    if (file.exists(grpc_mingw_root_pem_path_detect)) {
-      Sys.setenv(GRPC_DEFAULT_SSL_ROOTS_FILE_PATH = grpc_mingw_root_pem_path_detect)
-    }
-  }
-  bqs_init_logger()
-  # Issue with parallel arrow as.data.frame on Windows
-  if (Sys.info()[["sysname"]] == "Windows") {
-    options("arrow.use_threads" = FALSE)
-  }
-
   invisible()
 }
 
@@ -67,8 +54,4 @@ register_s3_method <- function(pkg, generic, class, fun = NULL) {
       registerS3method(generic, class, fun, envir = asNamespace(pkg))
     }
   )
-}
-
-.onUnload <- function(libpath) {
-  library.dynam.unload("bigrquery", libpath)
 }

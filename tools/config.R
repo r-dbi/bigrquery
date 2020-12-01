@@ -1,3 +1,6 @@
+# https://github.com/kevinushey/configure
+# Configure R packages for installation with R.
+#
 # Copyright 2017-2018  Kevin Ushey
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -32,6 +35,13 @@ configure_database <- local({
     class(database) <- "configure_database"
     function() database
 })
+
+#' @export
+writeLines <- function(text, con, ...) {
+    f <- file(con, open = "wb")
+    base::writeLines(enc2utf8(text), f, sep = "\n", useBytes = TRUE)
+    close(f)
+}
 
 #' @export
 print.configure_database <- function(x, ...) {
@@ -177,7 +187,7 @@ configure_common <- function(type) {
 
 configure_platform <- function(type) {
 
-    sysname <- tolower(Sys.info()[["sysname"]])
+    sysname <- .Platform$OS.type
 
     subdirs <- sysname
     if (sysname != "windows")
@@ -215,7 +225,7 @@ r_cmd_config <- function(..., simplify = TRUE) {
     R <- file.path(R.home("bin"), "R")
 
     # suppress cygwin path warnings for windows
-    if (Sys.info()[["sysname"]] == "Windows") {
+    if (.Platform$OS.type == "windows") {
         CYGWIN <- Sys.getenv("CYGWIN")
         Sys.setenv(CYGWIN = "nodosfilewarning")
         on.exit(Sys.setenv(CYGWIN = CYGWIN), add = TRUE)
@@ -271,7 +281,7 @@ read_r_config <- function(
     R <- file.path(R.home("bin"), "R")
 
     # suppress cygwin path warnings for windows
-    if (Sys.info()[["sysname"]] == "Windows") {
+    if (.Platform$OS.type == "windows") {
         CYGWIN <- Sys.getenv("CYGWIN")
         Sys.setenv(CYGWIN = "nodosfilewarning")
         on.exit(Sys.setenv(CYGWIN = CYGWIN), add = TRUE)

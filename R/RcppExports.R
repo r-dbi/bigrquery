@@ -27,7 +27,6 @@ bqs_set_log_verbosity <- function(severity) {
     invisible(.Call(`_bigrquery_bqs_set_log_verbosity`, severity))
 }
 
-#' Check gRPC version
 grpc_version <- function() {
     .Call(`_bigrquery_grpc_version`)
 }

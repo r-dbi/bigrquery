@@ -3,11 +3,11 @@
 # Use 'configure_file()' to substitute configuration values.
 
 # Check OS
-win <- Sys.info()[["sysname"]] == "Windows"
+win <- .Platform$OS.type == "windows"
 
 # Find RTOOLS40
 
-pacman_install <- function(pkg, rtools40, win) {
+install_with_pacman <- function(pkg, rtools40, win) {
 	arch <- switch(win, "64" = "x86_64", "32" = "i686")
 	# try cran mirrors
 	pacman <- function() {
@@ -37,14 +37,14 @@ pacman_install <- function(pkg, rtools40, win) {
 if (win) {
 	message("*** searching for RTOOLS40 mingw binaries ...", appendLF = FALSE)
 	RTOOLS40_ROOT <- gsub("\\\\", "/", Sys.getenv("RTOOLS40_HOME", "c:/rtools40"))
-	WIN <- if (Sys.info()[["machine"]] == "x86-64") {"64"} else {"32"}
+	WIN <- if (.Platform$r_arch == "x64") {"64"} else {"32"}
 	MINGW_PREFIX <- paste0("/mingw", WIN)
 	BINPREF <- Sys.getenv("BINPREF", paste0(RTOOLS40_ROOT, MINGW_PREFIX, "/bin/"))
 	if (dir.exists(BINPREF)) {
 		Sys.setenv(PATH = paste(BINPREF, Sys.getenv("PATH"), sep = ";"))
 		if (Sys.which("grpc_cpp_plugin") == "") {
 			# attempt to install grpc and protoc using msys2
-			pacman_install("grpc", RTOOLS40_ROOT, WIN)
+			install_with_pacman("grpc", RTOOLS40_ROOT, WIN)
 		}
 		message(" OK")
 	} else {
