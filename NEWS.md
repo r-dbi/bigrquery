@@ -1,6 +1,8 @@
 # bigrquery (development version)
 
 * Add `billing` slot to `BigQueryResult`.
+* Add `BigQueryStorage` support. Use function `bqs_table_download` or
+  set `bqs` to `TRUE` when using DBI methods.
 
 # bigrquery 1.3.2
 

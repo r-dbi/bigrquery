@@ -2,6 +2,7 @@
 % Please edit documentation in R/bq-download.R
 \name{bq_table_download}
 \alias{bq_table_download}
+\alias{bqs_table_download}
 \title{Download table data}
 \usage{
 bq_table_download(
@@ -13,9 +14,21 @@ bq_table_download(
   quiet = NA,
   bigint = c("integer", "integer64", "numeric", "character")
 )
+
+bqs_table_download(
+  x,
+  billing,
+  snapshot_time = NA,
+  selected_fields = character(),
+  row_restriction = "",
+  max_results = Inf,
+  quiet = NA,
+  as_tibble = FALSE,
+  bigint = c("integer", "integer64", "numeric", "character")
+)
 }
 \arguments{
-\item{x}{A \link{bq_table}}
+\item{x}{BigQuery table reference \verb{\{project\}.\{dataset\}.\{table_name\}}}
 
 \item{max_results}{Maximum number of results to retrieve. Use \code{Inf}
 retrieve all rows.}
@@ -36,6 +49,17 @@ if \code{NA} displays progress bar only for long-running jobs.}
 The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
 values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
 which allows the full range of 64 bit integers.}
+
+\item{billing}{Used as parent for \code{CreateReadSession} grpc method.}
+
+\item{snapshot_time}{Snapshot time as POSIXct.}
+
+\item{selected_fields}{A character vector of field to select from table.}
+
+\item{row_restriction}{Restriction to apply to the table.}
+
+\item{as_tibble}{Should data be returned as tibble. Default is to return
+as arrow Table from raw IPC stream.}
 }
 \value{
 Because data retrieval may generalise list-cols and the data frame

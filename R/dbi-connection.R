@@ -197,9 +197,13 @@ setMethod(
 #' @export
 setMethod(
   "dbReadTable", c("BigQueryConnection", "character"),
-  function(conn, name, ...) {
+  function(conn, name, bqs = FALSE, ...) {
     tb <- as_bq_table(conn, name)
-    bq_table_download(tb, ...)
+    if (isTRUE(bqs)) {
+      bqs_table_download(tb, conn@billing, as_tibble = TRUE, ...)
+    } else {
+      bq_table_download(tb, ...)
+    }
   })
 
 #' @rdname DBI

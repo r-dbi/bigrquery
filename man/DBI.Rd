@@ -83,7 +83,7 @@
   row.names = NA
 )
 
-\S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
+\S4method{dbReadTable}{BigQueryConnection,character}(conn, name, bqs = FALSE, ...)
 
 \S4method{dbListTables}{BigQueryConnection}(conn, ...)
 
@@ -107,7 +107,7 @@
 
 \S4method{dbClearResult}{BigQueryResult}(res, ...)
 
-\S4method{dbFetch}{BigQueryResult}(res, n = -1, ...)
+\S4method{dbFetch}{BigQueryResult}(res, n = -1, bqs = FALSE, ...)
 
 \S4method{dbHasCompleted}{BigQueryResult}(res, ...)
 
