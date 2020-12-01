@@ -90,3 +90,6 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
+SystemRequirements:
+    protobuf
+    grpc
