@@ -1,0 +1,10 @@
+# Default make file;
+PKG_CPPFLAGS = @CPPF@
+PKG_CXXFLAGS = @CXXF@
+PKG_LIBS = @LIBS@
+CXX_STD = CXX11
+CC="clang -mmacosx-version-min=10.15"
+CXX="clang++ -mmacosx-version-min=10.15"
+
+# Obtain the object files
+OBJECTS=@TARGETS@

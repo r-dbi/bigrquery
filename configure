@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+: "${R_HOME=`R RHOME`}"
+"${R_HOME}/bin/Rscript" tools/config.R configure "$@"
+
+# macOS compiler
+if [ "$UNAME" = "Darwin" ]; then
+  CC="clang -mmacosx-version-min=10.15"
+  CXX="clang++ -mmacosx-version-min=10.15"
+fi

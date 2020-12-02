@@ -187,6 +187,119 @@ bq_download_callback <- function(page, path, progress) {
   }
 }
 
+
+#' @param x BigQuery table reference `{project}.{dataset}.{table_name}`
+#' @param billing Used as parent for `CreateReadSession` grpc method.
+#' @param snapshot_time Snapshot time as POSIXct.
+#' @param selected_fields A character vector of field to select from table.
+#' @param row_restriction Restriction to apply to the table.
+#' @param as_tibble Should data be returned as tibble. Default is to return
+#' as arrow Table from raw IPC stream.
+#' @rdname bq_table_download
+#' @importFrom arrow RecordBatchStreamReader Table
+#' @export
+bqs_table_download <-
+  function(x,
+           billing,
+           snapshot_time = NA,
+           selected_fields = character(),
+           row_restriction = "",
+           max_results = Inf,
+           quiet = NA,
+           as_tibble = FALSE,
+           bigint = c("integer", "integer64", "numeric", "character")
+) {
+
+  # Parameters validation
+  bqs_table_name <- unlist(strsplit(unlist(x), "\\.|:"))
+  assert_that(length(bqs_table_name) == 3)
+  assert_that(is.character(row_restriction))
+  assert_that(is.character(selected_fields))
+  if (is.na(snapshot_time)) {
+    snapshot_time <- 0L
+  } else {
+    assert_that(inherits(snapshot_time, "POSIXct"))
+  }
+  timestamp_seconds <- as.integer(snapshot_time)
+  timestamp_nanos <- as.integer(as.numeric(snapshot_time - timestamp_seconds)*1000000000)
+
+  billing <- as.character(billing)
+  if (nchar(billing) == 0) { billing <- bqs_table_name[1] }
+
+  if (max_results < 0 || max_results == Inf) {
+    max_results <- -1L
+    trim_to_n <- FALSE
+  } else {
+    trim_to_n <- TRUE
+  }
+
+  if (bq_has_token()) {
+    token <- .auth$get_cred()$credentials$access_token
+  } else {
+    token <- ""
+  }
+
+  root_certificate = Sys.getenv("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", grpc_mingw_root_pem_path_detect())
+
+  bigint <- match.arg(bigint)
+
+  # Setup grpc execution environment
+  bqs_initiate()
+
+  if (!bq_quiet(quiet)) {
+    bqs_set_log_verbosity(1L)
+  } else {
+    bqs_set_log_verbosity(2L)
+  }
+
+  # Cpp client call
+  raws <- bqs_ipc_stream(
+    project = bqs_table_name[1],
+    dataset = bqs_table_name[2],
+    table = bqs_table_name[3],
+    parent = billing,
+    n = max_results,
+    client_info = bq_ua(),
+    service_configuration = system.file(
+      "bqs_config/bigquerystorage_grpc_service_config.json",
+      package = "bigrquery",
+      mustWork = TRUE
+    ),
+    access_token = token,
+    root_certificate = root_certificate,
+    timestamp_seconds = timestamp_seconds,
+    timestamp_nanos = timestamp_nanos,
+    selected_fields = selected_fields,
+    row_restriction = row_restriction
+  )
+
+  rdr <- RecordBatchStreamReader$create(unlist(raws))
+  # There is currently no way to create an Arrow Table from a
+  # RecordBatchStreamReader when there is a schema but no batches.
+  if (length(raws[[2]]) == 0L) {
+    tb <- Table$create(
+      stats::setNames(
+        data.frame(matrix(ncol = rdr$schema$num_fields, nrow = 0)),
+        rdr$schema$names
+      )
+    )
+  } else {
+    tb <- rdr$read_table()
+  }
+
+  if (isTRUE(as_tibble)) {
+    tb <- convert_bigint(as.data.frame(tb), bigint)
+  }
+
+  # Batches do not support a max_results so we get just enough results before
+  # exiting the streaming loop.
+  if (isTRUE(trim_to_n) && nrow(tb) > 0) {
+    tb <- tb[1:max_results, ]
+  }
+
+  return(tb)
+}
+
 bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   x <- as_bq_table(x)
   assert_that(is.numeric(begin), length(begin) == 1)
@@ -216,6 +329,20 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   curl::handle_setheaders(h, .list = headers)
 
   h
+}
+
+# grpc default root certificates on windows --------------------------------
+grpc_mingw_root_pem_path_detect <- function() {
+  if (.Platform$OS.type == "windows") {
+    RTOOLS40_ROOT <- gsub("\\\\", "/", Sys.getenv("RTOOLS40_HOME", "c:/rtools40"))
+    WIN <- if (.Platform$r_arch == "x64") {"64"} else {"32"}
+    MINGW_PREFIX <- paste0("/mingw", WIN)
+    paste0(RTOOLS40_ROOT,
+           MINGW_PREFIX,
+           "/share/grpc/roots.pem")
+  } else {
+    ""
+  }
 }
 
 # Helpers for testing -----------------------------------------------------

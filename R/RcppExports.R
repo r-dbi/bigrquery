@@ -13,3 +13,26 @@ bq_parse_files <- function(schema_path, file_paths, n, quiet) {
     .Call(`_bigrquery_bq_parse_files`, schema_path, file_paths, n, quiet)
 }
 
+#' Simple read file to read configuration from json
+NULL
+
+#' append std::string at the end of a std::vector<uint8_t> vector
+NULL
+
+bqs_init_logger <- function() {
+    invisible(.Call(`_bigrquery_bqs_init_logger`))
+}
+
+bqs_set_log_verbosity <- function(severity) {
+    invisible(.Call(`_bigrquery_bqs_set_log_verbosity`, severity))
+}
+
+grpc_version <- function() {
+    .Call(`_bigrquery_grpc_version`)
+}
+
+#' @noRd
+bqs_ipc_stream <- function(project, dataset, table, parent, n, client_info, service_configuration, access_token, root_certificate, timestamp_seconds, timestamp_nanos, selected_fields, row_restriction) {
+    .Call(`_bigrquery_bqs_ipc_stream`, project, dataset, table, parent, n, client_info, service_configuration, access_token, root_certificate, timestamp_seconds, timestamp_nanos, selected_fields, row_restriction)
+}
+

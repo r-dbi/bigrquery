@@ -104,7 +104,7 @@ setMethod(
 #' @export
 setMethod(
   "dbFetch", "BigQueryResult",
-  function(res, n = -1, ...) {
+  function(res, n = -1, bqs = FALSE, ...) {
     stopifnot(length(n) == 1, is.numeric(n))
     stopifnot(n == round(n), !is.na(n), n >= -1)
 
@@ -112,12 +112,23 @@ setMethod(
       n <- res@cursor$left()
     }
 
-    data <- bq_table_download(res@bq_table,
-      max_results = n,
-      start_index = res@cursor$cur(),
-      page_size = res@page_size,
-      bigint = res@bigint
-    )
+    if (res@cursor$cur() != 0 || bqs == FALSE) {
+      data <- bq_table_download(res@bq_table,
+        max_results = n,
+        start_index = res@cursor$cur(),
+        page_size = res@page_size,
+        bigint = res@bigint
+      )
+    } else {
+      data <- bqs_table_download(res@bq_table,
+        billing = res@billing,
+        max_results = n,
+        bigint = res@bigint,
+        as_tibble = TRUE,
+        quiet = res@quiet
+      )
+    }
+
     res@cursor$adv(n)
 
     data

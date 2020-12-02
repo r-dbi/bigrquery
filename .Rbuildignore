@@ -1,5 +1,6 @@
 ^data-raw$
 ^pkgdown$
+^scripts$
 ^_pkgdown\.yml$
 ^docs$
 ^.*\.Rproj$

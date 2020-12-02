@@ -19,6 +19,23 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - name: Install grpc/protoc
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install build-essential autoconf libtool pkg-config
+          git clone -b v1.33.2 https://github.com/grpc/grpc
+          cd grpc
+          git submodule update --init
+          sudo ./test/distrib/cpp/run_distrib_test_cmake_module_install_pkgconfig.sh
+          cd ..
+          sudo rm -R grpc
+
+      - name: Install grpc/protoc
+        if: runner.os == 'MacOS'
+        run: |
+          brew install openssl
+          brew install grpc
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
