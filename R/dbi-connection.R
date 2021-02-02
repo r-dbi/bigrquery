@@ -16,6 +16,26 @@ BigQueryConnection <-
     use_legacy_sql = use_legacy_sql,
     bigint = match.arg(bigint)
   )
+  # Feed connection observer in RStudio
+  if (!is.null(getOption("connectionObserver"))) { # nocov start
+    addTaskCallback(function(expr, ...) {
+      tryCatch({
+        if (is.call(expr) &&
+            as.character(expr[[1]]) %in% c("<-", "=") &&
+            "dbConnect" %in% as.character(expr[[3]][[1]])) {
+
+          # notify if this is an assignment we can replay
+          on_connection_opened(eval(expr[[2]]), paste(
+            c("library(bigrquery)", deparse(expr)), collapse = "\n"))
+        }
+      }, error = function(e) {
+        warning("Could not notify connection observer. ", e$message, call. = FALSE)
+      })
+
+      # always return false so the task callback is run at most once
+      FALSE
+    })
+  } # nocov end
   ret
 }
 
@@ -65,6 +85,7 @@ setMethod(
 setMethod(
   "dbDisconnect", "BigQueryConnection",
   function(conn, ...) {
+    on_connection_closed(conn)
     invisible(TRUE)
   })
 
@@ -189,6 +210,8 @@ setMethod(
       write_disposition = write_disposition,
       ...
     )
+
+    on_connection_updated(conn)
     invisible(TRUE)
   })
 
@@ -246,6 +269,7 @@ setMethod(
   function(conn, name, ...) {
     tb <- as_bq_table(conn, name)
     bq_table_delete(tb)
+    on_connection_updated(conn)
     invisible(TRUE)
   })
 
