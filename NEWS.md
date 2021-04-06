@@ -2,7 +2,7 @@
 
 * Add `billing` slot to `BigQueryResult`.
 
-* Improve int64 support with dplyr syntax. Fix issue where collect() and tbl() ignored `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
+* Improve int64 support when reading BigQuery tables with dplyr syntax. `collect()` now utilizes `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
 
 # bigrquery 1.3.2
 
