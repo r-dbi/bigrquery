@@ -124,11 +124,13 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   }
 
   quiet <- if (n < 100) TRUE else x$src$con@quiet
+  bigint <- x$src$con@bigint %||% "integer"
   out <- bq_table_download(tb,
     max_results = n,
     page_size = page_size,
     quiet = quiet,
-    max_connections = max_connections
+    max_connections = max_connections,
+    bigint = bigint
   )
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
