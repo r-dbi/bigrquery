@@ -124,7 +124,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   }
 
   quiet <- if (n < 100) TRUE else x$src$con@quiet
-  bigint <- if (!is.null(x$src$con@bigint)) x$src$con@bigint else "integer"
+  bigint <- x$src$con@bigint %||% "integer"
   out <- bq_table_download(tb,
     max_results = n,
     page_size = page_size,
