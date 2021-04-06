@@ -133,7 +133,7 @@
 </h1>
 <ul>
 <li><p>Add <code>billing</code> slot to <code>BigQueryResult</code>.</p></li>
-<li><p>When using dplyr syntax with BigQuery table, <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now utilizes <code>bigint</code> parameter in <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code> object. Set <code>bigint =  integer64</code> in connection object to avoid int64 coercision to integer and resulting overflow issues (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>).</p></li>
+<li><p>Improve int64 support when reading BigQuery tables with dplyr syntax. <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now utilizes <code>bigint</code> parameter in <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">DBI::dbConnect()</a></code> object. Set <code>bigint</code> in connection object to <code>"integer64"</code> or <code>"character"</code> to avoid integer coercion and overflow issues (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>, <a href='https://github.com/r-dbi/bigrquery/issues/437'>#437</a>).</p></li>
 </ul>
 </div>
     <div id="bigrquery-132" class="section level1">

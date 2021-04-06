@@ -1,8 +1,8 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 5fe9f5875bc6dc7684f78e9e96a9e479503508b0
+pkgdown_sha: 7a5834b0177a78acd65e168e55674104e0931d61
 articles: {}
-last_built: 2021-04-06T14:20Z
+last_built: 2021-04-06T22:57Z
 urls:
   reference: https://bigrquery.r-dbi.org/reference
   article: https://bigrquery.r-dbi.org/articles
