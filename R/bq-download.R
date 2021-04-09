@@ -57,7 +57,8 @@ bq_table_download <-
            start_index = 0L,
            max_connections = 6L,
            quiet = NA,
-           bigint = c("integer", "integer64", "numeric", "character")) {
+           bigint = c("integer", "integer64", "numeric", "character"),
+           allow_fragments = FALSE) {
   x <- as_bq_table(x)
   assert_that(is.numeric(page_size), length(page_size) == 1)
   assert_that(is.numeric(max_results), length(max_results) == 1)
@@ -85,9 +86,21 @@ bq_table_download <-
     quiet = quiet
   )
 
+  page_rows <- c()
+  for (p in page_paths) {
+    page <- jsonlite::read_json(p)
+    n <- length(page[["rows"]])
+    page_rows<- c(page_rows, n)
+  }
+  num_observations <- sum(page_rows)
+
+  if (!allow_fragments) {
+    assert_that(are_equal(num_observations, page_info$n_rows))
+  }
+
   on.exit(file.remove(c(schema_path, page_paths)))
 
-  table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+  table_data <- bq_parse_files(schema_path, page_paths, n = num_observations, quiet = bq_quiet(quiet))
   convert_bigint(table_data, bigint)
 }
 
