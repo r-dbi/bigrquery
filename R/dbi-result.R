@@ -1,12 +1,22 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql) {
+BigQueryResult <- function(conn, sql, ...) {
+
+  args <- c(as.list(environment()), list(...))
+  if ("params" %in% names(args)) {
+    params = args["params"]
+  } else {
+    params = list()
+  }
+
   if (is.null(conn@dataset)) {
-    tb <- bq_project_query(conn@billing, sql, quiet = conn@quiet)
+    tb <- bq_project_query(conn@billing, sql, quiet = conn@quiet, parameters = params)
   } else {
     ds <- as_bq_dataset(conn)
-    tb <- bq_dataset_query(ds, sql, quiet = conn@quiet, billing = conn@billing)
+    tb <- bq_dataset_query(
+      ds, sql, quiet = conn@quiet, billing = conn@billing, parameters = params
+    )
   }
   nrow <- bq_table_nrow(tb)
 
