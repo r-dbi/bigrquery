@@ -8,8 +8,14 @@
 \usage{
 bq_project_query(x, query, destination_table = NULL, ..., quiet = NA)
 
-bq_dataset_query(x, query, destination_table = NULL, ...,
-  billing = NULL, quiet = NA)
+bq_dataset_query(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  billing = NULL,
+  quiet = NA
+)
 }
 \arguments{
 \item{x}{Either a project (a string) or a \link{bq_dataset}.}
@@ -26,8 +32,8 @@ queries (> 128 MB compressed).}
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
 
-\item{billing}{If you are query a dataset that you only have read access
-for, you'll also need to submit a \code{billing} project.}
+\item{billing}{If you query a dataset that you only have read access
+for, such as a public dataset, you must also submit a \code{billing} project.}
 }
 \value{
 A \link{bq_table}

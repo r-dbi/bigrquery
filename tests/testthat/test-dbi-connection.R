@@ -1,5 +1,3 @@
-context("test-dbi-connection.R")
-
 test_that("can connect and disconnect", {
   con <- DBI::dbConnect(bigquery(), project = "p")
   expect_true(dbIsValid(con))

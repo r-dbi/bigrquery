@@ -1,5 +1,108 @@
 # bigrquery (development version)
 
+* Add `billing` slot to `BigQueryResult`.
+
+* Improve int64 support when reading BigQuery tables with dplyr syntax. `collect()` now utilizes `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
+
+# bigrquery 1.3.2
+
+* BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
+  the [blob](https://blob.tidyverse.org/) and 
+  [wk](https://paleolimbot.github.io/wk/) packages, respectively
+  (@paleolimbot, #354, #388).
+
+* When used with dbplyr >= 2.0.0, ambiguous variables in joins will get
+  suffixes `_x` and `_y` (instead of `.x` and `.y` which don't work with
+  BigQuery) (#403).
+
+* `bq_table_download()` works once again with large row counts
+  (@gjuggler, #395). Google's API has stopped accepting `startIndex`
+  parameters with scientific formatting, which was happening for large
+  values (>1e5) by default.
+
+* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
+  performing a query (@Ka2wei, #316).
+
+# bigrquery 1.3.1
+
+* Now requires gargle 0.5.0
+
+# bigrquery 1.3.0
+
+* Old functions (not starting with `bq_`) are deprecated (@byapparov, #335)
+
+* When `bq_perform_*()` fails, you now see all errors, not just the first (#355).
+
+* `bq_perform_query()` can now execute parameterised query with parameters 
+  of `ARRAY` type (@byapparov, #303). Vectors of length > 1 will be
+  automatically converted to `ARRAY` type, or use `bq_param_array()` to
+  be explicit.
+
+* `bq_perform_upload()` works once again (#361). It seems like the generated
+  JSON was always incorrect, but Google's type checking only recently become
+  strict enough to detect the problem.
+
+* `dbExecute()` is better supported. It no longer fails with a spurious
+  error for DDL queries, and it returns the number of affected rows for
+  DML queries (#375).
+
+* `dbSendQuery()` (and hence `dbGetQuery()`) and `collect()` passes on `...` 
+  to `bq_perform_query()`. `collect()` gains `page_size` and `max_connection` 
+  arguments that are passed on to `bq_table_download()` (#374).
+
+* `copy_to()` now works with BigQuery (although it doesn't support temporary
+  tables so application is somewhat limited) (#337).
+  
+* `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
+  (@jimmyg3g, #369).
+
+* Error messages inlude hints for common problems (@deflaux, #353).
+
+# bigrquery 1.2.0
+
+## Auth from gargle
+
+bigrquery's auth functionality now comes from the [gargle package](https://gargle.r-lib.org), which provides R infrastructure to work with Google APIs, in general. The same transition is underway in several other packages, such as [googledrive](https://googledrive.tidyverse.org). This will make user interfaces more consistent and makes two new token flows available in bigrquery:
+
+  * Application Default Credentials
+  * Service account tokens from the metadata server available to VMs running on GCE
+  
+Where to learn more:
+  
+  * Help for [`bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html) *all that most users need*
+  * *details for more advanced users*
+    - [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html)
+    - [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html)
+    - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
+
+### Changes that a user will notice
+
+Temporary files are now deleted after table download. (@meztez, #343)
+
+OAuth2 tokens are now cached at the user level, by default, instead of in `.httr-oauth` in the current project. The default OAuth app has also changed. This means you will need to re-authorize bigrquery (i.e. get a new token). You may want to delete any vestigial `.httr-oauth` files lying around your bigrquery projects.
+
+The OAuth2 token key-value store now incorporates the associated Google user when indexing, which makes it easier to switch between Google identities.
+
+`bq_user()` is a new function that reveals the email of the user associated with the current token.
+
+If you previously used `set_service_token()` to use a service account token, it still works. But you'll get a deprecation warning. Switch over to `bq_auth(path = "/path/to/your/service-account.json")`. Several other functions are similarly soft-deprecated.
+
+## Dependency changes
+
+R 3.1 is no longer explicitly supported or tested. Our general practice is to support the current release (3.6), devel, and the 4 previous versions of R (3.5, 3.4, 3.3, 3.2).
+
+gargle and rlang are newly Imported.
+
+# bigrquery 1.1.1
+
+* Fix test failure with dbplyr 1.4.0.
+
+* `bq_field()` can now pass `description` parameter which will be applied
+  in `bq_table_create()` call (@byapparov, #272).
+  
+* `bq_table_patch()` - allows to patch table (@byapparov, #253) with new schema.
+
+
 # bigrquery 1.1.0
 
 ## Improved type support

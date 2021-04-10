@@ -1,7 +1,9 @@
 ## Test environments
-* local OS X install: R 3.4.0
-* travis-ci: R 3.2, 3.3, 3.4, release, devel.
-* win-builder: R devel
+
+* GitHub Actions (ubuntu-16.04): 3.3, 3.4, 3.5, oldrel, release, devel
+* GitHub Actions (windows): release
+* Github Actions (macOS): release, devel
+* win-builder: devel
 
 ## R CMD check results
 
@@ -9,7 +11,4 @@
 
 ## revdepcheck results
 
-We checked 3 reverse dependencies (1 from CRAN + 2 from BioConductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
+There is one reverse dependency (condusco), which passes R CMD check cleanly.

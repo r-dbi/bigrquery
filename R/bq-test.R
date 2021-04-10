@@ -1,21 +1,22 @@
 #' Project to use for testing bigrquery
 #'
 #' @description
-#' You'll need to set up the `BIGQUERY_TEST_PROJECT` (name of a project) and
+#' You'll need to set the `BIGQUERY_TEST_PROJECT` (name of a project) and
 #' `BIGQUERY_TEST_BUCKET` (name of bucket) env vars in order to run bigrquery
 #' tests locally. I recommend creating a new project because the tests involve
-#' both reading and writing in BigQuery and CloudStorage.
+#' both reading and writing in BigQuery and Cloud Storage.
 #'
-#' You will also need to have billing enabled for the project, and to
-#' run `bq_test_init()` once.
+#' The `BIGQUERY_TEST_PROJECT` must have billing enabled for the project. While
+#' logged in, via `bq_auth()`, as a user with permission to work in
+#' `BIGQUERY_TEST_PROJECT`, run `bq_test_init()` once to perform some setup.
 #'
-#' @section Testing:
-#' In tests, `bq_test_project()` (and hence `bq_test_dataset()`) will
+#' @section
+#' Testing: In tests, `bq_test_project()` (and hence `bq_test_dataset()`) will
 #' automatically skip if auth and a test project are not available.
 #'
-#' @return `bq_test_project()` returns the name of a project suitable for
-#'   use in testing. `bq_test_dataset()` creates a temporary dataset
-#'   whose lifetime is tied to the lifetime of the object that it returns.
+#' @return `bq_test_project()` returns the name of a project suitable for use in
+#'   testing. `bq_test_dataset()` creates a temporary dataset whose lifetime is
+#'   tied to the lifetime of the object that it returns.
 #' @export
 #' @keywords internal
 #' @examples
@@ -90,7 +91,7 @@ bq_testable <- function() {
 #' @export
 #' @rdname bq_test_project
 bq_authable <- function() {
-  has_access_cred() || (interactive() && !is_testing())
+  bq_has_token() || (interactive() && !is_testing())
 }
 
 #' @export
@@ -127,5 +128,5 @@ random_name <- function(n = 10) {
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")
 
 skip_if_no_auth <- function() {
-  testthat::skip_if_not(has_access_cred(), "Authentication not available")
+  testthat::skip_if_not(bq_has_token(), "Authentication not available")
 }

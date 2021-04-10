@@ -1,5 +1,3 @@
-context("test-bq-field.R")
-
 test_that("can create and coerce a single field", {
   x1 <- bq_field("x", "string")
   x2 <- as_bq_field(list(name = "x", type = "string"))

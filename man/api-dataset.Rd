@@ -20,8 +20,7 @@ bq_dataset_update(x, ...)
 
 bq_dataset_delete(x, delete_contents = FALSE)
 
-bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE,
-  ...)
+bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
 }
 \arguments{
 \item{x}{A \link{bq_dataset}}
@@ -47,13 +46,13 @@ all pages (this may take a long time!)}
 \description{
 Basic create-read-update-delete verbs for datasets.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/get}{get}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/insert}{insert}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/datasets/delete}{delete}
-\item \href{https://cloud.google.com/bigquery/docs/reference/v2/tables/list}{list}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert}{insert}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list}{list}
 }
 }
 

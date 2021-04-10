@@ -11,7 +11,7 @@
 #' * `bq_perform_load()`:    [bq_table_load()].
 #' * `bq_perform_extract()`: [bq_table_save()].
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 #'
 #' Additional information at:
@@ -131,7 +131,7 @@ bq_perform_upload <- function(x, values,
     fields <- as_bq_fields(fields)
     load$schema <- list(fields = as_json(fields))
   } else if (!bq_table_exists(x)) {
-    load$autodetect <- TRUE
+    load$autodetect <- unbox(TRUE)
   }
 
   config <- list(configuration = list(load = load))
@@ -224,13 +224,17 @@ bq_perform_load <- function(x,
   as_bq_job(res$jobReference)
 }
 
-
 #' @export
 #' @rdname api-perform
 #' @param query SQL query string.
 #' @param parameters Named list of parameters match to query parameters.
-#'   Parameter `x` will be matched to placeholder `@x`. See
-#'   <https://cloud.google.com/bigquery/docs/parameterized-queries>
+#'   Parameter `x` will be matched to placeholder `@x`.
+#'
+#'   Generally, you can supply R vectors and they will be automatically
+#'   converted to the correct type. If you need greater control, you can call
+#'   [bq_param_scalar()] or [bq_param_array()] explicitly.
+#'
+#'   See <https://cloud.google.com/bigquery/docs/parameterized-queries>
 #'   for more details.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
@@ -285,6 +289,40 @@ bq_perform_query <- function(query, billing,
     query = list(fields = "jobReference")
   )
   as_bq_job(res$jobReference)
+}
+
+#' @export
+#' @rdname api-perform
+bq_perform_query_dry_run <- function(query, billing,
+                                     ...,
+                                     default_dataset = NULL,
+                                     parameters = NULL,
+                                     use_legacy_sql = FALSE) {
+
+  assert_that(is.string(query), is.string(billing))
+
+  query <- list(
+    query = unbox(query),
+    useLegacySql = unbox(use_legacy_sql)
+  )
+  if (!is.null(parameters)) {
+    parameters <- as_bq_params(parameters)
+    query$queryParameters <- as_json(parameters)
+  }
+  if (!is.null(default_dataset)) {
+    query$defaultDataset <- datasetReference(default_dataset)
+  }
+
+  url <- bq_path(billing, jobs = "")
+  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+
+  res <- bq_post(
+    url,
+    body = bq_body(body, ...),
+    query = list(fields = "statistics")
+  )
+  bytes <- as.numeric(res$statistics$query$totalBytesProcessed)
+  structure(bytes, class = "bq_bytes")
 }
 
 #' @export

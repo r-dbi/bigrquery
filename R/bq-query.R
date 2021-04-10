@@ -6,8 +6,8 @@
 #' which you can then query for more information.
 #'
 #' @param x Either a project (a string) or a [bq_dataset].
-#' @param billing If you are query a dataset that you only have read access
-#'   for, you'll also need to submit a `billing` project.
+#' @param billing If you query a dataset that you only have read access
+#'   for, such as a public dataset, you must also submit a `billing` project.
 #' @inheritParams bq_perform_query
 #' @inheritParams api-job
 #' @param ... Passed on to [bq_perform_query()]
@@ -54,9 +54,7 @@ bq_project_query <- function(x, query,
     ...
   )
   bq_job_wait(job, quiet = quiet)
-
-  meta <- bq_job_meta(job, "configuration(query(destinationTable))")
-  as_bq_table(meta$configuration$query$destinationTable)
+  bq_job_table(job)
 }
 
 #' @export
@@ -75,9 +73,7 @@ bq_dataset_query <- function(x, query,
     ...
   )
   bq_job_wait(job, quiet = quiet)
-
-  meta <- bq_job_meta(job, "configuration(query(destinationTable))")
-  as_bq_table(meta$configuration$query$destinationTable)
+  bq_job_table(job)
 }
 
 # Similar to bq_perform_query: except uses dryRun, and hence result

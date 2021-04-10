@@ -13,20 +13,22 @@ get_job(project, job)
 }
 \value{
 a job resource list, as documented at
-\url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 }
 \description{
 Please use \link{api-job} instead
 }
 \seealso{
 API documentation for get method:
-\url{https://developers.google.com/bigquery/docs/reference/v2/jobs/get}
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}
 
 \code{\link[=wait_for]{wait_for()}} to wait for a job to complete
 
-Other jobs: \code{\link{insert_extract_job}},
-  \code{\link{insert_query_job}},
-  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
+Other jobs: 
+\code{\link{insert_extract_job}()},
+\code{\link{insert_query_job}()},
+\code{\link{insert_upload_job}()},
+\code{\link{wait_for}()}
 }
 \concept{jobs}
 \keyword{internal}

@@ -4,9 +4,16 @@
 \alias{insert_query_job}
 \title{Create a new query job \link{deprecated}}
 \usage{
-insert_query_job(query, project, destination_table = NULL,
-  default_dataset = NULL, create_disposition = "CREATE_IF_NEEDED",
-  write_disposition = "WRITE_EMPTY", use_legacy_sql = TRUE, ...)
+insert_query_job(
+  query,
+  project,
+  destination_table = NULL,
+  default_dataset = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  use_legacy_sql = TRUE,
+  ...
+)
 }
 \arguments{
 \item{query}{SQL query string}
@@ -22,31 +29,33 @@ list with \code{project_id} and \code{dataset_id} entries}
 \item{create_disposition}{behavior for table creation.
 defaults to \code{"CREATE_IF_NEEDED"},
 the only other supported value is \code{"CREATE_NEVER"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.createDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.createDisposition}{the API documentation}
 for more information}
 
 \item{write_disposition}{behavior for writing data.
 defaults to \code{"WRITE_EMPTY"}, other possible values are
 \code{"WRITE_TRUNCATE"} and \code{"WRITE_APPEND"}; see
-\href{https://cloud.google.com/bigquery/docs/reference/v2/jobs#configuration.query.writeDisposition}{the API documentation}
+\href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs#configuration.query.writeDisposition}{the API documentation}
 for more information}
 
 \item{use_legacy_sql}{(optional) set to \code{FALSE} to enable BigQuery's standard SQL.}
 }
 \value{
 a job resource list, as documented at
-\url{https://developers.google.com/bigquery/docs/reference/v2/jobs}
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}
 }
 \description{
-Please use \link{api-job} instead.
+Please use \link{api-job} and \link{api-perform} instead.
 }
 \seealso{
 API documentation for insert method:
-\url{https://developers.google.com/bigquery/docs/reference/v2/jobs/insert}
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/insert}
 
-Other jobs: \code{\link{get_job}},
-  \code{\link{insert_extract_job}},
-  \code{\link{insert_upload_job}}, \code{\link{wait_for}}
+Other jobs: 
+\code{\link{get_job}()},
+\code{\link{insert_extract_job}()},
+\code{\link{insert_upload_job}()},
+\code{\link{wait_for}()}
 }
 \concept{jobs}
 \keyword{internal}

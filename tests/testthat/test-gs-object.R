@@ -1,5 +1,3 @@
-context("test-gs-object.R")
-
 test_that("can delete objects", {
   skip_if_no_auth()
   tb <- bq_table(bq_test_project(), "basedata", "mtcars")

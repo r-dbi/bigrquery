@@ -24,19 +24,24 @@ defaults to 1e4.}
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/rstats-db/bigrquery}
-  \item Report bugs at \url{https://github.com/rstats-db/bigrquery/issues}
+  \item \url{https://github.com/r-dbi/bigrquery}
+  \item Report bugs at \url{https://github.com/r-dbi/bigrquery/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com}
+\strong{Maintainer}: Hadley Wickham \email{hadley@rstudio.com} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID})
+
+Authors:
+\itemize{
+  \item Jennifer Bryan \email{jenny@rstudio.com} (\href{https://orcid.org/0000-0002-6983-2759}{ORCID})
+}
 
 Other contributors:
 \itemize{
   \item Kungliga Tekniska Högskolan (strptime implementation) [contributor]
   \item The NetBSD Foundation, Inc. (gmtime implementation) [contributor]
-  \item RStudio [copyright holder]
+  \item RStudio [copyright holder, funder]
 }
 
 }

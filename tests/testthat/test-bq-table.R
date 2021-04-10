@@ -1,12 +1,16 @@
-context("bq-table.R")
-
 test_that("can create and delete tables", {
   ds <- bq_test_dataset()
 
   bq_mtcars <- bq_table(ds, "mtcars")
   expect_false(bq_table_exists(bq_mtcars))
 
-  bq_table_create(bq_mtcars, mtcars)
+  bq_table_create(
+    bq_mtcars,
+    mtcars,
+    friendly_name = "Motor Trend Car Road Tests",
+    description = "The data was extracted from the 1974 Motor Trend US magazine",
+    labels = list(category = "test")
+  )
   expect_true(bq_table_exists(bq_mtcars))
 
   bq_table_delete(bq_mtcars)
@@ -38,7 +42,7 @@ test_that("can round trip to non-default location", {
   bq_table_upload(bq_df, df1)
 
   df2 <- bq_table_download(bq_df)
-  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't gaurantee order
+  df2 <- df2[order(df2$x), names(df1)] # BQ doesn't guarantee order
   rownames(df2) <- NULL
 
   expect_equal(df1, df2)
@@ -133,4 +137,61 @@ test_that("can round trip data frame with list-cols", {
   df1 <- as.data.frame(df1)
   df2 <- as.data.frame(df2)
   expect_equal(df1, df2)
+})
+
+test_that("can create table field description", {
+  ds <- bq_test_dataset()
+  partition_table <- bq_table(ds, "table_field_description")
+
+  bq_table_create(
+    partition_table,
+    fields = bq_fields(list(bq_field("id", "integer", description = "Key field")))
+  )
+
+  meta <- bq_table_meta(partition_table)
+  expect_equal(meta$schema$fields[[1]]$description, "Key field")
+})
+
+test_that("can patch table with new fields in the schema", {
+  ds <- bq_test_dataset()
+  tb <- bq_table(ds, "table_to_patch")
+  df <- data.frame(id = 1)
+  bq_table_create(tb, fields = df)
+
+  df.patch <- data.frame(id = 1, title = "record name")
+  bq_table_patch(tb, fields = df.patch)
+
+  tb.meta <- bq_table_meta(tb)
+  expect_equal(
+    tb.meta$schema$fields[[2]]$name,
+    "title"
+  )
+})
+
+test_that("can round-trip GEOGRAPHY", {
+  skip_if_not_installed("wk")
+
+  ds <- bq_test_dataset()
+  df <- tibble(geography = wk::wkt("POINT(30 10)"))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "geography"),
+    as_bq_fields(df)
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
+})
+
+test_that("can round-trip BYTES", {
+  ds <- bq_test_dataset()
+  df <- tibble(x = blob::blob(charToRaw("hi!"), charToRaw("bye")))
+
+  tb1 <- bq_table_create(
+    bq_table(ds, "bytes"),
+    as_bq_fields(df)
+  )
+  bq_table_upload(tb1, df)
+  df1 <- bq_table_download(tb1)
+  expect_equal(df1, df)
 })

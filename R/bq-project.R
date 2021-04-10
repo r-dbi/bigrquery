@@ -4,7 +4,7 @@
 #' BigQuery objects, is no accompanying `bq_project` S3 class because a project
 #' is a simple string.
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
 #'

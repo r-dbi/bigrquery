@@ -1,5 +1,3 @@
-context("test-bq-dataset.R")
-
 test_that("can create and delete datasets", {
   ds <- bq_dataset(bq_test_project(), random_name())
   expect_false(bq_dataset_exists(ds))

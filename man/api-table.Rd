@@ -13,6 +13,7 @@
 \alias{bq_table_upload}
 \alias{bq_table_save}
 \alias{bq_table_load}
+\alias{bq_table_patch}
 \title{BigQuery tables}
 \usage{
 bq_table_create(x, fields = NULL, ...)
@@ -36,6 +37,8 @@ bq_table_upload(x, values, ..., quiet = NA)
 bq_table_save(x, destination_uris, ..., quiet = NA)
 
 bq_table_load(x, source_uris, ..., quiet = NA)
+
+bq_table_patch(x, fields)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -56,7 +59,7 @@ if \code{NA} displays progress bar only for long-running jobs.}
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export
 up to 1 Gb of data per file. Use a wild card URI (e.g.
-\code{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
+\verb{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
 number of files.}
 
 \item{source_uris}{The fully-qualified URIs that point to your data in
@@ -84,15 +87,15 @@ an invisible \link{bq_table}
 \description{
 Basic create-read-update-delete verbs for tables, as well as functions
 for uploading and downloading data in to/from memory (\code{bq_table_upload()},
-(\code{bq_table_download()})), and saving to/loading from Google CloudStorage
+\code{bq_table_download()}), and saving to/loading from Google Cloud Storage
 (\code{bq_table_load()}, \code{bq_table_save()}).
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}{insert}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/get}{get}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete}{delete}
 }
 }
 
@@ -100,6 +103,13 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 if (bq_testable()) {
 ds <- bq_test_dataset()
 
+bq_mtcars <- bq_table_create(
+  ds,
+  "mtcars",
+  friendly_name = "Motor Trend Car Road Tests",
+  description = "The data was extracted from the 1974 Motor Trend US magazine",
+  labels = list(category = "example")
+)
 bq_mtcars <- bq_table(ds, "mtcars")
 bq_table_exists(bq_mtcars)
 

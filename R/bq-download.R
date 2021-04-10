@@ -43,8 +43,8 @@
 #'   The default is `"integer"` which returns R's `integer` type but results in `NA` for
 #'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
 #'   which allows the full range of 64 bit integers.
-#' @section API documentation:
-#' * [list](https://developers.google.com/bigquery/docs/reference/v2/tabledata/list)
+#' @section Google BigQuery API documentation:
+#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examples
 #' if (bq_testable()) {
@@ -73,7 +73,7 @@ bq_table_download <-
     start_index = start_index
   )
   if (!bq_quiet(quiet)) {
-    message(glue::glue_data(
+    message(glue_data(
       page_info,
       "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
     ))
@@ -84,6 +84,8 @@ bq_table_download <-
     max_connections = max_connections,
     quiet = quiet
   )
+
+  on.exit(file.remove(c(schema_path, page_paths)))
 
   table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
   convert_bigint(table_data, bigint)
@@ -190,16 +192,18 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   assert_that(is.numeric(begin), length(begin) == 1)
   assert_that(is.numeric(end), length(end) == 1)
 
+  # Pre-format query params with forced non-scientific notation, since the BQ
+  # API doesn't accept numbers like 1e5. See issue #395 for details.
   query <- list(
-    startIndex = begin,
-    maxResults = end - begin
+    startIndex = format(begin, scientific = FALSE),
+    maxResults = format(end - begin, scientific = FALSE)
   )
 
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
   url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  token <- get_access_cred()
-  if (!is.null(token)) {
+  if (bq_has_token()) {
+    token <- .auth$get_cred()
     signed <- token$sign("GET", url)
     url <- signed$url
     headers <- signed$headers
