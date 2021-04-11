@@ -12,6 +12,7 @@ BigQueryResult <- function(conn, sql, ...) {
     params = list()
   }
 
+  message(params)
   if (is.null(conn@dataset)) {
     job <- bq_perform_query(sql,
       billing = conn@billing,
