@@ -10,6 +10,19 @@ test_that("can retrieve full query results", {
   expect_equal(df, tibble(count = 32L))
 })
 
+test_that("can retrieve parameterized query results", {
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    dataset = "basedata",
+    bigint = "integer"
+  )
+
+  df <- DBI::dbGetQuery(con, "SELECT @value AS value", params = (value = 100))
+  expect_equal(df, tibble(value = 100))
+})
+
+
 test_that("can retrieve without dataset", {
   con <- DBI::dbConnect(
     bigquery(),
