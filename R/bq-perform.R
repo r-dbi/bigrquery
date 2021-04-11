@@ -263,8 +263,6 @@ bq_perform_query <- function(query, billing,
     priority = unbox(priority)
   )
 
-  print("Parameters in bq_perfrom_query: /n")
-  print(parameters)
   if (!is.null(parameters) & !(length(parameters) == 0)) {
     parameters <- as_bq_params(parameters)
     query$queryParameters <- as_json(parameters)

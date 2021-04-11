@@ -7,12 +7,11 @@ BigQueryResult <- function(conn, sql, ...) {
   # to support DBI interface for parameterized queries
   args <- c(as.list(environment()), list(...))
   if ("params" %in% names(args)) {
-    params = args["params"]
+    params = args[["params"]]
   } else {
     params = list()
   }
 
-  print(params)
   if (is.null(conn@dataset)) {
     job <- bq_perform_query(sql,
       billing = conn@billing,
