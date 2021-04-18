@@ -4,6 +4,8 @@
 
 * Improve int64 support when reading BigQuery tables with dplyr syntax. `collect()` now utilizes `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
 
+* `DBI:dbGetQuery()` - now can take params attribute which will work with parameterised queries (@byapparov, #443)
+
 # bigrquery 1.3.2
 
 * BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
