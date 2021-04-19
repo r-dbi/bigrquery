@@ -24,7 +24,7 @@ always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
 found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by \code{\link[gargle:gargle_options]{gargle::gargle_oauth_email()}}.}
+retrieved by \code{\link[gargle:gargle_options]{gargle_oauth_email()}}.}
 
 \item{path}{JSON identifying the service account, in one of the forms
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
@@ -34,11 +34,11 @@ file path or JSON string).}
 Pick from those listed at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_options]{gargle::gargle_oauth_cache()}}.}
+"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_options]{gargle_oauth_cache()}}.}
 
 \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
-\code{\link[gargle:gargle_options]{gargle::gargle_oob_default()}}.}
+\code{\link[gargle:gargle_options]{gargle_oob_default()}}.}
 
 \item{token}{A token with class \link[httr:Token-class]{Token2.0} or an object of
 httr's class \code{request}, i.e. a token that has been prepared with

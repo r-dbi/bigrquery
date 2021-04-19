@@ -43,6 +43,11 @@
 #'   The default is `"integer"` which returns R's `integer` type but results in `NA` for
 #'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
 #'   which allows the full range of 64 bit integers.
+#' @param allow_fragments If FALSE, does not allow for mismatches between the number
+#'   of observations and the number of requested rows that may occur with large
+#'   records. Make `page_size` smaller if you are seeing a `num_observations not equal to page_info$n_rows`
+#'   error. If TRUE, allows mismatches, but the number of rows retrieved might be
+#'   fewer than requested.
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export

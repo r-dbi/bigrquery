@@ -11,7 +11,8 @@ bq_table_download(
   start_index = 0L,
   max_connections = 6L,
   quiet = NA,
-  bigint = c("integer", "integer64", "numeric", "character")
+  bigint = c("integer", "integer64", "numeric", "character"),
+  allow_fragments = FALSE
 )
 }
 \arguments{
@@ -36,6 +37,12 @@ if \code{NA} displays progress bar only for long-running jobs.}
 The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
 values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
 which allows the full range of 64 bit integers.}
+
+\item{allow_fragments}{If FALSE, does not allow for mismatches between the number
+of observations and the number of requested rows that may occur with large
+records. Make \code{page_size} smaller if you are seeing a \verb{num_observations not equal to page_info$n_rows}
+error. If TRUE, allows mismatches, but the number of rows retrieved might be
+fewer than requested.}
 }
 \value{
 Because data retrieval may generalise list-cols and the data frame
