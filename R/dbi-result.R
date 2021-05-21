@@ -1,16 +1,7 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, ...) {
-
-  # extract params of the query if provided
-  # to support DBI interface for parameterized queries
-  args <- c(as.list(environment()), list(...))
-  if ("params" %in% names(args)) {
-    params = args[["params"]]
-  } else {
-    params = list()
-  }
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
 
   if (is.null(conn@dataset)) {
     job <- bq_perform_query(sql,
