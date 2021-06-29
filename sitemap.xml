@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://bigrquery.r-dbi.org/404.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/ISSUE_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/authors.html</loc>
+  </url>
+  <url>
     <loc>https://bigrquery.r-dbi.org/index.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/news/index.html</loc>
   </url>
   <url>
     <loc>https://bigrquery.r-dbi.org/reference/DBI.html</loc>
@@ -77,6 +101,9 @@
   </url>
   <url>
     <loc>https://bigrquery.r-dbi.org/reference/id-dep.html</loc>
+  </url>
+  <url>
+    <loc>https://bigrquery.r-dbi.org/reference/index.html</loc>
   </url>
   <url>
     <loc>https://bigrquery.r-dbi.org/reference/insert_extract_job.html</loc>

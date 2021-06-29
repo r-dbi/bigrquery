@@ -69,9 +69,6 @@
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -137,13 +134,13 @@
 (in various forms) about an existing job.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_job_meta</span><span class='op'>(</span><span class='va'>x</span>, fields <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>bq_job_meta</span><span class='op'>(</span><span class='va'>x</span>, fields <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>bq_job_status</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='fu'>bq_job_show_statistics</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>bq_job_wait</span><span class='op'>(</span><span class='va'>x</span>, quiet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"bigrquery.quiet"</span><span class='op'>)</span>, pause <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></pre>
+<span class='fu'>bq_job_wait</span><span class='op'>(</span><span class='va'>x</span>, quiet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"bigrquery.quiet"</span><span class='op'>)</span>, pause <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,17 +175,17 @@ if <code>NA</code> displays progress bar only for long-running jobs.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>jobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='api-project.html'>bq_project_jobs</a></span><span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-
-<span class='co'># Show statistics about job</span>
-<span class='fu'>bq_job_show_statistics</span><span class='op'>(</span><span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
-
-<span class='co'># Wait for job to complete</span>
-<span class='fu'>bq_job_wait</span><span class='op'>(</span><span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>jobs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='api-project.html'>bq_project_jobs</a></span><span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Show statistics about job</span></span>
+<span class='r-in'><span class='fu'>bq_job_show_statistics</span><span class='op'>(</span><span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Wait for job to complete</span></span>
+<span class='r-in'><span class='fu'>bq_job_wait</span><span class='op'>(</span><span class='va'>jobs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

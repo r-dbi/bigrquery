@@ -68,9 +68,6 @@
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -135,7 +132,7 @@
     <p>Creates a BigQuery DBI driver for use in <code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>DBI::dbConnect()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for BigQueryDriver</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S4 method for BigQueryDriver</span>
 <span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span>
   <span class='va'>drv</span>,
   <span class='va'>project</span>,
@@ -146,7 +143,7 @@
   use_legacy_sql <span class='op'>=</span> <span class='cn'>FALSE</span>,
   bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer"</span>, <span class='st'>"integer64"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,37 +190,37 @@ which allows the full range of 64 bit integers.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span>
-  <span class='fu'>bigquery</span><span class='op'>(</span><span class='op'>)</span>,
-  project <span class='op'>=</span> <span class='st'>"publicdata"</span>,
-  dataset <span class='op'>=</span> <span class='st'>"samples"</span>,
-  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>con</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"natality"</span>, max_results <span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span>
-
-<span class='co'># Create a temporary dataset to explore</span>
-<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span>
-  <span class='fu'>bigquery</span><span class='op'>(</span><span class='op'>)</span>,
-  project <span class='op'>=</span> <span class='va'>ds</span><span class='op'>$</span><span class='va'>project</span>,
-  dataset <span class='op'>=</span> <span class='va'>ds</span><span class='op'>$</span><span class='va'>dataset</span>
-<span class='op'>)</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, <span class='op'>]</span>
-
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"SELECT count(*) FROM mtcars"</span><span class='op'>)</span>
-
-<span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"SELECT cyl, mpg FROM mtcars"</span><span class='op'>)</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbColumnInfo.html'>dbColumnInfo</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span><span class='op'>(</span><span class='va'>res</span>, <span class='fl'>10</span><span class='op'>)</span>
-<span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span><span class='op'>(</span><span class='va'>res</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbHasCompleted.html'>dbHasCompleted</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'>bigquery</span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  project <span class='op'>=</span> <span class='st'>"publicdata"</span>,</span>
+<span class='r-in'>  dataset <span class='op'>=</span> <span class='st'>"samples"</span>,</span>
+<span class='r-in'>  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>con</span></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"natality"</span>, max_results <span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Create a temporary dataset to explore</span></span>
+<span class='r-in'><span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'>bigquery</span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  project <span class='op'>=</span> <span class='va'>ds</span><span class='op'>$</span><span class='va'>project</span>,</span>
+<span class='r-in'>  dataset <span class='op'>=</span> <span class='va'>ds</span><span class='op'>$</span><span class='va'>dataset</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"mtcars"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>, <span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"SELECT count(*) FROM mtcars"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbSendQuery.html'>dbSendQuery</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"SELECT cyl, mpg FROM mtcars"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbColumnInfo.html'>dbColumnInfo</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span><span class='op'>(</span><span class='va'>res</span>, <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbFetch.html'>dbFetch</a></span><span class='op'>(</span><span class='va'>res</span>, <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbHasCompleted.html'>dbHasCompleted</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

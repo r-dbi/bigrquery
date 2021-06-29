@@ -71,9 +71,6 @@ which you can then query for more information." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -141,7 +138,7 @@ into a table (temporary or otherwise), so these functions return a <a href='bq_r
 which you can then query for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_project_query</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>query</span>, destination_table <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>bq_project_query</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>query</span>, destination_table <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
 
 <span class='fu'>bq_dataset_query</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -150,7 +147,7 @@ which you can then query for more information.</p>
   <span class='va'>...</span>,
   billing <span class='op'>=</span> <span class='cn'>NULL</span>,
   quiet <span class='op'>=</span> <span class='cn'>NA</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,32 +188,32 @@ for, such as a public dataset, you must also submit a <code>billing</code> proje
     <p>A <a href='bq_refs.html'>bq_table</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Querying a project requires full name in query</span>
-<span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_project_query</span><span class='op'>(</span>
-  <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span>,
-  <span class='st'>"SELECT count(*) FROM publicdata.samples.natality"</span>
-<span class='op'>)</span>
-<span class='fu'><a href='api-table.html'>bq_table_fields</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span>
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span>
-
-<span class='co'># Querying a dataset sets default dataset so you can use bare table name,</span>
-<span class='co'># but for public data, you'll need to set a project to bill.</span>
-<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span><span class='op'>(</span><span class='st'>"publicdata"</span>, <span class='st'>"samples"</span><span class='op'>)</span>
-<span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span><span class='op'>(</span><span class='va'>ds</span>,
-  query <span class='op'>=</span> <span class='st'>"SELECT count(*) FROM natality"</span>,
-  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span>
-
-<span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span><span class='op'>(</span><span class='va'>ds</span>,
-  query <span class='op'>=</span> <span class='st'>"SELECT count(*) FROM natality WHERE state = @state"</span>,
-  parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"KS"</span><span class='op'>)</span>,
-  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># Querying a project requires full name in query</span></span>
+<span class='r-in'><span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_project_query</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>"SELECT count(*) FROM publicdata.samples.natality"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='api-table.html'>bq_table_fields</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Querying a dataset sets default dataset so you can use bare table name,</span></span>
+<span class='r-in'><span class='co'># but for public data, you'll need to set a project to bill.</span></span>
+<span class='r-in'><span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_refs.html'>bq_dataset</a></span><span class='op'>(</span><span class='st'>"publicdata"</span>, <span class='st'>"samples"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span><span class='op'>(</span><span class='va'>ds</span>,</span>
+<span class='r-in'>  query <span class='op'>=</span> <span class='st'>"SELECT count(*) FROM natality"</span>,</span>
+<span class='r-in'>  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>tb</span> <span class='op'>&lt;-</span> <span class='fu'>bq_dataset_query</span><span class='op'>(</span><span class='va'>ds</span>,</span>
+<span class='r-in'>  query <span class='op'>=</span> <span class='st'>"SELECT count(*) FROM natality WHERE state = @state"</span>,</span>
+<span class='r-in'>  parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>state <span class='op'>=</span> <span class='st'>"KS"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  billing <span class='op'>=</span> <span class='fu'><a href='bq_test_project.html'>bq_test_project</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='bq_table_download.html'>bq_table_download</a></span><span class='op'>(</span><span class='va'>tb</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

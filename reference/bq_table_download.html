@@ -71,9 +71,6 @@ bq command line tool to download locally." />
 </script>
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -141,7 +138,7 @@ export the results to a CSV file stored on google cloud and use the
 bq command line tool to download locally.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bq_table_download</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>bq_table_download</span><span class='op'>(</span>
   <span class='va'>x</span>,
   max_results <span class='op'>=</span> <span class='cn'>Inf</span>,
   page_size <span class='op'>=</span> <span class='fl'>10000</span>,
@@ -149,7 +146,7 @@ bq command line tool to download locally.</p>
   max_connections <span class='op'>=</span> <span class='fl'>6L</span>,
   quiet <span class='op'>=</span> <span class='cn'>NA</span>,
   bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer"</span>, <span class='st'>"integer64"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,10 +230,10 @@ nested/repeated values, are not well supported in R.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>bq_table_download</span><span class='op'>(</span><span class='st'>"publicdata.samples.natality"</span>, max_results <span class='op'>=</span> <span class='fl'>35000</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>bq_table_download</span><span class='op'>(</span><span class='st'>"publicdata.samples.natality"</span>, max_results <span class='op'>=</span> <span class='fl'>35000</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
