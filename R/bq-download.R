@@ -64,30 +64,21 @@ bq_table_download <-
     assert_that(is.numeric(start_index), length(start_index) == 1)
     bigint <- match.arg(bigint)
 
-    schema_path <- bq_download_schema(x, tempfile())
-
     nrow <- bq_table_nrow(x)
-    page_info <- bq_download_page_info(nrow,
-                                       max_results = max_results,
-                                       page_size = page_size,
-                                       start_index = start_index
-    )
-    if (!bq_quiet(quiet)) {
-      message(glue_data(
-        page_info,
-        "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
-      ))
-    }
 
+    schema_path <- bq_download_schema(x, tempfile())
     page_paths <- bq_download_pages(x,
-                                    page_info = page_info,
-                                    max_connections = max_connections,
+                                    max_results = max_results,
+                                    start_index = start_index,
                                     quiet = quiet
     )
-
     on.exit(file.remove(c(schema_path, page_paths)))
 
-    table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+    table_data <- bq_parse_files(schema_path,
+                                 page_paths,
+                                 n = nrow,
+                                 quiet = bq_quiet(quiet)
+    )
     convert_bigint(table_data, bigint)
   }
 
@@ -117,106 +108,45 @@ rapply_int64 <- function(x, f) {
   }
 }
 
-bq_download_page_info <- function(nrow,
-                                  max_results = Inf,
-                                  start_index = 0,
-                                  page_size = 1e4) {
-  max_results <- pmax(pmin(max_results, nrow - start_index), 0)
-
-  n_pages <- ceiling(max_results / page_size)
-  page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
-  page_end <- pmin(page_begin + page_size, start_index + max_results)
-
-  list(
-    n_rows = max_results,
-    n_pages = n_pages,
-    begin = page_begin,
-    end = page_end
-  )
-}
-
-bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
+bq_download_pages <- function(x,
+                              max_results = Inf,
+                              start_index = 0,
+                              quiet = NA) {
   x <- as_bq_table(x)
-  assert_that(is.list(page_info))
 
-  n_pages <- page_info$n_pages
-  if (n_pages == 0) {
-    return(character())
-  }
-
-  paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
-  pool <- curl::new_pool(host_con = max_connections)
-  progress <- bq_progress(
-    "Downloading data [:bar] :percent ETA: :eta",
-    total = n_pages,
-    quiet = quiet
-  )
-
-  for (i in seq_len(n_pages)) {
-    handle <- bq_download_page_handle(
-      x,
-      begin = page_info$begin[i],
-      end = page_info$end[i]
-    )
-    curl::multi_add(handle,
-                    done = bq_download_callback(i, paths[[i]], progress),
-                    pool = pool
-    )
-  }
-
-  curl::multi_run(pool = pool)
-
-  paths
-}
-
-bq_download_callback <- function(page, path, progress) {
-  force(page)
-  force(path)
-
-  function(result) {
-    progress$tick()
-
-    bq_check_response(
-      result$status_code,
-      curl::parse_headers_list(result$headers)[["content-type"]],
-      result$content
-    )
-
-    con <- file(path, open = "wb")
-    on.exit(close(con))
-    writeBin(result$content, con)
-  }
-}
-
-bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
-  x <- as_bq_table(x)
-  assert_that(is.numeric(begin), length(begin) == 1)
-  assert_that(is.numeric(end), length(end) == 1)
-
+  url <- bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
   # Pre-format query params with forced non-scientific notation, since the BQ
   # API doesn't accept numbers like 1e5. See issue #395 for details.
   query <- list(
-    startIndex = format(begin, scientific = FALSE),
-    maxResults = format(end - begin, scientific = FALSE)
+    startIndex = format(start_index, scientific = FALSE),
+    maxResults = format(max_results, scientific = FALSE)
   )
 
-  url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
-  url <- httr::modify_url(url, query = prepare_bq_query(query))
+  progress <- bq_progress("Downloading data [:spinner]", quiet = quiet)
 
-  if (bq_has_token()) {
-    token <- .auth$get_cred()
-    signed <- token$sign("GET", url)
-    url <- signed$url
-    headers <- signed$headers
-  } else {
-    headers <- list()
-  }
+  page <- NULL
+  i <- 1
 
-  h <- curl::new_handle(url = url)
-  curl::handle_setopt(h, useragent = bq_ua())
-  curl::handle_setheaders(h, .list = headers)
+  out_dir <- tempfile("bq-download")
+  dir.create(out_dir)
 
-  h
+  repeat({
+    query$pageToken <- page
+    resp <- bq_get(url, query = query)
+
+    # Can we get pageToken without having to parse all data slowly?
+    jsonlite::write_json(resp, file.path(out_dir, paste("bq-", i, ".json")))
+
+    if (is.null(resp$pageToken)) {
+      break
+    }
+
+    page <- resp$pageToken
+    i <- i + 1
+    progress$tick()
+  })
+
+  dir(out_dir, full.names = TRUE)
 }
 
 # Helpers for testing -----------------------------------------------------
