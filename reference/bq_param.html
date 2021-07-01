@@ -47,8 +47,6 @@ you'll need to explicitly use bq_param_array()." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -70,15 +68,9 @@ you'll need to explicitly use bq_param_array()." />
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -99,6 +91,12 @@ you'll need to explicitly use bq_param_array()." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -136,11 +134,11 @@ and longer vectors are arrays. If you need to pass a length-1 array,
 you'll need to explicitly use <code>bq_param_array()</code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>bq_param</span><span class='op'>(</span><span class='va'>value</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>bq_param</span><span class='op'>(</span><span class='va'>value</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>bq_param_scalar</span><span class='op'>(</span><span class='va'>value</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>bq_param_array</span><span class='op'>(</span><span class='va'>value</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>bq_param_array</span><span class='op'>(</span><span class='va'>value</span>, type <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,66 +153,63 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>name of the parameter in the query, omitting the <code>@</code></p></td>
+      <td><p>name of the parameter in the query, omitting the <code><a href='https://rdrr.io/r/base/slotOp.html'>@</a></code></p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># bq_param() automatically picks scalar vs array based on length</span></span>
-<span class='r-in'><span class='fu'>bq_param</span><span class='op'>(</span><span class='st'>"a"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "name": {},</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterType": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "type": "STRING"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   },</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterValue": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "value": "a"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
-<span class='r-in'><span class='fu'>bq_param</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "name": {},</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterType": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "type": "ARRAY",</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "arrayType": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       "type": "STRING"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   },</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterValue": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "arrayValues": [</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         "value": "a"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       },</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         "value": "b"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       },</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         "value": "c"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     ]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># use bq_param_array() to create a length-1 array</span></span>
-<span class='r-in'><span class='fu'>bq_param_array</span><span class='op'>(</span><span class='st'>"a"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "name": {},</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterType": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "type": "ARRAY",</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "arrayType": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       "type": "STRING"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   },</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   "parameterValue": {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     "arrayValues": [</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       {</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         "value": "a"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     ]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='co'># bq_param() automatically picks scalar vs array based on length</span>
+<span class='fu'>bq_param</span><span class='op'>(</span><span class='st'>"a"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; {
+#&gt;   "name": {},
+#&gt;   "parameterType": {
+#&gt;     "type": "STRING"
+#&gt;   },
+#&gt;   "parameterValue": {
+#&gt;     "value": "a"
+#&gt;   }
+#&gt; }</div><div class='input'><span class='fu'>bq_param</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; {
+#&gt;   "name": {},
+#&gt;   "parameterType": {
+#&gt;     "type": "ARRAY",
+#&gt;     "arrayType": {
+#&gt;       "type": "STRING"
+#&gt;     }
+#&gt;   },
+#&gt;   "parameterValue": {
+#&gt;     "arrayValues": [
+#&gt;       {
+#&gt;         "value": "a"
+#&gt;       },
+#&gt;       {
+#&gt;         "value": "b"
+#&gt;       },
+#&gt;       {
+#&gt;         "value": "c"
+#&gt;       }
+#&gt;     ]
+#&gt;   }
+#&gt; }</div><div class='input'>
+<span class='co'># use bq_param_array() to create a length-1 array</span>
+<span class='fu'>bq_param_array</span><span class='op'>(</span><span class='st'>"a"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; {
+#&gt;   "name": {},
+#&gt;   "parameterType": {
+#&gt;     "type": "ARRAY",
+#&gt;     "arrayType": {
+#&gt;       "type": "STRING"
+#&gt;     }
+#&gt;   },
+#&gt;   "parameterValue": {
+#&gt;     "arrayValues": [
+#&gt;       {
+#&gt;         "value": "a"
+#&gt;       }
+#&gt;     ]
+#&gt;   }
+#&gt; }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -226,11 +221,11 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.rstudio.com" class="external-link"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p></p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://jennybryan.org'>Jennifer Bryan</a>, <a href='https://www.rstudio.com'><img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -238,8 +233,6 @@ you'll need to explicitly use <code>bq_param_array()</code>.</p>
 
   
 
-
-  
 
   </body>
 </html>

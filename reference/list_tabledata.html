@@ -47,8 +47,6 @@ of data." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -70,15 +68,9 @@ of data." />
 </script>
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -99,6 +91,12 @@ of data." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -136,7 +134,7 @@ of data." />
 of data.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>list_tabledata</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>list_tabledata</span><span class='op'>(</span>
   <span class='va'>project</span>,
   <span class='va'>dataset</span>,
   <span class='va'>table</span>,
@@ -159,7 +157,7 @@ of data.</p>
   quiet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"bigrquery.quiet"</span><span class='op'>)</span>
 <span class='op'>)</span>
 
-<span class='fu'>list_tabledata_iter</span><span class='op'>(</span><span class='va'>project</span>, <span class='va'>dataset</span>, <span class='va'>table</span>, table_info <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>list_tabledata_iter</span><span class='op'>(</span><span class='va'>project</span>, <span class='va'>dataset</span>, <span class='va'>table</span>, table_info <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -212,13 +210,13 @@ current page of data</p></td>
 <a href='https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list'>https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>billing_project</span> <span class='op'>&lt;-</span> <span class='st'>"341409650721"</span> <span class='co'># put your project number here</span></span>
-<span class='r-in'><span class='va'>natal</span> <span class='op'>&lt;-</span> <span class='fu'>list_tabledata</span><span class='op'>(</span><span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>, max_pages <span class='op'>=</span> <span class='fl'>2</span>,</span>
-<span class='r-in'>  page_size <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>natal</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>billing_project</span> <span class='op'>&lt;-</span> <span class='st'>"341409650721"</span> <span class='co'># put your project number here</span>
+<span class='va'>natal</span> <span class='op'>&lt;-</span> <span class='fu'>list_tabledata</span><span class='op'>(</span><span class='st'>"publicdata"</span>, <span class='st'>"samples"</span>, <span class='st'>"natality"</span>, max_pages <span class='op'>=</span> <span class='fl'>2</span>,
+  page_size <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>natal</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -230,11 +228,11 @@ current page of data</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.rstudio.com" class="external-link"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p></p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://jennybryan.org'>Jennifer Bryan</a>, <a href='https://www.rstudio.com'><img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -242,8 +240,6 @@ current page of data</p></td>
 
   
 
-
-  
 
   </body>
 </html>
