@@ -17,9 +17,6 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v1
         id: install-r
-        with:
-          r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
 
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -35,8 +32,8 @@ jobs:
           path: |
             ${{ env.R_LIBS_USER }}/*
             !${{ env.R_LIBS_USER }}/pak
-          key: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
-          restore-keys: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-
+          key: macOS-latest-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
+          restore-keys: macOS-latest-${{ steps.install-r.outputs.installed-r-version }}-1-
 
       - name: Install dependencies
         run: |
@@ -71,5 +68,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.config.os }}-r${{ matrix.config.r }}-results
+          name: macOS-latest-r${{ steps.install-r.outputs.installed-r-version }}-results
           path: check
