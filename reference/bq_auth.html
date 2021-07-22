@@ -44,16 +44,17 @@
 wrapper around gargle::token_fetch().
 By default, you are directed to a web browser, asked to sign in to your
 Google account, and to grant bigrquery permission to operate on your
-behalf with Google BigQuery. By default, these user credentials are cached in a
-folder below your home directory, ~/.R/gargle/gargle-oauth, from where
+behalf with Google BigQuery. By default, with your permission, these user
+credentials are cached in a folder below your home directory, from where
 they can be automatically refreshed, as necessary. Storage at the user
 level means the same token can be used across multiple projects and
 tokens are less likely to be synced to the cloud by accident.
-If you are interacting with R from a web-based platform, like RStudio
-Server or Cloud, you need to use a variant of this flow, known as
-out-of-band auth (&quot;oob&quot;). If this does not happen automatically, you
-can request it yourself with use_oob = TRUE or, more persistently, by
-setting an option via options(gargle_oob_default = TRUE)." />
+If you are interacting with R within a browser (applies to RStudio Server,
+RStudio Workbench, and RStudio Cloud), you need a variant of this flow,
+known as out-of-band auth (&quot;oob&quot;). If this does not happen
+automatically, you can request it yourself with use_oob = TRUE or,
+more persistently, by setting an option via
+options(gargle_oob_default = TRUE)." />
 
 
 
@@ -144,16 +145,17 @@ setting an option via options(gargle_oob_default = TRUE)." />
 wrapper around <code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>gargle::token_fetch()</a></code>.</p>
 <p>By default, you are directed to a web browser, asked to sign in to your
 Google account, and to grant bigrquery permission to operate on your
-behalf with Google BigQuery. By default, these user credentials are cached in a
-folder below your home directory, <code>~/.R/gargle/gargle-oauth</code>, from where
+behalf with Google BigQuery. By default, with your permission, these user
+credentials are cached in a folder below your home directory, from where
 they can be automatically refreshed, as necessary. Storage at the user
 level means the same token can be used across multiple projects and
 tokens are less likely to be synced to the cloud by accident.</p>
-<p>If you are interacting with R from a web-based platform, like RStudio
-Server or Cloud, you need to use a variant of this flow, known as
-out-of-band auth ("oob"). If this does not happen automatically, you
-can request it yourself with <code>use_oob = TRUE</code> or, more persistently, by
-setting an option via <code><a href='https://rdrr.io/r/base/options.html'>options(gargle_oob_default = TRUE)</a></code>.</p>
+<p>If you are interacting with R within a browser (applies to RStudio Server,
+RStudio Workbench, and RStudio Cloud), you need a variant of this flow,
+known as out-of-band auth ("oob"). If this does not happen
+automatically, you can request it yourself with <code>use_oob = TRUE</code> or,
+more persistently, by setting an option via
+<code><a href='https://rdrr.io/r/base/options.html'>options(gargle_oob_default = TRUE)</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>bq_auth</span><span class='op'>(</span>
@@ -179,8 +181,10 @@ Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use <code>NA</code>
 or <code>FALSE</code> to match nothing and force the OAuth dance in the browser. Use
 <code>TRUE</code> to allow email auto-discovery, if exactly one matching token is
-found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oauth_email()</a></code>.</p></td>
+found in the cache. Specify just the domain with a glob pattern, e.g.
+<code>"*@example.com"</code>, to create code that "just works" for both
+<code>alice@example.com</code> and <code>bob@example.com</code>. Defaults to the option named
+"gargle_oauth_email", retrieved by <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email()</a></code>.</p></td>
     </tr>
     <tr>
       <th>path</th>
@@ -196,13 +200,13 @@ Pick from those listed at <a href='https://developers.google.com/identity/protoc
     <tr>
       <th>cache</th>
       <td><p>Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></td>
+"gargle_oauth_cache", retrieved via <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache()</a></code>.</p></td>
     </tr>
     <tr>
       <th>use_oob</th>
       <td><p>Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
-<code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oob_default()</a></code>.</p></td>
+<code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default()</a></code>.</p></td>
     </tr>
     <tr>
       <th>token</th>
@@ -223,11 +227,16 @@ However, when necessary, this function allows the user to explicitly:</p><ul>
 are multiple cached tokens, this can clarify which one to use. It can
 also force bigrquery to switch from one identity to another. If
 there's no cached token for the email, this triggers a return to the
-browser to choose the identity and give consent.</p></li>
-<li><p>Use a service account token.</p></li>
+browser to choose the identity and give consent. You can specify just
+the domain by using a glob pattern. This means that a script
+containing <code>email = "*@example.com"</code> can be run without further
+tweaks on the machine of either <code>alice@example.com</code> or
+<code>bob@example.com</code>.</p></li>
+<li><p>Use a service account token or workload identity federation.</p></li>
 <li><p>Bring their own <a href='https://httr.r-lib.org/reference/Token-class.html'>Token2.0</a>.</p></li>
 <li><p>Specify non-default behavior re: token caching and out-of-bound
 authentication.</p></li>
+<li><p>Customize scopes.</p></li>
 </ul>
 
 <p>For details on the many ways to find a token, see
