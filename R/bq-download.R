@@ -48,7 +48,7 @@
 #' @export
 #' @examples
 #' if (bq_testable()) {
-#' df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
+#'   df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
 #' }
 bq_table_download <-
   function(x,
@@ -58,48 +58,50 @@ bq_table_download <-
            max_connections = 6L,
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character")) {
-  x <- as_bq_table(x)
-  assert_that(is.numeric(page_size), length(page_size) == 1)
-  assert_that(is.numeric(max_results), length(max_results) == 1)
-  assert_that(is.numeric(start_index), length(start_index) == 1)
-  bigint <- match.arg(bigint)
+    x <- as_bq_table(x)
+    assert_that(is.numeric(page_size), length(page_size) == 1)
+    assert_that(is.numeric(max_results), length(max_results) == 1)
+    assert_that(is.numeric(start_index), length(start_index) == 1)
+    bigint <- match.arg(bigint)
 
-  schema_path <- bq_download_schema(x, tempfile())
+    schema_path <- bq_download_schema(x, tempfile())
 
-  nrow <- bq_table_nrow(x)
-  page_info <- bq_download_page_info(nrow,
-    max_results = max_results,
-    page_size = page_size,
-    start_index = start_index
-  )
-  if (!bq_quiet(quiet)) {
-    message(glue_data(
-      page_info,
-      "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
-    ))
+    nrow <- bq_table_nrow(x)
+    page_info <- bq_download_page_info(nrow,
+                                       max_results = max_results,
+                                       page_size = page_size,
+                                       start_index = start_index
+    )
+    if (!bq_quiet(quiet)) {
+      message(glue_data(
+        page_info,
+        "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
+      ))
+    }
+
+    page_paths <- bq_download_pages(x,
+                                    page_info = page_info,
+                                    max_connections = max_connections,
+                                    quiet = quiet
+    )
+
+    on.exit(file.remove(c(schema_path, page_paths)))
+
+    table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
+    convert_bigint(table_data, bigint)
   }
-
-  page_paths <- bq_download_pages(x,
-    page_info = page_info,
-    max_connections = max_connections,
-    quiet = quiet
-  )
-
-  on.exit(file.remove(c(schema_path, page_paths)))
-
-  table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
-  convert_bigint(table_data, bigint)
-}
 
 # This function is a modified version of
 # https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R
 convert_bigint <- function(df, bigint) {
-  if (bigint == "integer64") return(df)
+  if (bigint == "integer64") {
+    return(df)
+  }
 
   as_bigint <- switch(bigint,
-    integer = as.integer,
-    numeric = as.numeric,
-    character = as.character
+                      integer = as.integer,
+                      numeric = as.numeric,
+                      character = as.character
   )
 
   rapply_int64(df, f = as_bigint)
@@ -116,9 +118,9 @@ rapply_int64 <- function(x, f) {
 }
 
 bq_download_page_info <- function(nrow,
-                              max_results = Inf,
-                              start_index = 0,
-                              page_size = 1e4) {
+                                  max_results = Inf,
+                                  start_index = 0,
+                                  page_size = 1e4) {
   max_results <- pmax(pmin(max_results, nrow - start_index), 0)
 
   n_pages <- ceiling(max_results / page_size)
@@ -128,7 +130,6 @@ bq_download_page_info <- function(nrow,
   list(
     n_rows = max_results,
     n_pages = n_pages,
-
     begin = page_begin,
     end = page_end
   )
@@ -158,8 +159,8 @@ bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
       end = page_info$end[i]
     )
     curl::multi_add(handle,
-      done = bq_download_callback(i, paths[[i]], progress),
-      pool = pool
+                    done = bq_download_callback(i, paths[[i]], progress),
+                    pool = pool
     )
   }
 
