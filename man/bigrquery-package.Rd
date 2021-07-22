@@ -24,6 +24,7 @@ defaults to 1e4.}
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://bigrquery.r-dbi.org}
   \item \url{https://github.com/r-dbi/bigrquery}
   \item Report bugs at \url{https://github.com/r-dbi/bigrquery/issues}
 }

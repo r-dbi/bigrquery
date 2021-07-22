@@ -84,6 +84,6 @@ nested/repeated values, are not well supported in R.
 
 \examples{
 if (bq_testable()) {
-df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
+  df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
 }
 }

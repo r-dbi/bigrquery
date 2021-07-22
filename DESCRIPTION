@@ -49,7 +49,7 @@ LinkingTo:
     Rcpp
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
 Collate: 
     'RcppExports.R'
     'bigrquery.R'
@@ -88,5 +88,5 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
-Remotes:  
+Remotes: 
     r-lib/gargle
