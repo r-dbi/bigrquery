@@ -7,7 +7,7 @@
 bq_table_download(
   x,
   max_results = Inf,
-  page_size = 10000,
+  page_size = NULL,
   start_index = 0L,
   max_connections = 6L,
   quiet = NA,
