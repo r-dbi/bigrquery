@@ -52,14 +52,14 @@
 #' }
 bq_table_download <-
   function(x,
-           max_results = NULL,
+           max_results = Inf,
            page_size = NULL,
            start_index = 0L,
            max_connections = 6L,
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character")) {
     x <- as_bq_table(x)
-    if (!is.null(max_results)) assert_that(is.numeric(max_results), length(max_results) == 1)
+    assert_that(is.numeric(max_results), length(max_results) == 1)
     if (!is.null(page_size)) assert_that(is.numeric(page_size), length(page_size) == 1)
     assert_that(is.numeric(start_index), length(start_index) == 1)
     bigint <- match.arg(bigint)
@@ -67,7 +67,7 @@ bq_table_download <-
     schema_path <- bq_download_schema(x, tempfile())
     withr::defer(file.remove(schema_path))
 
-    user_n_max <- max_results %||% Inf
+    user_n_max <- max_results
     user_chunk_size <- page_size
     nrow <- bq_table_nrow(x)
     n_max <- pmax(pmin(user_n_max, nrow - start_index), 0)
