@@ -115,7 +115,7 @@ bq_table_download <-
       n_chunks = 1,
       start_index = start_index
     )
-    handle <-bq_download_chunk_handle(
+    handle <- bq_download_chunk_handle(
       x,
       begin = chunk_plan$dat$chunk_begin[1],
       max_results = chunk_plan$dat$chunk_rows[1]
