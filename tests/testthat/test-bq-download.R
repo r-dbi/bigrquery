@@ -31,8 +31,7 @@ test_that("can specify large integers in page params", {
 
   # Use scipen to nudge R to prefer scientific formatting for very small numbers
   # to allow this test to exercise issue #395 with small datasets.
-  old <- options(scipen=-4)
-  on.exit(options(old))
+  withr::local_options(list(scipen = -4))
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
   df <- bq_table_download(tb, max_results = 100, page_size = 20)
@@ -42,6 +41,7 @@ test_that("can specify large integers in page params", {
 # bq_table_info -----------------------------------------------------------
 
 test_that("max_results + start_index affects end values", {
+  skip("function no longer exists")
   out <- bq_download_page_info(
     nrow = 100,
     max_results = 5,

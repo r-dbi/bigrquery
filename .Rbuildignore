@@ -15,3 +15,4 @@
 ^\.github$
 ^LICENSE\.md$
 ^appveyor\.yml$
+^internal$

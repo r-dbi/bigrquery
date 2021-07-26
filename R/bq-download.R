@@ -52,42 +52,133 @@
 #' }
 bq_table_download <-
   function(x,
-           max_results = Inf,
-           page_size = 1e4,
+           max_results = NULL,
+           page_size = NULL,
            start_index = 0L,
            max_connections = 6L,
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character")) {
     x <- as_bq_table(x)
-    assert_that(is.numeric(page_size), length(page_size) == 1)
-    assert_that(is.numeric(max_results), length(max_results) == 1)
+    if (!is.null(max_results)) assert_that(is.numeric(max_results), length(max_results) == 1)
+    if (!is.null(page_size)) assert_that(is.numeric(page_size), length(page_size) == 1)
     assert_that(is.numeric(start_index), length(start_index) == 1)
     bigint <- match.arg(bigint)
 
     schema_path <- bq_download_schema(x, tempfile())
+    withr::defer(file.remove(schema_path))
 
+    user_n_max <- max_results %||% Inf
+    user_chunk_size <- page_size
     nrow <- bq_table_nrow(x)
-    page_info <- bq_download_page_info(nrow,
-                                       max_results = max_results,
-                                       page_size = page_size,
-                                       start_index = start_index
+    n_max <- pmax(pmin(user_n_max, nrow - start_index), 0)
+
+    if (n_max == 0) {
+      table_data <- bq_parse_files(
+        schema_path,
+        file_paths = character(),
+        n = 0,
+        quiet = bq_quiet(quiet)
+      )
+      return(table_data)
+    }
+
+    # general download prep ----
+    pool <- curl::new_pool()
+    bq_download_callback <- function(i, progress = NULL) {
+      force(i)
+      function(result) {
+        if (!is.null(progress)) progress$tick()
+
+        bq_check_response(
+          result$status_code,
+          curl::parse_headers_list(result$headers)[["content-type"]],
+          result$content
+        )
+
+        token <- bq_peek_next_page(result)
+        chunk_plan$dat$next_page[i] <<- token
+
+        con <- file(chunk_plan$dat$path[i], open = "wb")
+        withr::defer(close(con))
+        writeBin(result$content, con)
+      }
+    }
+
+    # get first chunk ----
+    if (!bq_quiet(quiet)) {
+      message("Downloading first chunk of data.")
+    }
+
+    chunk_plan <- bq_download_plan(
+      n_max,
+      chunk_size = user_chunk_size,
+      n_chunks = 1,
+      start_index = start_index
     )
+    handle <-bq_download_chunk_handle(
+      x,
+      begin = chunk_plan$dat$chunk_begin[1],
+      max_results = chunk_plan$dat$chunk_rows[1]
+    )
+    curl::multi_add(
+      handle,
+      done = bq_download_callback(1),
+      pool = pool
+    )
+    curl::multi_run(pool = pool)
+    chunk_data <- bq_parse_file(schema_path, chunk_plan$dat$path[1])
+    n_got <- nrow(chunk_data)
+
+    if (!nzchar(chunk_plan$dat$next_page[1]) || n_got >= n_max) {
+      message("First chunk is all we need.")
+      return(convert_bigint(chunk_data, bigint))
+    }
+
+    # break rest of work into natural chunks ----
+    chunk_size <- trunc(0.75 * n_got)
+    message(glue("First chunk has {n_got} rows."))
+
+    chunk_plan <- bq_download_plan(
+      n_max,
+      chunk_size = chunk_size,
+      # TODO: start where we left off?
+      start_index = start_index
+    )
+    progress <- bq_progress(
+      "Downloading data [:bar] :percent ETA: :eta",
+      total = chunk_plan$n_chunks,
+      quiet = quiet
+    )
+
     if (!bq_quiet(quiet)) {
       message(glue_data(
-        page_info,
-        "Downloading {big_mark(n_rows)} rows in {n_pages} pages."
+        chunk_plan,
+        "Downloading {big_mark(n_max)} rows in {n_chunks} chunks \\
+         of (at most) {chunk_size[1]} rows."
       ))
     }
 
-    page_paths <- bq_download_pages(x,
-                                    page_info = page_info,
-                                    max_connections = max_connections,
-                                    quiet = quiet
+    for (i in seq_len(chunk_plan$n_chunks)) {
+      handle <-bq_download_chunk_handle(
+        x,
+        begin = chunk_plan$dat$chunk_begin[i],
+        max_results = chunk_plan$dat$chunk_rows[i]
+      )
+      curl::multi_add(
+        handle,
+        done = bq_download_callback(i, progress),
+        pool = pool
+      )
+    }
+    curl::multi_run(pool = pool)
+    withr::defer(file.remove(chunk_plan$dat$path))
+
+    table_data <- bq_parse_files(
+      schema_path,
+      chunk_plan$dat$path,
+      n = chunk_plan$n_max,
+      quiet = bq_quiet(quiet)
     )
-
-    on.exit(file.remove(c(schema_path, page_paths)))
-
-    table_data <- bq_parse_files(schema_path, page_paths, n = page_info$n_rows, quiet = bq_quiet(quiet))
     convert_bigint(table_data, bigint)
   }
 
@@ -117,91 +208,56 @@ rapply_int64 <- function(x, f) {
   }
 }
 
-bq_download_page_info <- function(nrow,
-                                  max_results = Inf,
-                                  start_index = 0,
-                                  page_size = 1e4) {
-  max_results <- pmax(pmin(max_results, nrow - start_index), 0)
+bq_download_plan <- function(n_max,
+                             chunk_size = NULL,
+                             n_chunks = NULL,
+                             start_index = 0) {
+  if (is.null(chunk_size) && is.null(n_chunks)) {
+    rlang::abort("`chunk_size` and/or `n_chunks` must be specified")
+  }
+  if (is.null(n_chunks)) {
+    n_chunks <- n_chunks %||% Inf
+  } else {
+    assert_that(is.numeric(n_chunks), length(n_chunks) == 1)
+    chunk_size <- chunk_size %||% ceiling(n_max / n_chunks)
+  }
+  n_chunks <- pmin(n_chunks, ceiling(n_max / chunk_size))
 
-  n_pages <- ceiling(max_results / page_size)
-  page_begin <- start_index + (seq_len(n_pages) - 1) * page_size
-  page_end <- pmin(page_begin + page_size, start_index + max_results)
+  chunk_begin <- start_index + (seq_len(n_chunks) - 1) * chunk_size
+  chunk_end <- pmin(chunk_begin + chunk_size, n_max)
+  chunk_rows <- chunk_end - chunk_begin
+  dat <- tibble::tibble(
+    chunk_begin,
+    chunk_rows,
+    path = sort(
+      tempfile(rep_len("bq-download-", length.out = n_chunks), fileext = ".json")
+    ),
+    next_page = rep_len("", length.out = n_chunks)
+  )
 
   list(
-    n_rows = max_results,
-    n_pages = n_pages,
-    begin = page_begin,
-    end = page_end
+    n_max = n_max,
+    chunk_size = chunk_size,
+    n_chunks = n_chunks,
+    dat = dat
   )
 }
 
-bq_download_pages <- function(x, page_info, max_connections = 6L, quiet = NA) {
-  x <- as_bq_table(x)
-  assert_that(is.list(page_info))
-
-  n_pages <- page_info$n_pages
-  if (n_pages == 0) {
-    return(character())
-  }
-
-  paths <- tempfile(rep("bq-", n_pages), fileext = ".json")
-  pool <- curl::new_pool(host_con = max_connections)
-  progress <- bq_progress(
-    "Downloading data [:bar] :percent ETA: :eta",
-    total = n_pages,
-    quiet = quiet
-  )
-
-  for (i in seq_len(n_pages)) {
-    handle <- bq_download_page_handle(
-      x,
-      begin = page_info$begin[i],
-      end = page_info$end[i]
-    )
-    curl::multi_add(handle,
-                    done = bq_download_callback(i, paths[[i]], progress),
-                    pool = pool
-    )
-  }
-
-  curl::multi_run(pool = pool)
-
-  paths
-}
-
-bq_download_callback <- function(page, path, progress) {
-  force(page)
-  force(path)
-
-  function(result) {
-    progress$tick()
-
-    bq_check_response(
-      result$status_code,
-      curl::parse_headers_list(result$headers)[["content-type"]],
-      result$content
-    )
-
-    con <- file(path, open = "wb")
-    on.exit(close(con))
-    writeBin(result$content, con)
-  }
-}
-
-bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
+bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   x <- as_bq_table(x)
   assert_that(is.numeric(begin), length(begin) == 1)
-  assert_that(is.numeric(end), length(end) == 1)
+  assert_that(is.numeric(max_results), length(max_results) == 1)
 
   # Pre-format query params with forced non-scientific notation, since the BQ
   # API doesn't accept numbers like 1e5. See issue #395 for details.
   query <- list(
     startIndex = format(begin, scientific = FALSE),
-    maxResults = format(end - begin, scientific = FALSE)
+    maxResults = format(max_results, scientific = FALSE)
   )
 
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
   url <- httr::modify_url(url, query = prepare_bq_query(query))
+  # cat("\nurl", url, "\n")
 
   if (bq_has_token()) {
     token <- .auth$get_cred()
@@ -217,6 +273,17 @@ bq_download_page_handle <- function(x, begin = 0L, end = begin + 1e4) {
   curl::handle_setheaders(h, .list = headers)
 
   h
+}
+
+bq_peek_next_page <- function(result) {
+  fragment <- rawToChar(readBin(result$content, n = 300, what = "raw"))
+  tmp <- strsplit(fragment, split = "\n")[[1]]
+  tmp <- grep("pageToken", tmp, value = TRUE)
+  if (length(tmp) == 0) {
+    return("")
+  }
+  tmp <- strsplit(tmp, split = ":")[[1]][[2]]
+  sub('.*["](.*)["].*', "\\1", tmp)
 }
 
 # Helpers for testing -----------------------------------------------------
