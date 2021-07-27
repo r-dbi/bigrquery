@@ -477,6 +477,7 @@ SEXP bq_parse_files(std::string schema_path,
   pb.set_total(file_paths.size());
 
   int offset = 0;
+  int seen = 0;
   char readBuffer[100 * 1024];
 
   for ( ; it != it_end; ++it) {
@@ -490,6 +491,10 @@ SEXP bq_parse_files(std::string schema_path,
       fclose(values_file);
     }
 
+    if (values_doc.HasMember("rows")) {
+      seen += values_doc["rows"].Size();
+    }
+
     offset += bq_fields_set(values_doc, out, fields, offset);
     if (!quiet) {
       pb.tick();
@@ -498,6 +503,10 @@ SEXP bq_parse_files(std::string schema_path,
     };
 
     fclose(values_file);
+  }
+
+  if (seen != n) {
+    Rcpp::stop("seen")
   }
 
   return out;
