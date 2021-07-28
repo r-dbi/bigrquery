@@ -95,9 +95,6 @@ bq_table_download <-
           result$content
         )
 
-        token <- bq_peek_next_page(result)
-        chunk_plan$dat$next_page[i] <<- token
-
         con <- file(chunk_plan$dat$path[i], open = "wb")
         withr::defer(close(con))
         writeBin(result$content, con)
@@ -129,7 +126,7 @@ bq_table_download <-
     chunk_data <- bq_parse_file(schema_path, chunk_plan$dat$path[1])
     n_got <- nrow(chunk_data)
 
-    if (!nzchar(chunk_plan$dat$next_page[1]) || n_got >= n_max) {
+    if (n_got >= n_max) {
       message("First chunk is all we need.")
       return(convert_bigint(chunk_data, bigint))
     }
@@ -197,6 +194,7 @@ convert_bigint <- function(df, bigint) {
 
   rapply_int64(df, f = as_bigint)
 }
+
 rapply_int64 <- function(x, f) {
   if (is.list(x)) {
     x[] <- lapply(x, rapply_int64, f = f)
@@ -231,8 +229,7 @@ bq_download_plan <- function(n_max,
     chunk_rows,
     path = sort(
       tempfile(rep_len("bq-download-", length.out = n_chunks), fileext = ".json")
-    ),
-    next_page = rep_len("", length.out = n_chunks)
+    )
   )
 
   list(
@@ -257,7 +254,6 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
 
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
   url <- httr::modify_url(url, query = prepare_bq_query(query))
-  # cat("\nurl", url, "\n")
 
   if (bq_has_token()) {
     token <- .auth$get_cred()
@@ -273,17 +269,6 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   curl::handle_setheaders(h, .list = headers)
 
   h
-}
-
-bq_peek_next_page <- function(result) {
-  fragment <- rawToChar(readBin(result$content, n = 300, what = "raw"))
-  tmp <- strsplit(fragment, split = "\n")[[1]]
-  tmp <- grep("pageToken", tmp, value = TRUE)
-  if (length(tmp) == 0) {
-    return("")
-  }
-  tmp <- strsplit(tmp, split = ":")[[1]][[2]]
-  sub('.*["](.*)["].*', "\\1", tmp)
 }
 
 # Helpers for testing -----------------------------------------------------
