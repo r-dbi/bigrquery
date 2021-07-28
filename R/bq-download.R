@@ -140,7 +140,7 @@ bq_table_download <-
     }
 
     for (i in seq_len(chunk_plan$n_chunks)) {
-      handle <-bq_download_chunk_handle(
+      handle <- bq_download_chunk_handle(
         x,
         begin = chunk_plan$dat$chunk_begin[i],
         max_results = chunk_plan$dat$chunk_rows[i]
