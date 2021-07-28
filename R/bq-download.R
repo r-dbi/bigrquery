@@ -82,24 +82,7 @@ bq_table_download <-
       return(table_data)
     }
 
-    # general download prep ----
     pool <- curl::new_pool()
-    bq_download_callback <- function(i, progress = NULL) {
-      force(i)
-      function(result) {
-        if (!is.null(progress)) progress$tick()
-
-        bq_check_response(
-          result$status_code,
-          curl::parse_headers_list(result$headers)[["content-type"]],
-          result$content
-        )
-
-        con <- file(chunk_plan$dat$path[i], open = "wb")
-        withr::defer(close(con))
-        writeBin(result$content, con)
-      }
-    }
 
     # get first chunk ----
     if (!bq_quiet(quiet)) {
@@ -119,10 +102,11 @@ bq_table_download <-
     )
     curl::multi_add(
       handle,
-      done = bq_download_callback(1),
+      done = bq_download_callback(chunk_plan$dat$path[1]),
       pool = pool
     )
     curl::multi_run(pool = pool)
+    # TODO: need to schedule deletion of the temp download file
     chunk_data <- bq_parse_file(schema_path, chunk_plan$dat$path[1])
     n_got <- nrow(chunk_data)
 
@@ -163,7 +147,7 @@ bq_table_download <-
       )
       curl::multi_add(
         handle,
-        done = bq_download_callback(i, progress),
+        done = bq_download_callback(chunk_plan$dat$path[i], progress),
         pool = pool
       )
     }
@@ -269,6 +253,23 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   curl::handle_setheaders(h, .list = headers)
 
   h
+}
+
+bq_download_callback <- function(path, progress = NULL) {
+  force(path)
+  function(result) {
+    if (!is.null(progress)) progress$tick()
+
+    bq_check_response(
+      result$status_code,
+      curl::parse_headers_list(result$headers)[["content-type"]],
+      result$content
+    )
+
+    con <- file(path, open = "wb")
+    withr::defer(close(con))
+    writeBin(result$content, con)
+  }
 }
 
 # Helpers for testing -----------------------------------------------------
