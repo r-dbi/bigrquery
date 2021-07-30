@@ -60,17 +60,26 @@ bq_table_download <-
            bigint = c("integer", "integer64", "numeric", "character")) {
     x <- as_bq_table(x)
     assert_that(is.numeric(max_results), length(max_results) == 1)
-    if (!is.null(page_size)) assert_that(is.numeric(page_size), length(page_size) == 1)
+    if (!is.null(page_size)) {
+      assert_that(
+        is.numeric(page_size),
+        length(page_size) == 1,
+        page_size > 0
+      )
+    }
     assert_that(is.numeric(start_index), length(start_index) == 1)
     bigint <- match.arg(bigint)
 
-    schema_path <- bq_download_schema(x, tempfile())
-    withr::defer(file.remove(schema_path))
-
     user_n_max <- max_results
     user_chunk_size <- page_size
+
     nrow <- bq_table_nrow(x)
+    start_index <- max(start_index, 0L)
     n_max <- pmax(pmin(user_n_max, nrow - start_index), 0)
+    start_index <- max(start_index, 0L)
+
+    schema_path <- bq_download_schema(x, tempfile())
+    withr::defer(file.remove(schema_path))
 
     if (n_max == 0) {
       table_data <- bq_parse_files(
@@ -194,33 +203,40 @@ bq_download_plan <- function(n_max,
                              chunk_size = NULL,
                              n_chunks = NULL,
                              start_index = 0) {
-  if (is.null(chunk_size) && is.null(n_chunks)) {
-    rlang::abort("`chunk_size` and/or `n_chunks` must be specified")
-  }
-  if (is.null(n_chunks)) {
-    n_chunks <- n_chunks %||% Inf
-  } else {
-    assert_that(is.numeric(n_chunks), length(n_chunks) == 1)
-    chunk_size <- chunk_size %||% ceiling(n_max / n_chunks)
-  }
-  n_chunks <- pmin(n_chunks, ceiling(n_max / chunk_size))
+  params <- set_chunk_params(n_max, chunk_size, n_chunks)
+  list(
+    n_max      = n_max,
+    chunk_size = params$chunk_size,
+    n_chunks   = params$n_chunks,
+    dat = set_chunk_plan(
+      n_max,
+      params$chunk_size,
+      params$n_chunks,
+      start_index
+    )
+  )
+}
 
+set_chunk_params <- function(n_max, chunk_size = NULL, n_chunks = NULL) {
+  if (is.null(chunk_size) && is.null(n_chunks)) {
+    n_chunks <- 1
+  }
+  n_chunks <- n_chunks %||% Inf
+  chunk_size <- pmin(chunk_size %||% ceiling(n_max / n_chunks), n_max)
+  n_chunks <- pmin(n_chunks, ceiling(n_max / chunk_size))
+  list(chunk_size = chunk_size, n_chunks = n_chunks)
+}
+
+set_chunk_plan <- function(n_max, chunk_size, n_chunks, start_index = 0) {
   chunk_begin <- start_index + (seq_len(n_chunks) - 1) * chunk_size
-  chunk_end <- pmin(chunk_begin + chunk_size, n_max)
+  chunk_end <- pmin(chunk_begin + chunk_size, start_index + n_max)
   chunk_rows <- chunk_end - chunk_begin
-  dat <- tibble::tibble(
+  tibble::tibble(
     chunk_begin,
     chunk_rows,
     path = sort(
       tempfile(rep_len("bq-download-", length.out = n_chunks), fileext = ".json")
     )
-  )
-
-  list(
-    n_max = n_max,
-    chunk_size = chunk_size,
-    n_chunks = n_chunks,
-    dat = dat
   )
 }
 

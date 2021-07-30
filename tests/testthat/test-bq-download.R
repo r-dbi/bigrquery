@@ -40,16 +40,73 @@ test_that("can specify large integers in page params", {
 
 # bq_table_info -----------------------------------------------------------
 
-test_that("max_results + start_index affects end values", {
-  skip("function no longer exists")
-  out <- bq_download_page_info(
-    nrow = 100,
-    max_results = 5,
-    page_size = 2,
-    start_index = 5
+test_that("set_chunk_params works", {
+  # no chunk_size, no n_chunks
+  expect_equal(set_chunk_params(5), list(chunk_size = 5, n_chunks = 1))
+
+  # yes chunk_size, no n_chunks
+  expect_equal(
+    set_chunk_params(10, chunk_size = 3),
+    list(chunk_size = 3, n_chunks = 4)
   )
-  expect_equal(out$begin, c(5, 7, 9))
-  expect_equal(out$end, c(7, 9, 10))
+  expect_equal(
+    set_chunk_params(10, chunk_size = 10),
+    list(chunk_size = 10, n_chunks = 1)
+  )
+  expect_equal(
+    set_chunk_params(10, chunk_size = 9),
+    list(chunk_size = 9, n_chunks = 2)
+  )
+  expect_equal(
+    set_chunk_params(10, chunk_size = 15),
+    list(chunk_size = 10, n_chunks = 1)
+  )
+
+  # no chunk_size, yes n_chunks
+  expect_equal(
+    set_chunk_params(10, n_chunks = 1),
+    list(chunk_size = 10, n_chunks = 1)
+  )
+  expect_equal(
+    set_chunk_params(10, n_chunks = 3),
+    list(chunk_size = 4, n_chunks = 3)
+  )
+  expect_equal(
+    set_chunk_params(10, n_chunks = 10),
+    list(chunk_size = 1, n_chunks = 10)
+  )
+  expect_equal(
+    set_chunk_params(10, n_chunks = 11),
+    list(chunk_size = 1, n_chunks = 10)
+  )
+
+  # yes chunk_size, yes n_chunks
+  expect_equal(
+    set_chunk_params(10, chunk_size = 3, n_chunks = 1),
+    list(chunk_size = 3, n_chunks = 1)
+  )
+  expect_equal(
+    set_chunk_params(10, chunk_size = 7, n_chunks = 5),
+    list(chunk_size = 7, n_chunks = 2)
+  )
+})
+
+test_that("set_chunk_plan() works", {
+  dat <- set_chunk_plan(5, chunk_size = 5, n_chunks = 1)
+  expect_equal(dat$chunk_begin, 0)
+  expect_equal(dat$chunk_rows, 5)
+
+  dat <- set_chunk_plan(5, chunk_size = 5, n_chunks = 1, start_index = 3)
+  expect_equal(dat$chunk_begin, 3)
+  expect_equal(dat$chunk_rows, 5)
+
+  dat <- set_chunk_plan(10, chunk_size = 3, n_chunks = 4)
+  expect_equal(dat$chunk_begin, c(0, 3, 6, 9))
+  expect_equal(dat$chunk_rows, c(3, 3, 3, 1))
+
+  dat <- set_chunk_plan(10, chunk_size = 3, n_chunks = 4, start_index = 8)
+  expect_equal(dat$chunk_begin, 8 + c(0, 3, 6, 9))
+  expect_equal(dat$chunk_rows, c(3, 3, 3, 1))
 })
 
 # types -------------------------------------------------------------------
