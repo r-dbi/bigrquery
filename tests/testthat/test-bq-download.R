@@ -38,6 +38,21 @@ test_that("can specify large integers in page params", {
   expect_equal(nrow(df), 100)
 })
 
+test_that("errors when table is known to be incomplete", {
+  skip_if_no_auth()
+
+  tb <- as_bq_table("bigquery-public-data.chicago_taxi_trips.taxi_trips")
+  expect_error(
+    bq_table_download(
+      tb,
+      max_results = 35000,
+      page_size = 35000,
+      bigint = "integer64"
+    ),
+    "incomplete"
+  )
+})
+
 # helpers around row and chunk params ------------------------------------------
 
 set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {

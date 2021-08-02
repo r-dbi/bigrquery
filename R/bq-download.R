@@ -131,7 +131,7 @@ bq_table_download <-
       rlang::abort(c(
         "First chunk is incomplete:",
         x = glue("{chunk_size} rows were requested, but only {n_got} rows \\
-                  were returned."),
+                  were received."),
         i = "Try a smaller `page_size` or leave this unspecified."
       ))
     }
@@ -159,7 +159,7 @@ bq_table_download <-
       message(glue_data(
         chunk_plan,
         "Downloading {big_mark(n_max)} rows in {n_chunks} chunks \\
-         of (at most) {chunk_size[1]} rows."
+         of (up to) {chunk_size} rows."
       ))
     }
 
