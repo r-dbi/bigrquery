@@ -59,24 +59,15 @@ bq_table_download <-
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character")) {
     x <- as_bq_table(x)
-    assert_that(is.numeric(max_results), length(max_results) == 1)
-    if (!is.null(page_size)) {
-      assert_that(
-        is.numeric(page_size),
-        length(page_size) == 1,
-        page_size > 0
-      )
-    }
-    assert_that(is.numeric(start_index), length(start_index) == 1)
     bigint <- match.arg(bigint)
 
-    user_n_max <- max_results
-    user_chunk_size <- page_size
-
-    nrow <- bq_table_nrow(x)
-    start_index <- max(start_index, 0L)
-    n_max <- pmax(pmin(user_n_max, nrow - start_index), 0)
-    start_index <- max(start_index, 0L)
+    params <- set_row_params(
+      nrow = bq_table_nrow(x),
+      n_max = max_results,
+      start_index = start_index
+    )
+    n_max <- params$n_max
+    start_index <- params$start_index
 
     schema_path <- bq_download_schema(x, tempfile())
     withr::defer(file.remove(schema_path))
@@ -98,9 +89,18 @@ bq_table_download <-
       message("Downloading first chunk of data.")
     }
 
+    if (!is.null(page_size)) {
+      assert_that(
+        is.numeric(page_size),
+        length(page_size) == 1,
+        page_size > 0
+      )
+    }
+    chunk_size <- page_size
+
     chunk_plan <- bq_download_plan(
       n_max,
-      chunk_size = user_chunk_size,
+      chunk_size = chunk_size,
       n_chunks = 1,
       start_index = start_index
     )
@@ -120,11 +120,12 @@ bq_table_download <-
     n_got <- nrow(chunk_data)
 
     if (n_got >= n_max) {
-      message("First chunk is all we need.")
+      message("First chunk includes all requested rows.")
       return(convert_bigint(chunk_data, bigint))
     }
 
     # break rest of work into natural chunks ----
+    # TODO: if user gave a chunk size and it worked, don't downsize it?
     chunk_size <- trunc(0.75 * n_got)
     message(glue("First chunk has {n_got} rows."))
 
@@ -197,6 +198,15 @@ rapply_int64 <- function(x, f) {
   } else {
     x
   }
+}
+
+set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
+  assert_that(is.numeric(n_max), length(n_max) == 1, n_max >= 0)
+  assert_that(is.numeric(start_index), length(start_index) == 1, start_index >= 0)
+
+  n_max <- max(min(n_max, nrow - start_index), 0)
+
+  list(n_max = n_max, start_index = start_index)
 }
 
 bq_download_plan <- function(n_max,

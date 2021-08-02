@@ -38,9 +38,40 @@ test_that("can specify large integers in page params", {
   expect_equal(nrow(df), 100)
 })
 
-# bq_table_info -----------------------------------------------------------
+# helpers around row and chunk params ------------------------------------------
 
-test_that("set_chunk_params works", {
+set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
+  assert_that(is.numeric(n_max), length(n_max) == 1, n_max >= 0)
+  assert_that(is.numeric(start_index), length(start_index) == 1, start_index >= 0)
+
+  n_max <- max(min(n_max, nrow - start_index), 0)
+
+  list(n_max = n_max, start_index = start_index)
+}
+
+test_that("set_row_params() works ", {
+  # n_max > nrow
+  expect_equal(
+    set_row_params(10, n_max = 15),
+    list(n_max = 10, start_index = 0)
+  )
+  # start_index > nrow
+  expect_equal(
+    set_row_params(10, start_index = 12),
+    list(n_max = 0, start_index = 12)
+  )
+  expect_equal(
+    set_row_params(10, n_max = 5, start_index = 12),
+    list(n_max = 0, start_index = 12)
+  )
+  # n_max > nrow - start_index
+  expect_equal(
+    set_row_params(10, n_max = 5, start_index = 7),
+    list(n_max = 3, start_index = 7)
+  )
+})
+
+test_that("set_chunk_params() works", {
   # no chunk_size, no n_chunks
   expect_equal(set_chunk_params(5), list(chunk_size = 5, n_chunks = 1))
 
