@@ -89,12 +89,15 @@ bq_table_download <-
       message("Downloading first chunk of data.")
     }
 
-    if (!is.null(page_size)) {
+    if (is.null(page_size)) {
+      chunk_size_from_user <- FALSE
+    } else {
       assert_that(
         is.numeric(page_size),
         length(page_size) == 1,
         page_size > 0
       )
+      chunk_size_from_user <- TRUE
     }
     chunk_size <- page_size
 
@@ -124,10 +127,21 @@ bq_table_download <-
       return(convert_bigint(chunk_data, bigint))
     }
 
+    if (chunk_size_from_user && n_got < chunk_size) {
+      rlang::abort(c(
+        "First chunk is incomplete:",
+        x = glue("{chunk_size} rows were requested, but only {n_got} rows \\
+                  were returned."),
+        i = "Try a smaller `page_size` or leave this unspecified."
+      ))
+    }
+
+
     # break rest of work into natural chunks ----
-    # TODO: if user gave a chunk size and it worked, don't downsize it?
-    chunk_size <- trunc(0.75 * n_got)
-    message(glue("First chunk has {n_got} rows."))
+    if (!chunk_size_from_user) {
+      message(glue("First chunk has {n_got} rows."))
+      chunk_size <- trunc(0.75 * n_got)
+    }
 
     chunk_plan <- bq_download_plan(
       n_max,
