@@ -502,7 +502,7 @@ SEXP bq_parse_files(std::string schema_path,
 
   if (total_seen != n) {
     // Matches the error thrown from R if the first "test balloon" chunk is short.
-    Rcpp::stop("%d rows were requested, but only %d rows were received.\n  Try a smaller `page_size` or leave this unspecified.", n, total_seen);
+    Rcpp::stop("%d rows were requested, but only %d rows were received.\n  Leave `page_size` unspecified or use an even smaller value.", n, total_seen);
   }
 
   return out;

@@ -118,8 +118,10 @@ bq_table_download <-
       pool = pool
     )
     curl::multi_run(pool = pool)
-    # TODO: need to schedule deletion of the temp download file
-    chunk_data <- bq_parse_file(schema_path, chunk_plan$dat$path[1])
+    path_first_chunk <- chunk_plan$dat$path[1]
+    withr::defer(file.remove(path_first_chunk))
+
+    chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
 
     if (n_got >= n_max) {
@@ -130,24 +132,25 @@ bq_table_download <-
     if (chunk_size_from_user && n_got < chunk_size) {
       rlang::abort(c(
         "First chunk is incomplete:",
-        x = glue("{chunk_size} rows were requested, but only {n_got} rows \\
-                  were received."),
-        i = "Try a smaller `page_size` or leave this unspecified."
+        x = glue("{big_mark(chunk_size)} rows were requested, but only \\
+                  {big_mark(n_got)} rows were received."),
+        i = "Leave `page_size` unspecified or use an even smaller value."
       ))
     }
 
-
     # break rest of work into natural chunks ----
     if (!chunk_size_from_user) {
-      message(glue("First chunk has {n_got} rows."))
+      message(glue("Received {big_mark(n_got)} rows in the first chunk."))
       chunk_size <- trunc(0.75 * n_got)
     }
 
+    n_max_new <- n_max - n_got
+    start_index_new <- n_got
+
     chunk_plan <- bq_download_plan(
-      n_max,
+      n_max_new,
       chunk_size = chunk_size,
-      # TODO: start where we left off?
-      start_index = start_index
+      start_index = start_index_new
     )
     progress <- bq_progress(
       "Downloading data [:bar] :percent ETA: :eta",
@@ -158,8 +161,8 @@ bq_table_download <-
     if (!bq_quiet(quiet)) {
       message(glue_data(
         chunk_plan,
-        "Downloading {big_mark(n_max)} rows in {n_chunks} chunks \\
-         of (up to) {chunk_size} rows."
+        "Downloading the remaining {big_mark(n_max)} rows in {n_chunks} \\
+         chunks of (up to) {big_mark(chunk_size)} rows."
       ))
     }
 
@@ -180,8 +183,8 @@ bq_table_download <-
 
     table_data <- bq_parse_files(
       schema_path,
-      chunk_plan$dat$path,
-      n = chunk_plan$n_max,
+      c(path_first_chunk, chunk_plan$dat$path),
+      n = n_max,
       quiet = bq_quiet(quiet)
     )
     convert_bigint(table_data, bigint)
