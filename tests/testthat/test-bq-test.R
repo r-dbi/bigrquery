@@ -1,6 +1,7 @@
 test_that("can init new dataset", {
   ds <- bq_test_dataset()
   bq_test_init(ds$dataset)
+  Sys.sleep(1)
   expect_true(bq_dataset_exists(ds))
 })
 
