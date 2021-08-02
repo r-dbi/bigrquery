@@ -39,7 +39,7 @@ Imports:
     prettyunits,
     progress,
     Rcpp,
-    rlang,
+    rlang (>= 0.4.9),
     tibble
 Suggests: 
     blob,
