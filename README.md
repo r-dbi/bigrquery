@@ -19,19 +19,19 @@ query BigQuery tables and retrieve metadata about your projects,
 datasets, tables, and jobs. The bigrquery package provides three levels
 of abstraction on top of BigQuery:
 
-  - The low-level API provides thin wrappers over the underlying REST
+-   The low-level API provides thin wrappers over the underlying REST
     API. All the low-level functions start with `bq_`, and mostly have
     the form `bq_noun_verb()`. This level of abstraction is most
     appropriate if you’re familiar with the REST API and you want do
     something not supported in the higher-level APIs.
 
-  - The [DBI interface](https://www.r-dbi.org) wraps the low-level API
+-   The [DBI interface](https://www.r-dbi.org) wraps the low-level API
     and makes working with BigQuery like working with any other database
     system. This is most convenient layer if you want to execute SQL
-    queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of
+    queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of
     data.
 
-  - The [dplyr interface](https://dbplyr.tidyverse.org/) lets you treat
+-   The [dplyr interface](https://dbplyr.tidyverse.org/) lets you treat
     BigQuery tables as if they are in-memory data frames. This is the
     most convenient layer if you don’t want to write SQL, but instead
     want dbplyr to write it for you.
@@ -62,19 +62,20 @@ sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality
 
 tb <- bq_project_query(billing, sql)
 bq_table_download(tb, n_max = 10)
+#> First chunk includes all requested rows.
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     4          6.12
-#>  2  1969     4    15          6.44
-#>  3  1969     4     8          8.88
-#>  4  1969     8    15          6.44
-#>  5  1969     1    21          7.50
-#>  6  1969     4    14          7.06
-#>  7  1969    11     3          6.56
-#>  8  1969     2     3          8.13
-#>  9  1969    11    20          8.19
-#> 10  1969     9     1          6.25
+#>  1  1969     1    20          7.00
+#>  2  1969     1    27          7.69
+#>  3  1969     6    19          6.75
+#>  4  1969     5    30          6.19
+#>  5  1969    11     9          7.87
+#>  6  1969     5    25          7.06
+#>  7  1969     7    25          7.94
+#>  8  1969     9    11          7.06
+#>  9  1969     7    13          6.00
+#> 10  1969     9    27          8.13
 ```
 
 ### DBI
@@ -98,19 +99,20 @@ dbListTables(con)
 #> [5] "shakespeare"     "trigrams"        "wikipedia"
 
 dbGetQuery(con, sql, n = 10)
+#> First chunk includes all requested rows.
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     2     4          6.12
-#>  2  1969     4    15          6.44
-#>  3  1969     4     8          8.88
-#>  4  1969     8    15          6.44
-#>  5  1969     1    21          7.50
-#>  6  1969     4    14          7.06
-#>  7  1969    11     3          6.56
-#>  8  1969     2     3          8.13
-#>  9  1969    11    20          8.19
-#> 10  1969     9     1          6.25
+#>  1  1969     1    20          7.00
+#>  2  1969     1    27          7.69
+#>  3  1969     6    19          6.75
+#>  4  1969     5    30          6.19
+#>  5  1969    11     9          7.87
+#>  6  1969     5    25          7.06
+#>  7  1969     7    25          7.94
+#>  8  1969     9    11          7.06
+#>  9  1969     7    13          6.00
+#> 10  1969     9    27          8.13
 ```
 
 ### dplyr
@@ -127,16 +129,16 @@ natality %>%
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     3    12          5.81
-#>  2  1969     2    18          7.23
-#>  3  1969     8    22          7.06
-#>  4  1970     4     1          8.56
-#>  5  1970     2    20          7.87
-#>  6  1970     6    22          6.69
-#>  7  1970     4    27          7.50
-#>  8  1970     6    21          4.81
-#>  9  1969     7     9          6.62
-#> 10  1969     8    16          8.44
+#>  1  1969    10     6          3.25
+#>  2  1969     5    11          5.75
+#>  3  1969     6    29          7.94
+#>  4  1969     3     7          8.38
+#>  5  1970     4    26          6.38
+#>  6  1971    10     6          6.69
+#>  7  1971     2    23          6.69
+#>  8  1971     8    12          7.37
+#>  9  1969     9     3          5.25
+#> 10  1969     4    25          6.62
 ```
 
 ## Important details
@@ -151,19 +153,19 @@ is preferred to use a service account token and put it into force via
 `bq_auth(path = "/path/to/your/service-account.json")`. More places to
 learn about auth:
 
-  - Help for
+-   Help for
     [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
-  - [How gargle gets
+-   [How gargle gets
     tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
-      - bigrquery obtains a token with `gargle::token_fetch()`, which
+    -   bigrquery obtains a token with `gargle::token_fetch()`, which
         supports a variety of token flows. This article provides full
         details, such as how to take advantage of Application Default
         Credentials or service accounts on GCE VMs.
-  - [Non-interactive
+-   [Non-interactive
     auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
     Explains how to set up a project when code must run without any user
     interaction.
-  - [How to get your own API
+-   [How to get your own API
     credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
     Instructions for getting your own OAuth client (or “app”) or service
     account token.
@@ -198,12 +200,12 @@ sample data; and as the `project` when you work with your own data.
 
 ## Useful links
 
-  - [SQL
+-   [SQL
     reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
-  - [API
+-   [API
     reference](https://cloud.google.com/bigquery/docs/reference/rest)
-  - [Query/job console](https://bigquery.cloud.google.com/)
-  - [Billing console](https://console.cloud.google.com/)
+-   [Query/job console](https://bigquery.cloud.google.com/)
+-   [Billing console](https://console.cloud.google.com/)
 
 ## Policies
 
