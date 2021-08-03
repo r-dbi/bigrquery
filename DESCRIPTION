@@ -34,12 +34,13 @@ Imports:
     gargle (>= 1.2.0),
     glue (>= 1.3.0),
     httr,
+    lifecycle,
     jsonlite,
     methods,
     prettyunits,
     progress,
     Rcpp,
-    rlang,
+    rlang (>= 0.4.9),
     tibble
 Suggests: 
     blob,

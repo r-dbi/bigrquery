@@ -101,7 +101,7 @@ db_copy_to.BigQueryConnection <- function(con, table, values,
 
 # registered onLoad
 collect.tbl_BigQueryConnection <- function(x, ...,
-                                           page_size = 1e4,
+                                           page_size = NULL,
                                            max_connections = 6L,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
@@ -126,7 +126,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   quiet <- if (n < 100) TRUE else x$src$con@quiet
   bigint <- x$src$con@bigint %||% "integer"
   out <- bq_table_download(tb,
-    max_results = n,
+    n_max = n,
     page_size = page_size,
     quiet = quiet,
     max_connections = max_connections,
