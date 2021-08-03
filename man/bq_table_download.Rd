@@ -6,19 +6,20 @@
 \usage{
 bq_table_download(
   x,
-  max_results = Inf,
+  n_max = Inf,
   page_size = NULL,
   start_index = 0L,
   max_connections = 6L,
   quiet = NA,
-  bigint = c("integer", "integer64", "numeric", "character")
+  bigint = c("integer", "integer64", "numeric", "character"),
+  max_results = deprecated()
 )
 }
 \arguments{
 \item{x}{A \link{bq_table}}
 
-\item{max_results}{Maximum number of results to retrieve. Use \code{Inf}
-retrieve all rows.}
+\item{n_max}{Maximum number of results to retrieve. Use \code{Inf} to retrieve all
+rows.}
 
 \item{page_size}{The number of rows returned per page. Make this smaller
 if you have many fields or large records and you are seeing a
@@ -37,6 +38,9 @@ mapped to. The default is \code{"integer"}, which returns R's \code{integer} typ
 but results in \code{NA} for values above/below +/- 2147483647. \code{"integer64"}
 returns a \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
+
+\item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
+\code{n_max} instead.}
 }
 \value{
 Because data retrieval may generate list-columns and the \code{data.frame}
@@ -85,6 +89,6 @@ nested/repeated values, are not well supported in R.
 
 \examples{
 if (bq_testable()) {
-  df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
+  df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
 }
 }

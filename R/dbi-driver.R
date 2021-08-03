@@ -22,7 +22,7 @@ NULL
 #' )
 #' con
 #' DBI::dbListTables(con)
-#' DBI::dbReadTable(con, "natality", max_results =10)
+#' DBI::dbReadTable(con, "natality", n_max = 10)
 #'
 #' # Create a temporary dataset to explore
 #' ds <- bq_test_dataset()

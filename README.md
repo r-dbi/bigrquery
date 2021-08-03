@@ -61,7 +61,7 @@ billing <- bq_test_project() # replace this with your project ID
 sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"
 
 tb <- bq_project_query(billing, sql)
-bq_table_download(tb, max_results = 10)
+bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 x 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>

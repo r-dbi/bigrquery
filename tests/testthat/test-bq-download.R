@@ -3,8 +3,8 @@ test_that("same results regardless of page size", {
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
 
-  df3 <- bq_table_download(tb, max_results = 30, page_size = 10)
-  df1 <- bq_table_download(tb, max_results = 30, page_size = 30)
+  df3 <- bq_table_download(tb, n_max = 30, page_size = 10)
+  df1 <- bq_table_download(tb, n_max = 30, page_size = 30)
   expect_equal(nrow(df1), 30)
   expect_equal(df1, df3)
 })
@@ -13,7 +13,7 @@ test_that("can retrieve fraction of page size", {
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, max_results = 15, page_size = 10)
+  df <- bq_table_download(tb, n_max = 15, page_size = 10)
   expect_equal(nrow(df), 15)
 })
 
@@ -21,7 +21,7 @@ test_that("can retrieve zero rows", {
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, max_results = 0)
+  df <- bq_table_download(tb, n_max = 0)
   expect_equal(nrow(df), 0)
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
@@ -34,7 +34,7 @@ test_that("can specify large integers in page params", {
   withr::local_options(list(scipen = -4))
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, max_results = 100, page_size = 20)
+  df <- bq_table_download(tb, n_max = 100, page_size = 20)
   expect_equal(nrow(df), 100)
 })
 
@@ -45,7 +45,7 @@ test_that("errors when table is known to be incomplete", {
   expect_error(
     bq_table_download(
       tb,
-      max_results = 35000,
+      n_max = 35000,
       page_size = 35000,
       bigint = "integer64"
     ),

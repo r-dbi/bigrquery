@@ -113,7 +113,7 @@ setMethod(
     }
 
     data <- bq_table_download(res@bq_table,
-      max_results = n,
+      n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
       bigint = res@bigint

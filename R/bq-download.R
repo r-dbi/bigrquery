@@ -30,8 +30,8 @@
 #'   a tibble. If you need a `data.frame`, coerce the results with
 #'   [as.data.frame()].
 #' @param x A [bq_table]
-#' @param max_results Maximum number of results to retrieve. Use `Inf`
-#'   retrieve all rows.
+#' @param n_max Maximum number of results to retrieve. Use `Inf` to retrieve all
+#'   rows.
 #' @param page_size The number of rows returned per page. Make this smaller
 #'   if you have many fields or large records and you are seeing a
 #'   'responseTooLarge' error.
@@ -44,27 +44,36 @@
 #'   but results in `NA` for values above/below +/- 2147483647. `"integer64"`
 #'   returns a [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
+#' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
+#'   `n_max` instead.
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examples
 #' if (bq_testable()) {
-#'   df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
+#'   df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
 #' }
 bq_table_download <-
   function(x,
-           max_results = Inf,
+           n_max = Inf,
            page_size = NULL,
            start_index = 0L,
            max_connections = 6L,
            quiet = NA,
-           bigint = c("integer", "integer64", "numeric", "character")) {
+           bigint = c("integer", "integer64", "numeric", "character"),
+           max_results = deprecated()) {
     x <- as_bq_table(x)
     bigint <- match.arg(bigint)
+    if (lifecycle::is_present(max_results)) {
+      lifecycle::deprecate_warn(
+        "1.3.3", "bq_table_download(max_results)", "bq_table_download(n_max)"
+      )
+      n_max <- max_results
+    }
 
     params <- set_row_params(
       nrow = bq_table_nrow(x),
-      n_max = max_results,
+      n_max = n_max,
       start_index = start_index
     )
     n_max <- params$n_max
