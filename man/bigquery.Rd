@@ -39,7 +39,7 @@ The default is \code{"integer"} which returns R's \code{integer} type but result
 values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
 which allows the full range of 64 bit integers.}
 
-\item{...}{Other arguments for compatbility with generic; currently ignored.}
+\item{...}{Other arguments for compatibility with generic; currently ignored.}
 }
 \description{
 Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.
