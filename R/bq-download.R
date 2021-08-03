@@ -32,9 +32,14 @@
 #' @param x A [bq_table]
 #' @param n_max Maximum number of results to retrieve. Use `Inf` to retrieve all
 #'   rows.
-#' @param page_size The number of rows returned per page. Make this smaller
-#'   if you have many fields or large records and you are seeing a
-#'   'responseTooLarge' error.
+#' @param page_size The number of rows requested per chunk. It is recommended to
+#'   leave this unspecified until you have evidence that the `page_size`
+#'   selected automatically by `bq_table_download()` is problematic.
+#'
+#'   When `page_size = NULL` bigrquery determines a conservative, natural chunk
+#'   size empirically. If you specify the `page_size`, it is important that each
+#'   chunk fits on one page, i.e. that the requested row limit is low enough to
+#'   prevent the API from paginating based on response size.
 #' @param start_index Starting row index (zero-based).
 #' @param max_connections Number of maximum simultaneous connections to
 #'   BigQuery servers.

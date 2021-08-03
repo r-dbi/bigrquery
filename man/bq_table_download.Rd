@@ -21,9 +21,14 @@ bq_table_download(
 \item{n_max}{Maximum number of results to retrieve. Use \code{Inf} to retrieve all
 rows.}
 
-\item{page_size}{The number of rows returned per page. Make this smaller
-if you have many fields or large records and you are seeing a
-'responseTooLarge' error.}
+\item{page_size}{The number of rows requested per chunk. It is recommended to
+leave this unspecified until you have evidence that the \code{page_size}
+selected automatically by \code{bq_table_download()} is problematic.
+
+When \code{page_size = NULL} bigrquery determines a conservative, natural chunk
+size empirically. If you specify the \code{page_size}, it is important that each
+chunk fits on one page, i.e. that the requested row limit is low enough to
+prevent the API from paginating based on response size.}
 
 \item{start_index}{Starting row index (zero-based).}
 
