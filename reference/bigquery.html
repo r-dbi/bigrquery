@@ -197,7 +197,7 @@ which allows the full range of 64 bit integers.</p></td>
 <span class='op'>)</span>
 <span class='va'>con</span>
 <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>dbListTables</a></span><span class='op'>(</span><span class='va'>con</span><span class='op'>)</span>
-<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"natality"</span>, max_results <span class='op'>=</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='st'>"natality"</span>, n_max <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 
 <span class='co'># Create a temporary dataset to explore</span>
 <span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bq_test_project.html'>bq_test_dataset</a></span><span class='op'>(</span><span class='op'>)</span>

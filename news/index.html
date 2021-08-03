@@ -129,6 +129,14 @@
 <a href="#bigrquery-development-version" class="anchor"></a>bigrquery (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> has been heavily refactored (<a href='https://github.com/r-dbi/bigrquery/issues/412'>#412</a>):</p>
+<ul>
+<li>It should now return the requested results, in full, in most situations. However, when there is a “row shortage”, it throws an error instead of silently returning incomplete results.</li>
+<li>The <code>max_results</code> argument has been deprecated in favor of <code>n_max</code>, which reflects what we actually do with this number and is consistent with the <code>n_max</code> argument elsewhere, e.g., <code><a href="https://readr.tidyverse.org/reference/read_delim.html">readr::read_csv()</a></code>.</li>
+<li>The default value of <code>page_size</code> is no longer fixed and, instead, is determined empirically. Users are strongly recommended to let bigrquery select <code>page_size</code> automatically, unless there’s a specific reason to do otherwise.</li>
+</ul>
+</li>
 <li><p>Add <code>billing</code> slot to <code>BigQueryResult</code>.</p></li>
 <li><p>Improve int64 support when reading BigQuery tables with dplyr syntax. <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> now utilizes <code>bigint</code> parameter in <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect()</a></code> object. Set <code>bigint</code> in connection object to <code>"integer64"</code> or <code>"character"</code> to avoid integer coercion and overflow issues (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>, <a href='https://github.com/r-dbi/bigrquery/issues/437'>#437</a>).</p></li>
 </ul>

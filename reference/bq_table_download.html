@@ -138,12 +138,13 @@ bq command line tool to download locally.</p>
 
     <pre class="usage"><span class='fu'>bq_table_download</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  max_results <span class='op'>=</span> <span class='cn'>Inf</span>,
-  page_size <span class='op'>=</span> <span class='fl'>10000</span>,
+  n_max <span class='op'>=</span> <span class='cn'>Inf</span>,
+  page_size <span class='op'>=</span> <span class='cn'>NULL</span>,
   start_index <span class='op'>=</span> <span class='fl'>0L</span>,
   max_connections <span class='op'>=</span> <span class='fl'>6L</span>,
   quiet <span class='op'>=</span> <span class='cn'>NA</span>,
-  bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer"</span>, <span class='st'>"integer64"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>
+  bigint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"integer"</span>, <span class='st'>"integer64"</span>, <span class='st'>"numeric"</span>, <span class='st'>"character"</span><span class='op'>)</span>,
+  max_results <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -154,15 +155,19 @@ bq command line tool to download locally.</p>
       <td><p>A <a href='bq_refs.html'>bq_table</a></p></td>
     </tr>
     <tr>
-      <th>max_results</th>
-      <td><p>Maximum number of results to retrieve. Use <code>Inf</code>
-retrieve all rows.</p></td>
+      <th>n_max</th>
+      <td><p>Maximum number of results to retrieve. Use <code>Inf</code> to retrieve all
+rows.</p></td>
     </tr>
     <tr>
       <th>page_size</th>
-      <td><p>The number of rows returned per page. Make this smaller
-if you have many fields or large records and you are seeing a
-'responseTooLarge' error.</p></td>
+      <td><p>The number of rows requested per chunk. It is recommended to
+leave this unspecified until you have evidence that the <code>page_size</code>
+selected automatically by <code>bq_table_download()</code> is problematic.</p>
+<p>When <code>page_size = NULL</code> bigrquery determines a conservative, natural chunk
+size empirically. If you specify the <code>page_size</code>, it is important that each
+chunk fits on one page, i.e. that the requested row limit is low enough to
+prevent the API from paginating based on response size.</p></td>
     </tr>
     <tr>
       <th>start_index</th>
@@ -170,7 +175,7 @@ if you have many fields or large records and you are seeing a
     </tr>
     <tr>
       <th>max_connections</th>
-      <td><p>Number of maximum simultaneously connections to
+      <td><p>Number of maximum simultaneous connections to
 BigQuery servers.</p></td>
     </tr>
     <tr>
@@ -180,18 +185,24 @@ if <code>NA</code> displays progress bar only for long-running jobs.</p></td>
     </tr>
     <tr>
       <th>bigint</th>
-      <td><p>The R type that BigQuery's 64-bit integer types should be mapped to.
-The default is <code>"integer"</code> which returns R's <code>integer</code> type but results in <code>NA</code> for
-values above/below +/- 2147483647. <code>"integer64"</code> returns a <a href='https://rdrr.io/pkg/bit64/man/bit64-package.html'>bit64::integer64</a>,
-which allows the full range of 64 bit integers.</p></td>
+      <td><p>The R type that BigQuery's 64-bit integer types should be
+mapped to. The default is <code>"integer"</code>, which returns R's <code>integer</code> type,
+but results in <code>NA</code> for values above/below +/- 2147483647. <code>"integer64"</code>
+returns a <a href='https://rdrr.io/pkg/bit64/man/bit64-package.html'>bit64::integer64</a>, which allows the full range of 64 bit
+integers.</p></td>
+    </tr>
+    <tr>
+      <th>max_results</th>
+      <td><p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a> Deprecated. Please use
+<code>n_max</code> instead.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Because data retrieval may generalise list-cols and the data frame
-print method can have problems with list-cols, this method returns
-tibbles. If you need a data frame, coerce the results with
+    <p>Because data retrieval may generate list-columns and the <code>data.frame</code>
+print method can have problems with list-columns, this method returns
+a tibble. If you need a <code>data.frame</code>, coerce the results with
 <code><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame()</a></code>.</p>
     <h2 class="hasAnchor" id="complex-data"><a class="anchor" href="#complex-data"></a>Complex data</h2>
 
@@ -199,9 +210,9 @@ tibbles. If you need a data frame, coerce the results with
 
 <p>bigrquery will retrieve nested and repeated columns in to list-columns
 as follows:</p><ul>
-<li><p>Repeated values (arrays) will become a list-cols of vectors.</p></li>
-<li><p>Records will become list-cols of named lists.</p></li>
-<li><p>Repeated records will become list-cols of data frames.</p></li>
+<li><p>Repeated values (arrays) will become a list-column of vectors.</p></li>
+<li><p>Records will become list-columns of named lists.</p></li>
+<li><p>Repeated records will become list-columns of data frames.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="larger-datasets"><a class="anchor" href="#larger-datasets"></a>Larger datasets</h2>
@@ -210,8 +221,8 @@ as follows:</p><ul>
 
 <p>In my timings, this code takes around 1 minute per 100 MB of data.
 If you need to download considerably more than this, I recommend:</p><ul>
-<li><p>Export a <code>.csv</code> file to Cloud Storage using <code><a href='api-table.html'>bq_table_save()</a></code></p></li>
-<li><p>Use the <code>gsutil</code> command line utility to download it</p></li>
+<li><p>Export a <code>.csv</code> file to Cloud Storage using <code><a href='api-table.html'>bq_table_save()</a></code>.</p></li>
+<li><p>Use the <code>gsutil</code> command line utility to download it.</p></li>
 <li><p>Read the csv file into R with <code><a href='https://readr.tidyverse.org/reference/read_delim.html'>readr::read_csv()</a></code> or <code>data.table::fread()</code>.</p></li>
 </ul>
 
@@ -229,7 +240,7 @@ nested/repeated values, are not well supported in R.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='bq_test_project.html'>bq_testable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>bq_table_download</span><span class='op'>(</span><span class='st'>"publicdata.samples.natality"</span>, max_results <span class='op'>=</span> <span class='fl'>35000</span><span class='op'>)</span>
+  <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>bq_table_download</span><span class='op'>(</span><span class='st'>"publicdata.samples.natality"</span>, n_max <span class='op'>=</span> <span class='fl'>35000</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

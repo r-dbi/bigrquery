@@ -109,7 +109,7 @@
 <span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span>
 
 <span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_query.html">bq_project_query</a></span><span class="op">(</span><span class="va">billing</span>, <span class="va">sql</span><span class="op">)</span>
-<span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, max_results <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, n_max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
