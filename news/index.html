@@ -137,8 +137,8 @@
 <li>The default value of <code>page_size</code> is no longer fixed and, instead, is determined empirically. Users are strongly recommended to let bigrquery select <code>page_size</code> automatically, unless there’s a specific reason to do otherwise.</li>
 </ul>
 </li>
-<li><p>Add <code>billing</code> slot to <code>BigQueryResult</code>.</p></li>
-<li><p>Improve int64 support when reading BigQuery tables with dplyr syntax. <code><a href="https://dplyr.tidyverse.org/reference/compute.html">collect()</a></code> now utilizes <code>bigint</code> parameter in <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect()</a></code> object. Set <code>bigint</code> in connection object to <code>"integer64"</code> or <code>"character"</code> to avoid integer coercion and overflow issues (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>, <a href='https://github.com/r-dbi/bigrquery/issues/437'>#437</a>).</p></li>
+<li><p>The <code>BigQueryResult</code> object gains a <code>billing</code> slot (<a href='https://github.com/meztez'>@meztez</a>).</p></li>
+<li><p><code>collect.tbl_BigQueryConnection()</code> honours the <code>bigint</code> field found in a connection object created with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect()</a></code> and passes <code>bigint</code> along to <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code>. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>, <a href='https://github.com/r-dbi/bigrquery/issues/437'>#437</a>).</p></li>
 </ul>
 </div>
     <div id="bigrquery-132" class="section level1">
@@ -174,7 +174,7 @@
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to()</a></code> now works with BigQuery (although it doesn’t support temporary tables so application is somewhat limited) (<a href='https://github.com/r-dbi/bigrquery/issues/337'>#337</a>).</p></li>
 <li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code><br>
 (<a href='https://github.com/jimmyg3g'>@jimmyg3g</a>, <a href='https://github.com/r-dbi/bigrquery/issues/369'>#369</a>).</p></li>
-<li><p>Error messages inlude hints for common problems (<a href='https://github.com/deflaux'>@deflaux</a>, <a href='https://github.com/r-dbi/bigrquery/issues/353'>#353</a>).</p></li>
+<li><p>Error messages include hints for common problems (<a href='https://github.com/deflaux'>@deflaux</a>, <a href='https://github.com/r-dbi/bigrquery/issues/353'>#353</a>).</p></li>
 </ul>
 </div>
     <div id="bigrquery-120" class="section level1">
@@ -239,7 +239,7 @@
 <ul>
 <li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> and the <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect</a></code> method now has a <code>bigint</code> argument which governs how BigQuery integer columns are imported into R. As before, the default is <code>bigint = "integer"</code>. You can set <code>bigint = "integer64"</code> to import BigQuery integer columns as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html">bit64::integer64</a></code> columns in R which allows for values outside the range of <code>integer</code> (<code>-2147483647</code> to <code>2147483647</code>) (<a href='https://github.com/rasmusab'>@rasmusab</a>, <a href='https://github.com/r-dbi/bigrquery/issues/94'>#94</a>).</p></li>
 <li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now treats NUMERIC columns the same was as FLOAT columns (<a href='https://github.com/paulsendavidjay'>@paulsendavidjay</a>, <a href='https://github.com/r-dbi/bigrquery/issues/282'>#282</a>).</p></li>
-<li><p><code><a href="../reference/api-table.html">bq_table_upload()</a></code> works with POSIXct/POSIXct varibles (<a href='https://github.com/r-dbi/bigrquery/issues/251'>#251</a>)</p></li>
+<li><p><code><a href="../reference/api-table.html">bq_table_upload()</a></code> works with POSIXct/POSIXct variables (<a href='https://github.com/r-dbi/bigrquery/issues/251'>#251</a>)</p></li>
 </ul>
 </div>
 <div id="sql-translation" class="section level2">
@@ -408,7 +408,7 @@
 <a href="#version-020" class="anchor"></a>Version 0.2.0.<small> 2016-03-03 </small>
 </h1>
 <ul>
-<li><p>Compatiable with latest httr.</p></li>
+<li><p>Compatible with latest httr.</p></li>
 <li><p>Computation of the SQL data type that corresponds to a given R object is now more robust against unknown classes. (<a href='https://github.com/r-dbi/bigrquery/issues/95'>#95</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
 <li><p>A data frame with full schema information is returned for zero-row results. (<a href='https://github.com/r-dbi/bigrquery/issues/88'>#88</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
 <li><p>New <code><a href="../reference/table-dep.html">exists_table()</a></code>. (<a href='https://github.com/r-dbi/bigrquery/issues/91'>#91</a>, <a href='https://github.com/krlmlr'>@krlmlr</a>)</p></li>
