@@ -1,5 +1,18 @@
 # bigrquery (development version)
 
+* `bq_table_download()` has been heavily refactored (#412):
+
+  - It should now return the requested results, in full, in most situations.
+    However, when there is a "row shortage", it throws an error instead of
+    silently returning incomplete results.
+  - The `max_results` argument has been deprecated in favor of `n_max`, which
+    reflects what we actually do with this number and is consistent with the
+    `n_max` argument elsewhere, e.g., `readr::read_csv()`.
+  - The default value of `page_size` is no longer fixed and, instead, is
+    determined empirically. Users are strongly recommended to let bigrquery
+    select `page_size` automatically, unless there's a specific reason to do
+    otherwise.
+
 * Add `billing` slot to `BigQueryResult`.
 
 * Improve int64 support when reading BigQuery tables with dplyr syntax. `collect()` now utilizes `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
