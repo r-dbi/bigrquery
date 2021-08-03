@@ -71,7 +71,7 @@ bq_table_download <-
     bigint <- match.arg(bigint)
     if (lifecycle::is_present(max_results)) {
       lifecycle::deprecate_warn(
-        "1.3.3", "bq_table_download(max_results)", "bq_table_download(n_max)"
+        "1.4.0", "bq_table_download(max_results)", "bq_table_download(n_max)"
       )
       n_max <- max_results
     }
