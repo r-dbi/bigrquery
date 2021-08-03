@@ -110,19 +110,20 @@
 
 <span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_query.html">bq_project_query</a></span><span class="op">(</span><span class="va">billing</span>, <span class="va">sql</span><span class="op">)</span>
 <span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, n_max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="co">#&gt; First chunk includes all requested rows.</span>
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     2     4          6.12</span>
-<span class="co">#&gt;  2  1969     4    15          6.44</span>
-<span class="co">#&gt;  3  1969     4     8          8.88</span>
-<span class="co">#&gt;  4  1969     8    15          6.44</span>
-<span class="co">#&gt;  5  1969     1    21          7.50</span>
-<span class="co">#&gt;  6  1969     4    14          7.06</span>
-<span class="co">#&gt;  7  1969    11     3          6.56</span>
-<span class="co">#&gt;  8  1969     2     3          8.13</span>
-<span class="co">#&gt;  9  1969    11    20          8.19</span>
-<span class="co">#&gt; 10  1969     9     1          6.25</span></code></pre></div>
+<span class="co">#&gt;  1  1969     1    20          7.00</span>
+<span class="co">#&gt;  2  1969     1    27          7.69</span>
+<span class="co">#&gt;  3  1969     6    19          6.75</span>
+<span class="co">#&gt;  4  1969     5    30          6.19</span>
+<span class="co">#&gt;  5  1969    11     9          7.87</span>
+<span class="co">#&gt;  6  1969     5    25          7.06</span>
+<span class="co">#&gt;  7  1969     7    25          7.94</span>
+<span class="co">#&gt;  8  1969     9    11          7.06</span>
+<span class="co">#&gt;  9  1969     7    13          6.00</span>
+<span class="co">#&gt; 10  1969     9    27          8.13</span></code></pre></div>
 </div>
 <div id="dbi" class="section level3">
 <h3 class="hasAnchor">
@@ -146,19 +147,20 @@
 <span class="co">#&gt; [5] "shakespeare"     "trigrams"        "wikipedia"</span>
 
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="co">#&gt; First chunk includes all requested rows.</span>
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     2     4          6.12</span>
-<span class="co">#&gt;  2  1969     4    15          6.44</span>
-<span class="co">#&gt;  3  1969     4     8          8.88</span>
-<span class="co">#&gt;  4  1969     8    15          6.44</span>
-<span class="co">#&gt;  5  1969     1    21          7.50</span>
-<span class="co">#&gt;  6  1969     4    14          7.06</span>
-<span class="co">#&gt;  7  1969    11     3          6.56</span>
-<span class="co">#&gt;  8  1969     2     3          8.13</span>
-<span class="co">#&gt;  9  1969    11    20          8.19</span>
-<span class="co">#&gt; 10  1969     9     1          6.25</span></code></pre></div>
+<span class="co">#&gt;  1  1969     1    20          7.00</span>
+<span class="co">#&gt;  2  1969     1    27          7.69</span>
+<span class="co">#&gt;  3  1969     6    19          6.75</span>
+<span class="co">#&gt;  4  1969     5    30          6.19</span>
+<span class="co">#&gt;  5  1969    11     9          7.87</span>
+<span class="co">#&gt;  6  1969     5    25          7.06</span>
+<span class="co">#&gt;  7  1969     7    25          7.94</span>
+<span class="co">#&gt;  8  1969     9    11          7.06</span>
+<span class="co">#&gt;  9  1969     7    13          6.00</span>
+<span class="co">#&gt; 10  1969     9    27          8.13</span></code></pre></div>
 </div>
 <div id="dplyr" class="section level3">
 <h3 class="hasAnchor">
@@ -175,16 +177,16 @@
 <span class="co">#&gt; # A tibble: 10 x 4</span>
 <span class="co">#&gt;     year month   day weight_pounds</span>
 <span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     3    12          5.81</span>
-<span class="co">#&gt;  2  1969     2    18          7.23</span>
-<span class="co">#&gt;  3  1969     8    22          7.06</span>
-<span class="co">#&gt;  4  1970     4     1          8.56</span>
-<span class="co">#&gt;  5  1970     2    20          7.87</span>
-<span class="co">#&gt;  6  1970     6    22          6.69</span>
-<span class="co">#&gt;  7  1970     4    27          7.50</span>
-<span class="co">#&gt;  8  1970     6    21          4.81</span>
-<span class="co">#&gt;  9  1969     7     9          6.62</span>
-<span class="co">#&gt; 10  1969     8    16          8.44</span></code></pre></div>
+<span class="co">#&gt;  1  1969    10     6          3.25</span>
+<span class="co">#&gt;  2  1969     5    11          5.75</span>
+<span class="co">#&gt;  3  1969     6    29          7.94</span>
+<span class="co">#&gt;  4  1969     3     7          8.38</span>
+<span class="co">#&gt;  5  1970     4    26          6.38</span>
+<span class="co">#&gt;  6  1971    10     6          6.69</span>
+<span class="co">#&gt;  7  1971     2    23          6.69</span>
+<span class="co">#&gt;  8  1971     8    12          7.37</span>
+<span class="co">#&gt;  9  1969     9     3          5.25</span>
+<span class="co">#&gt; 10  1969     4    25          6.62</span></code></pre></div>
 </div>
 </div>
 <div id="important-details" class="section level2">
