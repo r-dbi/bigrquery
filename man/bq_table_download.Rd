@@ -26,22 +26,23 @@ if you have many fields or large records and you are seeing a
 
 \item{start_index}{Starting row index (zero-based).}
 
-\item{max_connections}{Number of maximum simultaneously connections to
+\item{max_connections}{Number of maximum simultaneous connections to
 BigQuery servers.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
 
-\item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
-The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
-values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
-which allows the full range of 64 bit integers.}
+\item{bigint}{The R type that BigQuery's 64-bit integer types should be
+mapped to. The default is \code{"integer"}, which returns R's \code{integer} type,
+but results in \code{NA} for values above/below +/- 2147483647. \code{"integer64"}
+returns a \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
+integers.}
 }
 \value{
-Because data retrieval may generalise list-cols and the data frame
-print method can have problems with list-cols, this method returns
-tibbles. If you need a data frame, coerce the results with
-\code{as.data.frame()}.
+Because data retrieval may generate list-columns and the \code{data.frame}
+print method can have problems with list-columns, this method returns
+a tibble. If you need a \code{data.frame}, coerce the results with
+\code{\link[=as.data.frame]{as.data.frame()}}.
 }
 \description{
 This retrieves rows in chunks of \code{page_size}. It is most suitable for results
@@ -54,9 +55,9 @@ bq command line tool to download locally.
 bigrquery will retrieve nested and repeated columns in to list-columns
 as follows:
 \itemize{
-\item Repeated values (arrays) will become a list-cols of vectors.
-\item Records will become list-cols of named lists.
-\item Repeated records will become list-cols of data frames.
+\item Repeated values (arrays) will become a list-column of vectors.
+\item Records will become list-columns of named lists.
+\item Repeated records will become list-columns of data frames.
 }
 }
 
@@ -65,8 +66,8 @@ as follows:
 In my timings, this code takes around 1 minute per 100 MB of data.
 If you need to download considerably more than this, I recommend:
 \itemize{
-\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}
-\item Use the \code{gsutil} command line utility to download it
+\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}.
+\item Use the \code{gsutil} command line utility to download it.
 \item Read the csv file into R with \code{readr::read_csv()} or \code{data.table::fread()}.
 }
 
