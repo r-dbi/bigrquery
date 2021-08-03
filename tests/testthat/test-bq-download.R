@@ -55,15 +55,6 @@ test_that("errors when table is known to be incomplete", {
 
 # helpers around row and chunk params ------------------------------------------
 
-set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
-  assert_that(is.numeric(n_max), length(n_max) == 1, n_max >= 0)
-  assert_that(is.numeric(start_index), length(start_index) == 1, start_index >= 0)
-
-  n_max <- max(min(n_max, nrow - start_index), 0)
-
-  list(n_max = n_max, start_index = start_index)
-}
-
 test_that("set_row_params() works ", {
   # n_max > nrow
   expect_equal(
