@@ -101,7 +101,7 @@ db_copy_to.BigQueryConnection <- function(con, table, values,
 
 # registered onLoad
 collect.tbl_BigQueryConnection <- function(x, ...,
-                                           page_size = 1e4,
+                                           page_size = NULL,
                                            max_connections = 6L,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
