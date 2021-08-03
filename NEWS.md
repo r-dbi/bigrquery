@@ -13,9 +13,9 @@
     select `page_size` automatically, unless there's a specific reason to do
     otherwise.
 
-* Add `billing` slot to `BigQueryResult`.
+* The `BigQueryResult` object gains a `billing` slot (@meztez).
 
-* Improve int64 support when reading BigQuery tables with dplyr syntax. `collect()` now utilizes `bigint` parameter in `DBI::dbConnect()` object. Set `bigint` in connection object to `"integer64"` or `"character"` to avoid integer coercion and overflow issues (@zoews, #439, #437).
+* `collect.tbl_BigQueryConnection()` honours the `bigint` field found in a connection object created with `DBI::dbConnect()` and passes `bigint` along to `bq_table_download()`. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (@zoews, #439, #437).
 
 # bigrquery 1.3.2
 
@@ -69,7 +69,7 @@
 * `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
   (@jimmyg3g, #369).
 
-* Error messages inlude hints for common problems (@deflaux, #353).
+* Error messages include hints for common problems (@deflaux, #353).
 
 # bigrquery 1.2.0
 
@@ -130,7 +130,7 @@ gargle and rlang are newly Imported.
 * `bq_table_download()` now treats NUMERIC columns the same was as FLOAT 
   columns (@paulsendavidjay, #282).
 
-* `bq_table_upload()` works with POSIXct/POSIXct varibles (#251)
+* `bq_table_upload()` works with POSIXct/POSIXct variables (#251)
 
 ## SQL translation
 
@@ -339,7 +339,7 @@ The low-level API has been completely overhauled to make it easier to use. The p
   
 # Version 0.2.0.
 
-* Compatiable with latest httr.
+* Compatible with latest httr.
 
 * Computation of the SQL data type that corresponds to a given R object 
   is now more robust against unknown classes. (#95, @krlmlr)
