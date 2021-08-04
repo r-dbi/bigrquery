@@ -140,7 +140,9 @@ bq_table_download <-
     n_got <- nrow(chunk_data)
 
     if (n_got >= n_max) {
-      message("First chunk includes all requested rows.")
+      if (!bq_quiet(quiet)) {
+        message("First chunk includes all requested rows.")
+      }
       return(convert_bigint(chunk_data, bigint))
     }
 
@@ -155,7 +157,9 @@ bq_table_download <-
 
     # break rest of work into natural chunks ----
     if (!chunk_size_from_user) {
-      message(glue("Received {big_mark(n_got)} rows in the first chunk."))
+      if (!bq_quiet(quiet)) {
+        message(glue("Received {big_mark(n_got)} rows in the first chunk."))
+      }
       chunk_size <- trunc(0.75 * n_got)
     }
 
