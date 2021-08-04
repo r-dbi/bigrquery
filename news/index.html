@@ -137,7 +137,7 @@
 <li>The default value of <code>page_size</code> is no longer fixed and, instead, is determined empirically. Users are strongly recommended to let bigrquery select <code>page_size</code> automatically, unless there’s a specific reason to do otherwise.</li>
 </ul>
 </li>
-<li><p>The <code>BigQueryResult</code> object gains a <code>billing</code> slot (<a href='https://github.com/meztez'>@meztez</a>).</p></li>
+<li><p>The <code>BigQueryResult</code> object gains a <code>billing</code> slot (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/r-dbi/bigrquery/issues/423'>#423</a>).</p></li>
 <li><p><code>collect.tbl_BigQueryConnection()</code> honours the <code>bigint</code> field found in a connection object created with <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html">DBI::dbConnect()</a></code> and passes <code>bigint</code> along to <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code>. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (<a href='https://github.com/zoews'>@zoews</a>, <a href='https://github.com/r-dbi/bigrquery/issues/439'>#439</a>, <a href='https://github.com/r-dbi/bigrquery/issues/437'>#437</a>).</p></li>
 </ul>
 </div>
