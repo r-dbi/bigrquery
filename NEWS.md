@@ -13,7 +13,7 @@
     select `page_size` automatically, unless there's a specific reason to do
     otherwise.
 
-* The `BigQueryResult` object gains a `billing` slot (@meztez).
+* The `BigQueryResult` object gains a `billing` slot (@meztez, #423).
 
 * `collect.tbl_BigQueryConnection()` honours the `bigint` field found in a connection object created with `DBI::dbConnect()` and passes `bigint` along to `bq_table_download()`. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (@zoews, #439, #437).
 
