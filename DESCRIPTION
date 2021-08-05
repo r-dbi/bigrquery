@@ -1,6 +1,6 @@
 Package: bigrquery
 Title: An Interface to Google's 'BigQuery' 'API'
-Version: 1.4.0
+Version: 1.4.0.9000
 Authors@R: 
     c(person(given = "Hadley",
              family = "Wickham",
