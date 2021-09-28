@@ -337,8 +337,8 @@ bq_download_callback <- function(path, progress = NULL) {
 # Helpers for testing -----------------------------------------------------
 
 bq_parse_file <- function(fields, data) {
-  fields <- readr::read_file(fields)
-  data <- readr::read_file(data)
+  fields <- brio::read_file(fields)
+  data <- brio::read_file(data)
 
   bq_parse(fields, data)
 }

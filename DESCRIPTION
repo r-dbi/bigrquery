@@ -42,7 +42,7 @@ Imports:
     Rcpp,
     rlang (>= 0.4.9),
     tibble,
-    readr
+    brio
 Suggests: 
     blob,
     covr,
@@ -50,6 +50,7 @@ Suggests:
     dbplyr (>= 1.3.0),
     dplyr (>= 0.7.0),
     hms,
+    readr,
     sodium,
     testthat (>= 2.1.0),
     withr,
