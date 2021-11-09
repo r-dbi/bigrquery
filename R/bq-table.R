@@ -107,6 +107,34 @@ bq_table_nrow <- function(x) {
 
 #' @export
 #' @rdname api-table
+bq_table_mtime <- function(x) {
+  meta <- bq_table_meta(x, fields = "lastModifiedTime")
+  as.POSIXct(as.double(res$lastModifiedTime)/1000,
+             origin = "1970-01-01", tz = "UTC")
+}
+
+#' @export
+#' @rdname api-table
+bq_table_ctime <- function(x) {
+  meta <- bq_table_meta(x, fields = "creationTime")
+  as.POSIXct(as.double(meta)/1000,
+             origin = "1970-01-01", tz = "UTC")
+}
+
+#' @export
+#' @rdname api-table
+bq_table_location <- function(x) {
+  bq_table_meta(x, fields = "location")
+}
+
+#' @export
+#' @rdname api-table
+bq_table_type <- function(x) {
+  bq_table_meta(x, fields = "type")
+}
+
+#' @export
+#' @rdname api-table
 bq_table_exists <- function(x) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)

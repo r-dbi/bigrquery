@@ -7,6 +7,10 @@
 \alias{bq_table_fields}
 \alias{bq_table_size}
 \alias{bq_table_nrow}
+\alias{bq_table_mtime}
+\alias{bq_table_ctime}
+\alias{bq_table_location}
+\alias{bq_table_type}
 \alias{bq_table_exists}
 \alias{bq_table_delete}
 \alias{bq_table_copy}
@@ -25,6 +29,14 @@ bq_table_fields(x)
 bq_table_size(x)
 
 bq_table_nrow(x)
+
+bq_table_mtime(x)
+
+bq_table_ctime(x)
+
+bq_table_location(x)
+
+bq_table_type(x)
 
 bq_table_exists(x)
 
