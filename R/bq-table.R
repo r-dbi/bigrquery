@@ -109,7 +109,7 @@ bq_table_nrow <- function(x) {
 #' @rdname api-table
 bq_table_mtime <- function(x) {
   meta <- bq_table_meta(x, fields = "lastModifiedTime")
-  as.POSIXct(as.double(res$lastModifiedTime)/1000,
+  as.POSIXct(as.double(meta$lastModifiedTime)/1000,
              origin = "1970-01-01", tz = "UTC")
 }
 
@@ -117,7 +117,7 @@ bq_table_mtime <- function(x) {
 #' @rdname api-table
 bq_table_ctime <- function(x) {
   meta <- bq_table_meta(x, fields = "creationTime")
-  as.POSIXct(as.double(meta)/1000,
+  as.POSIXct(as.double(meta$creationTime)/1000,
              origin = "1970-01-01", tz = "UTC")
 }
 
