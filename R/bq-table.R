@@ -124,13 +124,13 @@ bq_table_ctime <- function(x) {
 #' @export
 #' @rdname api-table
 bq_table_location <- function(x) {
-  bq_table_meta(x, fields = "location")
+  bq_table_meta(x, fields = "location")$location
 }
 
 #' @export
 #' @rdname api-table
 bq_table_type <- function(x) {
-  bq_table_meta(x, fields = "type")
+  bq_table_meta(x, fields = "type")$type
 }
 
 #' @export
