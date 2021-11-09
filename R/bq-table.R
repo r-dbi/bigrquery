@@ -9,6 +9,7 @@
 #' @inheritParams api-job
 #' @inheritParams api-perform
 #' @inheritParams bq_projects
+#' @param expirationTime Expressed in milliseconds.
 #' @section Google BigQuery API documentation:
 #' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
 #' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
@@ -182,3 +183,18 @@ bq_table_patch <- function(x, fields) {
   body$schema <- list(fields = as_json(fields))
   bq_patch(url, body)
 }
+
+#' @export
+#' @rdname api-table
+bq_table_expiration <- function(x, expirationTime = as.integer(Sys.time())*1000L + 60L*60L*1000L*8L) {
+  x <- as_bq_table(x)
+
+  url <- bq_path(x$project, x$dataset, x$table)
+  body <- list(
+    tableReference = tableReference(x)
+  )
+  body$expirationTime <- as.character(expirationTime)
+  bq_patch(url, body)
+}
+
+

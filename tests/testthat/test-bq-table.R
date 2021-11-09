@@ -168,6 +168,24 @@ test_that("can patch table with new fields in the schema", {
   )
 })
 
+test_that("can patch table with new expiration", {
+  ds <- bq_test_dataset()
+  tb <- bq_table(ds, "table_to_patch")
+  df <- data.frame(id = 1)
+  bq_table_create(tb, fields = df)
+
+  df.patch <- data.frame(id = 1, title = "record name")
+
+  t <- floor(as.numeric(Sys.time())*1000L + 60L*60L*1000L*8L)
+  bq_table_expiration(tb, expirationTime = t)
+
+  tb.meta <- bq_table_meta(tb)
+  expect_equal(
+    tb.meta$expirationTime,
+    as.character(t)
+  )
+})
+
 test_that("can round-trip GEOGRAPHY", {
   skip_if_not_installed("wk")
 

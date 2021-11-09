@@ -14,6 +14,7 @@
 \alias{bq_table_save}
 \alias{bq_table_load}
 \alias{bq_table_patch}
+\alias{bq_table_expiration}
 \title{BigQuery tables}
 \usage{
 bq_table_create(x, fields = NULL, ...)
@@ -39,6 +40,11 @@ bq_table_save(x, destination_uris, ..., quiet = NA)
 bq_table_load(x, source_uris, ..., quiet = NA)
 
 bq_table_patch(x, fields)
+
+bq_table_expiration(
+  x,
+  expirationTime = as.integer(Sys.time()) * 1000L + 60L * 60L * 1000L * 8L
+)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -73,6 +79,8 @@ For Google Cloud Bigtable URIs: Exactly one URI can be specified and
 it has be a fully specified and valid HTTPS URL for a Google Cloud
 Bigtable table. For Google Cloud Datastore backups: Exactly one URI
 can be specified. Also, the '*' wildcard character is not allowed.}
+
+\item{expirationTime}{Expressed in milliseconds.}
 }
 \value{
 \itemize{
