@@ -172,7 +172,7 @@ test_that("can round-trip GEOGRAPHY", {
   skip_if_not_installed("wk")
 
   ds <- bq_test_dataset()
-  df <- tibble(geography = wk::wkt("POINT(30 10)"))
+  df <- tibble(geography = wk::wkt("POINT(30 10)", geodesic = TRUE))
 
   tb1 <- bq_table_create(
     bq_table(ds, "geography"),

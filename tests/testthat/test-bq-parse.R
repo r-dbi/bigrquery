@@ -177,9 +177,12 @@ test_that("can parse empty arrays", {
 test_that("can parse geography", {
   skip_if_not_installed("wk")
 
-  wkt <- wk::wkt("POINT (30 10)")
+  wkt <- wk::wkt("POINT (30 10)", geodesic = TRUE)
   expect_identical(bq_parse_single(as.character(wkt), "geography"), wkt)
-  expect_identical(bq_parse_single(NA_character_, "geography"), wk::wkt(NA_character_))
+  expect_identical(
+    bq_parse_single(NA_character_, "geography"),
+    wk::wkt(NA_character_, geodesic = TRUE)
+  )
 })
 
 test_that("can parse bytes", {

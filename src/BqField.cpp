@@ -183,6 +183,7 @@ public:
         check_namespace("wk", "GEOGRAPHY");
         Rcpp::CharacterVector out(n);
         out.attr("class") = Rcpp::CharacterVector::create("wk_wkt", "wk_vctr");
+        out.attr("geodesic") = true;
         return out;
       }
     case BQ_BYTES: {

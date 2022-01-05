@@ -54,7 +54,7 @@ Suggests:
     sodium,
     testthat (>= 2.1.0),
     withr,
-    wk (>= 0.3.2)
+    wk (>= 0.6.0)
 LinkingTo: 
     progress,
     rapidjsonr,

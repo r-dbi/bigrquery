@@ -213,7 +213,7 @@ test_that("can convert geography type", {
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
   df <- bq_table_download(tb)
 
-  expect_identical(df$geography, wk::wkt("POINT(30 10)"))
+  expect_identical(df$geography, wk::wkt("POINT(30 10)", geodesic = TRUE))
 })
 
 test_that("can convert bytes type", {
