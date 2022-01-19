@@ -56,16 +56,18 @@ NULL
 #' @param fields A [bq_fields] specification, or something coercible to it
 #'   (like a data frame).
 bq_table_create <- function(x, fields = NULL, ...) {
+  if (is.null(fields)){
+    fields <- x
+  }
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, x$dataset, "")
   body <- list(
     tableReference = tableReference(x)
   )
-  if (!is.null(fields)) {
-    fields <- as_bq_fields(fields)
-    body$schema <- list(fields = as_json(fields))
-  }
+
+  fields <- as_bq_fields(fields)
+  body$schema <- list(fields = as_json(fields))
 
   bq_post(url, body = bq_body(body, ...))
 
