@@ -111,7 +111,8 @@ bq_perform_upload <- function(x, values,
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_EMPTY",
                               ...,
-                              billing = x$project
+                              billing = x$project,
+                              autodetect = FALSE
                               ) {
 
   x <- as_bq_table(x)
@@ -126,6 +127,10 @@ bq_perform_upload <- function(x, values,
     createDisposition = unbox(create_disposition),
     writeDisposition = unbox(write_disposition)
   )
+
+  if (is.null(fields) && autodetect == FALSE && is.data.frame(values)) {
+    fields <- as_bq_fields(values)
+  }
 
   if (!is.null(fields)) {
     fields <- as_bq_fields(fields)
