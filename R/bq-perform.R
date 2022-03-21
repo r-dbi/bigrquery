@@ -240,6 +240,10 @@ bq_perform_load <- function(x,
 #'   If not supplied, results will be saved to a temporary table that lives
 #'   in a special dataset. You must supply this parameter for large
 #'   queries (> 128 MB compressed).
+#' @param location Specifies the geographic location where the query should run.
+#'
+#'   See <https://cloud.google.com/bigquery/docs/locations#specifying_your_location>
+#'   for more details.
 #' @param priority Specifies a priority for the query. Possible values include
 #'   "INTERACTIVE" and "BATCH". Batch queries do not start immediately,
 #'   but are not rate-limited in the same way as interactive queries.
@@ -250,6 +254,7 @@ bq_perform_query <- function(query, billing,
                              parameters = NULL,
                              destination_table = NULL,
                              default_dataset = NULL,
+                             location = NULL,
                              create_disposition = "CREATE_IF_NEEDED",
                              write_disposition = "WRITE_EMPTY",
                              use_legacy_sql = FALSE,
@@ -278,6 +283,10 @@ bq_perform_query <- function(query, billing,
 
   if (!is.null(default_dataset)) {
     query$defaultDataset <- datasetReference(default_dataset)
+  }
+
+  if (!is.null(location)) {
+    query$location <- location
   }
 
   url <- bq_path(billing, jobs = "")
