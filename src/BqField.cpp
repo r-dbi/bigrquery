@@ -68,7 +68,8 @@ enum BqType {
   BQ_DATETIME,
   BQ_RECORD,
   BQ_GEOGRAPHY,
-  BQ_BYTES
+  BQ_BYTES,
+  BQ_BIGNUMERIC
 };
 
 BqType parse_bq_type(std::string x) {
@@ -96,6 +97,8 @@ BqType parse_bq_type(std::string x) {
     return BQ_GEOGRAPHY;
   } else if (x == "BYTES") {
     return BQ_BYTES;
+  } else if (x == "BIGNUMERIC") {
+    return BQ_BIGNUMERIC;
   } else {
     Rcpp::stop("Unknown type %s", x);
   }
@@ -161,6 +164,8 @@ public:
       }
     case BQ_FLOAT:
       return Rcpp::DoubleVector(n);
+    case BQ_BIGNUMERIC:
+      return Rcpp::DoubleVector(n);
     case BQ_BOOLEAN:
       return Rcpp::LogicalVector(n);
     case BQ_STRING:
@@ -222,6 +227,9 @@ public:
       break;
     case BQ_TIMESTAMP:
     case BQ_FLOAT:
+      REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
+      break;
+    case BQ_BIGNUMERIC:
       REAL(x)[i] = v.IsString() ? atof(v.GetString()) : NA_REAL;
       break;
     case BQ_BOOLEAN:

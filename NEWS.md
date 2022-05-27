@@ -1,6 +1,8 @@
 # bigrquery (development version)
 
-brio is new in Imports, replacing the use of the Suggested package readr, in `bq_table_download()` (@AdeelK93, #462).
+* brio is new in Imports, replacing the use of the Suggested package readr, in `bq_table_download()` (@AdeelK93, #462).
+
+* Add support for BIGNUMERIC data type (@OssiLehtinen, #435)
 
 # bigrquery 1.4.0
 
