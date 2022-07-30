@@ -17,9 +17,7 @@ insert_extract_job(
 )
 }
 \arguments{
-\item{project}{Project and dataset identifiers}
-
-\item{dataset}{Project and dataset identifiers}
+\item{project, dataset}{Project and dataset identifiers}
 
 \item{table}{name of table to insert values into}
 
