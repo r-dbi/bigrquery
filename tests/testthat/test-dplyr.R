@@ -48,25 +48,6 @@ test_that("can collect and compute (no dataset)", {
   expect_true(DBI::dbExistsTable(con, name))
 })
 
-test_that("can collect and compute (no dataset)", {
-  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
-  bq_mtcars <- dplyr::tbl(con, "basedata.mtcars") %>% dplyr::filter(cyl == 4)
-
-  # collect
-  x <- dplyr::collect(bq_mtcars)
-  expect_equal(dim(x), c(11, 11))
-
-  # compute: temporary
-  temp <- dplyr::compute(bq_mtcars)
-
-  # compute: persistent
-  name <- paste0("basedata.", random_name())
-  temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
-  on.exit(DBI::dbRemoveTable(con, name))
-
-  expect_true(DBI::dbExistsTable(con, name))
-})
-
 test_that("can collect and compute (with dataset)", {
   con <- DBI::dbConnect(bigquery(),
     project = bq_test_project(),
