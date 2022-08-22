@@ -228,7 +228,7 @@ credentials_app_default_path <- function() {
 
 load_quota_project_id <- function() {
   path <- credentials_app_default_path()
-  if (!file_exists(path)) {
+  if (!fs::file_exists(path)) {
     return("")
   }
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)

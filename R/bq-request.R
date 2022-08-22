@@ -169,7 +169,7 @@ bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
     url,
     parts = parts,
     token,
-    prep_headers()
+    prep_headers(),
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
