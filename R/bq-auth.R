@@ -3,6 +3,7 @@
 
 # Initialization happens in .onLoad
 .auth <- NULL
+.quota_project_id <- NULL
 
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
@@ -205,4 +206,65 @@ bq_user <- function() {
   } else {
     NULL
   }
+}
+
+
+credentials_app_default_path <- function() {
+  if (nzchar(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
+    return(path_expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
+  }
+
+  pth <- "application_default_credentials.json"
+  if (nzchar(Sys.getenv("CLOUDSDK_CONFIG"))) {
+    pth <- c(Sys.getenv("CLOUDSDK_CONFIG"), pth)
+  } else if (xfun::is_windows()) {
+    appdata <- Sys.getenv("APPDATA", Sys.getenv("SystemDrive", "C:"))
+    pth <- c(appdata, "gcloud", pth)
+  } else {
+    pth <- fs::path_home(".config", "gcloud", pth)
+  }
+  fs::path_join(pth)
+}
+
+load_quota_project_id <- function() {
+  path <- credentials_app_default_path()
+  if (!file_exists(path)) {
+    return("")
+  }
+  info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
+  if (!("quota_project_id" %in% names(info))) {
+    return("")
+  }
+  info$quota_project_id
+}
+
+#' Get the specified quota project from ADC
+#'
+#'
+#' @family low-level API functions
+#' @export
+#' @examples
+#' \dontrun{
+#' bq_quota_project_id()
+#' }
+bq_quota_project_id <- function() {
+  if (is.null(.quota_project_id)) {
+    .quota_project_id <- load_quota_project_id()
+  }
+
+  .quota_project_id
+}
+
+#' Check if quota_project_id is set
+#'
+#'
+#' @family low-level API functions
+#' @export
+#' @examples
+#' \dontrun{
+#' bq_quota_project_id()
+#' }
+bq_has_quota_project_id <- function() {
+  quota_project_id <- bq_quota_project_id()
+  !identical(quota_project_id, "")
 }

@@ -1,5 +1,18 @@
 base_url <- "https://www.googleapis.com/bigquery/v2/"
 upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
+goog_project_header <- "X-Goog-User-Project"
+json_type <- "application/json"
+
+prep_headers <- function(type=NULL) {
+  header.list <- list()
+  if (!is.null(type)) {
+    header.list[["Content-Type"]] <- type
+  }
+  if (bq_has_quota_project_id()) {
+    header.list[[goog_project_header]] <- bq_quota_project_id()
+  }
+  do.call(add_headers, header.list)
+}
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
@@ -46,6 +59,7 @@ bq_get <- function(url, ..., query = NULL, raw = FALSE, token = bq_token()) {
   req <- GET(
     paste0(base_url, url),
     token,
+    prep_headers(),
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -57,6 +71,7 @@ bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
   req <- GET(
     paste0(base_url, url),
     token,
+    prep_headers(),
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -125,7 +140,7 @@ bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
     body = json,
     httr::user_agent(bq_ua()),
     token,
-    add_headers("Content-Type" = "application/json"),
+    prep_headers(json_type),
     ...,
     query = prepare_bq_query(query)
   )
@@ -140,7 +155,7 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
     body = json,
     httr::user_agent(bq_ua()),
     token,
-    add_headers("Content-Type" = "application/json"),
+    prep_headers(json_type),
     ...,
     query = prepare_bq_query(query)
   )
@@ -154,6 +169,7 @@ bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
     url,
     parts = parts,
     token,
+    prep_headers()
     httr::user_agent(bq_ua()),
     ...,
     query = prepare_bq_query(query)
@@ -186,7 +202,7 @@ bq_check_response <- function(status, type, content) {
   }
 
   type <- httr::parse_media(type)
-  if (type$complete == "application/json") {
+  if (type$complete == json_type) {
     json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
     signal_reason(json$error$errors[[1L]]$reason, json$error$message)
   } else {
@@ -240,7 +256,7 @@ POST_multipart_related <- function(url, config = NULL, parts = NULL,
   body <- paste0(sep, paste0(parts, collapse = sep), end)
 
   type <- paste0("multipart/related; boundary=", boundary)
-  config <- c(config, add_headers("Content-Type" = type))
+  config <- c(config, prep_headers(type))
 
   query <- utils::modifyList(list(uploadType = "multipart"), query)
 
