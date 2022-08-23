@@ -310,6 +310,10 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
     headers <- list()
   }
 
+  if (bq_has_quota_project_id()) {
+    headers[["X-Goog-User-Project"]] <- bq_quota_project_id()
+  }
+
   h <- curl::new_handle(url = url)
   curl::handle_setopt(h, useragent = bq_ua())
   curl::handle_setheaders(h, .list = headers)
