@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,23 +39,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bigrquery</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -61,16 +57,17 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Releases</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2021/08/bigrquery-1-4-0/">bigrquery 1.4.0</a>
+      <a href="https://www.tidyverse.org/blog/2021/08/bigrquery-1-4-0/" class="external-link">bigrquery 1.4.0</a>
     </li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/02/bigrquery-1-1-0/">bigrquery 1.1.0</a>
+      <a href="https://www.tidyverse.org/blog/2019/02/bigrquery-1-1-0/" class="external-link">bigrquery 1.1.0</a>
     </li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2018/04/bigrquery-1-0-0/">bigrquery 1.0.0</a>
+      <a href="https://www.tidyverse.org/blog/2018/04/bigrquery-1-0-0/" class="external-link">bigrquery 1.0.0</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="news/index.html">Changelog</a>
     </li>
   </ul>
@@ -78,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/r-dbi/bigrquery/">
+  <a href="https://github.com/r-dbi/bigrquery/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -95,231 +92,236 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="bigrquery" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#bigrquery" class="anchor"></a>bigrquery</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="bigrquery">bigrquery<a class="anchor" aria-label="anchor" href="#bigrquery"></a>
+</h1></div>
 <!-- badges: start -->
-
-<p>The bigrquery package makes it easy to work with data stored in <a href="https://cloud.google.com/bigquery/docs">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
+<p>The bigrquery package makes it easy to work with data stored in <a href="https://cloud.google.com/bigquery/docs" class="external-link">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
 <ul>
 <li><p>The low-level API provides thin wrappers over the underlying REST API. All the low-level functions start with <code>bq_</code>, and mostly have the form <code>bq_noun_verb()</code>. This level of abstraction is most appropriate if you’re familiar with the REST API and you want do something not supported in the higher-level APIs.</p></li>
-<li><p>The <a href="https://www.r-dbi.org">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
-<li><p>The <a href="https://dbplyr.tidyverse.org/">dplyr interface</a> lets you treat BigQuery tables as if they are in-memory data frames. This is the most convenient layer if you don’t want to write SQL, but instead want dbplyr to write it for you.</p></li>
+<li><p>The <a href="https://www.r-dbi.org" class="external-link">DBI interface</a> wraps the low-level API and makes working with BigQuery like working with any other database system. This is most convenient layer if you want to execute SQL queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of data.</p></li>
+<li><p>The <a href="https://dbplyr.tidyverse.org/" class="external-link">dplyr interface</a> lets you treat BigQuery tables as if they are in-memory data frames. This is the most convenient layer if you don’t want to write SQL, but instead want dbplyr to write it for you.</p></li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The current bigrquery release can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"bigrquery"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bigrquery"</span><span class="op">)</span></span></code></pre></div>
 <p>The newest development release can be installed from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages('devtools')</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-dbi/bigrquery"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages('devtools')</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-dbi/bigrquery"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<div id="low-level-api" class="section level3">
-<h3 class="hasAnchor">
-<a href="#low-level-api" class="anchor"></a>Low-level API</h3>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<div class="section level3">
+<h3 id="low-level-api">Low-level API<a class="anchor" aria-label="anchor" href="#low-level-api"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bigrquery.r-dbi.org">bigrquery</a></span><span class="op">)</span>
-<span class="va">billing</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># replace this with your project ID </span>
-<span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span>
-
-<span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_query.html">bq_project_query</a></span><span class="op">(</span><span class="va">billing</span>, <span class="va">sql</span><span class="op">)</span>
-<span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, n_max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; First chunk includes all requested rows.</span>
-<span class="co">#&gt; # A tibble: 10 x 4</span>
-<span class="co">#&gt;     year month   day weight_pounds</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     1    20          7.00</span>
-<span class="co">#&gt;  2  1969     1    27          7.69</span>
-<span class="co">#&gt;  3  1969     6    19          6.75</span>
-<span class="co">#&gt;  4  1969     5    30          6.19</span>
-<span class="co">#&gt;  5  1969    11     9          7.87</span>
-<span class="co">#&gt;  6  1969     5    25          7.06</span>
-<span class="co">#&gt;  7  1969     7    25          7.94</span>
-<span class="co">#&gt;  8  1969     9    11          7.06</span>
-<span class="co">#&gt;  9  1969     7    13          6.00</span>
-<span class="co">#&gt; 10  1969     9    27          8.13</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bigrquery.r-dbi.org">bigrquery</a></span><span class="op">)</span></span>
+<span><span class="va">billing</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># replace this with your project ID </span></span>
+<span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span></span>
+<span></span>
+<span><span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_query.html">bq_project_query</a></span><span class="op">(</span><span class="va">billing</span>, <span class="va">sql</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, n_max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; First chunk includes all requested rows.</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt;     year month   day weight_pounds</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  1969     1    20          7.00</span></span>
+<span><span class="co">#&gt;  2  1969     1    27          7.69</span></span>
+<span><span class="co">#&gt;  3  1969     6    19          6.75</span></span>
+<span><span class="co">#&gt;  4  1969     5    30          6.19</span></span>
+<span><span class="co">#&gt;  5  1969    11     9          7.87</span></span>
+<span><span class="co">#&gt;  6  1969     5    25          7.06</span></span>
+<span><span class="co">#&gt;  7  1969     7    25          7.94</span></span>
+<span><span class="co">#&gt;  8  1969     9    11          7.06</span></span>
+<span><span class="co">#&gt;  9  1969     7    13          6.00</span></span>
+<span><span class="co">#&gt; 10  1969     9    27          8.13</span></span></code></pre></div>
 </div>
-<div id="dbi" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dbi" class="anchor"></a>DBI</h3>
+<div class="section level3">
+<h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
+</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
-
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span>
-  <span class="fu">bigrquery</span><span class="fu">::</span><span class="fu"><a href="reference/bigquery.html">bigquery</a></span><span class="op">(</span><span class="op">)</span>,
-  project <span class="op">=</span> <span class="st">"publicdata"</span>,
-  dataset <span class="op">=</span> <span class="st">"samples"</span>,
-  billing <span class="op">=</span> <span class="va">billing</span>
-<span class="op">)</span>
-<span class="va">con</span> 
-<span class="co">#&gt; &lt;BigQueryConnection&gt;</span>
-<span class="co">#&gt;   Dataset: publicdata.samples</span>
-<span class="co">#&gt;   Billing: gargle-169921</span>
-
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html">dbListTables</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span>
-<span class="co">#&gt; [1] "github_nested"   "github_timeline" "gsod"            "natality"       </span>
-<span class="co">#&gt; [5] "shakespeare"     "trigrams"        "wikipedia"</span>
-
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; First chunk includes all requested rows.</span>
-<span class="co">#&gt; # A tibble: 10 x 4</span>
-<span class="co">#&gt;     year month   day weight_pounds</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969     1    20          7.00</span>
-<span class="co">#&gt;  2  1969     1    27          7.69</span>
-<span class="co">#&gt;  3  1969     6    19          6.75</span>
-<span class="co">#&gt;  4  1969     5    30          6.19</span>
-<span class="co">#&gt;  5  1969    11     9          7.87</span>
-<span class="co">#&gt;  6  1969     5    25          7.06</span>
-<span class="co">#&gt;  7  1969     7    25          7.94</span>
-<span class="co">#&gt;  8  1969     9    11          7.06</span>
-<span class="co">#&gt;  9  1969     7    13          6.00</span>
-<span class="co">#&gt; 10  1969     9    27          8.13</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span></span>
+<span>  <span class="fu">bigrquery</span><span class="fu">::</span><span class="fu"><a href="reference/bigquery.html">bigquery</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  project <span class="op">=</span> <span class="st">"publicdata"</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="st">"samples"</span>,</span>
+<span>  billing <span class="op">=</span> <span class="va">billing</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">con</span> </span>
+<span><span class="co">#&gt; &lt;BigQueryConnection&gt;</span></span>
+<span><span class="co">#&gt;   Dataset: publicdata.samples</span></span>
+<span><span class="co">#&gt;   Billing: gargle-169921</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">dbListTables</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "github_nested"   "github_timeline" "gsod"            "natality"       </span></span>
+<span><span class="co">#&gt; [5] "shakespeare"     "trigrams"        "wikipedia"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; First chunk includes all requested rows.</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt;     year month   day weight_pounds</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  1969     1    20          7.00</span></span>
+<span><span class="co">#&gt;  2  1969     1    27          7.69</span></span>
+<span><span class="co">#&gt;  3  1969     6    19          6.75</span></span>
+<span><span class="co">#&gt;  4  1969     5    30          6.19</span></span>
+<span><span class="co">#&gt;  5  1969    11     9          7.87</span></span>
+<span><span class="co">#&gt;  6  1969     5    25          7.06</span></span>
+<span><span class="co">#&gt;  7  1969     7    25          7.94</span></span>
+<span><span class="co">#&gt;  8  1969     9    11          7.06</span></span>
+<span><span class="co">#&gt;  9  1969     7    13          6.00</span></span>
+<span><span class="co">#&gt; 10  1969     9    27          8.13</span></span></code></pre></div>
 </div>
-<div id="dplyr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dplyr" class="anchor"></a>dplyr</h3>
+<div class="section level3">
+<h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-
-<span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span>
-
-<span class="va">natality</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">weight_pounds</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">collect</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 10 x 4</span>
-<span class="co">#&gt;     year month   day weight_pounds</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  1969    10     6          3.25</span>
-<span class="co">#&gt;  2  1969     5    11          5.75</span>
-<span class="co">#&gt;  3  1969     6    29          7.94</span>
-<span class="co">#&gt;  4  1969     3     7          8.38</span>
-<span class="co">#&gt;  5  1970     4    26          6.38</span>
-<span class="co">#&gt;  6  1971    10     6          6.69</span>
-<span class="co">#&gt;  7  1971     2    23          6.69</span>
-<span class="co">#&gt;  8  1971     8    12          7.37</span>
-<span class="co">#&gt;  9  1969     9     3          5.25</span>
-<span class="co">#&gt; 10  1969     4    25          6.62</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">natality</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">weight_pounds</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt;     year month   day weight_pounds</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  1969    10     6          3.25</span></span>
+<span><span class="co">#&gt;  2  1969     5    11          5.75</span></span>
+<span><span class="co">#&gt;  3  1969     6    29          7.94</span></span>
+<span><span class="co">#&gt;  4  1969     3     7          8.38</span></span>
+<span><span class="co">#&gt;  5  1970     4    26          6.38</span></span>
+<span><span class="co">#&gt;  6  1971    10     6          6.69</span></span>
+<span><span class="co">#&gt;  7  1971     2    23          6.69</span></span>
+<span><span class="co">#&gt;  8  1971     8    12          7.37</span></span>
+<span><span class="co">#&gt;  9  1969     9     3          5.25</span></span>
+<span><span class="co">#&gt; 10  1969     4    25          6.62</span></span></code></pre></div>
 </div>
 </div>
-<div id="important-details" class="section level2">
-<h2 class="hasAnchor">
-<a href="#important-details" class="anchor"></a>Important details</h2>
-<div id="authentication-and-authorization" class="section level3">
-<h3 class="hasAnchor">
-<a href="#authentication-and-authorization" class="anchor"></a>Authentication and authorization</h3>
-<p>When using bigrquery interactively, you’ll be prompted to <a href="https://cloud.google.com/bigquery/docs/authorization">authorize bigrquery</a> in the browser. Your token will be cached across sessions inside the folder <code>~/.R/gargle/gargle-oauth/</code>, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via <code><a href="reference/bq_auth.html">bq_auth(path = "/path/to/your/service-account.json")</a></code>. More places to learn about auth:</p>
+<div class="section level2">
+<h2 id="important-details">Important details<a class="anchor" aria-label="anchor" href="#important-details"></a>
+</h2>
+<div class="section level3">
+<h3 id="authentication-and-authorization">Authentication and authorization<a class="anchor" aria-label="anchor" href="#authentication-and-authorization"></a>
+</h3>
+<p>When using bigrquery interactively, you’ll be prompted to <a href="https://cloud.google.com/bigquery/docs/authorization" class="external-link">authorize bigrquery</a> in the browser. Your token will be cached across sessions inside the folder <code>~/.R/gargle/gargle-oauth/</code>, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via <code>bq_auth(path = "/path/to/your/service-account.json")</code>. More places to learn about auth:</p>
 <ul>
 <li>Help for <a href="https://bigrquery.r-dbi.org/reference/bq_auth.html"><code>bigrquery::bq_auth()</code></a>.</li>
 <li>
-<a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.
-<ul>
-<li>bigrquery obtains a token with <code><a href="https://gargle.r-lib.org/reference/token_fetch.html">gargle::token_fetch()</a></code>, which supports a variety of token flows. This article provides full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs.</li>
-</ul>
+<a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html" class="external-link">How gargle gets tokens</a>.<ul><li>bigrquery obtains a token with <code><a href="https://gargle.r-lib.org/reference/token_fetch.html" class="external-link">gargle::token_fetch()</a></code>, which supports a variety of token flows. This article provides full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs.</li></ul>
 </li>
 <li>
-<a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">Non-interactive auth</a>. Explains how to set up a project when code must run without any user interaction.</li>
+<a href="https://gargle.r-lib.org/articles/non-interactive-auth.html" class="external-link">Non-interactive auth</a>. Explains how to set up a project when code must run without any user interaction.</li>
 <li>
-<a href="https://gargle.r-lib.org/articles/get-api-credentials.html">How to get your own API credentials</a>. Instructions for getting your own OAuth client (or “app”) or service account token.</li>
+<a href="https://gargle.r-lib.org/articles/get-api-credentials.html" class="external-link">How to get your own API credentials</a>. Instructions for getting your own OAuth client (or “app”) or service account token.</li>
 </ul>
-<p>Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling <code><a href="reference/api-table.html">bq_table_delete()</a></code> or <code><a href="reference/api-table.html">bq_table_upload()</a></code>). Our <a href="https://www.tidyverse.org/google_privacy_policy">Privacy policy</a> provides more info.</p>
+<p>Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling <code><a href="reference/api-table.html">bq_table_delete()</a></code> or <code><a href="reference/api-table.html">bq_table_upload()</a></code>). Our <a href="https://www.tidyverse.org/google_privacy_policy" class="external-link">Privacy policy</a> provides more info.</p>
 </div>
-<div id="billing-project" class="section level3">
-<h3 class="hasAnchor">
-<a href="#billing-project" class="anchor"></a>Billing project</h3>
-<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
+<div class="section level3">
+<h3 id="billing-project">Billing project<a class="anchor" aria-label="anchor" href="#billing-project"></a>
+</h3>
+<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data" class="external-link">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
 <p>To create a project:</p>
-<ol>
-<li><p>Open <a href="https://console.cloud.google.com/" class="uri">https://console.cloud.google.com/</a> and create a project. Make a note of the “Project ID” in the “Project info” box.</p></li>
+<ol style="list-style-type: decimal">
+<li><p>Open <a href="https://console.cloud.google.com/" class="external-link uri">https://console.cloud.google.com/</a> and create a project. Make a note of the “Project ID” in the “Project info” box.</p></li>
 <li><p>Click on “APIs &amp; Services”, then “Dashboard” in the left the left menu.</p></li>
 <li><p>Click on “Enable Apis and Services” at the top of the page, then search for “BigQuery API” and “Cloud storage”.</p></li>
 </ol>
 <p>Use your project ID as the <code>billing</code> project whenever you work with free sample data; and as the <code>project</code> when you work with your own data.</p>
 </div>
 </div>
-<div id="useful-links" class="section level2">
-<h2 class="hasAnchor">
-<a href="#useful-links" class="anchor"></a>Useful links</h2>
+<div class="section level2">
+<h2 id="useful-links">Useful links<a class="anchor" aria-label="anchor" href="#useful-links"></a>
+</h2>
 <ul>
-<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators">SQL reference</a></li>
-<li><a href="https://cloud.google.com/bigquery/docs/reference/rest">API reference</a></li>
-<li><a href="https://bigquery.cloud.google.com/">Query/job console</a></li>
-<li><a href="https://console.cloud.google.com/">Billing console</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators" class="external-link">SQL reference</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/rest" class="external-link">API reference</a></li>
+<li><a href="https://bigquery.cloud.google.com/" class="external-link">Query/job console</a></li>
+<li><a href="https://console.cloud.google.com/" class="external-link">Billing console</a></li>
 </ul>
 </div>
-<div id="policies" class="section level2">
-<h2 class="hasAnchor">
-<a href="#policies" class="anchor"></a>Policies</h2>
+<div class="section level2">
+<h2 id="policies">Policies<a class="anchor" aria-label="anchor" href="#policies"></a>
+</h2>
 <p>Please note that the ‘bigrquery’ project is released with a <a href="https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-<p><a href="https://www.tidyverse.org/google_privacy_policy">Privacy policy</a></p>
+<p><a href="https://www.tidyverse.org/google_privacy_policy" class="external-link">Privacy policy</a></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=bigrquery">https://​cloud.r-project.org/​package=bigrquery</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/r-dbi/bigrquery/">https://​github.com/​r-dbi/​bigrquery/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/r-dbi/bigrquery/issues">https://​github.com/​r-dbi/​bigrquery/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
-</ul>
-</div>
-<div class="community">
-<h2>Community</h2>
-<ul class="list-unstyled">
-<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
-<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>
-<a href="http://hadley.nz">Hadley Wickham</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://jennybryan.org">Jennifer Bryan</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6983-2759" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=bigrquery" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/r-dbi/bigrquery/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/r-dbi/bigrquery/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=bigrquery"><img src="https://www.r-pkg.org/badges/version/bigrquery" alt="CRAN Status"></a></li>
-<li><a href="https://github.com/r-dbi/bigrquery/actions"><img src="https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/r-dbi/bigrquery?branch=master"><img src="https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+<li><a href="SUPPORT.html">Getting help</a></li>
+</ul>
 </div>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing bigrquery</a></li>
+</ul>
+</div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Hadley Wickham <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6983-2759" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>RStudio <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=bigrquery" class="external-link"><img src="https://www.r-pkg.org/badges/version/bigrquery" alt="CRAN Status"></a></li>
+<li><a href="https://github.com/r-dbi/bigrquery/actions" class="external-link"><img src="https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/r-dbi/bigrquery?branch=master" class="external-link"><img src="https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://jennybryan.org">Jennifer Bryan</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
+  <p></p>
+<p>Developed by Hadley Wickham, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -327,6 +329,8 @@
 
   
 
+
+  
 
   </body>
 </html>
