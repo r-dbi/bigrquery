@@ -106,25 +106,27 @@ collect.tbl_BigQueryConnection <- function(x, ...,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
   assert_that(length(n) == 1, n > 0L)
+  con <- dbplyr::remote_con(x)
 
-  if (op_can_download(x$ops)) {
-    name <- op_table(x$ops, x$src$con)
-    tb <- as_bq_table(x$src$con, name)
-    n <- min(op_rows(x$ops), n)
+  if (op_can_download(x)) {
+    lq <- x$lazy_query
+    name <- op_table(x, con)
+    tb <- as_bq_table(con, name)
+    n <- min(op_rows(x$lazy_query), n)
   } else {
-    sql <- dbplyr::db_sql_render(x$src$con, x)
+    sql <- dbplyr::db_sql_render(con, x)
 
-    billing <- x$src$con@billing
-    if (is.null(x$src$con@dataset)) {
-      tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet, ...)
+    billing <- con@billing
+    if (is.null(con@dataset)) {
+      tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
     } else {
-      ds <- as_bq_dataset(x$src$con)
-      tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing, ...)
+      ds <- as_bq_dataset(con)
+      tb <- bq_dataset_query(ds, sql, quiet = con@quiet, billing = billing, ...)
     }
   }
 
-  quiet <- if (n < 100) TRUE else x$src$con@quiet
-  bigint <- x$src$con@bigint %||% "integer"
+  quiet <- if (n < 100) TRUE else con@quiet
+  bigint <- con@bigint %||% "integer"
   out <- bq_table_download(tb,
     n_max = n,
     page_size = page_size,
@@ -139,23 +141,57 @@ collect.tbl_BigQueryConnection <- function(x, ...,
 
 op_can_download <- function(x) UseMethod("op_can_download")
 #' @export
-op_can_download.op <- function(x) FALSE
+op_can_download.tbl_lazy <- function(x) op_can_download(x$lazy_query)
 #' @export
-op_can_download.op_head <- function(x) op_can_download(x$x)
+op_can_download.lazy_query <- function(x) FALSE
 #' @export
-op_can_download.op_base_remote <- function(x) dbplyr::is.ident(x$x)
+op_can_download.lazy_select_query <- function(x) {
+  query_is_head_only(x)
+}
+#' @export
+op_can_download.lazy_base_query <- function(x) dbplyr::is.ident(x$x)
+
+query_is_head_only <- function(x) {
+  if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
+
+  vars_base <- dbplyr::op_vars(x$x)
+  if (!is_select_trivial(x$select, vars_base)) return(FALSE)
+
+  if (!rlang::is_empty(x$where)) return(FALSE)
+  if (!rlang::is_empty(x$order_by)) return(FALSE)
+  if (!rlang::is_false(x$distinct)) return(FALSE)
+
+  TRUE
+}
+
+is_select_trivial <- function(select, vars_prev) {
+  identical(select$name, vars_prev) &&
+    all(vapply(select$expr, rlang::is_symbol, logical(1))) &&
+    identical(rlang::syms(select$name), select$expr)
+}
+
 
 op_rows <- function(x) UseMethod("op_rows")
 #' @export
-op_rows.op_base <- function(x) Inf
+op_rows.tbl_lazy <- function(x) op_rows(x$lazy_query)
 #' @export
-op_rows.op_head <- function(x) min(x$args$n, op_rows(x$x))
+op_rows.lazy_base_query <- function(x) Inf
+#' @export
+op_rows.lazy_select_query <- function(x) {
+  min(x$limit, op_rows(x$x))
+}
 
 op_table <- function(x, con) UseMethod("op_table")
 #' @export
-op_table.op <- function(x, con) op_table(x$x, con)
+op_table.tbl_lazy <- function(x, con) op_table(x$lazy_query, con)
 #' @export
-op_table.op_base_remote <- function(x, con) {
+op_table.lazy_query <- function(x, con) NULL
+#' @export
+op_table.lazy_base_remote_query <- function(x, con) x$x
+#' @export
+op_table.lazy_select_query <- function(x, con) {
+  if (!query_is_head_only(x)) return(NULL)
+
   x$x
 }
 
