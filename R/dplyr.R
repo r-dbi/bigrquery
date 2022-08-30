@@ -166,7 +166,7 @@ query_is_head_only <- function(x) {
 
 is_select_trivial <- function(select, vars_prev) {
   identical(select$name, vars_prev) &&
-    purrr::every(select$expr, rlang::is_symbol) &&
+    all(vapply(select$expr, rlang::is_symbol, logical(1))) &&
     identical(rlang::syms(select$name), select$expr)
 }
 
