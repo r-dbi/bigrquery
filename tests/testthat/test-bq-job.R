@@ -13,6 +13,7 @@ test_that("informative errors on failure", {
   fields <- bq_fields(list(bq_field("x", "integer"), bq_field("y", "string")))
   bq_mtcars <- bq_table_create(tb, fields = fields)
 
+  # TODO update the `Multiple errors` test case
   verify_output(test_path("bq-job-errors.txt"), {
     "One error"
     bq_dataset_query(ds, "SELECT 1 +", quiet = TRUE)
