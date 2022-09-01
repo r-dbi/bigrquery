@@ -27,6 +27,7 @@
 #'
 #' bq_mtcars <- bq_table_create(
 #'   bq_table(ds,"mtcars"),
+#'   mtcars,
 #'   friendly_name = "Motor Trend Car Road Tests",
 #'   description = "The data was extracted from the 1974 Motor Trend US magazine",
 #'   labels = list(category = "example")
