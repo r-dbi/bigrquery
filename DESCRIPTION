@@ -44,7 +44,7 @@ Suggests:
     hms,
     readr,
     sodium,
-    testthat (>= 2.1.0),
+    testthat (>= 3.0.0),
     withr,
     wk (>= 0.3.2)
 LinkingTo: 
@@ -92,3 +92,4 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
+Config/testthat/edition: 3

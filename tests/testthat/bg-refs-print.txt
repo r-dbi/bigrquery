@@ -1,3 +1,0 @@
-<bq_job> x.y.US
-<bq_dataset> x.y
-<bq_table> x.y.z

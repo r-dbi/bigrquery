@@ -107,7 +107,7 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     rlang::abort(c(paste0("Job '", if (!isTRUE(quiet)) x, "' failed"), bullets))
   }
 
-  if (isFALSE(quiet) || (is.na(quiet) && interactive())) {
+  if (isFALSE(quiet) || (is.na(quiet) && rlang::is_interactive())) {
     message("Complete")
     bq_job_show_statistics(x)
   }

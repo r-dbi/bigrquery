@@ -22,11 +22,11 @@ test_that("table equivalent to construction", {
 })
 
 test_that("objects have helpful print methods", {
-  expect_known_output({
-    print(as_bq_job("x.y.US"))
-    print(as_bq_dataset("x.y"))
-    print(as_bq_table("x.y.z"))
-  }, file = test_path("bg-refs-print.txt"))
+  expect_snapshot({
+    as_bq_job("x.y.US")
+    as_bq_dataset("x.y")
+    as_bq_table("x.y.z")
+  })
 })
 
 test_that("string coercion error on invalid number of components", {
