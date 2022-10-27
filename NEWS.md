@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.4.1
 
 * Fix for `R CMD check` in R-devel (#511)
 
