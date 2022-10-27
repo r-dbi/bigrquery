@@ -91,7 +91,7 @@ bq_testable <- function() {
 #' @export
 #' @rdname bq_test_project
 bq_authable <- function() {
-  bq_has_token() || (interactive() && !is_testing())
+  bq_has_token() || (rlang::is_interactive() && !is_testing())
 }
 
 #' @export

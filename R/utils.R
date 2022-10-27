@@ -7,7 +7,7 @@ as_df <- function(x) {
 
 bq_quiet <- function(x) {
   if (is.na(x)) {
-    !interactive()
+    !rlang::is_interactive()
   } else {
     x
   }

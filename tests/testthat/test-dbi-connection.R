@@ -17,14 +17,13 @@ test_that("useful print with and without dataset", {
   con1 <- DBI::dbConnect(bigquery(), project = "p", dataset = "x", billing = "b")
   con2 <- DBI::dbConnect(bigquery(), project = "p")
 
-  expect_known_output({
-    cat_line("With dataset:")
-    print(con1)
+  expect_snapshot({
+    "With dataset"
+    con1
 
-    cat_line()
-    cat_line("Without dataset:")
-    print(con2)
-  }, file = test_path("dbi-connection-print.txt"))
+    "Without dataset"
+    con2
+  })
 })
 
 test_that("uses BigQuery quoting standards", {

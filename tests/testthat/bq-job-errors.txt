@@ -1,7 +1,0 @@
-> # One error
-> bq_dataset_query(ds, "SELECT 1 +", quiet = TRUE)
-Error in bq_job_wait(job, quiet = quiet): Job '' failed
-x Syntax error: Unexpected end of script at [1:11] [invalidQuery]
-
-> # Multiple erros
-> bq_table_upload(tb, data.frame(x = 1, y = 1:5), quiet = TRUE)
