@@ -96,6 +96,7 @@
 <div class="page-header"><h1 id="bigrquery">bigrquery<a class="anchor" aria-label="anchor" href="#bigrquery"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p>The bigrquery package makes it easy to work with data stored in <a href="https://cloud.google.com/bigquery/docs" class="external-link">Google BigQuery</a> by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:</p>
 <ul>
 <li><p>The low-level API provides thin wrappers over the underlying REST API. All the low-level functions start with <code>bq_</code>, and mostly have the form <code>bq_noun_verb()</code>. This level of abstraction is most appropriate if you’re familiar with the REST API and you want do something not supported in the higher-level APIs.</p></li>
@@ -126,20 +127,19 @@
 <span></span>
 <span><span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_query.html">bq_project_query</a></span><span class="op">(</span><span class="va">billing</span>, <span class="va">sql</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">tb</span>, n_max <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; First chunk includes all requested rows.</span></span>
-<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969     1    20          7.00</span></span>
-<span><span class="co">#&gt;  2  1969     1    27          7.69</span></span>
-<span><span class="co">#&gt;  3  1969     6    19          6.75</span></span>
-<span><span class="co">#&gt;  4  1969     5    30          6.19</span></span>
-<span><span class="co">#&gt;  5  1969    11     9          7.87</span></span>
-<span><span class="co">#&gt;  6  1969     5    25          7.06</span></span>
-<span><span class="co">#&gt;  7  1969     7    25          7.94</span></span>
-<span><span class="co">#&gt;  8  1969     9    11          7.06</span></span>
-<span><span class="co">#&gt;  9  1969     7    13          6.00</span></span>
-<span><span class="co">#&gt; 10  1969     9    27          8.13</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969     3    15          6.88</span></span>
+<span><span class="co">#&gt;  2  1969     7    11          6.12</span></span>
+<span><span class="co">#&gt;  3  1969    11     8          7.50</span></span>
+<span><span class="co">#&gt;  4  1969     3    15          7.69</span></span>
+<span><span class="co">#&gt;  5  1969     3    12          6.31</span></span>
+<span><span class="co">#&gt;  6  1969    10    24          7.19</span></span>
+<span><span class="co">#&gt;  7  1969     5    14          7.69</span></span>
+<span><span class="co">#&gt;  8  1969    10    14          4.31</span></span>
+<span><span class="co">#&gt;  9  1969     4     5          8.44</span></span>
+<span><span class="co">#&gt; 10  1969     2     6          8.50</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
@@ -163,20 +163,19 @@
 <span><span class="co">#&gt; [5] "shakespeare"     "trigrams"        "wikipedia"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">sql</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; First chunk includes all requested rows.</span></span>
-<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969     1    20          7.00</span></span>
-<span><span class="co">#&gt;  2  1969     1    27          7.69</span></span>
-<span><span class="co">#&gt;  3  1969     6    19          6.75</span></span>
-<span><span class="co">#&gt;  4  1969     5    30          6.19</span></span>
-<span><span class="co">#&gt;  5  1969    11     9          7.87</span></span>
-<span><span class="co">#&gt;  6  1969     5    25          7.06</span></span>
-<span><span class="co">#&gt;  7  1969     7    25          7.94</span></span>
-<span><span class="co">#&gt;  8  1969     9    11          7.06</span></span>
-<span><span class="co">#&gt;  9  1969     7    13          6.00</span></span>
-<span><span class="co">#&gt; 10  1969     9    27          8.13</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969     3    15          6.88</span></span>
+<span><span class="co">#&gt;  2  1969     7    11          6.12</span></span>
+<span><span class="co">#&gt;  3  1969    11     8          7.50</span></span>
+<span><span class="co">#&gt;  4  1969     3    15          7.69</span></span>
+<span><span class="co">#&gt;  5  1969     3    12          6.31</span></span>
+<span><span class="co">#&gt;  6  1969    10    24          7.19</span></span>
+<span><span class="co">#&gt;  7  1969     5    14          7.69</span></span>
+<span><span class="co">#&gt;  8  1969    10    14          4.31</span></span>
+<span><span class="co">#&gt;  9  1969     4     5          8.44</span></span>
+<span><span class="co">#&gt; 10  1969     2     6          8.50</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
@@ -185,24 +184,27 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: &lt;BigQueryConnection&gt; uses an old dbplyr interface</span></span>
+<span><span class="co">#&gt; ℹ Please install a newer version of the package or contact the maintainer</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">weight_pounds</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    10     6          3.25</span></span>
-<span><span class="co">#&gt;  2  1969     5    11          5.75</span></span>
-<span><span class="co">#&gt;  3  1969     6    29          7.94</span></span>
-<span><span class="co">#&gt;  4  1969     3     7          8.38</span></span>
-<span><span class="co">#&gt;  5  1970     4    26          6.38</span></span>
-<span><span class="co">#&gt;  6  1971    10     6          6.69</span></span>
-<span><span class="co">#&gt;  7  1971     2    23          6.69</span></span>
-<span><span class="co">#&gt;  8  1971     8    12          7.37</span></span>
-<span><span class="co">#&gt;  9  1969     9     3          5.25</span></span>
-<span><span class="co">#&gt; 10  1969     4    25          6.62</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  2005     2    NA          9.31</span></span>
+<span><span class="co">#&gt;  2  2005     9    NA          7.75</span></span>
+<span><span class="co">#&gt;  3  2005     3    NA          7.39</span></span>
+<span><span class="co">#&gt;  4  2005    12    NA          6.75</span></span>
+<span><span class="co">#&gt;  5  2005     7    NA          8.38</span></span>
+<span><span class="co">#&gt;  6  2005    11    NA          7.79</span></span>
+<span><span class="co">#&gt;  7  2005    11    NA          8.98</span></span>
+<span><span class="co">#&gt;  8  2005     5    NA          7.51</span></span>
+<span><span class="co">#&gt;  9  2005     4    NA          8.38</span></span>
+<span><span class="co">#&gt; 10  2005    12    NA          7.37</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -215,7 +217,10 @@
 <ul>
 <li>Help for <a href="https://bigrquery.r-dbi.org/reference/bq_auth.html"><code>bigrquery::bq_auth()</code></a>.</li>
 <li>
-<a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html" class="external-link">How gargle gets tokens</a>.<ul><li>bigrquery obtains a token with <code><a href="https://gargle.r-lib.org/reference/token_fetch.html" class="external-link">gargle::token_fetch()</a></code>, which supports a variety of token flows. This article provides full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs.</li></ul>
+<a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html" class="external-link">How gargle gets tokens</a>.
+<ul>
+<li>bigrquery obtains a token with <code><a href="https://gargle.r-lib.org/reference/token_fetch.html" class="external-link">gargle::token_fetch()</a></code>, which supports a variety of token flows. This article provides full details, such as how to take advantage of Application Default Credentials or service accounts on GCE VMs.</li>
+</ul>
 </li>
 <li>
 <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html" class="external-link">Non-interactive auth</a>. Explains how to set up a project when code must run without any user interaction.</li>
@@ -305,7 +310,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=bigrquery" class="external-link"><img src="https://www.r-pkg.org/badges/version/bigrquery" alt="CRAN Status"></a></li>
-<li><a href="https://github.com/r-dbi/bigrquery/actions" class="external-link"><img src="https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/r-dbi/bigrquery?branch=master" class="external-link"><img src="https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
