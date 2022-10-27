@@ -9,7 +9,7 @@
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=master)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
@@ -202,7 +202,7 @@ sample data; and as the `project` when you work with your own data.
 - [SQL
   reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
 - [API reference](https://cloud.google.com/bigquery/docs/reference/rest)
-- [Query/job console](https://bigquery.cloud.google.com/)
+- [Query/job console](https://console.cloud.google.com/bigquery/)
 - [Billing console](https://console.cloud.google.com/)
 
 ## Policies
