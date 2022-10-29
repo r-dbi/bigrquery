@@ -1,12 +1,11 @@
 #' @export
 #' @title Show RECORD: repeated columns in a BigQuery table
+#' @description BigQuery can store data in RECORD: repeated columns in a table. These are structured arrays of data function as nested data frames. RECORD: repeated columns cannot be queried directly and must be unnested using BigQuery's `UNNEST()` function.
 #' @param con BigQueryConnection object
 #' @param tbl_name Character string of BigQuery dataset.table
 #' @examples
-#' # NOT RUN
-#' # start_con
 #'
-#' has_records(con, "eg_table.eg_sample")
+#' get_records(con, "eg_dataset.eg_table")
 
 get_records <- function(con, tbl_name) {
   bq_tab <- bigrquery::as_bq_table(con, tbl_name)

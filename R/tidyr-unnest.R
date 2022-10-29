@@ -1,7 +1,19 @@
-#' @importFrom tidyr unnest
+#' @title Unnest BigQuery record columns
+#' @inheritParams tidyr::unnest
 #' @export
-unnest.tbl_BigQueryConnection <- function(data, cols, ..., keep_empty = FALSE,
-                                          ptype = NULL, names_sep = NULL,
+#' @importFrom tidyr unnest
+#' @examples
+#' # NOT RUN
+#' # check if record columns exist in dataset
+#' # get_records(con, "eg_dataset.eg_table")
+#' tbl(con, "eg_dataset.eg_table") |>
+#'   unnest(record_column) |>
+#'   head(10)
+
+unnest.tbl_BigQueryConnection <- function(data, cols, ...,
+                                          keep_empty = FALSE,
+                                          ptype = NULL,
+                                          names_sep = NULL,
                                           names_repair = "check_unique",
                                           .drop = deprecated(),
                                           .id = deprecated(),
@@ -43,6 +55,7 @@ unnest.tbl_BigQueryConnection <- function(data, cols, ..., keep_empty = FALSE,
   cols_nested <- paste0(nested_name,".",cols_unnested)
   names(cols_nested) <- cols_unnested
 
+  # mimic tidyr::unnest error messages
   if(length(intersect(retain_names,cols_unnested))>0 &
      names_repair == "check_unique") {
 
@@ -51,7 +64,6 @@ unnest.tbl_BigQueryConnection <- function(data, cols, ..., keep_empty = FALSE,
 
     bullets <- rep("*",length(dups))
     names(dups) <- rep("*",length(dups))
-    bullets <- c("*" = "afdsa")
     abort(message = c("Names must be unique.",
                       "x" = "These names are duplicated:"),
           body = dups,
@@ -64,13 +76,12 @@ unnest.tbl_BigQueryConnection <- function(data, cols, ..., keep_empty = FALSE,
 
   }
 
+  # replace record col with unnested cols
   new_vars <- c(retain_names[1:nested_loc-1]
                 ,cols_nested,
                 retain_names[nested_loc:length(retain_names)])
 
-
-
-  # construct lazy_query, using modified add_select
+  # construct lazy_query
   data$lazy_query <- add_unnest(.data = out,
                                 vars = syms(new_vars),
                                 outer = nested_name,
@@ -103,6 +114,8 @@ lazy_unnest_query <- function(x, last_op, outer = outer, type = type,
                               limit = NULL, distinct = FALSE,
                               group_vars = NULL,
                               order_vars = NULL, frame = NULL) {
+  # most of this is pulled from dbplyr::select.tbl_lazy
+  # more investigation needed to ensure dbplyr functions can follow unnest
   stopifnot(inherits(x, "lazy_query"))
   stopifnot(rlang::is_string(last_op))
   stopifnot(is.null(select) || dbplyr:::is_lazy_sql_part(select))
@@ -123,7 +136,7 @@ lazy_unnest_query <- function(x, last_op, outer = outer, type = type,
     select <- dbplyr:::new_lazy_select(select)
   }
 
-
+  # create op info
   dbplyr:::lazy_query(query_type = "unnest", x = x, outer = outer,
                       inner = inner, retained = retained,
                       type = type, select = select, group_by = group_by,

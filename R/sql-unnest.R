@@ -1,13 +1,15 @@
-#' @importFrom dbplyr sql_build
 #' @export
+#' @importFrom dbplyr sql_build
 sql_build.lazy_unnest_query <- function(op, con = NULL, ...) {
   if (!is.null(op$message_summarise)) {
     inform(op$message_summarise)
   }
-  # op$select$expr <- syms(gsub("[.]","`.`",op$select$expr))
+  # build SELECT clause with unnested cols
+  # most pulled from dbplyr::select methods. Need additional cleanup
   select_sql_list <- get_unnest_sql(op$select, "unnest",
                                     dbplyr::op_vars(op$x), con)
   where_sql <- dbplyr:::translate_sql_(op$where, con = con, context = list(clause = "WHERE"))
+  # add join operation. Currently on LEFT is supported
   unnest_query(from = dbplyr:::sql_build(op$x, con),
                unnest = sql(paste0(op$type, " JOIN UNNEST(",op$outer,") ", op$outer)),
                select = select_sql_list$select_sql, where = where_sql,
@@ -54,6 +56,10 @@ sql_render.unnest_query <- function(query, con = NULL, ...,
                                                            ..., subquery = TRUE,
                                                            lvl = lvl + 1),
                                        name = NULL, lvl = lvl)
+  # bigrquery currently evaluates "parent.nested" as a string instead of
+  #  backticks `parent`.`nested`
+  # current solution is hacked together, needs further cleanup
+  # should examine column detection in bigrquery
   split_subtick <- unlist(strsplit(from,"`"))
   sub_name <- paste0("`",split_subtick[[length(split_subtick)]],"`")
 
@@ -75,6 +81,8 @@ sql_render.unnest_query <- function(query, con = NULL, ...,
 
 get_unnest_sql <- function (select, select_operation, in_vars, con)
 {
+  # borrowed directly from select
+  # Need cleanup
   if (select_operation == "summarise") {
     select_expr <- set_names(select$expr, select$name)
     select_sql_list <- translate_sql_(select_expr, con, window = FALSE,
@@ -120,6 +128,8 @@ translate_unnest_sql <- function (con, select_df) {
                             vars_frame = vars_frame[[1]],
                             context = list(clause = "SELECT"))
   })
+  # current behavior evaluates nested column as `parent.nested`
+  # needs to be modified to `parent`.`nested`
   out <- lapply(out,gsub,pattern="[.]", replacement = "`.`")
   sql(unlist(out))
 }
