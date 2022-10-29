@@ -53,6 +53,7 @@ Suggests:
     readr,
     sodium,
     testthat (>= 2.1.0),
+    tidyr (>= 1.2.0),
     withr,
     wk (>= 0.3.2)
 LinkingTo: 
@@ -98,5 +99,8 @@ Collate:
     'old-query.R'
     'old-table.R'
     'old-tabledata.R'
+    'records.R'
+    'sql-unnest.R'
+    'tidyr-unnest.R'
     'utils.R'
     'zzz.R'
