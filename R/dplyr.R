@@ -192,7 +192,7 @@ op_table.lazy_base_remote_query <- function(x, con) x$x
 op_table.lazy_select_query <- function(x, con) {
   if (!query_is_head_only(x)) return(NULL)
 
-  x$x$x
+op_table(x$x)
 }
 
 # SQL translation -------------------------------------------------------------
