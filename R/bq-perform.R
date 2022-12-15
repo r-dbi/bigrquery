@@ -281,11 +281,12 @@ bq_perform_query <- function(query, billing,
   }
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query))
+    
+  body <- list(configuration = bq_body(list(query = query), ...))
 
   res <- bq_post(
     url,
-    body = bq_body(body, ...),
+    body = body,
     query = list(fields = "jobReference")
   )
   as_bq_job(res$jobReference)
@@ -314,11 +315,10 @@ bq_perform_query_dry_run <- function(query, billing,
   }
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
-
+  body <- list(configuration = bq_body(list(query = query, dryRun = unbox(TRUE)), ... ))
   res <- bq_post(
     url,
-    body = bq_body(body, ...),
+    body = body,
     query = list(fields = "statistics")
   )
   bytes <- as.numeric(res$statistics$query$totalBytesProcessed)
