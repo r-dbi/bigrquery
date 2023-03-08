@@ -110,7 +110,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
 
   if (op_can_download(x)) {
     lq <- x$lazy_query
-    name <- op_table(x, con)
+    name <- op_table(lq, con)
     tb <- as_bq_table(con, name)
     n <- min(op_rows(x$lazy_query), n)
   } else {
