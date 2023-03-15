@@ -127,3 +127,12 @@ test_that("suffixes use _", {
 
   expect_equal(dbplyr::sql_join_suffix(simulate_bigrquery()), c("_x", "_y"))
 })
+
+test_that("runif is correctly translated", {
+  skip_if_not_installed("dbplyr", "1.99")
+
+  expect_equal(
+    dbplyr::translate_sql(runif(n()), con = simulate_bigrquery()),
+    dbplyr::sql("RAND()")
+  )
+})

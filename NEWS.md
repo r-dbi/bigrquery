@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* Added a translation for `runif(n())`. This fixes the translation for
+  `slice_sample()` (@mgirlich, #448).
+
 # bigrquery 1.4.1
 
 * Fix for `R CMD check` in R-devel (#511)

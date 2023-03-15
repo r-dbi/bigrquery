@@ -39,8 +39,8 @@ Suggests:
     blob,
     covr,
     DBItest,
-    dbplyr (>= 2.2.1),
     dplyr (>= 0.7.0),
+    dbplyr (>= 2.3.1.9000),
     hms,
     readr,
     sodium,
@@ -93,3 +93,5 @@ Collate:
     'utils.R'
     'zzz.R'
 Config/testthat/edition: 3
+Remotes:  
+    tidyverse/dbplyr

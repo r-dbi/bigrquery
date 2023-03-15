@@ -248,7 +248,11 @@ sql_translate_env.BigQueryConnection <- function(x) {
       pmin = sql_prefix("LEAST"),
 
       # Median
-      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
+      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]"),
+
+      runif = function(n = n(), min = 0, max = 1) {
+        dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
+      },
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
