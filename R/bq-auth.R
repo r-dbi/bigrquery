@@ -55,6 +55,18 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     cache = gargle::gargle_oauth_cache(),
                     use_oob = gargle::gargle_oob_default(),
                     token = NULL) {
+  if (!missing(email) && !missing(path)) {
+    # TODO: do we use cli here?
+    cli::cli_warn(c(
+      "It is very unusual to provide both {.arg email} and \\
+       {.arg path} to {.fun bq_auth}.",
+      "They relate to two different auth methods.",
+      "The {.arg path} argument is only for a service account token.",
+      "If you need to specify your own OAuth client, use \\
+      {.fun bq_auth_configure}."
+    ))
+  }
+
   cred <- gargle::token_fetch(
     scopes = scopes,
     app = bq_oauth_client() %||% gargle::tidyverse_client(),
