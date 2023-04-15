@@ -5,21 +5,21 @@
 \alias{bq_oauth_client}
 \title{Edit and view auth configuration}
 \usage{
-bq_auth_configure(app, path)
+bq_auth_configure(client, path, app = deprecated())
 
 bq_oauth_client()
 }
 \arguments{
-\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
-argument.}
+\item{client}{A Google OAuth client, presumably constructed via
+\code{\link[gargle:gargle_oauth_client_from_json]{gargle::gargle_oauth_client_from_json()}}. Note, however, that it is
+preferred to specify the client with JSON, using the \code{path} argument.}
 
 \item{path}{JSON downloaded from \href{https://console.cloud.google.com}{Google Cloud Console}, containing a client id and
 secret, in one of the forms supported for the \code{txt} argument of
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
 
-\item{client}{A Google OAuth client, presumably constructed via
-\code{\link[gargle:gargle_oauth_client_from_json]{gargle::gargle_oauth_client_from_json()}}. Note, however, that it is
-preferred to specify the client with JSON, using the \code{path} argument.}
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 }
 \value{
 \itemize{
@@ -44,37 +44,23 @@ are used.
 \code{bq_oauth_client()} retrieves the currently configured OAuth client.
 }
 \examples{
-# see the current user-configured OAuth app (probaby `NULL`)
-bq_oauth_app()
+# see and store the current user-configured OAuth client (probably `NULL`)
+(original_client <- bq_oauth_client())
 
-if (require(httr)) {
-
-  # store current state, so we can restore
-  original_app <- bq_oauth_app()
-
-  # bring your own app via client id (aka key) and secret
-  google_app <- httr::oauth_app(
-    "my-awesome-google-api-wrapping-package",
-    key = "123456789.apps.googleusercontent.com",
-    secret = "abcdefghijklmnopqrstuvwxyz"
-  )
-  bq_auth_configure(app = google_app)
-
-  # confirm current app
-  bq_oauth_app()
-
-  # restore original state
-  bq_auth_configure(app = original_app)
-  bq_oauth_app()
-}
-
-\dontrun{
-# bring your own app via JSON downloaded from GCP Console
-bq_auth_configure(
-  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
+# the preferred way to configure your own client is via a JSON file
+# downloaded from Google Developers Console
+# this example JSON is indicative, but fake
+path_to_json <- system.file(
+  "extdata", "data", "client_secret_123.googleusercontent.com.json",
+  package = "googledrive"
 )
-}
+bq_auth_configure(path = path_to_json)
 
+# confirm the changes
+bq_oauth_client()
+
+# restore original auth config
+bq_auth_configure(client = original_client)
 }
 \seealso{
 Other auth functions: 

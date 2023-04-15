@@ -140,48 +140,45 @@ bq_has_token <- function() {
 #' @family auth functions
 #' @export
 #' @examples
-#' # see the current user-configured OAuth app (probaby `NULL`)
-#' bq_oauth_app()
+#' # see and store the current user-configured OAuth client (probably `NULL`)
+#' (original_client <- bq_oauth_client())
 #'
-#' if (require(httr)) {
-#'
-#'   # store current state, so we can restore
-#'   original_app <- bq_oauth_app()
-#'
-#'   # bring your own app via client id (aka key) and secret
-#'   google_app <- httr::oauth_app(
-#'     "my-awesome-google-api-wrapping-package",
-#'     key = "123456789.apps.googleusercontent.com",
-#'     secret = "abcdefghijklmnopqrstuvwxyz"
-#'   )
-#'   bq_auth_configure(app = google_app)
-#'
-#'   # confirm current app
-#'   bq_oauth_app()
-#'
-#'   # restore original state
-#'   bq_auth_configure(app = original_app)
-#'   bq_oauth_app()
-#' }
-#'
-#' \dontrun{
-#' # bring your own app via JSON downloaded from GCP Console
-#' bq_auth_configure(
-#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
+#' # the preferred way to configure your own client is via a JSON file
+#' # downloaded from Google Developers Console
+#' # this example JSON is indicative, but fake
+#' path_to_json <- system.file(
+#'   "extdata", "data", "client_secret_123.googleusercontent.com.json",
+#'   package = "googledrive"
 #' )
-#' }
+#' bq_auth_configure(path = path_to_json)
 #'
-bq_auth_configure <- function(app, path) {
-  if (!xor(missing(app), missing(path))) {
-    stop("Must supply exactly one of `app` and `path`", call. = FALSE)
+#' # confirm the changes
+#' bq_oauth_client()
+#'
+#' # restore original auth config
+#' bq_auth_configure(client = original_client)
+bq_auth_configure <- function(client, path, app = deprecated()) {
+  if (lifecycle::is_present(app)) {
+    lifecycle::deprecate_warn(
+      "1.4.2",
+      "bq_auth_configure(app)",
+      "bq_auth_configure(client)"
+    )
+    bq_auth_configure(client = app, path = path)
+  }
+
+  if (!xor(missing(client), missing(path))) {
+    stop("Must supply exactly one of `client` and `path`", call. = FALSE)
   }
   if (!missing(path)) {
     stopifnot(is_string(path))
-    app <- gargle::oauth_app_from_json(path)
+    client <- gargle::gargle_oauth_client_from_json(path)
   }
-  stopifnot(is.null(app) || inherits(app, "oauth_app"))
+  stopifnot(is.null(client) || inherits(client, "gargle_oauth_client"))
 
-  .auth$set_app(app)
+  .auth$set_app(client)
+
+  invisible(.auth)
 }
 
 #' @export
