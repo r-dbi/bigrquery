@@ -57,7 +57,7 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_client() %||% gargle::tidyverse_app(),
+    app = bq_oauth_client() %||% gargle::tidyverse_client(),
     email = email,
     path = path,
     package = "bigrquery",

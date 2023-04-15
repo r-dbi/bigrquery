@@ -24,7 +24,7 @@ Imports:
     brio,
     curl,
     DBI,
-    gargle (>= 1.2.0),
+    gargle (>= 1.4.0),
     glue (>= 1.3.0),
     httr,
     jsonlite,
