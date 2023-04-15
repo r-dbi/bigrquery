@@ -56,7 +56,6 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     use_oob = gargle::gargle_oob_default(),
                     token = NULL) {
   if (!missing(email) && !missing(path)) {
-    # TODO: do we use cli here?
     cli::cli_warn(c(
       "It is very unusual to provide both {.arg email} and \\
        {.arg path} to {.fun bq_auth}.",
