@@ -67,6 +67,13 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
     ))
   }
 
+  # In a BYO token situation, such as `bq_auth(token = drive_token())`, it's
+  # easy to not have, e.g., googledrive attached (provides drive_token()).
+  # If we don't force here, the error is muffled in token_fetch()'s tryCatch()
+  # treatment, which makes it much harder to figure out what's wrong.
+  # By forcing here, we expose this mistake early and noisily.
+  force(token)
+
   cred <- gargle::token_fetch(
     scopes = scopes,
     app = bq_oauth_client() %||% gargle::tidyverse_client(),
