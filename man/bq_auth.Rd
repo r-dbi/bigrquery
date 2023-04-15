@@ -36,11 +36,10 @@ file path or JSON string).}
 Pick from those listed at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle_oauth_cache()}}.}
+\code{"gargle_oauth_cache"}, retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle_oauth_cache()}}.}
 
-\item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-\code{\link[gargle:gargle_oob_default]{gargle_oob_default()}}.}
+\item{use_oob}{Whether to prefer out-of-band authentication. Defaults to the
+value returned by \code{\link[gargle:gargle_oob_default]{gargle_oob_default()}}.}
 
 \item{token}{A token with class \link[httr:Token-class]{Token2.0} or an object of
 httr's class \code{request}, i.e. a token that has been prepared with
@@ -60,7 +59,7 @@ level means the same token can be used across multiple projects and
 tokens are less likely to be synced to the cloud by accident.
 
 If you are interacting with R within a browser (applies to RStudio Server,
-RStudio Workbench, and RStudio Cloud), you need a variant of this flow,
+Posit Workbench, and Posit Cloud), you need a variant of this flow,
 known as out-of-band auth ("oob"). If this does not happen
 automatically, you can request it yourself with \code{use_oob = TRUE} or,
 more persistently, by setting an option via
@@ -90,7 +89,7 @@ authentication.
 
 For details on the many ways to find a token, see
 \code{\link[gargle:token_fetch]{gargle::token_fetch()}}. For deeper control over auth, use
-\code{\link[=bq_auth_configure]{bq_auth_configure()}} to bring your own OAuth app or API key.
+\code{\link[=bq_auth_configure]{bq_auth_configure()}} to bring your own OAuth client or API key.
 Read more about gargle options, see \link[gargle:gargle_options]{gargle::gargle_options}.
 }
 \examples{

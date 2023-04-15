@@ -57,7 +57,7 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_app() %||% gargle::tidyverse_app(),
+    app = bq_oauth_client() %||% gargle::tidyverse_app(),
     email = email,
     path = path,
     package = "bigrquery",
@@ -186,7 +186,9 @@ bq_auth_configure <- function(app, path) {
 
 #' @export
 #' @rdname bq_auth_configure
-bq_oauth_app <- function() .auth$app
+bq_oauth_client <- function() {
+  .auth$app
+}
 
 #' Get info on current user
 #'
@@ -206,3 +208,23 @@ bq_user <- function() {
     NULL
   }
 }
+
+# deprecated functions ----
+
+#' Get currently configured OAuth app (deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' In light of the new [gargle::gargle_oauth_client()] constructor and class of
+#' the same name, `bq_oauth_app()` is being replaced by
+#' [bq_oauth_client()].
+#' @keywords internal
+#' @export
+bq_oauth_app <- function() {
+  lifecycle::deprecate_warn(
+    "1.4.2", "bq_oauth_app()", "bq_oauth_client()"
+  )
+  bq_oauth_client()
+}
+
