@@ -166,7 +166,7 @@ bq_has_token <- function() {
 #' # this example JSON is indicative, but fake
 #' path_to_json <- system.file(
 #'   "extdata", "data", "client_secret_123.googleusercontent.com.json",
-#'   package = "googledrive"
+#'   package = "bigrquery"
 #' )
 #' bq_auth_configure(path = path_to_json)
 #'
