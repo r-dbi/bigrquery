@@ -1,5 +1,16 @@
 # bigrquery (development version)
 
+* Syncing up with the current release of gargle (1.4.0). Recently gargle
+  introduced some changes around OAuth and bigrquery is syncing with up that:
+
+  - `bq_oauth_client()` is a new function to replace the now-deprecated
+    `gs4_oauth_app()`.
+  -  The new `client` argument of `bq_auth_configure()` replaces the
+     now-deprecated `client` argument.
+  -  The documentation of `bq_auth_configure()` emphasizes that the preferred
+     way to "bring your own OAuth client" is by providing the JSON downloaded
+     from Google Developers Console.
+
 # bigrquery 1.4.1
 
 * Fix for `R CMD check` in R-devel (#511)

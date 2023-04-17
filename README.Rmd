@@ -109,8 +109,7 @@ natality %>%
 
 ### Authentication and authorization
 
-When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the browser. Your token will be cached across sessions inside the folder `~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it is preferred to use a service account token and put it into force via `bq_auth(path = "/path/to/your/service-account.json")`. More places to learn
-about auth:
+When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the browser. You'll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:
 
   * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
   * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
@@ -120,7 +119,7 @@ about auth:
       on GCE VMs.
   * [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html). Explains
     how to set up a project when code must run without any user interaction.
-  * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client (or "app") or service account token.
+  * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client or service account token.
 
 Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://www.tidyverse.org/google_privacy_policy) provides more info.
 
