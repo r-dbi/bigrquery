@@ -80,6 +80,7 @@
 <li>The new <code>client</code> argument of <code><a href="../reference/bq_auth_configure.html">bq_auth_configure()</a></code> replaces the now-deprecated <code>client</code> argument.</li>
 <li>The documentation of <code><a href="../reference/bq_auth_configure.html">bq_auth_configure()</a></code> emphasizes that the preferred way to “bring your own OAuth client” is by providing the JSON downloaded from Google Developers Console.</li>
 </ul></li>
+<li><p><code>op_table.lazy_select_query()</code> now returns a string instead of a list, which fixes an error seen when printing or using functions like <code><a href="https://rdrr.io/r/utils/head.html" class="external-link">head()</a></code> or <code><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">dplyr::glimpse()</a></code> (<a href="https://github.com/clente" class="external-link">@clente</a>, <a href="https://github.com/r-dbi/bigrquery/issues/509" class="external-link">#509</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.1" id="bigrquery-141">bigrquery 1.4.1<small>2022-10-27</small><a class="anchor" aria-label="anchor" href="#bigrquery-141"></a></h2>
