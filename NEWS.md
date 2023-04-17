@@ -11,8 +11,9 @@
      way to "bring your own OAuth client" is by providing the JSON downloaded
      from Google Developers Console.
 
-* `op_table.lazy_select_query()` now returns a string instead of a list
-  (@clente, #509).
+* `op_table.lazy_select_query()` now returns a string instead of a list, which
+  fixes an error seen when printing or using functions like `head()` or
+  `dplyr::glimpse()` (@clente, #509).
 
 # bigrquery 1.4.1
 
