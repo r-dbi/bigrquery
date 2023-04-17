@@ -9,7 +9,7 @@
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=master)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
@@ -45,8 +45,8 @@ install.packages("bigrquery")
 The newest development release can be installed from GitHub:
 
 ``` r
-# install.packages('devtools')
-devtools::install_github("r-dbi/bigrquery")
+#install.packages("pak")
+pak::pak("r-dbi/bigrquery")
 ```
 
 ## Usage
