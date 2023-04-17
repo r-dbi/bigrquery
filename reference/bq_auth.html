@@ -9,7 +9,7 @@ they can be automatically refreshed, as necessary. Storage at the user
 level means the same token can be used across multiple projects and
 tokens are less likely to be synced to the cloud by accident.
 If you are interacting with R within a browser (applies to RStudio Server,
-RStudio Workbench, and RStudio Cloud), you need a variant of this flow,
+Posit Workbench, and Posit Cloud), you need a variant of this flow,
 known as out-of-band auth ("oob"). If this does not happen
 automatically, you can request it yourself with use_oob = TRUE or,
 more persistently, by setting an option via
@@ -97,7 +97,7 @@ they can be automatically refreshed, as necessary. Storage at the user
 level means the same token can be used across multiple projects and
 tokens are less likely to be synced to the cloud by accident.</p>
 <p>If you are interacting with R within a browser (applies to RStudio Server,
-RStudio Workbench, and RStudio Cloud), you need a variant of this flow,
+Posit Workbench, and Posit Cloud), you need a variant of this flow,
 known as out-of-band auth ("oob"). If this does not happen
 automatically, you can request it yourself with <code>use_oob = TRUE</code> or,
 more persistently, by setting an option via
@@ -146,13 +146,12 @@ Pick from those listed at <a href="https://developers.google.com/identity/protoc
 
 <dt>cache</dt>
 <dd><p>Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via <code><a href="https://gargle.r-lib.org/reference/gargle_options.html" class="external-link">gargle_oauth_cache()</a></code>.</p></dd>
+<code>"gargle_oauth_cache"</code>, retrieved via <code><a href="https://gargle.r-lib.org/reference/gargle_options.html" class="external-link">gargle_oauth_cache()</a></code>.</p></dd>
 
 
 <dt>use_oob</dt>
-<dd><p>Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-<code><a href="https://gargle.r-lib.org/reference/gargle_options.html" class="external-link">gargle_oob_default()</a></code>.</p></dd>
+<dd><p>Whether to prefer out-of-band authentication. Defaults to the
+value returned by <code><a href="https://gargle.r-lib.org/reference/gargle_options.html" class="external-link">gargle_oob_default()</a></code>.</p></dd>
 
 
 <dt>token</dt>
@@ -183,7 +182,7 @@ authentication.</p></li>
 <li><p>Customize scopes.</p></li>
 </ul><p>For details on the many ways to find a token, see
 <code><a href="https://gargle.r-lib.org/reference/token_fetch.html" class="external-link">gargle::token_fetch()</a></code>. For deeper control over auth, use
-<code><a href="bq_auth_configure.html">bq_auth_configure()</a></code> to bring your own OAuth app or API key.
+<code><a href="bq_auth_configure.html">bq_auth_configure()</a></code> to bring your own OAuth client or API key.
 Read more about gargle options, see <a href="https://gargle.r-lib.org/reference/gargle_options.html" class="external-link">gargle::gargle_options</a>.</p>
     </div>
     <div id="see-also">
