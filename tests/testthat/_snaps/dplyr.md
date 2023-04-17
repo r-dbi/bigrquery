@@ -1,4 +1,4 @@
-# can correclty print a lazy query
+# can correctly print a lazy query
 
     Code
       print(bq_mtcars)

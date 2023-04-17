@@ -128,7 +128,7 @@ test_that("suffixes use _", {
   expect_equal(dbplyr::sql_join_suffix(simulate_bigrquery()), c("_x", "_y"))
 })
 
-test_that("can correclty print a lazy query", {
+test_that("can correctly print a lazy query", {
   con <- DBI::dbConnect(
     bigquery(),
     project = bq_test_project(),
