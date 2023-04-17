@@ -87,7 +87,7 @@ db_copy_to.BigQueryConnection <- function(con, table, values,
                             analyze = TRUE, ...) {
 
   if (temporary) {
-    rlang::abort("BigQuery does not support temporary tables")
+    abort("BigQuery does not support temporary tables")
   }
 
   tb <- bq_table(con@project, con@dataset, table)
@@ -157,17 +157,17 @@ query_is_head_only <- function(x) {
   vars_base <- dbplyr::op_vars(x$x)
   if (!is_select_trivial(x$select, vars_base)) return(FALSE)
 
-  if (!rlang::is_empty(x$where)) return(FALSE)
-  if (!rlang::is_empty(x$order_by)) return(FALSE)
-  if (!rlang::is_false(x$distinct)) return(FALSE)
+  if (!is_empty(x$where)) return(FALSE)
+  if (!is_empty(x$order_by)) return(FALSE)
+  if (!is_false(x$distinct)) return(FALSE)
 
   TRUE
 }
 
 is_select_trivial <- function(select, vars_prev) {
   identical(select$name, vars_prev) &&
-    all(vapply(select$expr, rlang::is_symbol, logical(1))) &&
-    identical(rlang::syms(select$name), select$expr)
+    all(vapply(select$expr, is_symbol, logical(1))) &&
+    identical(syms(select$name), select$expr)
 }
 
 

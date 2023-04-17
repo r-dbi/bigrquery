@@ -1,5 +1,5 @@
 test_that("historical API continues to work", {
-  rlang::reset_warning_verbosity("BigQueryConnection-edition")
+  reset_warning_verbosity("BigQueryConnection-edition")
   src <- src_bigquery(bq_test_project(), "basedata")
 
   # old dbplyr interface warning

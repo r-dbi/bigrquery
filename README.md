@@ -7,10 +7,9 @@
 
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
-[![R build
-status](https://github.com/r-dbi/bigrquery/workflows/R-CMD-check/badge.svg)](https://github.com/r-dbi/bigrquery/actions)
+[![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://codecov.io/gh/r-dbi/bigrquery?branch=master)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
@@ -19,22 +18,21 @@ query BigQuery tables and retrieve metadata about your projects,
 datasets, tables, and jobs. The bigrquery package provides three levels
 of abstraction on top of BigQuery:
 
--   The low-level API provides thin wrappers over the underlying REST
-    API. All the low-level functions start with `bq_`, and mostly have
-    the form `bq_noun_verb()`. This level of abstraction is most
-    appropriate if you’re familiar with the REST API and you want do
-    something not supported in the higher-level APIs.
+- The low-level API provides thin wrappers over the underlying REST API.
+  All the low-level functions start with `bq_`, and mostly have the form
+  `bq_noun_verb()`. This level of abstraction is most appropriate if
+  you’re familiar with the REST API and you want do something not
+  supported in the higher-level APIs.
 
--   The [DBI interface](https://www.r-dbi.org) wraps the low-level API
-    and makes working with BigQuery like working with any other database
-    system. This is most convenient layer if you want to execute SQL
-    queries in BigQuery or upload smaller amounts (i.e. &lt;100 MB) of
-    data.
+- The [DBI interface](https://www.r-dbi.org) wraps the low-level API and
+  makes working with BigQuery like working with any other database
+  system. This is most convenient layer if you want to execute SQL
+  queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of data.
 
--   The [dplyr interface](https://dbplyr.tidyverse.org/) lets you treat
-    BigQuery tables as if they are in-memory data frames. This is the
-    most convenient layer if you don’t want to write SQL, but instead
-    want dbplyr to write it for you.
+- The [dplyr interface](https://dbplyr.tidyverse.org/) lets you treat
+  BigQuery tables as if they are in-memory data frames. This is the most
+  convenient layer if you don’t want to write SQL, but instead want
+  dbplyr to write it for you.
 
 ## Installation
 
@@ -47,8 +45,8 @@ install.packages("bigrquery")
 The newest development release can be installed from GitHub:
 
 ``` r
-# install.packages('devtools')
-devtools::install_github("r-dbi/bigrquery")
+#install.packages("pak")
+pak::pak("r-dbi/bigrquery")
 ```
 
 ## Usage
@@ -62,20 +60,19 @@ sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality
 
 tb <- bq_project_query(billing, sql)
 bq_table_download(tb, n_max = 10)
-#> First chunk includes all requested rows.
-#> # A tibble: 10 x 4
+#> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     1    20          7.00
-#>  2  1969     1    27          7.69
-#>  3  1969     6    19          6.75
-#>  4  1969     5    30          6.19
-#>  5  1969    11     9          7.87
-#>  6  1969     5    25          7.06
-#>  7  1969     7    25          7.94
-#>  8  1969     9    11          7.06
-#>  9  1969     7    13          6.00
-#> 10  1969     9    27          8.13
+#>  1  1969    10     7          7.56
+#>  2  1969     5     9          6.62
+#>  3  1969     2     6          2.00
+#>  4  1969     1     8          8.44
+#>  5  1969     6    23          9.81
+#>  6  1969     7    31          7.19
+#>  7  1969    11     6          7.50
+#>  8  1969    12    19          7.50
+#>  9  1969     2    17          7.05
+#> 10  1969     5     3          8.50
 ```
 
 ### DBI
@@ -99,20 +96,19 @@ dbListTables(con)
 #> [5] "shakespeare"     "trigrams"        "wikipedia"
 
 dbGetQuery(con, sql, n = 10)
-#> First chunk includes all requested rows.
-#> # A tibble: 10 x 4
+#> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     1    20          7.00
-#>  2  1969     1    27          7.69
-#>  3  1969     6    19          6.75
-#>  4  1969     5    30          6.19
-#>  5  1969    11     9          7.87
-#>  6  1969     5    25          7.06
-#>  7  1969     7    25          7.94
-#>  8  1969     9    11          7.06
-#>  9  1969     7    13          6.00
-#> 10  1969     9    27          8.13
+#>  1  1969    10     7          7.56
+#>  2  1969     5     9          6.62
+#>  3  1969     2     6          2.00
+#>  4  1969     1     8          8.44
+#>  5  1969     6    23          9.81
+#>  6  1969     7    31          7.19
+#>  7  1969    11     6          7.50
+#>  8  1969    12    19          7.50
+#>  9  1969     2    17          7.05
+#> 10  1969     5     3          8.50
 ```
 
 ### dplyr
@@ -121,24 +117,27 @@ dbGetQuery(con, sql, n = 10)
 library(dplyr)
 
 natality <- tbl(con, "natality")
+#> Warning: <BigQueryConnection> uses an old dbplyr interface
+#> ℹ Please install a newer version of the package or contact the maintainer
+#> This warning is displayed once every 8 hours.
 
 natality %>%
   select(year, month, day, weight_pounds) %>% 
   head(10) %>%
   collect()
-#> # A tibble: 10 x 4
+#> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    10     6          3.25
-#>  2  1969     5    11          5.75
-#>  3  1969     6    29          7.94
-#>  4  1969     3     7          8.38
-#>  5  1970     4    26          6.38
-#>  6  1971    10     6          6.69
-#>  7  1971     2    23          6.69
-#>  8  1971     8    12          7.37
-#>  9  1969     9     3          5.25
-#> 10  1969     4    25          6.62
+#>  1  2005     5    NA          7.56
+#>  2  2005     6    NA          4.75
+#>  3  2005    11    NA          7.37
+#>  4  2005     6    NA          7.81
+#>  5  2005     5    NA          3.69
+#>  6  2005    10    NA          6.95
+#>  7  2005    12    NA          8.44
+#>  8  2005    10    NA          8.69
+#>  9  2005    10    NA          7.63
+#> 10  2005     7    NA          8.27
 ```
 
 ## Important details
@@ -147,28 +146,26 @@ natality %>%
 
 When using bigrquery interactively, you’ll be prompted to [authorize
 bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the
-browser. Your token will be cached across sessions inside the folder
-`~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it
-is preferred to use a service account token and put it into force via
-`bq_auth(path = "/path/to/your/service-account.json")`. More places to
-learn about auth:
+browser. You’ll be asked if you want to cache tokens for reuse in future
+sessions. For non-interactive usage, it is preferred to use a service
+account token, if possible. More places to learn about auth:
 
--   Help for
-    [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
--   [How gargle gets
-    tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
-    -   bigrquery obtains a token with `gargle::token_fetch()`, which
-        supports a variety of token flows. This article provides full
-        details, such as how to take advantage of Application Default
-        Credentials or service accounts on GCE VMs.
--   [Non-interactive
-    auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
-    Explains how to set up a project when code must run without any user
-    interaction.
--   [How to get your own API
-    credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
-    Instructions for getting your own OAuth client (or “app”) or service
-    account token.
+- Help for
+  [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
+- [How gargle gets
+  tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+  - bigrquery obtains a token with `gargle::token_fetch()`, which
+    supports a variety of token flows. This article provides full
+    details, such as how to take advantage of Application Default
+    Credentials or service accounts on GCE VMs.
+- [Non-interactive
+  auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
+  Explains how to set up a project when code must run without any user
+  interaction.
+- [How to get your own API
+  credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
+  Instructions for getting your own OAuth client or service account
+  token.
 
 Note that bigrquery requests permission to modify your data; but it will
 never do so unless you explicitly request it (e.g. by calling
@@ -200,12 +197,11 @@ sample data; and as the `project` when you work with your own data.
 
 ## Useful links
 
--   [SQL
-    reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
--   [API
-    reference](https://cloud.google.com/bigquery/docs/reference/rest)
--   [Query/job console](https://bigquery.cloud.google.com/)
--   [Billing console](https://console.cloud.google.com/)
+- [SQL
+  reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
+- [API reference](https://cloud.google.com/bigquery/docs/reference/rest)
+- [Query/job console](https://console.cloud.google.com/bigquery/)
+- [Billing console](https://console.cloud.google.com/)
 
 ## Policies
 
