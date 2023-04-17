@@ -7,7 +7,7 @@ as_df <- function(x) {
 
 bq_quiet <- function(x) {
   if (is.na(x)) {
-    !rlang::is_interactive()
+    !is_interactive()
   } else {
     x
   }
@@ -35,7 +35,7 @@ bq_check_namespace <- function(pkg, bq_type) {
     return()
   }
 
-  rlang::abort(glue::glue(
+  abort(glue(
     "Package '{pkg}' must be installed to load BigQuery field with type '{bq_type}'"
   ))
 }

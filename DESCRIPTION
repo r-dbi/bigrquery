@@ -35,7 +35,8 @@ Imports:
     progress,
     Rcpp,
     rlang (>= 0.4.9),
-    tibble
+    tibble,
+    withr
 Suggests: 
     blob,
     covr,
@@ -46,7 +47,6 @@ Suggests:
     readr,
     sodium,
     testthat (>= 3.0.0),
-    withr,
     wk (>= 0.3.2)
 LinkingTo: 
     progress,
@@ -57,7 +57,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Collate: 
     'RcppExports.R'
-    'bigrquery.R'
+    'bigrquery-package.R'
     'bq-auth.R'
     'bq-dataset.R'
     'bq-download.R'
