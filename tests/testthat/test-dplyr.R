@@ -137,7 +137,10 @@ test_that("can correctly print a lazy query", {
 
   bq_mtcars <- dplyr::tbl(con, "mtcars")
 
-  expect_snapshot({
-    print(bq_mtcars)
-  })
+  # not a snapshot test because column order can vary
+  expect_no_error(
+    expect_output(
+      print(bq_mtcars)
+    )
+  )
 })
