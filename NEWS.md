@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.4.2
 
 * Sync up with the current release of gargle (1.4.0). Recently gargle
   introduced some changes around OAuth and bigrquery is syncing with up that:
