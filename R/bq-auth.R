@@ -194,7 +194,7 @@ bq_auth_configure <- function(client, path, app = deprecated()) {
   }
   stopifnot(is.null(client) || inherits(client, "gargle_oauth_client"))
 
-  .auth$set_app(client)
+  .auth$set_client(client)
 
   invisible(.auth)
 }
@@ -202,7 +202,7 @@ bq_auth_configure <- function(client, path, app = deprecated()) {
 #' @export
 #' @rdname bq_auth_configure
 bq_oauth_client <- function() {
-  .auth$app
+  .auth$client
 }
 
 #' Get info on current user

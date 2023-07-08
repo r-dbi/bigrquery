@@ -56,7 +56,7 @@ set_oauth2.0_cred <- function(app) {
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/cloud-platform"
     ),
-    app = app,
+    client = app,
     package = "bigrquery"
   )
   bq_auth(token = cred)
