@@ -1,5 +1,13 @@
 # bigrquery (development version)
 
+# bigrquery 1.4.3
+
+* Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations.
+  - `R/bq-request.R`
+    - Substitute `https://bigquery.googleapis.com` for `https://www.googleapis.com`
+  - `R/gs-object.R`
+    - Substitute `https://storage.googleapis.com` for `https://www.googleapis.com`
+
 # bigrquery 1.4.2
 
 * Sync up with the current release of gargle (1.4.0). Recently gargle
