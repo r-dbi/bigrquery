@@ -73,7 +73,19 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="bigrquery-development-version">bigrquery (development version)<a class="anchor" aria-label="anchor" href="#bigrquery-development-version"></a></h2>
-</div>
+<ul><li>Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations. (<a href="https://github.com/husseyd" class="external-link">@husseyd</a>, <a href="https://github.com/r-dbi/bigrquery/issues/541" class="external-link">#541</a>)
+<ul><li>
+<code>R/bq-request.R</code>
+<ul><li>Substitute <code>https://bigquery.googleapis.com</code> for <code>https://www.googleapis.com</code>
+</li>
+</ul></li>
+<li>
+<code>R/gs-object.R</code>
+<ul><li>Substitute <code>https://storage.googleapis.com</code> for <code>https://www.googleapis.com</code>
+</li>
+</ul></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4.2" id="bigrquery-142">bigrquery 1.4.2<small>2023-04-20</small><a class="anchor" aria-label="anchor" href="#bigrquery-142"></a></h2>
 <ul><li>
