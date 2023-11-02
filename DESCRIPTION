@@ -52,6 +52,8 @@ LinkingTo:
     progress,
     rapidjsonr,
     Rcpp
+Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -93,5 +95,3 @@ Collate:
     'old-tabledata.R'
     'utils.R'
     'zzz.R'
-Config/testthat/edition: 3
-Config/Needs/website: tidyverse/tidytemplate
