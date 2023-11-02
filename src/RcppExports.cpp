@@ -49,7 +49,7 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP null_to_na_(SEXP);
+RcppExport SEXP null_to_na_(void *);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_bigrquery_bq_parse", (DL_FUNC) &_bigrquery_bq_parse, 2},
