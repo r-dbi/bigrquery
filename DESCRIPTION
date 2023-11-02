@@ -94,3 +94,4 @@ Collate:
     'utils.R'
     'zzz.R'
 Config/testthat/edition: 3
+Config/Needs/website: tidyverse/tidytemplate
