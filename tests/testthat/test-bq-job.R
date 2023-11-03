@@ -10,7 +10,7 @@ test_that("can control chattiness of bq_job_wait", {
 
 test_that("informative errors on failure", {
   ds <- bq_test_dataset()
-  tb <- bq_table(ds, "df")
+  tb <- bq_test_table()
 
   fields <- bq_fields(list(bq_field("x", "integer"), bq_field("y", "string")))
   bq_mtcars <- bq_table_create(tb, fields = fields)
