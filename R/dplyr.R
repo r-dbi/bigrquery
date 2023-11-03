@@ -153,6 +153,7 @@ op_can_download.lazy_base_query <- function(x) dbplyr::is.ident(x$x)
 
 query_is_head_only <- function(x) {
   if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
+  if (inherits(x$x$x, "sql")) return(FALSE)
 
   vars_base <- dbplyr::op_vars(x$x)
   if (!is_select_trivial(x$select, vars_base)) return(FALSE)

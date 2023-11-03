@@ -99,6 +99,10 @@ test_that("collect can identify directly download tables", {
 
   x <- dplyr::collect(bq1)
   expect_s3_class(x, "tbl")
+
+  bq5 <- dplyr::tbl(con, dplyr::sql("SELECT * FROM mtcars"))
+  expect_false(op_can_download(bq5))
+  expect_false(op_can_download(head(bq5)))
 })
 
 test_that("casting uses bigquery types", {
