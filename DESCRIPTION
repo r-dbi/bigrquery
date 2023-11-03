@@ -40,7 +40,6 @@ Imports:
 Suggests: 
     blob,
     covr,
-    DBItest,
     dbplyr (>= 2.2.1),
     dplyr (>= 0.7.0),
     hms,
