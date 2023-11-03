@@ -2,7 +2,7 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles: {}
-last_built: 2023-10-25T22:57Z
+last_built: 2023-11-03T13:42Z
 urls:
   reference: https://bigrquery.r-dbi.org/reference
   article: https://bigrquery.r-dbi.org/articles
