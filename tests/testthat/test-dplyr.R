@@ -26,7 +26,7 @@ test_that("can copy_to", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
 
-  expect_error(dplyr::copy_to(con, mtcars), "temporary tables")
+  expect_snapshot(dplyr::copy_to(con, mtcars), error = TRUE)
   bq_mtcars <- dplyr::copy_to(con, mtcars, temporary = FALSE)
 
   expect_s3_class(bq_mtcars, "tbl_BigQueryConnection")
@@ -83,12 +83,12 @@ test_that("collect can identify directly download tables", {
   bq1 <- dplyr::tbl(con, "mtcars")
   expect_true(op_can_download(bq1))
   expect_equal(op_rows(bq1), Inf)
-  expect_equal(as.character(op_table(bq1)), "mtcars")
+  expect_equal(format(op_table(bq1)), "`mtcars`")
 
   bq2 <- head(bq1, 4)
   expect_true(op_can_download(bq2))
   expect_equal(op_rows(bq2), 4)
-  expect_equal(as.character(op_table(bq1)), "mtcars")
+  expect_equal(format(op_table(bq1)), "`mtcars`")
 
   bq3 <- head(bq2, 2)
   expect_true(op_can_download(bq3))
