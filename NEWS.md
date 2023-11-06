@@ -1,5 +1,9 @@
 # bigrquery (development version)
 
+* Deprecated functions (i.e. those not starting with `bq_`) have been
+  removed (#551). These have been superseded for a long time and were formally 
+  deprecated in bigrquery 1.3.0 (2020).
+
 * Now uses 2nd edition of dbplyr interface (#508).
 
 * Compatible with dbplyr 2.4.0 (#550).
