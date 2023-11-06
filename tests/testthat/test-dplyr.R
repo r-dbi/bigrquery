@@ -1,9 +1,7 @@
 test_that("historical API continues to work", {
-  reset_warning_verbosity("BigQueryConnection-edition")
   src <- src_bigquery(bq_test_project(), "basedata")
 
-  # old dbplyr interface warning
-  expect_warning(x <- dplyr::tbl(src, "mtcars"))
+  x <- dplyr::tbl(src, "mtcars")
 
   expect_s3_class(x, "tbl")
   expect_true("cyl" %in% dbplyr::op_vars(x))

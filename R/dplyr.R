@@ -28,9 +28,7 @@
 #'   arrange(desc(n))
 #' }
 src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
-  if (!requireNamespace("dplyr", quietly = TRUE)) {
-    stop("dplyr is required to use src_bigquery", call. = FALSE)
-  }
+  check_installed("dbplyr")
 
   con <- DBI::dbConnect(
     bigquery(),
@@ -44,27 +42,26 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 }
 
 # registered onLoad
-db_query_fields.BigQueryConnection <- function(con, sql) {
-  if (dbplyr::is.sql(sql)) {
-    ds <- bq_dataset(con@project, con@dataset)
-    fields <- bq_query_fields(sql, con@billing, default_dataset = ds)
-  } else {
-    tb <- as_bq_table(con, sql)
-    fields <- bq_table_fields(tb)
-  }
-
-  vapply(fields, "[[", "name", FUN.VALUE = character(1))
-}
+dbplyr_edition.BigQueryConnection <- function(con) 2L
 
 # registered onLoad
-db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, ...) {
+db_compute.BigQueryConnection <- function(con,
+                                          table,
+                                          sql,
+                                          ...,
+                                          overwrite = FALSE,
+                                          temporary = TRUE,
+                                          unique_indexes = list(),
+                                          indexes = list(),
+                                          analyze = TRUE,
+                                          in_transaction = FALSE) {
 
   if (is.null(con@dataset)) {
-    destination_table <- if (!temporary) as_bq_table(con, name)
+    destination_table <- if (!temporary) as_bq_table(con, table)
     tb <- bq_project_query(con@project, sql, destination_table = destination_table)
   } else {
     ds <- bq_dataset(con@project, con@dataset)
-    destination_table <- if (!temporary) as_bq_table(con, name)
+    destination_table <- if (!temporary) as_bq_table(con, table)
 
     tb <- bq_dataset_query(ds,
       query = sql,
@@ -73,18 +70,22 @@ db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, .
   }
 
   paste0(tb$project, ".", tb$dataset, ".", tb$table)
+
+  table
 }
 
 # registered onLoad
-db_analyze.BigQueryConnection <- function(con, table, ...) {
-  TRUE
-}
-
-# registered onLoad
-db_copy_to.BigQueryConnection <- function(con, table, values,
-                            overwrite = FALSE, types = NULL, temporary = TRUE,
-                            unique_indexes = NULL, indexes = NULL,
-                            analyze = TRUE, ...) {
+db_copy_to.BigQueryConnection <- function(con,
+                                          table,
+                                          values,
+                                          ...,
+                                          overwrite = FALSE,
+                                          types = NULL,
+                                          temporary = TRUE,
+                                          unique_indexes = NULL,
+                                          indexes = NULL,
+                                          analyze = TRUE,
+                                          in_transaction = TRUE) {
 
   if (temporary) {
     abort("BigQuery does not support temporary tables")
@@ -105,6 +106,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
                                            max_connections = 6L,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
+
   assert_that(length(n) == 1, n > 0L)
   con <- dbplyr::remote_con(x)
 
@@ -211,7 +213,7 @@ sql_join_suffix.BigQueryConnection <- function(con, ...) {
 }
 
 # registered onLoad
-sql_translate_env.BigQueryConnection <- function(x) {
+sql_translation.BigQueryConnection <- function(x) {
   dbplyr::sql_variant(
     dbplyr::sql_translator(.parent = dbplyr::base_scalar,
 
