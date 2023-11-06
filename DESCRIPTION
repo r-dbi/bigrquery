@@ -82,6 +82,7 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
+    'import-standalone-s3-register.R'
     'old-auth.R'
     'old-dataset.R'
     'old-id.R'

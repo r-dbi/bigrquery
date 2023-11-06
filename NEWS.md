@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Now uses 2nd edition of dbplyr interface (#508).
+
 * Compatible with dbplyr 2.4.0 (#550).
 
 * `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
