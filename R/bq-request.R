@@ -1,5 +1,5 @@
-base_url <- "https://www.googleapis.com/bigquery/v2/"
-upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
+base_url <- "https://bigquery.googleapis.com/bigquery/v2/"
+upload_url <- "https://bigquery.googleapis.com/upload/bigquery/v2/"
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")

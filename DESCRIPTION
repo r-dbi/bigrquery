@@ -17,7 +17,7 @@ License: GPL-3
 URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
-    R (>= 3.3)
+    R (>= 3.6)
 Imports: 
     assertthat,
     bit64,
@@ -40,7 +40,6 @@ Imports:
 Suggests: 
     blob,
     covr,
-    DBItest,
     dbplyr (>= 2.2.1),
     dplyr (>= 0.7.0),
     hms,
@@ -52,6 +51,10 @@ LinkingTo:
     progress,
     rapidjsonr,
     Rcpp
+Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: TRUE
+Config/testthat/start-first: bq-table, dplyr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -79,18 +82,6 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
-    'old-auth.R'
-    'old-dataset.R'
-    'old-id.R'
-    'old-job-extract.R'
-    'old-job-query.R'
-    'old-job-upload.R'
-    'old-job.R'
-    'old-project.R'
-    'old-projects.R'
-    'old-query.R'
-    'old-table.R'
-    'old-tabledata.R'
+    'import-standalone-s3-register.R'
     'utils.R'
     'zzz.R'
-Config/testthat/edition: 3

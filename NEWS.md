@@ -1,5 +1,23 @@
 # bigrquery (development version)
 
+* Deprecated functions (i.e. those not starting with `bq_`) have been
+  removed (#551). These have been superseded for a long time and were formally 
+  deprecated in bigrquery 1.3.0 (2020).
+
+* Now uses 2nd edition of dbplyr interface (#508).
+
+* Compatible with dbplyr 2.4.0 (#550).
+
+* `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
+  "URL using bad/illegal format or missing URL" error).
+
+* Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations.
+  (@husseyd, #541)
+  - `R/bq-request.R`
+    - Substitute `https://bigquery.googleapis.com` for `https://www.googleapis.com`
+  - `R/gs-object.R`
+    - Substitute `https://storage.googleapis.com` for `https://www.googleapis.com`
+
 # bigrquery 1.4.2
 
 * Sync up with the current release of gargle (1.4.0). Recently gargle

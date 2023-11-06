@@ -16,6 +16,8 @@
 #' @rawNamespace import(assertthat, except = has_name)
 "_PACKAGE"
 
+the <- new_environment()
+
 # We import rlang this way because jsonlite's unbox() is used extensively.
 
 ## usethis namespace: start

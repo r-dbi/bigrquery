@@ -82,6 +82,11 @@ bq_test_dataset <- function(name = random_name(), location = "US") {
   ds
 }
 
+bq_test_table <- function() {
+  ds <- env_cache(the, "test_dataset", bq_test_dataset())
+  bq_table(ds, random_name())
+}
+
 #' @export
 #' @rdname bq_test_project
 bq_testable <- function() {

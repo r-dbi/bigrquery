@@ -97,15 +97,20 @@ test_that("dataset is optional", {
 
 test_that("can create bq_table from connection + name", {
   con1 <- DBI::dbConnect(bigquery(), project = "p")
-  expect_error(as_bq_table(con1, "x"), "must have 2 or 3 components")
+  expect_snapshot(as_bq_table(con1, "x"), error = TRUE)
   expect_equal(as_bq_table(con1, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con1, "x.y.z"), as_bq_table("x.y.z"))
-  expect_error(as_bq_table(con1, "a.b.c.d"), "must have 1-3 components")
+  expect_snapshot(as_bq_table(con1, "a.b.c.d"), error = TRUE)
 
   con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
   expect_equal(as_bq_table(con2, "x"), as_bq_table("p.d.x"))
   expect_equal(as_bq_table(con2, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con2, "x.y.z"), as_bq_table("x.y.z"))
+})
+
+test_that("as_bq_table checks its input types", {
+  con1 <- DBI::dbConnect(bigquery(), project = "p")
+  expect_snapshot(as_bq_table(con1, letters), error = TRUE)
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
