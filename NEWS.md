@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* bigrquery is now MIT licensed (#453).
+
 * Deprecated functions (i.e. those not starting with `bq_`) have been
   removed (#551). These have been superseded for a long time and were formally 
   deprecated in bigrquery 1.3.0 (2020).
