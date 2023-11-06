@@ -14,6 +14,22 @@
       <BigQueryConnection>
         Billing: p
 
+# dataset is optional
+
+    Code
+      DBI::dbListTables(con)
+    Condition
+      Error:
+      ! To list table, must supply `dataset` when creating connection
+
+---
+
+    Code
+      DBI::dbReadTable(con, "natality", n_max = 10)
+    Condition
+      Error in `as_bq_table()`:
+      ! `name` ("natality") must have 2 or 3 components if the connection doesn't have a dataset.
+
 # can create bq_table from connection + name
 
     Code

@@ -84,15 +84,12 @@ test_that("can append to an existing dataset", {
 
 test_that("dataset is optional", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
-  expect_error(DBI::dbListTables(con), "`dataset`")
+  expect_snapshot(DBI::dbListTables(con), error = TRUE)
 
   df <- DBI::dbReadTable(con, "publicdata.samples.natality", n_max = 10)
   expect_equal(ncol(df), 31)
 
-  expect_error(
-    DBI::dbReadTable(con, "natality", n_max = 10),
-    "must have 2 or 3 components"
-  )
+  expect_snapshot(DBI::dbReadTable(con, "natality", n_max = 10), error = TRUE)
 })
 
 test_that("can create bq_table from connection + name", {

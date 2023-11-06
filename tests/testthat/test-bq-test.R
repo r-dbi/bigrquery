@@ -17,6 +17,8 @@ test_that("error if env var not set", {
     TESTTHAT = ""
   ))
 
-  expect_error(bq_test_project(), "BIGQUERY_TEST_PROJECT")
-  expect_error(gs_test_bucket(), "BIGQUERY_TEST_BUCKET")
+  expect_snapshot(error = TRUE, {
+    bq_test_project()
+    gs_test_bucket()
+  })
 })

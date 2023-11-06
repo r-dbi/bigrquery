@@ -42,14 +42,14 @@ test_that("errors when table is known to be incomplete", {
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.chicago_taxi_trips.taxi_trips")
-  expect_error(
+  expect_snapshot(
     bq_table_download(
       tb,
       n_max = 35000,
       page_size = 35000,
       bigint = "integer64"
     ),
-    "incomplete"
+    error = TRUE
   )
 })
 
