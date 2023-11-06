@@ -90,7 +90,7 @@ db_copy_to.BigQueryConnection <- function(con, table, values,
     abort("BigQuery does not support temporary tables")
   }
 
-  tb <- bq_table(con@project, con@dataset, table)
+  tb <- as_bq_table(con, table)
   write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
   bq_table_upload(tb, values, fields = types, write_disposition = write)
 
@@ -149,7 +149,9 @@ op_can_download.lazy_select_query <- function(x) {
   query_is_head_only(x)
 }
 #' @export
-op_can_download.lazy_base_query <- function(x) dbplyr::is.ident(x$x)
+op_can_download.lazy_base_query <- function(x) {
+  dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+}
 
 query_is_head_only <- function(x) {
   if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)

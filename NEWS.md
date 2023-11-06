@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Compatible with dbplyr 2.4.0 (#550).
+
 * `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
   "URL using bad/illegal format or missing URL" error).
 

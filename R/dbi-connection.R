@@ -304,19 +304,26 @@ as_bq_dataset.BigQueryConnection <- function(x) {
 
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
-  pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
+  if (inherits(name, "dbplyr_table_ident")) {
+    name <- unclass(name)
+    pieces <- c(name$catalog, name$schema, name$table)
+    pieces <- pieces[!is.na(pieces)]
+
+    if (length(pieces) == 1) {
+      pieces <- strsplit(pieces, ".", fixed = TRUE)[[1]]
+    }
+  } else if (is.character(name) && length(name) == 1) {
+    pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
+  } else {
+    cli::cli_abort("{.arg name} must be a string or a dbplyr_table_ident.")
+  }
 
   if (length(pieces) > 3) {
-    stop(
-      "Table name, '", name, "', must have 1-3 components.",
-      call. = FALSE
-    )
+    cli::cli_abort("{.arg name} ({.str {name}}) must have 1-3 components.")
   }
   if (length(pieces) == 1 && is.null(x@dataset)) {
-    stop(
-      "Table name, '", name, "', must have 2 or 3 components ",
-      "when the connection has no dataset",
-      call. = FALSE
+    cli::cli_abort(
+      "{.arg name} ({.str {name}}) must have 2 or 3 components if the connection doesn't have a dataset."
     )
   }
 
@@ -326,4 +333,3 @@ as_bq_table.BigQueryConnection <- function(x, name, ...) {
     bq_table(pieces[[1]], pieces[[2]], pieces[[3]])
   )
 }
-
