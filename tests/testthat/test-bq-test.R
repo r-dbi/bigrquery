@@ -1,8 +1,13 @@
-test_that("can init new dataset", {
+test_that("can init and clean up dataset", {
   ds <- bq_test_dataset()
-  bq_test_init(ds$dataset)
-  Sys.sleep(1)
   expect_true(bq_dataset_exists(ds))
+
+  bq_test_init(ds$dataset)
+  expect_true(bq_table_exists(bq_table(ds, "mtcars")))
+
+  attr(ds, "env") <- NULL
+  gc()
+  expect_false(bq_dataset_exists(ds))
 })
 
 test_that("error if env var not set", {
@@ -12,6 +17,8 @@ test_that("error if env var not set", {
     TESTTHAT = ""
   ))
 
-  expect_error(bq_test_project(), "BIGQUERY_TEST_PROJECT")
-  expect_error(gs_test_bucket(), "BIGQUERY_TEST_BUCKET")
+  expect_snapshot(error = TRUE, {
+    bq_test_project()
+    gs_test_bucket()
+  })
 })
