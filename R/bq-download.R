@@ -85,7 +85,7 @@ bq_table_download <-
     start_index <- params$start_index
 
     schema_path <- bq_download_schema(x, tempfile())
-    defer(file.remove(schema_path))
+    defer(unlink(schema_path))
 
     if (n_max == 0) {
       table_data <- bq_parse_files(
@@ -134,7 +134,7 @@ bq_table_download <-
     )
     curl::multi_run(pool = pool)
     path_first_chunk <- chunk_plan$dat$path[1]
-    defer(file.remove(path_first_chunk))
+    defer(unlink(path_first_chunk))
 
     chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
@@ -198,7 +198,7 @@ bq_table_download <-
       )
     }
     curl::multi_run(pool = pool)
-    defer(file.remove(chunk_plan$dat$path))
+    defer(unlink(chunk_plan$dat$path))
 
     table_data <- bq_parse_files(
       schema_path,
