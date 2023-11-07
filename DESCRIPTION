@@ -35,8 +35,7 @@ Imports:
     progress,
     Rcpp,
     rlang (>= 0.4.9),
-    tibble,
-    withr
+    tibble
 Suggests: 
     blob,
     covr,
@@ -46,7 +45,8 @@ Suggests:
     readr,
     sodium,
     testthat (>= 3.1.5),
-    wk (>= 0.3.2)
+    wk (>= 0.3.2),
+    withr
 LinkingTo: 
     progress,
     rapidjsonr,

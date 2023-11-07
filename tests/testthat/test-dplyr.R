@@ -44,7 +44,7 @@ test_that("can collect and compute (no dataset)", {
   # compute: persistent
   name <- paste0("basedata.", random_name())
   temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
-  on.exit(DBI::dbRemoveTable(con, name))
+  defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
 })
@@ -66,7 +66,7 @@ test_that("can collect and compute (with dataset)", {
   # compute: persistent
   name <- random_name()
   temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
-  on.exit(DBI::dbRemoveTable(con, name))
+  defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
 })

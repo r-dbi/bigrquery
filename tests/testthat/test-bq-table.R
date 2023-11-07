@@ -51,7 +51,7 @@ test_that("can roundtrip via save + load", {
   gs <- gs_test_object()
 
   bq_table_save(tb1, gs)
-  on.exit(gs_object_delete(gs))
+  defer(gs_object_delete(gs))
   bq_table_load(tb2, gs)
 
   df <- bq_table_download(tb2)
