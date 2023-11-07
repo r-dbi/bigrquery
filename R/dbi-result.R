@@ -116,7 +116,8 @@ setMethod(
       n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
-      bigint = res@bigint
+      bigint = res@bigint,
+      quiet = res@quiet
     )
     res@cursor$adv(n)
 

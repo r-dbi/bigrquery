@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* `dbFetch()` now respects the `quiet` setting from the connection (#463).
+
 * Added a translation for `runif(n())`. This fixes the translation for
   `slice_sample()` (@mgirlich, #448).
 
