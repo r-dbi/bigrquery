@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `dbWriteTable()` now correct uses the `billing` value set in the 
+  connection (#486).
+
 * Now supports `dbAppendTable()` (#539).
 
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
