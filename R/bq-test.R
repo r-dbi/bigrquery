@@ -132,6 +132,8 @@ random_name <- function(n = 10) {
 
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")
 
+is_snapshot <- function() identical(Sys.getenv("TESTTHAT_IS_SNAPSHOT"), "true")
+
 skip_if_no_auth <- function() {
   testthat::skip_if_not(bq_has_token(), "Authentication not available")
 }

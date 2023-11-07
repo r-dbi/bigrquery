@@ -7,7 +7,7 @@ as_df <- function(x) {
 
 bq_quiet <- function(x) {
   if (is.na(x)) {
-    !is_interactive()
+    !(is_interactive() || is_snapshot())
   } else {
     x
   }
@@ -77,3 +77,4 @@ print.bq_bytes <- function(x, ...) {
   cat_line(prettyunits::pretty_bytes(unclass(x)))
 }
 # nocov end
+
