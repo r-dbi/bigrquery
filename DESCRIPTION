@@ -40,8 +40,8 @@ Imports:
 Suggests: 
     blob,
     covr,
-    dbplyr (>= 2.2.1),
-    dplyr (>= 0.7.0),
+    dbplyr (>= 2.4.0),
+    dplyr (>= 1.1.0),
     hms,
     readr,
     sodium,

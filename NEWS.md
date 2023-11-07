@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* Added a translation for `runif(n())`. This fixes the translation for
+  `slice_sample()` (@mgirlich, #448).
+
 * Add a `dbQuoteLiteral()` method for logicals to revert breaking change 
   introduced by DBI 1.1.2 (@meztez, #478).
 

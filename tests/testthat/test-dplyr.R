@@ -130,6 +130,13 @@ test_that("suffixes use _", {
   expect_equal(dbplyr::sql_join_suffix(simulate_bigrquery()), c("_x", "_y"))
 })
 
+test_that("runif is correctly translated", {
+  expect_equal(
+    dbplyr::translate_sql(runif(n()), con = simulate_bigrquery()),
+    dbplyr::sql("RAND()")
+  )
+})
+
 test_that("can correctly print a lazy query", {
   con <- DBI::dbConnect(
     bigquery(),
