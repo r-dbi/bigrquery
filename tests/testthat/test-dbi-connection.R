@@ -74,9 +74,11 @@ test_that("can use DBI::Id()", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
 
-  id <- DBI::Id(table = "mtcars")
+  df <- data.frame(x = 1:10)
+  id <- DBI::Id(table = "mytable")
 
-  expect_no_error(DBI::dbWriteTable(con, id, mtcars))
+  expect_no_error(DBI::dbWriteTable(con, id, df))
+  expect_no_error(DBI::dbAppendTable(con, id, df))
   expect_no_error(DBI::dbReadTable(con, id))
   expect_true(DBI::dbExistsTable(con, id))
   expect_no_error(DBI::dbListFields(con, id))
@@ -91,8 +93,11 @@ test_that("can append to an existing dataset", {
   DBI::dbWriteTable(con, "df", df)
   DBI::dbWriteTable(con, "df", df, append = TRUE)
 
+  # Or with dbAppend
+  DBI::dbAppendTable(con, "df", df)
+
   df2 <- DBI::dbReadTable(con, "df")
-  expect(nrow(df2), 2L)
+  expect(nrow(df2), 3L)
 })
 
 test_that("dataset is optional", {

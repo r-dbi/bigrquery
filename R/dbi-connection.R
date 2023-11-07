@@ -1,13 +1,14 @@
 #' @include dbi-driver.R
 NULL
 
-BigQueryConnection <-
-  function(project, dataset, billing,
+BigQueryConnection <- function(project,
+           dataset,
+           billing,
            page_size = 1e4,
            quiet = NA,
            use_legacy_sql = FALSE,
            bigint = c("integer", "integer64", "numeric", "character")) {
-  ret <- new("BigQueryConnection",
+  new("BigQueryConnection",
     project = project,
     dataset = dataset,
     billing = billing,
@@ -16,7 +17,6 @@ BigQueryConnection <-
     use_legacy_sql = use_legacy_sql,
     bigint = match.arg(bigint)
   )
-  ret
 }
 
 #' @rdname DBI
@@ -180,9 +180,12 @@ dbWriteTable_bq <- function(conn,
   }
   tb <- as_bq_table(conn, name)
 
-  bq_table_upload(tb, value,
+  bq_table_upload(
+    tb,
+    value,
     create_disposition = create_disposition,
     write_disposition = write_disposition,
+    billing = conn@billing,
     ...
   )
   invisible(TRUE)
@@ -215,6 +218,27 @@ setMethod(
   c("BigQueryConnection", "Id", "data.frame"),
   dbWriteTable_bq
 )
+
+dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
+  tb <- as_bq_table(conn, name)
+
+  bq_table_upload(tb, value,
+    create_disposition = "CREATE_NEVER",
+    write_disposition = "WRITE_APPEND",
+    ...
+  )
+  invisible(TRUE)
+}
+
+#' @inheritParams DBI::dbAppendTable
+#' @rdname DBI
+#' @export
+setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), dbAppendTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
+
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
