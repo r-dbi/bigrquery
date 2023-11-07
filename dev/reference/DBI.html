@@ -84,7 +84,7 @@
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
-<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span>, params <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -244,6 +244,10 @@ or a <a href="https://dbi.r-dbi.org/reference/DBIResult-class.html" class="exter
 <dd><p>a character string containing SQL.</p></dd>
 
 
+<dt>params</dt>
+<dd><p>A list of bindings, named or unnamed.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A character vector to quote as string.</p></dd>
 
@@ -303,10 +307,6 @@ Field types are unescaped.</p>
 or <code>n = Inf</code>
 to retrieve all pending records.  Some implementations may recognize other
 special values.</p></dd>
-
-
-<dt>params</dt>
-<dd><p>A list of bindings, named or unnamed.</p></dd>
 
 </dl></div>
 
