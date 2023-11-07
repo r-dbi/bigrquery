@@ -19,12 +19,8 @@
 * `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
   "URL using bad/illegal format or missing URL" error).
 
-* Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations.
-  (@husseyd, #541)
-  - `R/bq-request.R`
-    - Substitute `https://bigquery.googleapis.com` for `https://www.googleapis.com`
-  - `R/gs-object.R`
-    - Substitute `https://storage.googleapis.com` for `https://www.googleapis.com`
+* Align Google APIs URLs to Google Cloud Discovery docs. This enables support 
+  for Private and Restricted Google APIs configurations (@husseyd, #541)
 
 # bigrquery 1.4.2
 
