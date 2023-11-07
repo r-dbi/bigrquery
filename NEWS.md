@@ -2,6 +2,9 @@
 
 * Now supports `dbAppendTable()` (#539) and `dbCreateTable()` (#483).
 
+* `dbWriteTable()` now correct uses the `billing` value set in the 
+  connection (#486).
+
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
   and `dbListFields()` now all work with `DBI::Id()` (#537).
 
