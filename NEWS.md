@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* Add a `dbQuoteLiteral()` method for logicals to revert breaking change 
+  introduced by DBI 1.1.2 (@meztez, #478).
+
 * bigrquery is now MIT licensed (#453).
 
 * Deprecated functions (i.e. those not starting with `bq_`) have been
