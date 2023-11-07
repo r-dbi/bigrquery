@@ -22,8 +22,7 @@
 #'
 #' @return A [bq_job].
 #' @keywords internal
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' ds <- bq_test_dataset()
 #' bq_mtcars <- bq_table(ds, "mtcars")
 #' job <- bq_perform_upload(bq_mtcars, mtcars)
@@ -32,7 +31,6 @@
 #' bq_job_wait(job)
 #' bq_table_exists(bq_mtcars)
 #' head(bq_table_download(bq_mtcars))
-#' }
 #' @name api-perform
 NULL
 

@@ -12,8 +12,7 @@ NULL
 #' @export
 #' @usage NULL
 #' @import methods DBI
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' con <- DBI::dbConnect(
 #'   bigquery(),
 #'   project = "publicdata",
@@ -41,8 +40,6 @@ NULL
 #' dbFetch(res, 10)
 #' dbFetch(res, -1)
 #' DBI::dbHasCompleted(res)
-#'
-#' }
 bigquery <- function() {
   new("BigQueryDriver")
 }

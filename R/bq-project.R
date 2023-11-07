@@ -15,15 +15,11 @@
 #' * `bq_project_jobs()`: a list of [bq_job]s.
 #'
 #' @name api-project
-#' @examples
-#' if (bq_authable()) {
+#' @examplesIf bq_testable()
 #' bq_project_datasets("bigquery-public-data")
 #' bq_project_datasets("githubarchive")
-#' }
 #'
-#' if (bq_testable()) {
 #' bq_project_jobs(bq_test_project(), page_size = 10)
-#' }
 NULL
 
 #' @export

@@ -100,7 +100,7 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 }
 
 \examples{
-if (bq_testable()) {
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ds <- bq_test_dataset()
 
 bq_mtcars <- bq_table_create(
@@ -125,5 +125,5 @@ bq_table_exists(bq_mtcars)
 
 my_natality <- bq_table(ds, "mynatality")
 bq_table_copy("publicdata.samples.natality", my_natality)
-}
+\dontshow{\}) # examplesIf}
 }

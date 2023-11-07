@@ -45,7 +45,7 @@ which allows the full range of 64 bit integers.}
 Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.
 }
 \examples{
-if (bq_testable()) {
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 con <- DBI::dbConnect(
   bigquery(),
   project = "publicdata",
@@ -73,6 +73,5 @@ dbColumnInfo(res)
 dbFetch(res, 10)
 dbFetch(res, -1)
 DBI::dbHasCompleted(res)
-
-}
+\dontshow{\}) # examplesIf}
 }
