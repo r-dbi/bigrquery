@@ -77,6 +77,26 @@ setMethod(
     BigQueryResult(conn, statement, ...)
   })
 
+
+#' @rdname DBI
+#' @inheritParams DBI::dbSendQuery
+#' @export
+setMethod("dbExecute", c("BigQueryConnection", "character"), function(conn, statement, ...) {
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+
+  job <- bq_perform_query(statement,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    ...
+  )
+  bq_job_wait(job, quiet = conn@quiet)
+
+  meta <- bq_job_meta(job, "statistics(query(numDmlAffectedRows))")
+  as.numeric(meta$statistics$query$numDmlAffectedRows %||% 0)
+})
+
+
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString
 #' @export

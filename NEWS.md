@@ -1,6 +1,7 @@
 # bigrquery (development version)
 
-* Now supports `dbAppendTable()` (#539) and `dbCreateTable()` (#483).
+* Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
+  and `dbExecute` (#502).
 
 * `dbWriteTable()` now correct uses the `billing` value set in the 
   connection (#486).

@@ -15,6 +15,7 @@
 \alias{dbIsValid,BigQueryConnection-method}
 \alias{dbDisconnect,BigQueryConnection-method}
 \alias{dbSendQuery,BigQueryConnection,character-method}
+\alias{dbExecute,BigQueryConnection,character-method}
 \alias{dbQuoteString,BigQueryConnection,character-method}
 \alias{dbQuoteString,BigQueryConnection,SQL-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,character-method}
@@ -25,6 +26,7 @@
 \alias{dbWriteTable,BigQueryConnection,Id,data.frame-method}
 \alias{dbAppendTable,BigQueryConnection,character,data.frame-method}
 \alias{dbAppendTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbCreateTable,BigQueryConnection-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
 \alias{dbReadTable,BigQueryConnection,Id-method}
 \alias{dbListTables,BigQueryConnection-method}
@@ -69,6 +71,8 @@
 
 \S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ...)
 
+\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
+
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
 \S4method{dbQuoteString}{BigQueryConnection,SQL}(conn, x, ...)
@@ -108,6 +112,10 @@
 \S4method{dbAppendTable}{BigQueryConnection,character,data.frame}(conn, name, value, ..., row.names = NULL)
 
 \S4method{dbAppendTable}{BigQueryConnection,Id,data.frame}(conn, name, value, ..., row.names = NULL)
+
+\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
+
+\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 
@@ -199,6 +207,15 @@ output to the output DBMS table; if \code{TRUE}, an extra field whose name
 will be whatever the R identifier \code{"row.names"} maps to the DBMS (see
 \code{\link[DBI:make.db.names]{DBI::make.db.names()}}). If \code{NA} will add rows names if
 they are characters, otherwise will ignore.}
+
+\item{fields}{Either a character vector or a data frame.
+
+A named character vector: Names are column names, values are types.
+Names are escaped with \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.
+Field types are unescaped.
+
+A data frame: field types are generated using
+\code{\link[DBI:dbDataType]{dbDataType()}}.}
 
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}
 
