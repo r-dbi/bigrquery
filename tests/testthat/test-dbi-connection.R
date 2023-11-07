@@ -70,6 +70,19 @@ test_that("can roundtrip a data frame", {
   expect_equal(ncol(df), 11)
 })
 
+test_that("can use DBI::Id()", {
+  ds <- bq_test_dataset()
+  con <- DBI::dbConnect(ds)
+
+  id <- DBI::Id(table = "mtcars")
+
+  expect_no_error(DBI::dbWriteTable(con, id, mtcars))
+  expect_no_error(DBI::dbReadTable(con, id))
+  expect_true(DBI::dbExistsTable(con, id))
+  expect_no_error(DBI::dbListFields(con, id))
+  expect_no_error(DBI::dbRemoveTable(con, id))
+})
+
 test_that("can append to an existing dataset", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
@@ -103,6 +116,29 @@ test_that("can create bq_table from connection + name", {
   expect_equal(as_bq_table(con2, "x"), as_bq_table("p.d.x"))
   expect_equal(as_bq_table(con2, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con2, "x.y.z"), as_bq_table("x.y.z"))
+})
+
+test_that("can create bq_table() from connection + Id", {
+  con1 <- DBI::dbConnect(bigquery(), project = "p")
+  expect_equal(
+    as_bq_table(con1, Id(schema = "x", table = "y")),
+    as_bq_table("p.x.y")
+  )
+  expect_equal(
+    as_bq_table(con1, Id(catalog = "q", schema = "x", table = "y")),
+    as_bq_table("q.x.y")
+  )
+
+  con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
+  expect_equal(as_bq_table(con2, Id(table = "x")), as_bq_table("p.d.x"))
+  expect_equal(
+    as_bq_table(con2, Id(schema = "x", table = "y")),
+    as_bq_table("p.x.y")
+  )
+  expect_equal(
+    as_bq_table(con2, Id(catalog = "q", schema = "x", table = "y")),
+    as_bq_table("q.x.y")
+  )
 })
 
 test_that("as_bq_table checks its input types", {

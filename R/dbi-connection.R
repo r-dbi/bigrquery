@@ -153,6 +153,41 @@ setMethod(
   }
 )
 
+dbWriteTable_bq <- function(conn,
+                            name,
+                            value,
+                            overwrite = FALSE,
+                            append = FALSE,
+                            ...,
+                            field.types = NULL,
+                            temporary = FALSE,
+                            row.names = NA) {
+  assert_that(is.flag(overwrite), is.flag(append))
+
+  if (!is.null(field.types)) {
+    stop("`field.types` not supported by bigrquery", call. = FALSE)
+  }
+  if (!identical(temporary, FALSE)) {
+    stop("Temporary tables not supported by bigrquery", call. = FALSE)
+  }
+
+  if (append) {
+    create_disposition <- "CREATE_NEVER"
+    write_disposition <- "WRITE_APPEND"
+  } else {
+    create_disposition <- "CREATE_IF_NEEDED"
+    write_disposition <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
+  }
+  tb <- as_bq_table(conn, name)
+
+  bq_table_upload(tb, value,
+    create_disposition = create_disposition,
+    write_disposition = write_disposition,
+    ...
+  )
+  invisible(TRUE)
+}
+
 #' @rdname DBI
 #' @inheritParams DBI::dbWriteTable
 #' @param row.names A logical specifying whether the `row.names` should be
@@ -168,49 +203,32 @@ setMethod(
 #'   generic.
 #' @export
 setMethod(
-  "dbWriteTable", c("BigQueryConnection", "character", "data.frame"),
-  function(conn, name, value,
-           overwrite = FALSE,
-           append = FALSE,
-           ...,
-           field.types = NULL,
-           temporary = FALSE,
-           row.names = NA) {
-    assert_that(is.flag(overwrite), is.flag(append))
+  "dbWriteTable",
+  c("BigQueryConnection", "character", "data.frame"),
+  dbWriteTable_bq
+)
 
-    if (!is.null(field.types)) {
-      stop("`field.types` not supported by bigrquery", call. = FALSE)
-    }
-    if (!identical(temporary, FALSE)) {
-      stop("Temporary tables not supported by bigrquery", call. = FALSE)
-    }
+#' @rdname DBI
+#' @export
+setMethod(
+  "dbWriteTable",
+  c("BigQueryConnection", "Id", "data.frame"),
+  dbWriteTable_bq
+)
 
-    if (append) {
-      create_disposition <- "CREATE_NEVER"
-      write_disposition <- "WRITE_APPEND"
-    } else {
-      create_disposition <- "CREATE_IF_NEEDED"
-      write_disposition <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
-    }
-    tb <- as_bq_table(conn, name)
-
-    bq_table_upload(tb, value,
-      create_disposition = create_disposition,
-      write_disposition = write_disposition,
-      ...
-    )
-    invisible(TRUE)
-  })
+dbReadTable_bq <- function(conn, name, ...) {
+  tb <- as_bq_table(conn, name)
+  bq_table_download(tb, ...)
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbReadTable
 #' @export
-setMethod(
-  "dbReadTable", c("BigQueryConnection", "character"),
-  function(conn, name, ...) {
-    tb <- as_bq_table(conn, name)
-    bq_table_download(tb, ...)
-  })
+setMethod("dbReadTable", c("BigQueryConnection", "character"), dbReadTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbReadTable", c("BigQueryConnection", "Id"), dbReadTable_bq)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbListTables
@@ -227,37 +245,48 @@ setMethod(
     map_chr(tbs, function(x) x$table)
   })
 
-#' @rdname DBI
+dbExistsTable_bq <- function(conn, name, ...) {
+  tb <- as_bq_table(conn, name)
+  bq_table_exists(tb)
+}
 #' @inheritParams DBI::dbExistsTable
+#' @rdname DBI
 #' @export
-setMethod(
-  "dbExistsTable", c("BigQueryConnection", "character"),
-  function(conn, name, ...) {
-    tb <- as_bq_table(conn, name)
-    bq_table_exists(tb)
-  })
+setMethod("dbExistsTable", c("BigQueryConnection", "character"), dbExistsTable_bq)
 
 #' @rdname DBI
+#' @export
+setMethod("dbExistsTable", c("BigQueryConnection", "Id"), dbExistsTable_bq)
+
+dbListFields_bq <- function(conn, name, ...) {
+  tb <- as_bq_table(conn, name)
+  flds <- bq_table_fields(tb)
+  map_chr(flds, function(x) x$name)
+}
+
 #' @inheritParams DBI::dbListFields
+#' @rdname DBI
 #' @export
-setMethod(
-  "dbListFields", c("BigQueryConnection", "character"),
-  function(conn, name, ...) {
-    tb <- as_bq_table(conn, name)
-    flds <- bq_table_fields(tb)
-    map_chr(flds, function(x) x$name)
-  })
+setMethod("dbListFields", c("BigQueryConnection", "character"), dbListFields_bq)
 
 #' @rdname DBI
-#' @inheritParams DBI::dbRemoveTable
 #' @export
-setMethod(
-  "dbRemoveTable", c("BigQueryConnection", "character"),
-  function(conn, name, ...) {
-    tb <- as_bq_table(conn, name)
-    bq_table_delete(tb)
-    invisible(TRUE)
-  })
+setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
+
+dbRemoveTable_bq <- function(conn, name, ...) {
+  tb <- as_bq_table(conn, name)
+  bq_table_delete(tb)
+  invisible(TRUE)
+}
+
+#' @inheritParams DBI::dbRemoveTable
+#' @rdname DBI
+#' @export
+setMethod("dbRemoveTable", c("BigQueryConnection", "character"), dbRemoveTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbRemoveTable", c("BigQueryConnection", "Id"), dbRemoveTable_bq)
 
 # nocov start
 #' @rdname DBI
@@ -322,6 +351,8 @@ as_bq_table.BigQueryConnection <- function(x, name, ...) {
     if (length(pieces) == 1) {
       pieces <- strsplit(pieces, ".", fixed = TRUE)[[1]]
     }
+  } else if (is(name, "Id")) {
+    pieces <- unname(name@name)
   } else if (is.character(name) && length(name) == 1) {
     pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
   } else {
