@@ -216,6 +216,27 @@ setMethod(
   dbWriteTable_bq
 )
 
+dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
+  tb <- as_bq_table(conn, name)
+
+  bq_table_upload(tb, value,
+    create_disposition = "CREATE_NEVER",
+    write_disposition = "WRITE_APPEND",
+    ...
+  )
+  invisible(TRUE)
+}
+
+#' @inheritParams DBI::dbAppendTable
+#' @rdname DBI
+#' @export
+setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), dbAppendTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
+
+
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
   bq_table_download(tb, ...)
