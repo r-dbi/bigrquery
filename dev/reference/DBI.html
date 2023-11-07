@@ -87,6 +87,9 @@
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection,character</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbQuoteString.html" class="external-link">dbQuoteString</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,SQL</span></span>
@@ -135,6 +138,12 @@
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,Id,data.frame</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">value</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">dbCreateTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">fields</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span>, temporary <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">dbCreateTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">fields</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span>, temporary <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -274,6 +283,15 @@ output to the output DBMS table; if <code>TRUE</code>, an extra field whose name
 will be whatever the R identifier <code>"row.names"</code> maps to the DBMS (see
 <code><a href="https://dbi.r-dbi.org/reference/make.db.names.html" class="external-link">DBI::make.db.names()</a></code>). If <code>NA</code> will add rows names if
 they are characters, otherwise will ignore.</p></dd>
+
+
+<dt>fields</dt>
+<dd><p>Either a character vector or a data frame.</p>
+<p>A named character vector: Names are column names, values are types.
+Names are escaped with <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>.
+Field types are unescaped.</p>
+<p>A data frame: field types are generated using
+<code><a href="https://dbi.r-dbi.org/reference/dbDataType.html" class="external-link">dbDataType()</a></code>.</p></dd>
 
 
 <dt>res</dt>
