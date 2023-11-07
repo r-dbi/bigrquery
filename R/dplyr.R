@@ -256,6 +256,7 @@ sql_translation.BigQueryConnection <- function(x) {
       median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]"),
 
       runif = function(n = n(), min = 0, max = 1) {
+        RAND <- NULL # quiet R CMD check
         dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
       },
     ),
