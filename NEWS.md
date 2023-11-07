@@ -3,10 +3,11 @@
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).
 
+* Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
+  and `dbExecute` (#502).
+
 * `dbWriteTable()` now correct uses the `billing` value set in the 
   connection (#486).
-
-* Now supports `dbAppendTable()` (#539).
 
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
   and `dbListFields()` now all work with `DBI::Id()` (#537).

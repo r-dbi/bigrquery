@@ -77,6 +77,26 @@ setMethod(
     BigQueryResult(conn, statement, ...)
   })
 
+
+#' @rdname DBI
+#' @inheritParams DBI::dbSendQuery
+#' @export
+setMethod("dbExecute", c("BigQueryConnection", "character"), function(conn, statement, ...) {
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+
+  job <- bq_perform_query(statement,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    ...
+  )
+  bq_job_wait(job, quiet = conn@quiet)
+
+  meta <- bq_job_meta(job, "statistics(query(numDmlAffectedRows))")
+  as.numeric(meta$statistics$query$numDmlAffectedRows %||% 0)
+})
+
+
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString
 #' @export
@@ -239,6 +259,30 @@ setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), d
 #' @export
 setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
 
+dbCreateTable_bq <- function(conn,
+                             name,
+                             fields,
+                             ...,
+                             row.names = NULL,
+                             temporary = FALSE) {
+  if (!identical(temporary, FALSE)) {
+    stop("Temporary tables not supported by bigrquery", call. = FALSE)
+  }
+
+  tb <- as_bq_table(conn, name)
+  bq_table_create(tb, fields)
+
+  invisible(TRUE)
+}
+
+#' @inheritParams DBI::dbCreateTable
+#' @rdname DBI
+#' @export
+setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
