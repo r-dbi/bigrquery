@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
+  try to fetch more rows than actually exist (#501).
+
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
   and `dbListFields()` now all work with `DBI::Id()` (#537).
 

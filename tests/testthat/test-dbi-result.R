@@ -43,6 +43,20 @@ test_that("can retrieve query in pieces and that quiet is respected", {
   expect_true(DBI::dbHasCompleted(res))
 })
 
+test_that("dbHasCompleted() is accurate if you fetch past end", {
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    dataset = "basedata"
+  )
+
+  res <- DBI::dbSendQuery(con, "SELECT cyl FROM mtcars LIMIT 5")
+  df <- DBI::dbFetch(res, 10)
+
+  expect_equal(DBI::dbGetRowCount(res), 5)
+  expect_true(DBI::dbHasCompleted(res))
+})
+
 test_that("can get metadata", {
   con <- DBI::dbConnect(
     bigquery(),
