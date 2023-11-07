@@ -25,7 +25,11 @@ test_that("by default can not delete dataset containing tables", {
   ds <- bq_test_dataset()
 
   bq_table_create(bq_table(ds, "testing"))
-  expect_error(bq_dataset_delete(ds))
+  expect_snapshot(
+    bq_dataset_delete(ds),
+    error = TRUE,
+    transform = function(x) gsub(ds$dataset, "<DATASET>", x)
+  )
 })
 
 test_that("can list tables in a dataset", {

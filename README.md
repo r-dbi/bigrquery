@@ -9,7 +9,7 @@
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/master/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=master)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
@@ -45,8 +45,8 @@ install.packages("bigrquery")
 The newest development release can be installed from GitHub:
 
 ``` r
-# install.packages('devtools')
-devtools::install_github("r-dbi/bigrquery")
+#install.packages("pak")
+pak::pak("r-dbi/bigrquery")
 ```
 
 ## Usage
@@ -63,16 +63,16 @@ bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     3    15          6.88
-#>  2  1969     7    11          6.12
-#>  3  1969    11     8          7.50
-#>  4  1969     3    15          7.69
-#>  5  1969     3    12          6.31
-#>  6  1969    10    24          7.19
-#>  7  1969     5    14          7.69
-#>  8  1969    10    14          4.31
-#>  9  1969     4     5          8.44
-#> 10  1969     2     6          8.50
+#>  1  1969    10     7          7.56
+#>  2  1969     5     9          6.62
+#>  3  1969     2     6          2.00
+#>  4  1969     1     8          8.44
+#>  5  1969     6    23          9.81
+#>  6  1969     7    31          7.19
+#>  7  1969    11     6          7.50
+#>  8  1969    12    19          7.50
+#>  9  1969     2    17          7.05
+#> 10  1969     5     3          8.50
 ```
 
 ### DBI
@@ -99,16 +99,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969     3    15          6.88
-#>  2  1969     7    11          6.12
-#>  3  1969    11     8          7.50
-#>  4  1969     3    15          7.69
-#>  5  1969     3    12          6.31
-#>  6  1969    10    24          7.19
-#>  7  1969     5    14          7.69
-#>  8  1969    10    14          4.31
-#>  9  1969     4     5          8.44
-#> 10  1969     2     6          8.50
+#>  1  1969    10     7          7.56
+#>  2  1969     5     9          6.62
+#>  3  1969     2     6          2.00
+#>  4  1969     1     8          8.44
+#>  5  1969     6    23          9.81
+#>  6  1969     7    31          7.19
+#>  7  1969    11     6          7.50
+#>  8  1969    12    19          7.50
+#>  9  1969     2    17          7.05
+#> 10  1969     5     3          8.50
 ```
 
 ### dplyr
@@ -128,16 +128,16 @@ natality %>%
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  2005     2    NA          9.31
-#>  2  2005     9    NA          7.75
-#>  3  2005     3    NA          7.39
-#>  4  2005    12    NA          6.75
-#>  5  2005     7    NA          8.38
-#>  6  2005    11    NA          7.79
-#>  7  2005    11    NA          8.98
-#>  8  2005     5    NA          7.51
-#>  9  2005     4    NA          8.38
-#> 10  2005    12    NA          7.37
+#>  1  2005     5    NA          7.56
+#>  2  2005     6    NA          4.75
+#>  3  2005    11    NA          7.37
+#>  4  2005     6    NA          7.81
+#>  5  2005     5    NA          3.69
+#>  6  2005    10    NA          6.95
+#>  7  2005    12    NA          8.44
+#>  8  2005    10    NA          8.69
+#>  9  2005    10    NA          7.63
+#> 10  2005     7    NA          8.27
 ```
 
 ## Important details
@@ -146,11 +146,9 @@ natality %>%
 
 When using bigrquery interactively, you’ll be prompted to [authorize
 bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the
-browser. Your token will be cached across sessions inside the folder
-`~/.R/gargle/gargle-oauth/`, by default. For non-interactive usage, it
-is preferred to use a service account token and put it into force via
-`bq_auth(path = "/path/to/your/service-account.json")`. More places to
-learn about auth:
+browser. You’ll be asked if you want to cache tokens for reuse in future
+sessions. For non-interactive usage, it is preferred to use a service
+account token, if possible. More places to learn about auth:
 
 - Help for
   [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
@@ -166,8 +164,8 @@ learn about auth:
   interaction.
 - [How to get your own API
   credentials](https://gargle.r-lib.org/articles/get-api-credentials.html).
-  Instructions for getting your own OAuth client (or “app”) or service
-  account token.
+  Instructions for getting your own OAuth client or service account
+  token.
 
 Note that bigrquery requests permission to modify your data; but it will
 never do so unless you explicitly request it (e.g. by calling

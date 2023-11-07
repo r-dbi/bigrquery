@@ -55,9 +55,27 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
                     cache = gargle::gargle_oauth_cache(),
                     use_oob = gargle::gargle_oob_default(),
                     token = NULL) {
+  if (!missing(email) && !missing(path)) {
+    cli::cli_warn(c(
+      "It is very unusual to provide both {.arg email} and \\
+       {.arg path} to {.fun bq_auth}.",
+      "They relate to two different auth methods.",
+      "The {.arg path} argument is only for a service account token.",
+      "If you need to specify your own OAuth client, use \\
+      {.fun bq_auth_configure}."
+    ))
+  }
+
+  # In a BYO token situation, such as `bq_auth(token = drive_token())`, it's
+  # easy to not have, e.g., googledrive attached (provides drive_token()).
+  # If we don't force here, the error is muffled in token_fetch()'s tryCatch()
+  # treatment, which makes it much harder to figure out what's wrong.
+  # By forcing here, we expose this mistake early and noisily.
+  force(token)
+
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = bq_oauth_app() %||% gargle::tidyverse_app(),
+    app = bq_oauth_client() %||% gargle::tidyverse_client(),
     email = email,
     path = path,
     package = "bigrquery",
@@ -140,53 +158,52 @@ bq_has_token <- function() {
 #' @family auth functions
 #' @export
 #' @examples
-#' # see the current user-configured OAuth app (probaby `NULL`)
-#' bq_oauth_app()
+#' # see and store the current user-configured OAuth client (probably `NULL`)
+#' (original_client <- bq_oauth_client())
 #'
-#' if (require(httr)) {
-#'
-#'   # store current state, so we can restore
-#'   original_app <- bq_oauth_app()
-#'
-#'   # bring your own app via client id (aka key) and secret
-#'   google_app <- httr::oauth_app(
-#'     "my-awesome-google-api-wrapping-package",
-#'     key = "123456789.apps.googleusercontent.com",
-#'     secret = "abcdefghijklmnopqrstuvwxyz"
-#'   )
-#'   bq_auth_configure(app = google_app)
-#'
-#'   # confirm current app
-#'   bq_oauth_app()
-#'
-#'   # restore original state
-#'   bq_auth_configure(app = original_app)
-#'   bq_oauth_app()
-#' }
-#'
-#' \dontrun{
-#' # bring your own app via JSON downloaded from GCP Console
-#' bq_auth_configure(
-#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
+#' # the preferred way to configure your own client is via a JSON file
+#' # downloaded from Google Developers Console
+#' # this example JSON is indicative, but fake
+#' path_to_json <- system.file(
+#'   "extdata", "data", "client_secret_123.googleusercontent.com.json",
+#'   package = "bigrquery"
 #' )
-#' }
+#' bq_auth_configure(path = path_to_json)
 #'
-bq_auth_configure <- function(app, path) {
-  if (!xor(missing(app), missing(path))) {
-    stop("Must supply exactly one of `app` and `path`", call. = FALSE)
+#' # confirm the changes
+#' bq_oauth_client()
+#'
+#' # restore original auth config
+#' bq_auth_configure(client = original_client)
+bq_auth_configure <- function(client, path, app = deprecated()) {
+  if (lifecycle::is_present(app)) {
+    lifecycle::deprecate_warn(
+      "1.4.2",
+      "bq_auth_configure(app)",
+      "bq_auth_configure(client)"
+    )
+    bq_auth_configure(client = app, path = path)
+  }
+
+  if (!xor(missing(client), missing(path))) {
+    stop("Must supply exactly one of `client` and `path`", call. = FALSE)
   }
   if (!missing(path)) {
     stopifnot(is_string(path))
-    app <- gargle::oauth_app_from_json(path)
+    client <- gargle::gargle_oauth_client_from_json(path)
   }
-  stopifnot(is.null(app) || inherits(app, "oauth_app"))
+  stopifnot(is.null(client) || inherits(client, "gargle_oauth_client"))
 
-  .auth$set_app(app)
+  .auth$set_app(client)
+
+  invisible(.auth)
 }
 
 #' @export
 #' @rdname bq_auth_configure
-bq_oauth_app <- function() .auth$app
+bq_oauth_client <- function() {
+  .auth$app
+}
 
 #' Get info on current user
 #'
@@ -206,3 +223,23 @@ bq_user <- function() {
     NULL
   }
 }
+
+# deprecated functions ----
+
+#' Get currently configured OAuth app (deprecated)
+#'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' In light of the new [gargle::gargle_oauth_client()] constructor and class of
+#' the same name, `bq_oauth_app()` is being replaced by
+#' [bq_oauth_client()].
+#' @keywords internal
+#' @export
+bq_oauth_app <- function() {
+  lifecycle::deprecate_warn(
+    "1.4.2", "bq_oauth_app()", "bq_oauth_client()"
+  )
+  bq_oauth_client()
+}
+
