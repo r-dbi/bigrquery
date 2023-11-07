@@ -17,14 +17,13 @@ test_that("useful print with and without dataset", {
   con1 <- DBI::dbConnect(bigquery(), project = "p", dataset = "x", billing = "b")
   con2 <- DBI::dbConnect(bigquery(), project = "p")
 
-  expect_known_output({
-    cat_line("With dataset:")
-    print(con1)
+  expect_snapshot({
+    "With dataset"
+    con1
 
-    cat_line()
-    cat_line("Without dataset:")
-    print(con2)
-  }, file = test_path("dbi-connection-print.txt"))
+    "Without dataset"
+    con2
+  })
 })
 
 test_that("uses BigQuery quoting standards", {
@@ -85,28 +84,30 @@ test_that("can append to an existing dataset", {
 
 test_that("dataset is optional", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
-  expect_error(DBI::dbListTables(con), "`dataset`")
+  expect_snapshot(DBI::dbListTables(con), error = TRUE)
 
   df <- DBI::dbReadTable(con, "publicdata.samples.natality", n_max = 10)
   expect_equal(ncol(df), 31)
 
-  expect_error(
-    DBI::dbReadTable(con, "natality", n_max = 10),
-    "must have 2 or 3 components"
-  )
+  expect_snapshot(DBI::dbReadTable(con, "natality", n_max = 10), error = TRUE)
 })
 
 test_that("can create bq_table from connection + name", {
   con1 <- DBI::dbConnect(bigquery(), project = "p")
-  expect_error(as_bq_table(con1, "x"), "must have 2 or 3 components")
+  expect_snapshot(as_bq_table(con1, "x"), error = TRUE)
   expect_equal(as_bq_table(con1, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con1, "x.y.z"), as_bq_table("x.y.z"))
-  expect_error(as_bq_table(con1, "a.b.c.d"), "must have 1-3 components")
+  expect_snapshot(as_bq_table(con1, "a.b.c.d"), error = TRUE)
 
   con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
   expect_equal(as_bq_table(con2, "x"), as_bq_table("p.d.x"))
   expect_equal(as_bq_table(con2, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con2, "x.y.z"), as_bq_table("x.y.z"))
+})
+
+test_that("as_bq_table checks its input types", {
+  con1 <- DBI::dbConnect(bigquery(), project = "p")
+  expect_snapshot(as_bq_table(con1, letters), error = TRUE)
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {

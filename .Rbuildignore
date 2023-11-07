@@ -16,3 +16,4 @@
 ^LICENSE\.md$
 ^appveyor\.yml$
 ^internal$
+^CRAN-SUBMISSION$

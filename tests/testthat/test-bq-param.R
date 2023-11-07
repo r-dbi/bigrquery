@@ -9,7 +9,7 @@ test_that("can create parameters from list", {
 })
 
 test_that("parameter json doesn't change without notice", {
-  verify_output(test_path("test-bq-param-json.txt"), {
+  expect_snapshot({
     as_bq_params(list(
       scalar = "a",
       vector = c("a", "b", "c")

@@ -48,7 +48,7 @@ test_that("can get metadata", {
   )
   sql <- "SELECT cyl, mpg FROM mtcars"
   res <- DBI::dbSendQuery(con, sql)
-  expect_known_output(print(res), "dbi-result-print.txt")
+  expect_snapshot(res)
 
   col_info <- DBI::dbColumnInfo(res)
   expect_equal(dim(col_info), c(2, 2))

@@ -147,7 +147,7 @@ bq_table_download <-
     }
 
     if (chunk_size_from_user && n_got < chunk_size) {
-      rlang::abort(c(
+      abort(c(
         "First chunk is incomplete:",
         x = glue("{big_mark(chunk_size)} rows were requested, but only \\
                   {big_mark(n_got)} rows were received."),
