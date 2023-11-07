@@ -75,30 +75,3 @@ bq_dataset_query <- function(x, query,
   bq_job_wait(job, quiet = quiet)
   bq_job_table(job)
 }
-
-# Similar to bq_perform_query: except uses dryRun, and hence result
-# processing is totally different
-bq_query_fields <- function(query, x, ..., default_dataset = NULL, use_legacy_sql = FALSE) {
-  assert_that(is.string(x), is.string(query))
-
-  url <- bq_path(x, jobs = "")
-
-  query <- list(
-    query = unbox(query),
-    useLegacySql = unbox(use_legacy_sql)
-  )
-  if (!is.null(default_dataset)) {
-    query$defaultDataset <- datasetReference(default_dataset)
-  }
-
-  body <- list(configuration = list(query = query, dryRun = TRUE))
-
-  res <- bq_post(
-    url,
-    body = bq_body(body, ...),
-    query = list(fields = "statistics(query(schema(fields)))")
-  )
-
-  fields <- res$statistics$query$schema$fields
-  bq_fields(lapply(fields, as_bq_field))
-}

@@ -7,7 +7,7 @@ as_df <- function(x) {
 
 bq_quiet <- function(x) {
   if (is.na(x)) {
-    !interactive()
+    !(is_interactive() || is_snapshot())
   } else {
     x
   }
@@ -35,7 +35,7 @@ bq_check_namespace <- function(pkg, bq_type) {
     return()
   }
 
-  rlang::abort(glue::glue(
+  abort(glue(
     "Package '{pkg}' must be installed to load BigQuery field with type '{bq_type}'"
   ))
 }
@@ -77,3 +77,8 @@ print.bq_bytes <- function(x, ...) {
   cat_line(prettyunits::pretty_bytes(unclass(x)))
 }
 # nocov end
+
+defer <- function (expr, env = caller_env(), after = FALSE) {
+  thunk <- as.call(list(function() expr))
+  do.call(on.exit, list(thunk, TRUE, after), envir = env)
+}

@@ -3,23 +3,14 @@ NULL
 
 BigQueryResult <- function(conn, sql, params = NULL, ...) {
 
-  if (is.null(conn@dataset)) {
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      quiet = conn@quiet,
-      parameters = params,
-      ...
-    )
-  } else {
-    ds <- as_bq_dataset(conn)
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      default_dataset = ds,
-      quiet = conn@quiet,
-      parameters = params,
-      ...
-    )
-  }
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+  job <- bq_perform_query(sql,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    parameters = params,
+    ...
+  )
 
   bq_job_wait(job, quiet = conn@quiet)
   meta <- bq_job_meta(job, paste0(
@@ -116,12 +107,13 @@ setMethod(
     }
 
     data <- bq_table_download(res@bq_table,
-      max_results = n,
+      n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
-      bigint = res@bigint
+      bigint = res@bigint,
+      quiet = res@quiet
     )
-    res@cursor$adv(n)
+    res@cursor$adv(nrow(data))
 
     data
   })

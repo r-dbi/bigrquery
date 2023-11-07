@@ -13,10 +13,10 @@ test_that("can delete objects", {
 })
 
 test_that("has useful print method", {
-  gs <- gs_object("xxx", "yyy")
-  expect_known_output(print(gs), test_path("gs-object-print.txt"))
+  expect_snapshot({
+    gs_object("xxx", "yyy")
+  })
 })
-
 
 test_that("coercing to character gives URI", {
   gs <- gs_object("xxx", "yyy")
