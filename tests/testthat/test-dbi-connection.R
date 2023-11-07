@@ -70,6 +70,18 @@ test_that("can roundtrip a data frame", {
   expect_equal(ncol(df), 11)
 })
 
+test_that("can execute a query", {
+  tb <- bq_test_table()
+  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
+
+  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
+  out <- dbExecute(con, glue("UPDATE {tb$table} SET x = x + 1 WHERE true"))
+  expect_equal(out, 4)
+
+  out <- dbExecute(con, glue("DELETE {tb$table} WHERE x <= 3"))
+  expect_equal(out, 2)
+})
+
 test_that("can use DBI::Id()", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
