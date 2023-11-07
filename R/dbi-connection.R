@@ -72,11 +72,12 @@ setMethod(
 #' @inheritParams DBI::dbSendQuery
 #' @export
 setMethod(
-  "dbSendQuery", c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
-    BigQueryResult(conn, statement, ...)
-  })
-
+  "dbSendQuery",
+  c("BigQueryConnection", "character"),
+  function(conn, statement, ..., params = NULL) {
+    BigQueryResult(conn, statement, params = params, ...)
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery

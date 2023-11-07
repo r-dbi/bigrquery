@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
+
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).
 
@@ -80,8 +83,6 @@
 * The `BigQueryResult` object gains a `billing` slot (@meztez, #423).
 
 * `collect.tbl_BigQueryConnection()` honours the `bigint` field found in a connection object created with `DBI::dbConnect()` and passes `bigint` along to `bq_table_download()`. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (@zoews, #439, #437).
-
-* `DBI:dbGetQuery()` - now can take params attribute which will work with parameterised queries (@byapparov, #443)
 
 # bigrquery 1.3.2
 
