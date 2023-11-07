@@ -13,7 +13,7 @@ Authors@R: c(
     person("Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Easily talk to Google's 'BigQuery' database from R.
-License: GPL-3
+License: MIT + file LICENSE
 URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
