@@ -137,6 +137,13 @@ test_that("runif is correctly translated", {
   )
 })
 
+test_that("median is correctly translated", {
+  expect_equal(
+    dbplyr::translate_sql(median(x), con = simulate_bigrquery(), window = FALSE),
+    dbplyr::sql("APPROX_QUANTILES(`x`, 2)[SAFE_ORDINAL(2)]")
+  )
+})
+
 test_that("can correctly print a lazy query", {
   con <- DBI::dbConnect(
     bigquery(),

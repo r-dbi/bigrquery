@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `median()` gets a translation that works in `summarise()` and a clear
+  error if you use it in `mutate()` (#419).
+
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).
 
