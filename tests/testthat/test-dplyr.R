@@ -153,4 +153,3 @@ test_that("can correctly print a lazy query", {
     )
   )
 })
->>>>>>> 95a1cf528570ab98f258132a16a71483b5235d50
