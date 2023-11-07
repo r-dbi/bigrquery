@@ -69,7 +69,7 @@
 
 \S4method{dbDisconnect}{BigQueryConnection}(conn, ...)
 
-\S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ...)
+\S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
 \S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
 
@@ -179,6 +179,8 @@ or a \linkS4class{DBIResult}}
 
 \item{statement}{a character string containing SQL.}
 
+\item{params}{A list of bindings, named or unnamed.}
+
 \item{x}{A character vector to quote as string.}
 
 \item{name}{The table name, passed on to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}. Options are:
@@ -223,8 +225,6 @@ A data frame: field types are generated using
 or \code{n = Inf}
 to retrieve all pending records.  Some implementations may recognize other
 special values.}
-
-\item{params}{A list of bindings, named or unnamed.}
 }
 \description{
 Implementations of pure virtual functions defined in the \code{DBI} package.

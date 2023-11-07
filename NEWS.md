@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
+
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).
 
