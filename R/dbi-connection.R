@@ -239,6 +239,30 @@ setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), d
 #' @export
 setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
 
+dbCreateTable_bq <- function(conn,
+                             name,
+                             fields,
+                             ...,
+                             row.names = NULL,
+                             temporary = FALSE) {
+  if (!identical(temporary, FALSE)) {
+    stop("Temporary tables not supported by bigrquery", call. = FALSE)
+  }
+
+  tb <- as_bq_table(conn, name)
+  bq_table_create(tb, fields)
+
+  invisible(TRUE)
+}
+
+#' @inheritParams DBI::dbCreateTable
+#' @rdname DBI
+#' @export
+setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
