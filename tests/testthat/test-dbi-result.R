@@ -1,5 +1,3 @@
-context("test-dbi-result.R")
-
 test_that("can retrieve full query results", {
   con <- DBI::dbConnect(
     bigquery(),
@@ -22,7 +20,7 @@ test_that("can retrieve without dataset", {
   expect_equal(df, tibble(count = 32L))
 })
 
-test_that("can retrieve query in pieces", {
+test_that("can retrieve query in pieces and that quiet is respected", {
   con <- DBI::dbConnect(
     bigquery(),
     project = bq_test_project(),
@@ -32,13 +30,30 @@ test_that("can retrieve query in pieces", {
   res <- DBI::dbSendQuery(con, "SELECT cyl, mpg FROM mtcars")
   expect_equal(DBI::dbGetRowCount(res), 0L)
 
-  df <- DBI::dbFetch(res, 10)
+  res@quiet <- FALSE
+  expect_snapshot(df <- DBI::dbFetch(res, 10))
+
   expect_equal(nrow(df), 10)
   expect_false(DBI::dbHasCompleted(res))
   expect_equal(DBI::dbGetRowCount(res), 10L)
 
-  df <- DBI::dbFetch(res, -1)
+  res@quiet <- TRUE
+  expect_snapshot(df <- DBI::dbFetch(res, -1))
   expect_equal(nrow(df), 22)
+  expect_true(DBI::dbHasCompleted(res))
+})
+
+test_that("dbHasCompleted() is accurate if you fetch past end", {
+  con <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    dataset = "basedata"
+  )
+
+  res <- DBI::dbSendQuery(con, "SELECT cyl FROM mtcars LIMIT 5")
+  df <- DBI::dbFetch(res, 10)
+
+  expect_equal(DBI::dbGetRowCount(res), 5)
   expect_true(DBI::dbHasCompleted(res))
 })
 
@@ -50,7 +65,7 @@ test_that("can get metadata", {
   )
   sql <- "SELECT cyl, mpg FROM mtcars"
   res <- DBI::dbSendQuery(con, sql)
-  expect_known_output(print(res), "dbi-result-print.txt")
+  expect_snapshot(res)
 
   col_info <- DBI::dbColumnInfo(res)
   expect_equal(dim(col_info), c(2, 2))

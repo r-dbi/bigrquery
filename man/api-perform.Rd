@@ -6,6 +6,7 @@
 \alias{bq_perform_upload}
 \alias{bq_perform_load}
 \alias{bq_perform_query}
+\alias{bq_perform_query_dry_run}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
@@ -54,6 +55,15 @@ bq_perform_query(
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
   priority = "INTERACTIVE"
+)
+
+bq_perform_query_dry_run(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE
 )
 
 bq_perform_copy(
@@ -160,9 +170,9 @@ queries (> 128 MB compressed).}
 
 \item{default_dataset}{A \link{bq_dataset} used to automatically qualify table names.}
 
-\item{time_partitioning}{A list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step.}
+\item{time_partitioning}{A list with following elements: type (string), filed (string), requirePartitionFilter (boolean), the later of each is converted in the as_json step. See https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TimePartitioning}
 
-\item{clustering}{A list of one element named fields, which is a vector of strings.}
+\item{clustering}{A list of one element named fields, which is a vector of strings. See https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#Clustering}
 
 \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
 
@@ -185,7 +195,7 @@ you should use instead:
 \item \code{bq_perform_extract()}: \code{\link[=bq_table_save]{bq_table_save()}}.
 }
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}

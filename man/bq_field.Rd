@@ -5,7 +5,7 @@
 \alias{bq_fields}
 \alias{as_bq_field}
 \alias{as_bq_fields}
-\title{BiqQuery field (and fields) class}
+\title{BigQuery field (and fields) class}
 \usage{
 bq_field(name, type, mode = "NULLABLE", fields = list(), description = NULL)
 

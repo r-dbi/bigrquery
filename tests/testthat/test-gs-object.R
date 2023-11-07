@@ -1,5 +1,3 @@
-context("test-gs-object.R")
-
 test_that("can delete objects", {
   skip_if_no_auth()
   tb <- bq_table(bq_test_project(), "basedata", "mtcars")
@@ -15,10 +13,10 @@ test_that("can delete objects", {
 })
 
 test_that("has useful print method", {
-  gs <- gs_object("xxx", "yyy")
-  expect_known_output(print(gs), test_path("gs-object-print.txt"))
+  expect_snapshot({
+    gs_object("xxx", "yyy")
+  })
 })
-
 
 test_that("coercing to character gives URI", {
   gs <- gs_object("xxx", "yyy")

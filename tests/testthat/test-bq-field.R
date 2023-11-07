@@ -1,5 +1,3 @@
-context("test-bq-field.R")
-
 test_that("can create and coerce a single field", {
   x1 <- bq_field("x", "string")
   x2 <- as_bq_field(list(name = "x", type = "string"))
@@ -26,12 +24,9 @@ test_that("recursive printing of subfields", {
   z2 <- bq_field("z2", "record", fields = list(z1))
   z3 <- bq_field("z3", "record", fields = list(z2))
 
-  expect_known_output({
-    cat_line("Field:")
+  expect_snapshot({
     print(z3)
 
-    cat_line()
-    cat_line("Fields: ")
     print(z3$fields)
-  }, "bq-field-print.txt")
+  })
 })

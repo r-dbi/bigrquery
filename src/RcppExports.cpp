@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // bq_parse
 SEXP bq_parse(std::string meta_s, std::string data_s);
 RcppExport SEXP _bigrquery_bq_parse(SEXP meta_sSEXP, SEXP data_sSEXP) {
@@ -44,13 +49,10 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP null_to_na_(SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_bigrquery_bq_parse", (DL_FUNC) &_bigrquery_bq_parse, 2},
     {"_bigrquery_bq_field_init", (DL_FUNC) &_bigrquery_bq_field_init, 2},
     {"_bigrquery_bq_parse_files", (DL_FUNC) &_bigrquery_bq_parse_files, 4},
-    {"null_to_na_", (DL_FUNC) &null_to_na_, 1},
     {NULL, NULL, 0}
 };
 

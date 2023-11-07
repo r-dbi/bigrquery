@@ -5,8 +5,8 @@
 #' but you will need to provide a `billing` project whenever you perform
 #' any non-free operation.
 #'
-#' @section API documentation:
-#' * [list](https://cloud.google.com/bigquery/docs/reference/v2/projects/list)
+#' @section Google BigQuery API documentation:
+#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/list)
 #' @param page_size Number of items per page.
 #' @param max_pages Maximum number of pages to retrieve. Use `Inf` to retrieve
 #'   all pages (this may take a long time!)

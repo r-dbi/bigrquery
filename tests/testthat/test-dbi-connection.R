@@ -1,5 +1,3 @@
-context("test-dbi-connection.R")
-
 test_that("can connect and disconnect", {
   con <- DBI::dbConnect(bigquery(), project = "p")
   expect_true(dbIsValid(con))
@@ -19,14 +17,13 @@ test_that("useful print with and without dataset", {
   con1 <- DBI::dbConnect(bigquery(), project = "p", dataset = "x", billing = "b")
   con2 <- DBI::dbConnect(bigquery(), project = "p")
 
-  expect_known_output({
-    cat_line("With dataset:")
-    print(con1)
+  expect_snapshot({
+    "With dataset"
+    con1
 
-    cat_line()
-    cat_line("Without dataset:")
-    print(con2)
-  }, file = test_path("dbi-connection-print.txt"))
+    "Without dataset"
+    con2
+  })
 })
 
 test_that("uses BigQuery quoting standards", {
@@ -58,7 +55,7 @@ test_that("can retrieve information about public dataset", {
 
   expect_true("natality" %in% DBI::dbListTables(con))
 
-  df <- DBI::dbReadTable(con, "natality", max_results = 10)
+  df <- DBI::dbReadTable(con, "natality", n_max = 10)
   expect_equal(nrow(df), 10)
 })
 
@@ -73,42 +70,107 @@ test_that("can roundtrip a data frame", {
   expect_equal(ncol(df), 11)
 })
 
-test_that("can append to an existing dataset", {
+test_that("can execute a query", {
+  tb <- bq_test_table()
+  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
+
+  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
+  out <- dbExecute(con, glue("UPDATE {tb$table} SET x = x + 1 WHERE true"))
+  expect_equal(out, 4)
+
+  out <- dbExecute(con, glue("DELETE {tb$table} WHERE x <= 3"))
+  expect_equal(out, 2)
+})
+
+test_that("can use parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  df <- DBI::dbGetQuery(con, "SELECT @x AS value", params = list(x = 1))
+  expect_equal(df, tibble(value = 1))
+})
+
+test_that("can use DBI::Id()", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
 
-  df <- data.frame(x = 1, y = 2)
-  DBI::dbWriteTable(con, "df", df)
-  DBI::dbWriteTable(con, "df", df, append = TRUE)
+  df <- data.frame(x = 1:10)
+  id <- DBI::Id(table = "mytable")
 
-  df2 <- DBI::dbReadTable(con, "df")
-  expect(nrow(df2), 2L)
+  expect_no_error(DBI::dbCreateTable(con, id, df))
+  expect_no_error(DBI::dbAppendTable(con, id, df))
+  expect_no_error(DBI::dbWriteTable(con, id, df, overwrite = TRUE))
+  expect_no_error(DBI::dbReadTable(con, id))
+  expect_true(DBI::dbExistsTable(con, id))
+  expect_no_error(DBI::dbListFields(con, id))
+  expect_no_error(DBI::dbRemoveTable(con, id))
+})
+
+test_that("can create an empty dataset then append to it", {
+  tb <- bq_test_table()
+  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
+
+  df <- data.frame(x = 1, y = 2)
+  DBI::dbCreateTable(con, tb$table, df)
+  expect_equal(bq_table_nrow(tb), 0)
+
+  # With dbWriteTable
+  DBI::dbWriteTable(con, tb$table, df, append = TRUE)
+  expect_equal(bq_table_nrow(tb), 1)
+
+  # Or with dbAppend
+  DBI::dbAppendTable(con, tb$table, df)
+  expect_equal(bq_table_nrow(tb), 2)
 })
 
 test_that("dataset is optional", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
-  expect_error(DBI::dbListTables(con), "`dataset`")
+  expect_snapshot(DBI::dbListTables(con), error = TRUE)
 
-  df <- DBI::dbReadTable(con, "publicdata.samples.natality", max_results = 10)
+  df <- DBI::dbReadTable(con, "publicdata.samples.natality", n_max = 10)
   expect_equal(ncol(df), 31)
 
-  expect_error(
-    DBI::dbReadTable(con, "natality", max_results = 10),
-    "must have 2 or 3 components"
-  )
+  expect_snapshot(DBI::dbReadTable(con, "natality", n_max = 10), error = TRUE)
 })
 
 test_that("can create bq_table from connection + name", {
   con1 <- DBI::dbConnect(bigquery(), project = "p")
-  expect_error(as_bq_table(con1, "x"), "must have 2 or 3 components")
+  expect_snapshot(as_bq_table(con1, "x"), error = TRUE)
   expect_equal(as_bq_table(con1, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con1, "x.y.z"), as_bq_table("x.y.z"))
-  expect_error(as_bq_table(con1, "a.b.c.d"), "must have 1-3 components")
+  expect_snapshot(as_bq_table(con1, "a.b.c.d"), error = TRUE)
 
   con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
   expect_equal(as_bq_table(con2, "x"), as_bq_table("p.d.x"))
   expect_equal(as_bq_table(con2, "x.y"), as_bq_table("p.x.y"))
   expect_equal(as_bq_table(con2, "x.y.z"), as_bq_table("x.y.z"))
+})
+
+test_that("can create bq_table() from connection + Id", {
+  con1 <- DBI::dbConnect(bigquery(), project = "p")
+  expect_equal(
+    as_bq_table(con1, Id(schema = "x", table = "y")),
+    as_bq_table("p.x.y")
+  )
+  expect_equal(
+    as_bq_table(con1, Id(catalog = "q", schema = "x", table = "y")),
+    as_bq_table("q.x.y")
+  )
+
+  con2 <- DBI::dbConnect(bigquery(), project = "p", dataset = "d")
+  expect_equal(as_bq_table(con2, Id(table = "x")), as_bq_table("p.d.x"))
+  expect_equal(
+    as_bq_table(con2, Id(schema = "x", table = "y")),
+    as_bq_table("p.x.y")
+  )
+  expect_equal(
+    as_bq_table(con2, Id(catalog = "q", schema = "x", table = "y")),
+    as_bq_table("q.x.y")
+  )
+})
+
+test_that("as_bq_table checks its input types", {
+  con1 <- DBI::dbConnect(bigquery(), project = "p")
+  expect_snapshot(as_bq_table(con1, letters), error = TRUE)
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
@@ -120,4 +182,12 @@ test_that("the return type of integer columns is set by the bigint argument", {
 
   expect_equal(DBI::dbGetQuery(con_integer64, sql)$x, bit64::as.integer64(x))
   expect_equal(DBI::dbGetQuery(con_character, sql)$x, x)
+})
+
+test_that("DBI::sqlData return TRUE, FALSE for logical class", {
+  con <- dbConnect(bigquery(), project = bq_test_project())
+  expect_equal(
+    DBI::dbQuoteLiteral(con, c(TRUE, FALSE, NA)),
+    DBI::SQL(c("TRUE", "FALSE", "NULL"))
+  )
 })

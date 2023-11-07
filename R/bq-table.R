@@ -2,17 +2,17 @@
 #'
 #' Basic create-read-update-delete verbs for tables, as well as functions
 #' for uploading and downloading data in to/from memory (`bq_table_upload()`,
-#' (`bq_table_download()`)), and saving to/loading from Google CloudStorage
+#' `bq_table_download()`), and saving to/loading from Google Cloud Storage
 #' (`bq_table_load()`, `bq_table_save()`).
 #'
 #' @param x A [bq_table], or an object coercible to a `bq_table`.
 #' @inheritParams api-job
 #' @inheritParams api-perform
 #' @inheritParams bq_projects
-#' @section API documentation:
-#' * [insert](https://developers.google.com/bigquery/docs/reference/v2/tables/insert)
-#' * [get](https://developers.google.com/bigquery/docs/reference/v2/tables/get)
-#' * [delete](https://developers.google.com/bigquery/docs/reference/v2/tables/delete)
+#' @section Google BigQuery API documentation:
+#' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
+#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
+#' * [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
 #' @return
 #' * `bq_table_copy()`, `bq_table_create()`, `bq_table_delete()`, `bq_table_upload()`:
 #'   an invisible [bq_table]
@@ -25,18 +25,19 @@
 #' if (bq_testable()) {
 #' ds <- bq_test_dataset()
 #'
-#' bq_mtcars <- bq_table_create(
-#'   ds,
-#'   "mtcars",
+#' bq_mtcars <- bq_table(ds, "mtcars")
+#' bq_table_exists(bq_mtcars)
+#'
+#' bq_table_create(
+#'   bq_mtcars,
+#'   fields = mtcars,
 #'   friendly_name = "Motor Trend Car Road Tests",
 #'   description = "The data was extracted from the 1974 Motor Trend US magazine",
 #'   labels = list(category = "example")
 #' )
-#' bq_mtcars <- bq_table(ds, "mtcars")
 #' bq_table_exists(bq_mtcars)
 #'
 #' bq_table_upload(bq_mtcars, mtcars)
-#' bq_table_exists(bq_mtcars)
 #'
 #' bq_table_fields(bq_mtcars)
 #' bq_table_size(bq_mtcars)

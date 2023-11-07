@@ -1,5 +1,3 @@
-context("test-bq-param.R")
-
 test_that("can create parameters from list", {
   x <- list(a = bq_param(1, "integer"), b = "x", c = 1:3)
   p <- as_bq_params(x)
@@ -11,7 +9,7 @@ test_that("can create parameters from list", {
 })
 
 test_that("parameter json doesn't change without notice", {
-  verify_output(test_path("test-bq-param-json.txt"), {
+  expect_snapshot({
     as_bq_params(list(
       scalar = "a",
       vector = c("a", "b", "c")

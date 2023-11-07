@@ -1,4 +1,4 @@
-#' BiqQuery field (and fields) class
+#' BigQuery field (and fields) class
 #'
 #' `bq_field()` and `bq_fields()` create; `as_bq_field()` and `as_bq_fields()`
 #' coerce from lists.
@@ -130,6 +130,8 @@ data_type <- function(x) {
   if (is.factor(x)) return("STRING")
   if (inherits(x, "POSIXt")) return("TIMESTAMP")
   if (inherits(x, "hms")) return("TIME")
+  if (inherits(x, "wk_wkt")) return("GEOGRAPHY")
+  if (inherits(x, "blob")) return("BYTES")
   if (inherits(x, "Date")) return("DATE")
 
   switch(

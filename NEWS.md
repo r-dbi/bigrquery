@@ -2,6 +2,109 @@
 
 * `bq_perform_query()` can now execute query with time partitioning and clustering (@SeagleLiu, #398) 
 
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
+
+* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
+  try to fetch more rows than actually exist (#501).
+
+* Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
+  and `dbExecute` (#502).
+
+* `dbWriteTable()` now correct uses the `billing` value set in the 
+  connection (#486).
+
+* `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
+  and `dbListFields()` now all work with `DBI::Id()` (#537).
+
+* `dbFetch()` now respects the `quiet` setting from the connection (#463).
+
+* Added a translation for `runif(n())`. This fixes the translation for
+  `slice_sample()` (@mgirlich, #448).
+
+* Add a `dbQuoteLiteral()` method for logicals to revert breaking change 
+  introduced by DBI 1.1.2 (@meztez, #478).
+
+* bigrquery is now MIT licensed (#453).
+
+* Deprecated functions (i.e. those not starting with `bq_`) have been
+  removed (#551). These have been superseded for a long time and were formally 
+  deprecated in bigrquery 1.3.0 (2020).
+
+* Now uses 2nd edition of dbplyr interface (#508).
+
+* Compatible with dbplyr 2.4.0 (#550).
+
+* `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
+  "URL using bad/illegal format or missing URL" error).
+
+* Align Google APIs URLs to Google Cloud Discovery docs. This enables support 
+  for Private and Restricted Google APIs configurations (@husseyd, #541)
+
+# bigrquery 1.4.2
+
+* Sync up with the current release of gargle (1.4.0). Recently gargle
+  introduced some changes around OAuth and bigrquery is syncing with up that:
+
+  - `bq_oauth_client()` is a new function to replace the now-deprecated
+    `bq_oauth_app()`.
+  -  The new `client` argument of `bq_auth_configure()` replaces the
+     now-deprecated `client` argument.
+  -  The documentation of `bq_auth_configure()` emphasizes that the preferred
+     way to "bring your own OAuth client" is by providing the JSON downloaded
+     from Google Developers Console.
+
+* `op_table.lazy_select_query()` now returns a string instead of a list, which
+  fixes an error seen when printing or using functions like `head()` or
+  `dplyr::glimpse()` (@clente, #509).
+
+# bigrquery 1.4.1
+
+* Fix for `R CMD check` in R-devel (#511)
+
+* bigrquery is now compatible with dbplyr 2.2.0 (@mgirlich, #495).
+
+* brio is new in Imports, replacing the use of the Suggested package readr, 
+  in `bq_table_download()` (@AdeelK93, #462).
+
+# bigrquery 1.4.0
+
+* `bq_table_download()` has been heavily refactored (#412):
+
+  - It should now return the requested results, in full, in most situations.
+    However, when there is a "row shortage", it throws an error instead of
+    silently returning incomplete results.
+  - The `max_results` argument has been deprecated in favor of `n_max`, which
+    reflects what we actually do with this number and is consistent with the
+    `n_max` argument elsewhere, e.g., `readr::read_csv()`.
+  - The default value of `page_size` is no longer fixed and, instead, is
+    determined empirically. Users are strongly recommended to let bigrquery
+    select `page_size` automatically, unless there's a specific reason to do
+    otherwise.
+
+* The `BigQueryResult` object gains a `billing` slot (@meztez, #423).
+
+* `collect.tbl_BigQueryConnection()` honours the `bigint` field found in a connection object created with `DBI::dbConnect()` and passes `bigint` along to `bq_table_download()`. This improves support for 64-bit integers when reading BigQuery tables with dplyr syntax (@zoews, #439, #437).
+
+# bigrquery 1.3.2
+
+* BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
+  the [blob](https://blob.tidyverse.org/) and 
+  [wk](https://paleolimbot.github.io/wk/) packages, respectively
+  (@paleolimbot, #354, #388).
+
+* When used with dbplyr >= 2.0.0, ambiguous variables in joins will get
+  suffixes `_x` and `_y` (instead of `.x` and `.y` which don't work with
+  BigQuery) (#403).
+
+* `bq_table_download()` works once again with large row counts
+  (@gjuggler, #395). Google's API has stopped accepting `startIndex`
+  parameters with scientific formatting, which was happening for large
+  values (>1e5) by default.
+
+* New `bq_perform_query_dry_run()` to retrieve the estimated cost of
+  performing a query (@Ka2wei, #316).
+
 # bigrquery 1.3.1
 
 * Now requires gargle 0.5.0
@@ -35,7 +138,7 @@
 * `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
   (@jimmyg3g, #369).
 
-* Error messages inlude hints for common problems (@deflaux, #353).
+* Error messages include hints for common problems (@deflaux, #353).
 
 # bigrquery 1.2.0
 
@@ -96,7 +199,7 @@ gargle and rlang are newly Imported.
 * `bq_table_download()` now treats NUMERIC columns the same was as FLOAT 
   columns (@paulsendavidjay, #282).
 
-* `bq_table_upload()` works with POSIXct/POSIXct varibles (#251)
+* `bq_table_upload()` works with POSIXct/POSIXct variables (#251)
 
 ## SQL translation
 
@@ -305,7 +408,7 @@ The low-level API has been completely overhauled to make it easier to use. The p
   
 # Version 0.2.0.
 
-* Compatiable with latest httr.
+* Compatible with latest httr.
 
 * Computation of the SQL data type that corresponds to a given R object 
   is now more robust against unknown classes. (#95, @krlmlr)

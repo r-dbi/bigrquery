@@ -1,5 +1,3 @@
-context("test-bq-parse.R")
-
 # Individual values -------------------------------------------------------
 
 test_that("can parse atomic vectors", {
@@ -37,7 +35,7 @@ test_that("can parse date/times", {
     dt
   )
   expect_identical(
-    bq_parse_single(as.character(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
+    bq_parse_single(format(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
     dt
   )
 
@@ -91,7 +89,7 @@ test_that("can parse structs of simple values", {
   )
 
   x <- f(v("1"), v("a"))
-  out <- bq_parse_single(x, "record", field = fields)
+  out <- bq_parse_single(x, "record", fields = fields)
 
   expect_equal(out, list(list(x = bit64::as.integer64(1L), y = "a")))
 })
@@ -103,7 +101,7 @@ test_that("can parse structs of arrays", {
   )
 
   x <- f(v(vs("1", "2", "3")), v(vs("a", "b")))
-  out <- bq_parse_single(x, "record", field = fields)
+  out <- bq_parse_single(x, "record", fields = fields)
 
   expect_equal(out, list(list(x = bit64::as.integer64(1:3), y = c("a", "b"))))
 })
@@ -116,7 +114,7 @@ test_that("can parse arrays of structs", {
   )
 
   x <- vs(list(f = vs("1", "a")), list(f = vs("2", "b")))
-  out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
+  out <- bq_parse_single(x, "record", mode = "repeated", fields = fields)
 
   expect_equal(out, list(tibble(x = bit64::as.integer64(1:2), y = c("a", "b"))))
 })
@@ -175,3 +173,26 @@ test_that("can parse empty arrays", {
   df <- bq_table_download(tb)
   expect_equal(df$x, list(tibble::tibble(a = integer(length = 0), b = character())))
 })
+
+test_that("can parse geography", {
+  skip_if_not_installed("wk")
+
+  wkt <- wk::wkt("POINT (30 10)")
+  expect_identical(bq_parse_single(as.character(wkt), "geography"), wkt)
+  expect_identical(bq_parse_single(NA_character_, "geography"), wk::wkt(NA_character_))
+})
+
+test_that("can parse bytes", {
+  bytes <- blob::blob(
+    as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+             0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
+             0x40))
+  )
+
+  expect_identical(bq_parse_single(bytes[[1]], "bytes"), bytes)
+  expect_identical(
+    bq_parse_single(NA_character_, "bytes"),
+    blob::blob(NULL)
+  )
+})
+

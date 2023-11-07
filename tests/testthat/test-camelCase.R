@@ -1,5 +1,3 @@
-context("camelCase.R")
-
 test_that("toCamel recursively renamed", {
   x1 <- list(a_b = 1, c_d = list(e_f = 2))
   x2 <- list(aB = 1, cD = list(eF = 2))

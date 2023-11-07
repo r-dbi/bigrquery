@@ -87,15 +87,15 @@ an invisible \link{bq_table}
 \description{
 Basic create-read-update-delete verbs for tables, as well as functions
 for uploading and downloading data in to/from memory (\code{bq_table_upload()},
-(\code{bq_table_download()})), and saving to/loading from Google CloudStorage
+\code{bq_table_download()}), and saving to/loading from Google Cloud Storage
 (\code{bq_table_load()}, \code{bq_table_save()}).
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/insert}{insert}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/get}{get}
-\item \href{https://developers.google.com/bigquery/docs/reference/v2/tables/delete}{delete}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get}{get}
+\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete}{delete}
 }
 }
 
@@ -103,18 +103,19 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 if (bq_testable()) {
 ds <- bq_test_dataset()
 
-bq_mtcars <- bq_table_create(
-  ds,
-  "mtcars",
+bq_mtcars <- bq_table(ds, "mtcars")
+bq_table_exists(bq_mtcars)
+
+bq_table_create(
+  bq_mtcars,
+  fields = mtcars,
   friendly_name = "Motor Trend Car Road Tests",
   description = "The data was extracted from the 1974 Motor Trend US magazine",
   labels = list(category = "example")
 )
-bq_mtcars <- bq_table(ds, "mtcars")
 bq_table_exists(bq_mtcars)
 
 bq_table_upload(bq_mtcars, mtcars)
-bq_table_exists(bq_mtcars)
 
 bq_table_fields(bq_mtcars)
 bq_table_size(bq_mtcars)

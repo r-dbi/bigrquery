@@ -1,22 +1,16 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, ...) {
-  if (is.null(conn@dataset)) {
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      quiet = conn@quiet,
-      ...
-    )
-  } else {
-    ds <- as_bq_dataset(conn)
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      default_dataset = ds,
-      quiet = conn@quiet,
-      ...
-    )
-  }
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
+
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+  job <- bq_perform_query(sql,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    parameters = params,
+    ...
+  )
 
   bq_job_wait(job, quiet = conn@quiet)
   meta <- bq_job_meta(job, paste0(
@@ -43,7 +37,8 @@ BigQueryResult <- function(conn, sql, ...) {
     page_size = conn@page_size,
     quiet = conn@quiet,
     cursor = cursor(nrow),
-    bigint = conn@bigint
+    bigint = conn@bigint,
+    billing = conn@billing
   )
   res
 }
@@ -61,7 +56,8 @@ setClass(
     page_size = "numeric",
     quiet = "logical",
     cursor = "list",
-    bigint = "character"
+    bigint = "character",
+    billing = "character"
   )
 )
 
@@ -111,12 +107,13 @@ setMethod(
     }
 
     data <- bq_table_download(res@bq_table,
-      max_results = n,
+      n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
-      bigint = res@bigint
+      bigint = res@bigint,
+      quiet = res@quiet
     )
-    res@cursor$adv(n)
+    res@cursor$adv(nrow(data))
 
     data
   })
