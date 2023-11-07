@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
+  try to fetch more rows than actually exist (#501).
+
 * Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
   and `dbExecute` (#502).
 

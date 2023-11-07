@@ -119,7 +119,7 @@ setMethod(
       bigint = res@bigint,
       quiet = res@quiet
     )
-    res@cursor$adv(n)
+    res@cursor$adv(nrow(data))
 
     data
   })
