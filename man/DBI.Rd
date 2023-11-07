@@ -19,6 +19,7 @@
 \alias{dbQuoteString,BigQueryConnection,SQL-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,character-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,SQL-method}
+\alias{dbQuoteLiteral,BigQueryConnection,logical-method}
 \alias{dbDataType,BigQueryConnection-method}
 \alias{dbWriteTable,BigQueryConnection,character,data.frame-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
@@ -68,6 +69,8 @@
 \S4method{dbQuoteIdentifier}{BigQueryConnection,character}(conn, x, ...)
 
 \S4method{dbQuoteIdentifier}{BigQueryConnection,SQL}(conn, x, ...)
+
+\S4method{dbQuoteLiteral}{BigQueryConnection,logical}(conn, x, ...)
 
 \S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
 

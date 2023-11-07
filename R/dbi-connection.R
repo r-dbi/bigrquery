@@ -132,6 +132,16 @@ setMethod(
   }
 )
 
+#' @rdname DBI
+#' @export
+setMethod(
+  "dbQuoteLiteral", c("BigQueryConnection", "logical"),
+  function(conn, x, ...) {
+    x <- as.character(x)
+    x[is.na(x)] <- "NULL"
+    SQL(x, names = names(x))
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbDataType
