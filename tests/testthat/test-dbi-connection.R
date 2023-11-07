@@ -77,27 +77,30 @@ test_that("can use DBI::Id()", {
   df <- data.frame(x = 1:10)
   id <- DBI::Id(table = "mytable")
 
-  expect_no_error(DBI::dbWriteTable(con, id, df))
+  expect_no_error(DBI::dbCreateTable(con, id, df))
   expect_no_error(DBI::dbAppendTable(con, id, df))
+  expect_no_error(DBI::dbWriteTable(con, id, df, overwrite = TRUE))
   expect_no_error(DBI::dbReadTable(con, id))
   expect_true(DBI::dbExistsTable(con, id))
   expect_no_error(DBI::dbListFields(con, id))
   expect_no_error(DBI::dbRemoveTable(con, id))
 })
 
-test_that("can append to an existing dataset", {
-  ds <- bq_test_dataset()
-  con <- DBI::dbConnect(ds)
+test_that("can create an empty dataset then append to it", {
+  tb <- bq_test_table()
+  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
 
   df <- data.frame(x = 1, y = 2)
-  DBI::dbWriteTable(con, "df", df)
-  DBI::dbWriteTable(con, "df", df, append = TRUE)
+  DBI::dbCreateTable(con, tb$table, df)
+  expect_equal(bq_table_nrow(tb), 0)
+
+  # With dbWriteTable
+  DBI::dbWriteTable(con, tb$table, df, append = TRUE)
+  expect_equal(bq_table_nrow(tb), 1)
 
   # Or with dbAppend
-  DBI::dbAppendTable(con, "df", df)
-
-  df2 <- DBI::dbReadTable(con, "df")
-  expect(nrow(df2), 3L)
+  DBI::dbAppendTable(con, tb$table, df)
+  expect_equal(bq_table_nrow(tb), 2)
 })
 
 test_that("dataset is optional", {

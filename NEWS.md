@@ -1,6 +1,6 @@
 # bigrquery (development version)
 
-* Now supports `dbAppendTable()` (#539).
+* Now supports `dbAppendTable()` (#539) and `dbCreateTable()` (#483).
 
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
   and `dbListFields()` now all work with `DBI::Id()` (#537).
