@@ -23,6 +23,8 @@
 \alias{dbDataType,BigQueryConnection-method}
 \alias{dbWriteTable,BigQueryConnection,character,data.frame-method}
 \alias{dbWriteTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbAppendTable,BigQueryConnection,character,data.frame-method}
+\alias{dbAppendTable,BigQueryConnection,Id,data.frame-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
 \alias{dbReadTable,BigQueryConnection,Id-method}
 \alias{dbListTables,BigQueryConnection-method}
@@ -102,6 +104,10 @@
   temporary = FALSE,
   row.names = NA
 )
+
+\S4method{dbAppendTable}{BigQueryConnection,character,data.frame}(conn, name, value, ..., row.names = NULL)
+
+\S4method{dbAppendTable}{BigQueryConnection,Id,data.frame}(conn, name, value, ..., row.names = NULL)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 
