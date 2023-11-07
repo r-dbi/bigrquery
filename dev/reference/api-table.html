@@ -167,18 +167,19 @@ an invisible <a href="bq_refs.html">bq_table</a></p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="bq_test_project.html">bq_testable</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_test_project.html">bq_test_dataset</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">bq_mtcars</span> <span class="op">&lt;-</span> <span class="fu">bq_table_create</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">ds</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"mtcars"</span>,</span></span>
+<span class="r-in"><span><span class="va">bq_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_refs.html">bq_table</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"mtcars"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bq_table_exists</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">bq_table_create</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">bq_mtcars</span>,</span></span>
+<span class="r-in"><span>  fields <span class="op">=</span> <span class="va">mtcars</span>,</span></span>
 <span class="r-in"><span>  friendly_name <span class="op">=</span> <span class="st">"Motor Trend Car Road Tests"</span>,</span></span>
 <span class="r-in"><span>  description <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend US magazine"</span>,</span></span>
 <span class="r-in"><span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bq_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_refs.html">bq_table</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"mtcars"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bq_table_exists</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">bq_table_upload</span><span class="op">(</span><span class="va">bq_mtcars</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bq_table_exists</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">bq_table_fields</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bq_table_size</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
