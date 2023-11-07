@@ -1,8 +1,8 @@
 # bigrquery (development version)
 
-* Add a `dbQuoteLiteral` method for logical class to revert breaking change introduced by DBI 1.1.2. Fix #478. (@meztez, #479).
+* Add a `dbQuoteLiteral` method for logical class to revert breaking change 
+  introduced by DBI 1.1.2. Fix #478. (@meztez, #479).
 
-brio is new in Imports, replacing the use of the Suggested package readr, in `bq_table_download()` (@AdeelK93, #462).
 * bigrquery is now MIT licensed (#453).
 
 * Deprecated functions (i.e. those not starting with `bq_`) have been

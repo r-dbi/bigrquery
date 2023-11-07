@@ -122,7 +122,9 @@ test_that("the return type of integer columns is set by the bigint argument", {
 })
 
 test_that("DBI::sqlData return TRUE, FALSE for logical class", {
-  test_df <- data.frame(var1 = c(TRUE, FALSE, NA))
   con <- dbConnect(bigquery(), project = bq_test_project())
-  expect_identical(DBI::sqlData(con, test_df), data.frame(var1 = DBI::SQL(c("TRUE", "FALSE", "NULL"))))
+  expect_equal(
+    DBI::dbQuoteLiteral(con, c(TRUE, FALSE, NA)),
+    DBI::SQL(c("TRUE", "FALSE", "NULL"))
+  )
 })
