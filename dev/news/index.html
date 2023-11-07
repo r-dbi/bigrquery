@@ -61,19 +61,7 @@
 <li><p>Now uses 2nd edition of dbplyr interface (<a href="https://github.com/r-dbi/bigrquery/issues/508" class="external-link">#508</a>).</p></li>
 <li><p>Compatible with dbplyr 2.4.0 (<a href="https://github.com/r-dbi/bigrquery/issues/550" class="external-link">#550</a>).</p></li>
 <li><p><code>con |&gt; tbl(sql("..."))</code> now works robustly once more (<a href="https://github.com/r-dbi/bigrquery/issues/540" class="external-link">#540</a>). (No more “URL using bad/illegal format or missing URL” error).</p></li>
-<li>
-<p>Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations. (<a href="https://github.com/husseyd" class="external-link">@husseyd</a>, <a href="https://github.com/r-dbi/bigrquery/issues/541" class="external-link">#541</a>)</p>
-<ul><li>
-<code>R/bq-request.R</code>
-<ul><li>Substitute <code>https://bigquery.googleapis.com</code> for <code>https://www.googleapis.com</code>
-</li>
-</ul></li>
-<li>
-<code>R/gs-object.R</code>
-<ul><li>Substitute <code>https://storage.googleapis.com</code> for <code>https://www.googleapis.com</code>
-</li>
-</ul></li>
-</ul></li>
+<li><p>Align Google APIs URLs to Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations (<a href="https://github.com/husseyd" class="external-link">@husseyd</a>, <a href="https://github.com/r-dbi/bigrquery/issues/541" class="external-link">#541</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.2" id="bigrquery-142">bigrquery 1.4.2<a class="anchor" aria-label="anchor" href="#bigrquery-142"></a></h2><p class="text-muted">CRAN release: 2023-04-20</p>
