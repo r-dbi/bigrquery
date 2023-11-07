@@ -175,7 +175,7 @@ export_json <- function(values) {
   })
 
   con <- rawConnection(raw(0), "r+")
-  on.exit(close(con))
+  defer(close(con))
   jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
 
   rawToChar(rawConnectionValue(con))

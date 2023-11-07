@@ -11,7 +11,7 @@ test_that("can create and delete datasets", {
 
 test_that("can update dataset metadata", {
   ds <- bq_dataset(bq_test_project(), random_name())
-  on.exit(bq_dataset_delete(ds))
+  defer(bq_dataset_delete(ds))
 
   bq_dataset_create(ds, description = "a", friendly_name = "b")
   bq_dataset_update(ds, description = "b")

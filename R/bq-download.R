@@ -85,7 +85,7 @@ bq_table_download <-
     start_index <- params$start_index
 
     schema_path <- bq_download_schema(x, tempfile())
-    withr::defer(file.remove(schema_path))
+    defer(file.remove(schema_path))
 
     if (n_max == 0) {
       table_data <- bq_parse_files(
@@ -134,7 +134,7 @@ bq_table_download <-
     )
     curl::multi_run(pool = pool)
     path_first_chunk <- chunk_plan$dat$path[1]
-    withr::defer(file.remove(path_first_chunk))
+    defer(file.remove(path_first_chunk))
 
     chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
@@ -198,7 +198,7 @@ bq_table_download <-
       )
     }
     curl::multi_run(pool = pool)
-    withr::defer(file.remove(chunk_plan$dat$path))
+    defer(file.remove(chunk_plan$dat$path))
 
     table_data <- bq_parse_files(
       schema_path,
@@ -329,7 +329,7 @@ bq_download_callback <- function(path, progress = NULL) {
     )
 
     con <- file(path, open = "wb")
-    withr::defer(close(con))
+    defer(close(con))
     writeBin(result$content, con)
   }
 }
