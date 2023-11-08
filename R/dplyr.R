@@ -233,10 +233,12 @@ sql_translation.BigQueryConnection <- function(x) {
 
       # Regular expressions
       grepl = function(pattern, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_contains
         dbplyr::build_sql("REGEXP_CONTAINS", list(x, pattern))
       },
-      gsub = function(match, replace, x) {
-        dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
+      gsub = function(pattern, replace, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_replace
+        dbplyr::build_sql("REGEXP_REPLACE", list(x, pattern, replace))
       },
 
       # Other scalar functions

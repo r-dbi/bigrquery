@@ -137,6 +137,15 @@ test_that("runif is correctly translated", {
   )
 })
 
+test_that("string functions correctly", {
+  con <- simulate_bigrquery()
+
+  expect_snapshot({
+    dbplyr::translate_sql(grepl("a.c", x), con = con)
+    dbplyr::translate_sql(gsub("a.c", "", x), con = con)
+  })
+})
+
 test_that("median is correctly translated", {
   expect_equal(
     dbplyr::translate_sql(median(x), con = simulate_bigrquery(), window = FALSE),

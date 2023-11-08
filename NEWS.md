@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* `grepl(pattern, x)` is now correctly translated to 
+  `REGEXP_CONTAINS(x, pattern)` (#416).
+
 * `median()` gets a translation that works in `summarise()` and a clear
   error if you use it in `mutate()` (#419).
 
