@@ -99,8 +99,7 @@ setMethod(
 setMethod(
   "dbFetch", "BigQueryResult",
   function(res, n = -1, ...) {
-    stopifnot(length(n) == 1, is.numeric(n))
-    stopifnot(n == round(n), !is.na(n), n >= -1)
+    check_number_whole(n, min = -1, allow_infinite = TRUE)
 
     if (n == -1 || n == Inf) {
       n <- res@cursor$left()

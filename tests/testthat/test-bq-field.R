@@ -30,3 +30,12 @@ test_that("recursive printing of subfields", {
     print(z3$fields)
   })
 })
+
+test_that("tests its inputs", {
+  expect_snapshot(error = TRUE, {
+    bq_field(1)
+    bq_field("x", 1)
+    bq_field("x", "y", mode = 1)
+    bq_field("x", "y", description = 1)
+  })
+})

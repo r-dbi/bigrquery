@@ -21,7 +21,10 @@
 #' # as_bq_fields() can also take a data frame
 #' as_bq_fields(mtcars)
 bq_field <- function(name, type, mode = "NULLABLE", fields = list(), description = NULL) {
-  assert_that(is.string(name), is.string(type), is.string(mode))
+  check_string(name)
+  check_string(type)
+  check_string(mode)
+  check_string(description, allow_null = TRUE)
 
   structure(
     list(
@@ -78,6 +81,9 @@ as_bq_field.list <- function(x) {
 #' @export
 #' @rdname bq_field
 as_bq_fields <- function(x) UseMethod("as_bq_fields")
+
+#' @export
+as_bq_fields.NULL <- function(x) x
 
 #' @export
 as_bq_fields.bq_fields <- function(x) x

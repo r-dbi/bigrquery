@@ -13,7 +13,6 @@
 #' @aliases bigrquery-package
 #' @useDynLib bigrquery, .registration = TRUE
 #' @rawNamespace import(rlang, except = unbox)
-#' @rawNamespace import(assertthat, except = has_name)
 "_PACKAGE"
 
 the <- new_environment()
