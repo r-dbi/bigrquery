@@ -252,9 +252,6 @@ sql_translation.BigQueryConnection <- function(x) {
       pmax = sql_prefix("GREATEST"),
       pmin = sql_prefix("LEAST"),
 
-      # Median
-      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]"),
-
       runif = function(n = n(), min = 0, max = 1) {
         RAND <- NULL # quiet R CMD check
         dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
@@ -269,7 +266,12 @@ sql_translation.BigQueryConnection <- function(x) {
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       cor = dbplyr::sql_aggregate_2("CORR"),
-      cov = dbplyr::sql_aggregate_2("COVAR_SAMP")
+      cov = dbplyr::sql_aggregate_2("COVAR_SAMP"),
+
+      # Median
+      median = function(x, na.rm = TRUE) {
+        dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
+      }
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_win,
       all = dbplyr::win_absent("LOGICAL_AND"),
@@ -280,7 +282,9 @@ sql_translation.BigQueryConnection <- function(x) {
       cor = dbplyr::win_absent("CORR"),
       cov = dbplyr::win_absent("COVAR_SAMP"),
 
-      n_distinct = dbplyr::win_absent("n_distinct")
+      n_distinct = dbplyr::win_absent("n_distinct"),
+
+      median = dbplyr::win_absent("median")
     )
   )
 }
