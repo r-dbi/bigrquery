@@ -107,7 +107,6 @@ bq_table <- function(project, dataset, table = NULL) {
     table <- dataset
     dataset <- project$dataset
     project <- project$project
-
   } else {
     check_string(project)
     check_string(dataset)
@@ -244,4 +243,3 @@ bq_from_string <- function(x, n, type, error_call = caller_env()) {
   }
   pieces
 }
-
