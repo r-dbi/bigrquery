@@ -22,9 +22,6 @@ the <- new_environment()
 
 ## usethis namespace: start
 #' @importFrom bit64 integer64
-#' @importFrom glue glue
-#' @importFrom glue glue_collapse
-#' @importFrom glue glue_data
 #' @importFrom jsonlite unbox
 #' @importFrom lifecycle deprecated
 #' @importFrom Rcpp sourceCpp

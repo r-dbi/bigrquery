@@ -213,24 +213,26 @@ tableReference <- function(x) {
 
 # Helpers -----------------------------------------------------------------
 
-bq_from_list <- function(x, names, type) {
+bq_from_list <- function(x, names, type, error_call = caller_env()) {
   names(x) <- camelCase(names(x))
 
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue_collapse(names, sep = ", ", last = " and ")
-  stop(glue("List <{type}> must have components {names_str}"), call. = FALSE)
+  cli::cli_abort(
+    "List <{type}> must have components {.and {.str {names}}}.",
+    call = error_call
+  )
 }
 
-bq_from_string <- function(x, n, type) {
+bq_from_string <- function(x, n, type, error_call = caller_env()) {
   assert_that(is.string(x))
 
   pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
   if (length(pieces) != n) {
-    stop(
-      glue("Character <{type}> must contain {n} components when split by `.`"),
-      call. = FALSE
+    cli::cli_abort(
+      "Character <{type}> must contain {n} components when split by `.`",
+      call = error_call
     )
   }
   pieces

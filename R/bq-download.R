@@ -147,10 +147,9 @@ bq_table_download <-
     }
 
     if (chunk_size_from_user && n_got < chunk_size) {
-      abort(c(
+      cli::cli_abort(c(
         "First chunk is incomplete:",
-        x = glue("{big_mark(chunk_size)} rows were requested, but only \\
-                  {big_mark(n_got)} rows were received."),
+        x = "{big_mark(chunk_size)} rows were requested, but only {big_mark(n_got)} rows were received.",
         i = "Leave `page_size` unspecified or use an even smaller value."
       ))
     }
@@ -158,7 +157,7 @@ bq_table_download <-
     # break rest of work into natural chunks ----
     if (!chunk_size_from_user) {
       if (!bq_quiet(quiet)) {
-        message(glue("Received {big_mark(n_got)} rows in the first chunk."))
+        cli::cli_inform("Received {big_mark(n_got)} rows in the first chunk.")
       }
       chunk_size <- trunc(0.75 * n_got)
     }
@@ -178,11 +177,10 @@ bq_table_download <-
     )
 
     if (!bq_quiet(quiet)) {
-      message(glue_data(
-        chunk_plan,
-        "Downloading the remaining {big_mark(n_max)} rows in {n_chunks} \\
-         chunks of (up to) {big_mark(chunk_size)} rows."
-      ))
+      cli::cli_inform(
+        "Downloading the remaining {big_mark(chunk_plan$n_max)} rows in {chunk_plan$n_chunks} \\
+         chunks of (up to) {big_mark(chunk_plan$chunk_size)} rows."
+      )
     }
 
     for (i in seq_len(chunk_plan$n_chunks)) {
