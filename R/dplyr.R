@@ -232,9 +232,13 @@ sql_translation.BigQueryConnection <- function(x) {
       Sys.time = sql_prefix("current_time"),
 
       # Regular expressions
-      grepl = sql_prefix("REGEXP_CONTAINS", 2),
-      gsub = function(match, replace, x) {
-        dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
+      grepl = function(pattern, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_contains
+        dbplyr::build_sql("REGEXP_CONTAINS", list(x, pattern))
+      },
+      gsub = function(pattern, replace, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_replace
+        dbplyr::build_sql("REGEXP_REPLACE", list(x, pattern, replace))
       },
 
       # Other scalar functions
