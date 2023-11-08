@@ -42,8 +42,6 @@ bq_check_namespace <- function(pkg, bq_type) {
 
 isFALSE <- function(x) identical(x, FALSE)
 
-is_string <- function(x) length(x) == 1L && is.character(x)
-
 cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
 }
