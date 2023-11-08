@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
+  tries again (#535).
+
 * `median()` gets a translation that works in `summarise()` and a clear
   error if you use it in `mutate()` (#419).
 
