@@ -16,3 +16,10 @@ test_that("parameter json doesn't change without notice", {
     ))
   })
 })
+
+test_that("checks inputs", {
+  expect_snapshot(error = TRUE, {
+    bq_param_scalar(1:3)
+    bq_param_array(integer())
+  })
+})
