@@ -37,3 +37,16 @@
         }
       ]
 
+# checks inputs
+
+    Code
+      bq_param_scalar(1:3)
+    Condition
+      Error in `bq_param_scalar()`:
+      ! `value` must be length 1, not 3.
+    Code
+      bq_param_array(integer())
+    Condition
+      Error in `bq_param_array()`:
+      ! `value` can't be zero-length.
+

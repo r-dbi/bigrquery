@@ -107,7 +107,10 @@ collect.tbl_BigQueryConnection <- function(x, ...,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
 
-  assert_that(length(n) == 1, n > 0L)
+  check_number_whole(n, min = 0, allow_infinite = TRUE)
+  check_number_whole(max_connections, min = 1)
+  check_bool(warn_incomplete)
+
   con <- dbplyr::remote_con(x)
 
   if (op_can_download(x)) {

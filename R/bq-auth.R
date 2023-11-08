@@ -182,20 +182,20 @@ bq_auth_configure <- function(client, path, app = deprecated()) {
       "bq_auth_configure(app)",
       "bq_auth_configure(client)"
     )
-    bq_auth_configure(client = app, path = path)
+    return(bq_auth_configure(client = app, path = path))
   }
 
-  if (!xor(missing(client), missing(path))) {
-    stop("Must supply exactly one of `client` and `path`", call. = FALSE)
-  }
+  check_exclusive(client, path)
   if (!missing(path)) {
-    stopifnot(is_string(path))
+    check_string(path)
     client <- gargle::gargle_oauth_client_from_json(path)
+  } else {
+    if (!is.null(client) && !inherits(client, "gargle_oauth_client")) {
+      stop_input_type(client, "a gargle OAuth client", allow_null = TRUE)
+    }
   }
-  stopifnot(is.null(client) || inherits(client, "gargle_oauth_client"))
 
   .auth$set_client(client)
-
   invisible(.auth)
 }
 

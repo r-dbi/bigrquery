@@ -27,7 +27,9 @@ bq_param <- function(value, type = NULL, name = NULL) {
 #' @rdname bq_param
 #' @export
 bq_param_scalar <- function(value, type = NULL, name = NULL) {
-  assert_that(length(value) == 1)
+  if (length(value) != 1) {
+    cli::cli_abort("{.arg value} must be length 1, not {length(value)}.")
+  }
 
   if (is.null(type)) {
     type <- data_type(value)
@@ -41,7 +43,9 @@ bq_param_scalar <- function(value, type = NULL, name = NULL) {
 #' @rdname bq_param
 #' @export
 bq_param_array <- function(value, type = NULL, name = NULL) {
-  assert_that(length(value) > 0)
+  if (length(value) == 0) {
+    cli::cli_abort("{.arg value} can't be zero-length.")
+  }
 
   if (is.null(type)) {
     type <- data_type(value)
