@@ -18,22 +18,22 @@
     Code
       as_bq_table("x")
     Condition
-      Error:
+      Error in `as_bq_table()`:
       ! Character <bq_table> must contain 3 components when split by `.`
     Code
       as_bq_table("a.b.c.d")
     Condition
-      Error:
+      Error in `as_bq_table()`:
       ! Character <bq_table> must contain 3 components when split by `.`
     Code
       as_bq_job("x")
     Condition
-      Error:
+      Error in `as_bq_job()`:
       ! Character <bq_job> must contain 3 components when split by `.`
     Code
       as_bq_dataset("x")
     Condition
-      Error:
+      Error in `as_bq_dataset()`:
       ! Character <bq_dataset> must contain 2 components when split by `.`
 
 # list coercion errors with bad names

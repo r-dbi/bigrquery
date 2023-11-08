@@ -19,7 +19,6 @@ BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
     R (>= 3.6)
 Imports: 
-    assertthat,
     bit64,
     brio,
     cli,

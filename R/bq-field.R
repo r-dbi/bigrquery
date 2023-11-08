@@ -83,6 +83,9 @@ as_bq_field.list <- function(x) {
 as_bq_fields <- function(x) UseMethod("as_bq_fields")
 
 #' @export
+as_bq_fields.NULL <- function(x) x
+
+#' @export
 as_bq_fields.bq_fields <- function(x) x
 
 #' @export

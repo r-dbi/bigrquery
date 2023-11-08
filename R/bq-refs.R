@@ -58,7 +58,8 @@ NULL
 #' @rdname bq_refs
 #' @export
 bq_dataset <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
+  check_string(project)
+  check_string(dataset)
 
   structure(
     list(
@@ -102,10 +103,16 @@ as_bq_dataset.list <- function(x) {
 #' @export
 bq_table <- function(project, dataset, table = NULL) {
   if (inherits(project, "bq_dataset") && is.null(table)) {
-    return(bq_table(project$project, project$dataset, dataset))
-  }
+    check_string(dataset)
+    table <- dataset
+    dataset <- project$dataset
+    project <- project$project
 
-  assert_that(is.string(project), is.string(dataset), is.string(table))
+  } else {
+    check_string(project)
+    check_string(dataset)
+    check_string(table)
+  }
 
   structure(
     list(
@@ -223,14 +230,14 @@ bq_from_list <- function(x, names, type) {
   stop(glue("List <{type}> must have components {names_str}"), call. = FALSE)
 }
 
-bq_from_string <- function(x, n, type) {
-  assert_that(is.string(x))
+bq_from_string <- function(x, n, type, error_call = caller_env()) {
+  check_string(x, call = error_call)
 
   pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
   if (length(pieces) != n) {
-    stop(
-      glue("Character <{type}> must contain {n} components when split by `.`"),
-      call. = FALSE
+    cli::cli_abort(
+      "Character <{type}> must contain {n} components when split by `.`",
+      call = error_call
     )
   }
   pieces

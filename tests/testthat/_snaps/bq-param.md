@@ -48,5 +48,5 @@
       bq_param_array(integer())
     Condition
       Error in `bq_param_array()`:
-      ! `value` can't be zero length.
+      ! `value` can't be zero-length.
 
