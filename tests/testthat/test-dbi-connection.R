@@ -82,6 +82,13 @@ test_that("can execute a query", {
   expect_equal(out, 2)
 })
 
+test_that("can use parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  df <- DBI::dbGetQuery(con, "SELECT @x AS value", params = list(x = 1))
+  expect_equal(df, tibble(value = 1))
+})
+
 test_that("can use DBI::Id()", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)

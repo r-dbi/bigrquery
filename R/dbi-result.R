@@ -1,22 +1,16 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, ...) {
-  if (is.null(conn@dataset)) {
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      quiet = conn@quiet,
-      ...
-    )
-  } else {
-    ds <- as_bq_dataset(conn)
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      default_dataset = ds,
-      quiet = conn@quiet,
-      ...
-    )
-  }
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
+
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+  job <- bq_perform_query(sql,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    parameters = params,
+    ...
+  )
 
   bq_job_wait(job, quiet = conn@quiet)
   meta <- bq_job_meta(job, paste0(
