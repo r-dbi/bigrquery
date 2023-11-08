@@ -1,7 +1,5 @@
 test_that("can create and delete tables", {
-  ds <- bq_test_dataset()
-
-  bq_mtcars <- bq_table(ds, "mtcars")
+  bq_mtcars <- bq_test_table()
   expect_false(bq_table_exists(bq_mtcars))
 
   bq_table_create(
@@ -24,8 +22,7 @@ test_that("can retrieve table size information", {
 })
 
 test_that("can create table with schema", {
-  ds <- bq_test_dataset()
-  tb <- bq_table(ds, "df")
+  tb <- bq_test_table()
 
   df <- data.frame(x = 1, y = "a")
   bq_table_create(tb, "df", fields = df)
@@ -35,10 +32,10 @@ test_that("can create table with schema", {
 })
 
 test_that("can round trip to non-default location", {
-  asia <- bq_test_dataset(location = "asia-east1")
+  dallas <- bq_test_dataset(location = "us-south1")
   df1 <- tibble(x = 1:10, y = letters[1:10])
 
-  bq_df <- bq_table(asia, "df")
+  bq_df <- bq_table(dallas, "df")
   bq_table_upload(bq_df, df1)
 
   df2 <- bq_table_download(bq_df)
@@ -49,14 +46,12 @@ test_that("can round trip to non-default location", {
 })
 
 test_that("can roundtrip via save + load", {
-  ds <- bq_test_dataset()
-
   tb1 <- bq_table(bq_test_project(), "basedata", "mtcars")
-  tb2 <- bq_table(ds, "save_load")
+  tb2 <- bq_test_table()
   gs <- gs_test_object()
 
   bq_table_save(tb1, gs)
-  on.exit(gs_object_delete(gs))
+  defer(gs_object_delete(gs))
   bq_table_load(tb2, gs)
 
   df <- bq_table_download(tb2)
@@ -64,8 +59,7 @@ test_that("can roundtrip via save + load", {
 })
 
 test_that("can copy table from public dataset", {
-  ds <- bq_test_dataset()
-  my_natality <- bq_table(ds, "mynatality")
+  my_natality <- bq_test_table()
 
   out <- bq_table_copy("publicdata.samples.natality", my_natality)
   expect_equal(out, my_natality)
@@ -75,7 +69,6 @@ test_that("can copy table from public dataset", {
 # data-types --------------------------------------------------------------
 
 test_that("can round trip atomic vectors", {
-  ds <- bq_test_dataset()
   df1 <- tibble(
     lgl = c(FALSE, TRUE, NA),
     int = c(-1, 1, NA),
@@ -83,7 +76,7 @@ test_that("can round trip atomic vectors", {
     chr = c("A", "B", NA)
   )
 
-  bq_df <- bq_table(ds, "df")
+  bq_df <- bq_test_table()
   bq_table_upload(bq_df, df1)
 
   df2 <- bq_table_download(bq_df, bigint = "integer")
@@ -94,11 +87,10 @@ test_that("can round trip atomic vectors", {
 })
 
 test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
-  ds <- bq_test_dataset()
   df <- tibble(datetime = as.POSIXct("2020-01-01 09:00", tz = "UTC"))
 
   tb1 <- bq_table_create(
-    bq_table(ds, "timestamp"),
+    bq_test_table(),
     bq_fields(list(bq_field("datetime", "TIMESTAMP")))
   )
   bq_table_upload(tb1, df)
@@ -106,7 +98,7 @@ test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
   expect_equal(df1, df)
 
   tb2 <- bq_table_create(
-    bq_table(ds, "datetime2"),
+    bq_test_table(),
     bq_fields(list(bq_field("datetime", "DATETIME")))
   )
   bq_table_upload(tb2, df)
@@ -115,8 +107,7 @@ test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
 })
 
 test_that("can round trip data frame with list-cols", {
-  ds <- bq_test_dataset()
-  tb <- bq_table(ds, "complex")
+  tb <- bq_test_table()
 
   df1 <- tibble::tibble(
     val = 1.5,
@@ -140,8 +131,7 @@ test_that("can round trip data frame with list-cols", {
 })
 
 test_that("can create table field description", {
-  ds <- bq_test_dataset()
-  partition_table <- bq_table(ds, "table_field_description")
+  partition_table <- bq_test_table()
 
   bq_table_create(
     partition_table,
@@ -153,8 +143,7 @@ test_that("can create table field description", {
 })
 
 test_that("can patch table with new fields in the schema", {
-  ds <- bq_test_dataset()
-  tb <- bq_table(ds, "table_to_patch")
+  tb <- bq_test_table()
   df <- data.frame(id = 1)
   bq_table_create(tb, fields = df)
 
@@ -171,26 +160,18 @@ test_that("can patch table with new fields in the schema", {
 test_that("can round-trip GEOGRAPHY", {
   skip_if_not_installed("wk")
 
-  ds <- bq_test_dataset()
   df <- tibble(geography = wk::wkt("POINT(30 10)"))
 
-  tb1 <- bq_table_create(
-    bq_table(ds, "geography"),
-    as_bq_fields(df)
-  )
+  tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
   bq_table_upload(tb1, df)
   df1 <- bq_table_download(tb1)
   expect_equal(df1, df)
 })
 
 test_that("can round-trip BYTES", {
-  ds <- bq_test_dataset()
   df <- tibble(x = blob::blob(charToRaw("hi!"), charToRaw("bye")))
 
-  tb1 <- bq_table_create(
-    bq_table(ds, "bytes"),
-    as_bq_fields(df)
-  )
+  tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
   bq_table_upload(tb1, df)
   df1 <- bq_table_download(tb1)
   expect_equal(df1, df)

@@ -61,7 +61,7 @@ bq_test_init <- function(name = "basedata") {
 
   bq_mtcars <- bq_table(basedata, "mtcars")
   if (!bq_table_exists(bq_mtcars)) {
-    bq_table_upload(bq_mtcars, values = datasets::mtcars)
+    job <- bq_table_upload(bq_mtcars, values = datasets::mtcars)
   }
 }
 
@@ -82,6 +82,11 @@ bq_test_dataset <- function(name = random_name(), location = "US") {
   ds
 }
 
+bq_test_table <- function() {
+  ds <- env_cache(the, "test_dataset", bq_test_dataset())
+  bq_table(ds, random_name())
+}
+
 #' @export
 #' @rdname bq_test_project
 bq_testable <- function() {
@@ -91,7 +96,7 @@ bq_testable <- function() {
 #' @export
 #' @rdname bq_test_project
 bq_authable <- function() {
-  bq_has_token() || (interactive() && !is_testing())
+  bq_has_token() || (is_interactive() && !is_testing())
 }
 
 #' @export
@@ -126,6 +131,8 @@ random_name <- function(n = 10) {
 }
 
 is_testing <- function() identical(Sys.getenv("TESTTHAT"), "true")
+
+is_snapshot <- function() identical(Sys.getenv("TESTTHAT_IS_SNAPSHOT"), "true")
 
 skip_if_no_auth <- function() {
   testthat::skip_if_not(bq_has_token(), "Authentication not available")

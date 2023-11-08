@@ -15,17 +15,27 @@
 \alias{dbIsValid,BigQueryConnection-method}
 \alias{dbDisconnect,BigQueryConnection-method}
 \alias{dbSendQuery,BigQueryConnection,character-method}
+\alias{dbExecute,BigQueryConnection,character-method}
 \alias{dbQuoteString,BigQueryConnection,character-method}
 \alias{dbQuoteString,BigQueryConnection,SQL-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,character-method}
 \alias{dbQuoteIdentifier,BigQueryConnection,SQL-method}
+\alias{dbQuoteLiteral,BigQueryConnection,logical-method}
 \alias{dbDataType,BigQueryConnection-method}
 \alias{dbWriteTable,BigQueryConnection,character,data.frame-method}
+\alias{dbWriteTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbAppendTable,BigQueryConnection,character,data.frame-method}
+\alias{dbAppendTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbCreateTable,BigQueryConnection-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
+\alias{dbReadTable,BigQueryConnection,Id-method}
 \alias{dbListTables,BigQueryConnection-method}
 \alias{dbExistsTable,BigQueryConnection,character-method}
+\alias{dbExistsTable,BigQueryConnection,Id-method}
 \alias{dbListFields,BigQueryConnection,character-method}
+\alias{dbListFields,BigQueryConnection,Id-method}
 \alias{dbRemoveTable,BigQueryConnection,character-method}
+\alias{dbRemoveTable,BigQueryConnection,Id-method}
 \alias{dbGetInfo,BigQueryConnection-method}
 \alias{dbBegin,BigQueryConnection-method}
 \alias{dbCommit,BigQueryConnection-method}
@@ -59,7 +69,9 @@
 
 \S4method{dbDisconnect}{BigQueryConnection}(conn, ...)
 
-\S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ...)
+\S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
+
+\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
 
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
@@ -68,6 +80,8 @@
 \S4method{dbQuoteIdentifier}{BigQueryConnection,character}(conn, x, ...)
 
 \S4method{dbQuoteIdentifier}{BigQueryConnection,SQL}(conn, x, ...)
+
+\S4method{dbQuoteLiteral}{BigQueryConnection,logical}(conn, x, ...)
 
 \S4method{dbDataType}{BigQueryConnection}(dbObj, obj, ...)
 
@@ -83,15 +97,43 @@
   row.names = NA
 )
 
+\S4method{dbWriteTable}{BigQueryConnection,Id,data.frame}(
+  conn,
+  name,
+  value,
+  overwrite = FALSE,
+  append = FALSE,
+  ...,
+  field.types = NULL,
+  temporary = FALSE,
+  row.names = NA
+)
+
+\S4method{dbAppendTable}{BigQueryConnection,character,data.frame}(conn, name, value, ..., row.names = NULL)
+
+\S4method{dbAppendTable}{BigQueryConnection,Id,data.frame}(conn, name, value, ..., row.names = NULL)
+
+\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
+
+\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
+
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
+
+\S4method{dbReadTable}{BigQueryConnection,Id}(conn, name, ...)
 
 \S4method{dbListTables}{BigQueryConnection}(conn, ...)
 
 \S4method{dbExistsTable}{BigQueryConnection,character}(conn, name, ...)
 
+\S4method{dbExistsTable}{BigQueryConnection,Id}(conn, name, ...)
+
 \S4method{dbListFields}{BigQueryConnection,character}(conn, name, ...)
 
+\S4method{dbListFields}{BigQueryConnection,Id}(conn, name, ...)
+
 \S4method{dbRemoveTable}{BigQueryConnection,character}(conn, name, ...)
+
+\S4method{dbRemoveTable}{BigQueryConnection,Id}(conn, name, ...)
 
 \S4method{dbGetInfo}{BigQueryConnection}(dbObj, ...)
 
@@ -137,10 +179,19 @@ or a \linkS4class{DBIResult}}
 
 \item{statement}{a character string containing SQL.}
 
+\item{params}{A list of bindings, named or unnamed.}
+
 \item{x}{A character vector to quote as string.}
 
-\item{name}{A character string specifying the unquoted DBMS table name,
-or the result of a call to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
+\item{name}{The table name, passed on to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}. Options are:
+\itemize{
+\item a character string with the unquoted DBMS table name,
+e.g. \code{"table_name"},
+\item a call to \code{\link[DBI:Id]{Id()}} with components to the fully qualified table name,
+e.g. \code{Id(schema = "my_schema", table = "table_name")}
+\item a call to \code{\link[DBI:SQL]{SQL()}} with the quoted and fully qualified table name
+given verbatim, e.g. \code{SQL('"my_schema"."table_name"')}
+}}
 
 \item{value}{a \link{data.frame} (or coercible to data.frame).}
 
@@ -159,14 +210,21 @@ will be whatever the R identifier \code{"row.names"} maps to the DBMS (see
 \code{\link[DBI:make.db.names]{DBI::make.db.names()}}). If \code{NA} will add rows names if
 they are characters, otherwise will ignore.}
 
+\item{fields}{Either a character vector or a data frame.
+
+A named character vector: Names are column names, values are types.
+Names are escaped with \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.
+Field types are unescaped.
+
+A data frame: field types are generated using
+\code{\link[DBI:dbDataType]{dbDataType()}}.}
+
 \item{res}{An object inheriting from \linkS4class{DBIResult}.}
 
 \item{n}{maximum number of records to retrieve per fetch. Use \code{n = -1}
 or \code{n = Inf}
 to retrieve all pending records.  Some implementations may recognize other
 special values.}
-
-\item{params}{A list of bindings, named or unnamed.}
 }
 \description{
 Implementations of pure virtual functions defined in the \code{DBI} package.

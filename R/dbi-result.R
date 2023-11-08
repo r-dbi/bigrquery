@@ -1,22 +1,16 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, ...) {
-  if (is.null(conn@dataset)) {
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      quiet = conn@quiet,
-      ...
-    )
-  } else {
-    ds <- as_bq_dataset(conn)
-    job <- bq_perform_query(sql,
-      billing = conn@billing,
-      default_dataset = ds,
-      quiet = conn@quiet,
-      ...
-    )
-  }
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
+
+  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+  job <- bq_perform_query(sql,
+    billing = conn@billing,
+    default_dataset = ds,
+    quiet = conn@quiet,
+    parameters = params,
+    ...
+  )
 
   bq_job_wait(job, quiet = conn@quiet)
   meta <- bq_job_meta(job, paste0(
@@ -105,8 +99,7 @@ setMethod(
 setMethod(
   "dbFetch", "BigQueryResult",
   function(res, n = -1, ...) {
-    stopifnot(length(n) == 1, is.numeric(n))
-    stopifnot(n == round(n), !is.na(n), n >= -1)
+    check_number_whole(n, min = -1, allow_infinite = TRUE)
 
     if (n == -1 || n == Inf) {
       n <- res@cursor$left()
@@ -116,9 +109,10 @@ setMethod(
       n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
-      bigint = res@bigint
+      bigint = res@bigint,
+      quiet = res@quiet
     )
-    res@cursor$adv(n)
+    res@cursor$adv(nrow(data))
 
     data
   })

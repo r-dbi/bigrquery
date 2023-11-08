@@ -85,7 +85,7 @@ bq_table_download <-
     start_index <- params$start_index
 
     schema_path <- bq_download_schema(x, tempfile())
-    withr::defer(file.remove(schema_path))
+    defer(unlink(schema_path))
 
     if (n_max == 0) {
       table_data <- bq_parse_files(
@@ -104,16 +104,8 @@ bq_table_download <-
       message("Downloading first chunk of data.")
     }
 
-    if (is.null(page_size)) {
-      chunk_size_from_user <- FALSE
-    } else {
-      assert_that(
-        is.numeric(page_size),
-        length(page_size) == 1,
-        page_size > 0
-      )
-      chunk_size_from_user <- TRUE
-    }
+    check_number_whole(page_size, min = 0, allow_null = TRUE)
+    chunk_size_from_user <- !is.null(page_size)
     chunk_size <- page_size
 
     chunk_plan <- bq_download_plan(
@@ -134,7 +126,7 @@ bq_table_download <-
     )
     curl::multi_run(pool = pool)
     path_first_chunk <- chunk_plan$dat$path[1]
-    withr::defer(file.remove(path_first_chunk))
+    defer(unlink(path_first_chunk))
 
     chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
@@ -147,7 +139,7 @@ bq_table_download <-
     }
 
     if (chunk_size_from_user && n_got < chunk_size) {
-      rlang::abort(c(
+      abort(c(
         "First chunk is incomplete:",
         x = glue("{big_mark(chunk_size)} rows were requested, but only \\
                   {big_mark(n_got)} rows were received."),
@@ -198,7 +190,7 @@ bq_table_download <-
       )
     }
     curl::multi_run(pool = pool)
-    withr::defer(file.remove(chunk_plan$dat$path))
+    defer(unlink(chunk_plan$dat$path))
 
     table_data <- bq_parse_files(
       schema_path,
@@ -237,8 +229,8 @@ rapply_int64 <- function(x, f) {
 }
 
 set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
-  assert_that(is.numeric(n_max), length(n_max) == 1, n_max >= 0)
-  assert_that(is.numeric(start_index), length(start_index) == 1, start_index >= 0)
+  check_number_whole(n_max, min = 0, allow_infinite = TRUE)
+  check_number_whole(start_index, min = 0)
 
   n_max <- max(min(n_max, nrow - start_index), 0)
 
@@ -288,8 +280,8 @@ set_chunk_plan <- function(n_max, chunk_size, n_chunks, start_index = 0) {
 
 bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   x <- as_bq_table(x)
-  assert_that(is.numeric(begin), length(begin) == 1)
-  assert_that(is.numeric(max_results), length(max_results) == 1)
+  check_number_whole(begin, min = 0)
+  check_number_whole(max_results, min = 1, allow_infinite = TRUE)
 
   # Pre-format query params with forced non-scientific notation, since the BQ
   # API doesn't accept numbers like 1e5. See issue #395 for details.
@@ -329,7 +321,7 @@ bq_download_callback <- function(path, progress = NULL) {
     )
 
     con <- file(path, open = "wb")
-    withr::defer(close(con))
+    defer(close(con))
     writeBin(result$content, con)
   }
 }

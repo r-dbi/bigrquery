@@ -61,9 +61,13 @@ bq_perform_extract <- function(x,
                                ...,
                                print_header = TRUE,
                                billing = x$project) {
+
   x <- as_bq_table(x)
-  destination_uris <- as.character(destination_uris)
-  assert_that(is.string(billing))
+  destination_uris <- as.character(destination_uris) # for gs_object
+  check_string(destination_format)
+  check_string(compression)
+  check_bool(print_header)
+  check_string(billing)
 
   url <- bq_path(billing, jobs = "")
   body <- list(
@@ -115,10 +119,13 @@ bq_perform_upload <- function(x, values,
                               ) {
 
   x <- as_bq_table(x)
-  assert_that(
-    is.data.frame(values),
-    is.string(billing)
-  )
+  if (!is.data.frame(values)) {
+    cli::cli_abort("{.arg values} must be a data frame.")
+  }
+  fields <- as_bq_fields(fields)
+  check_string(create_disposition)
+  check_string(write_disposition)
+  check_string(billing)
 
   load <- list(
     sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
@@ -128,9 +135,9 @@ bq_perform_upload <- function(x, values,
   )
 
   if (!is.null(fields)) {
-    fields <- as_bq_fields(fields)
     load$schema <- list(fields = as_json(fields))
-  } else if (!bq_table_exists(x)) {
+  }
+  if (!bq_table_exists(x)) {
     load$autodetect <- unbox(TRUE)
   }
 
@@ -155,6 +162,31 @@ bq_perform_upload <- function(x, values,
   as_bq_job(res$jobReference)
 }
 
+# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
+export_json <- function(values) {
+  # Eliminate row names
+  rownames(values) <- NULL
+
+  # Convert times to canonical format
+  is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
+  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+
+  # Convert wk_wkt to text
+  is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
+  values[is_wk] <- lapply(values[is_wk], as.character)
+
+  # Unbox blobs
+  is_blob <- vapply(values, function(x) inherits(x, "blob"), logical(1))
+  values[is_blob] <- lapply(values[is_blob], function(x) {
+    vapply(x, jsonlite::base64_enc, character(1))
+  })
+
+  con <- rawConnection(raw(0), "r+")
+  defer(close(con))
+  jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
+
+  rawToChar(rawConnectionValue(con))
+}
 
 #' @export
 #' @name api-perform
@@ -192,7 +224,11 @@ bq_perform_load <- function(x,
                             ) {
   x <- as_bq_table(x)
   source_uris <- as.character(source_uris)
-  assert_that(is.string(billing))
+  check_string(billing)
+  check_string(source_format)
+  check_number_decimal(nskip, min = 0)
+  check_string(create_disposition)
+  check_string(write_disposition)
 
   load <- list(
     sourceUris = as.list(source_uris),
@@ -255,7 +291,14 @@ bq_perform_query <- function(query, billing,
                              use_legacy_sql = FALSE,
                              priority = "INTERACTIVE"
                              ) {
-  assert_that(is.string(query), is.string(billing))
+
+  check_string(query)
+  check_string(billing)
+
+  check_string(create_disposition)
+  check_string(write_disposition)
+  check_bool(use_legacy_sql)
+  check_string(priority)
 
   query <- list(
     query = unbox(query),
@@ -263,7 +306,7 @@ bq_perform_query <- function(query, billing,
     priority = unbox(priority)
   )
 
-  if (!is.null(parameters)) {
+  if (length(parameters) > 0) {
     parameters <- as_bq_params(parameters)
     query$queryParameters <- as_json(parameters)
   }
@@ -299,7 +342,9 @@ bq_perform_query_dry_run <- function(query, billing,
                                      parameters = NULL,
                                      use_legacy_sql = FALSE) {
 
-  assert_that(is.string(query), is.string(billing))
+  check_string(query)
+  check_string(billing)
+  check_bool(use_legacy_sql)
 
   query <- list(
     query = unbox(query),

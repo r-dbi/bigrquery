@@ -22,22 +22,26 @@ test_that("table equivalent to construction", {
 })
 
 test_that("objects have helpful print methods", {
-  expect_known_output({
-    print(as_bq_job("x.y.US"))
-    print(as_bq_dataset("x.y"))
-    print(as_bq_table("x.y.z"))
-  }, file = test_path("bg-refs-print.txt"))
+  expect_snapshot({
+    as_bq_job("x.y.US")
+    as_bq_dataset("x.y")
+    as_bq_table("x.y.z")
+  })
 })
 
 test_that("string coercion error on invalid number of components", {
-  expect_error(as_bq_table("x"), "must contain 3")
-  expect_error(as_bq_table("a.b.c.d"), "must contain 3")
-  expect_error(as_bq_job("x"), "must contain 3")
-  expect_error(as_bq_dataset("x"), "must contain 2")
+  expect_snapshot(error = TRUE, {
+    as_bq_table("x")
+    as_bq_table("a.b.c.d")
+    as_bq_job("x")
+    as_bq_dataset("x")
+  })
 })
 
 test_that("list coercion errors with bad names", {
-  expect_error(as_bq_table(list()), "must have components")
-  expect_error(as_bq_dataset(list()), "must have components")
-  expect_error(as_bq_job(list()), "must have components")
+  expect_snapshot(error = TRUE, {
+    as_bq_table(list())
+    as_bq_dataset(list())
+    as_bq_job(list())
+  })
 })

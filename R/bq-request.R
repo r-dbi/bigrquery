@@ -1,5 +1,5 @@
-base_url <- "https://www.googleapis.com/bigquery/v2/"
-upload_url <- "https://www.googleapis.com/upload/bigquery/v2/"
+base_url <- "https://bigquery.googleapis.com/bigquery/v2/"
+upload_url <- "https://bigquery.googleapis.com/upload/bigquery/v2/"
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
@@ -12,9 +12,9 @@ prepare_bq_query <- function(query) {
 }
 
 bq_path <- function(project, dataset = NULL, table = NULL, ...) {
-  assert_that(is.null(project) || is.string(project))
-  assert_that(is.null(table) || is.string(table))
-  assert_that(is.null(dataset) || is.string(dataset))
+  check_string(project, allow_null = TRUE)
+  check_string(dataset, allow_null = TRUE)
+  check_string(table, allow_null = TRUE)
 
   components <- c(
     projects = project,
@@ -69,8 +69,8 @@ bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
 bq_get_paginated <- function(url, ..., query = NULL, token = bq_token(),
                              page_size = 50, max_pages = Inf, warn = TRUE) {
 
-  assert_that(is.numeric(max_pages), length(max_pages) == 1)
-  assert_that(is.numeric(page_size), length(page_size) == 1)
+  check_number_whole(max_pages, min = 1, allow_infinite = TRUE)
+  check_number_whole(page_size, min = 1)
 
   if (!is.null(query$fields))
     query$fields <- paste0(query$fields, ",nextPageToken")
@@ -197,7 +197,7 @@ bq_check_response <- function(status, type, content) {
 
 signal_reason <- function(reason, message) {
   if (is.null(reason)) {
-    rlang::abort(message)
+    abort(message)
   } else {
     advice <- NULL
     if (reason == "responseTooLarge") {
@@ -220,7 +220,7 @@ signal_reason <- function(reason, message) {
       i = advice
     )
 
-    rlang::abort(message, class = paste0("bigrquery_", reason))
+    abort(message, class = paste0("bigrquery_", reason))
   }
 }
 

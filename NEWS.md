@@ -1,6 +1,75 @@
 # bigrquery (development version)
 
-brio is new in Imports, replacing the use of the Suggested package readr, in `bq_table_download()` (@AdeelK93, #462).
+* `grepl(pattern, x)` is now correctly translated to 
+  `REGEXP_CONTAINS(x, pattern)` (#416).
+
+* `median()` gets a translation that works in `summarise()` and a clear
+  error if you use it in `mutate()` (#419).
+
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
+
+* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
+  try to fetch more rows than actually exist (#501).
+
+* Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
+  and `dbExecute` (#502).
+
+* `dbWriteTable()` now correct uses the `billing` value set in the 
+  connection (#486).
+
+* `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
+  and `dbListFields()` now all work with `DBI::Id()` (#537).
+
+* `dbFetch()` now respects the `quiet` setting from the connection (#463).
+
+* Added a translation for `runif(n())`. This fixes the translation for
+  `slice_sample()` (@mgirlich, #448).
+
+* Add a `dbQuoteLiteral()` method for logicals to revert breaking change 
+  introduced by DBI 1.1.2 (@meztez, #478).
+
+* bigrquery is now MIT licensed (#453).
+
+* Deprecated functions (i.e. those not starting with `bq_`) have been
+  removed (#551). These have been superseded for a long time and were formally 
+  deprecated in bigrquery 1.3.0 (2020).
+
+* Now uses 2nd edition of dbplyr interface (#508).
+
+* Compatible with dbplyr 2.4.0 (#550).
+
+* `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
+  "URL using bad/illegal format or missing URL" error).
+
+* Align Google APIs URLs to Google Cloud Discovery docs. This enables support 
+  for Private and Restricted Google APIs configurations (@husseyd, #541)
+
+# bigrquery 1.4.2
+
+* Sync up with the current release of gargle (1.4.0). Recently gargle
+  introduced some changes around OAuth and bigrquery is syncing with up that:
+
+  - `bq_oauth_client()` is a new function to replace the now-deprecated
+    `bq_oauth_app()`.
+  -  The new `client` argument of `bq_auth_configure()` replaces the
+     now-deprecated `client` argument.
+  -  The documentation of `bq_auth_configure()` emphasizes that the preferred
+     way to "bring your own OAuth client" is by providing the JSON downloaded
+     from Google Developers Console.
+
+* `op_table.lazy_select_query()` now returns a string instead of a list, which
+  fixes an error seen when printing or using functions like `head()` or
+  `dplyr::glimpse()` (@clente, #509).
+
+# bigrquery 1.4.1
+
+* Fix for `R CMD check` in R-devel (#511)
+
+* bigrquery is now compatible with dbplyr 2.2.0 (@mgirlich, #495).
+
+* brio is new in Imports, replacing the use of the Suggested package readr, 
+  in `bq_table_download()` (@AdeelK93, #462).
 
 # bigrquery 1.4.0
 

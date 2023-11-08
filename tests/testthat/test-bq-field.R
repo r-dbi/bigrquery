@@ -24,12 +24,18 @@ test_that("recursive printing of subfields", {
   z2 <- bq_field("z2", "record", fields = list(z1))
   z3 <- bq_field("z3", "record", fields = list(z2))
 
-  expect_known_output({
-    cat_line("Field:")
+  expect_snapshot({
     print(z3)
 
-    cat_line()
-    cat_line("Fields: ")
     print(z3$fields)
-  }, "bq-field-print.txt")
+  })
+})
+
+test_that("tests its inputs", {
+  expect_snapshot(error = TRUE, {
+    bq_field(1)
+    bq_field("x", 1)
+    bq_field("x", "y", mode = 1)
+    bq_field("x", "y", description = 1)
+  })
 })
