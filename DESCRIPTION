@@ -34,7 +34,7 @@ Imports:
     prettyunits,
     progress,
     Rcpp,
-    rlang (>= 0.4.9),
+    rlang (>= 1.1.0),
     tibble
 Suggests: 
     blob,
@@ -82,6 +82,8 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
+    'import-standalone-obj-type.R'
     'import-standalone-s3-register.R'
+    'import-standalone-types-check.R'
     'utils.R'
     'zzz.R'
