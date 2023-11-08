@@ -28,9 +28,7 @@
 #'   arrange(desc(n))
 #' }
 src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
-  if (!requireNamespace("dplyr", quietly = TRUE)) {
-    stop("dplyr is required to use src_bigquery", call. = FALSE)
-  }
+  check_installed("dbplyr")
 
   con <- DBI::dbConnect(
     bigquery(),
@@ -44,27 +42,26 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 }
 
 # registered onLoad
-db_query_fields.BigQueryConnection <- function(con, sql) {
-  if (dbplyr::is.sql(sql)) {
-    ds <- bq_dataset(con@project, con@dataset)
-    fields <- bq_query_fields(sql, con@billing, default_dataset = ds)
-  } else {
-    tb <- as_bq_table(con, sql)
-    fields <- bq_table_fields(tb)
-  }
-
-  vapply(fields, "[[", "name", FUN.VALUE = character(1))
-}
+dbplyr_edition.BigQueryConnection <- function(con) 2L
 
 # registered onLoad
-db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, ...) {
+db_compute.BigQueryConnection <- function(con,
+                                          table,
+                                          sql,
+                                          ...,
+                                          overwrite = FALSE,
+                                          temporary = TRUE,
+                                          unique_indexes = list(),
+                                          indexes = list(),
+                                          analyze = TRUE,
+                                          in_transaction = FALSE) {
 
   if (is.null(con@dataset)) {
-    destination_table <- if (!temporary) as_bq_table(con, name)
+    destination_table <- if (!temporary) as_bq_table(con, table)
     tb <- bq_project_query(con@project, sql, destination_table = destination_table)
   } else {
     ds <- bq_dataset(con@project, con@dataset)
-    destination_table <- if (!temporary) as_bq_table(con, name)
+    destination_table <- if (!temporary) as_bq_table(con, table)
 
     tb <- bq_dataset_query(ds,
       query = sql,
@@ -73,24 +70,28 @@ db_save_query.BigQueryConnection <- function(con, sql, name, temporary = TRUE, .
   }
 
   paste0(tb$project, ".", tb$dataset, ".", tb$table)
+
+  table
 }
 
 # registered onLoad
-db_analyze.BigQueryConnection <- function(con, table, ...) {
-  TRUE
-}
-
-# registered onLoad
-db_copy_to.BigQueryConnection <- function(con, table, values,
-                            overwrite = FALSE, types = NULL, temporary = TRUE,
-                            unique_indexes = NULL, indexes = NULL,
-                            analyze = TRUE, ...) {
+db_copy_to.BigQueryConnection <- function(con,
+                                          table,
+                                          values,
+                                          ...,
+                                          overwrite = FALSE,
+                                          types = NULL,
+                                          temporary = TRUE,
+                                          unique_indexes = NULL,
+                                          indexes = NULL,
+                                          analyze = TRUE,
+                                          in_transaction = TRUE) {
 
   if (temporary) {
-    rlang::abort("BigQuery does not support temporary tables")
+    abort("BigQuery does not support temporary tables")
   }
 
-  tb <- bq_table(con@project, con@dataset, table)
+  tb <- as_bq_table(con, table)
   write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
   bq_table_upload(tb, values, fields = types, write_disposition = write)
 
@@ -101,34 +102,39 @@ db_copy_to.BigQueryConnection <- function(con, table, values,
 
 # registered onLoad
 collect.tbl_BigQueryConnection <- function(x, ...,
-                                           page_size = 1e4,
+                                           page_size = NULL,
                                            max_connections = 6L,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
+
   assert_that(length(n) == 1, n > 0L)
+  con <- dbplyr::remote_con(x)
 
-  if (op_can_download(x$ops)) {
-    name <- op_table(x$ops, x$src$con)
-    tb <- as_bq_table(x$src$con, name)
-    n <- min(op_rows(x$ops), n)
+  if (op_can_download(x)) {
+    lq <- x$lazy_query
+    name <- op_table(x, con)
+    tb <- as_bq_table(con, name)
+    n <- min(op_rows(x$lazy_query), n)
   } else {
-    sql <- dbplyr::db_sql_render(x$src$con, x)
+    sql <- dbplyr::db_sql_render(con, x)
 
-    billing <- x$src$con@billing
-    if (is.null(x$src$con@dataset)) {
-      tb <- bq_project_query(billing, sql, quiet = x$src$con@quiet, ...)
+    billing <- con@billing
+    if (is.null(con@dataset)) {
+      tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
     } else {
-      ds <- as_bq_dataset(x$src$con)
-      tb <- bq_dataset_query(ds, sql, quiet = x$src$con@quiet, billing = billing, ...)
+      ds <- as_bq_dataset(con)
+      tb <- bq_dataset_query(ds, sql, quiet = con@quiet, billing = billing, ...)
     }
   }
 
-  quiet <- if (n < 100) TRUE else x$src$con@quiet
+  quiet <- if (n < 100) TRUE else con@quiet
+  bigint <- con@bigint %||% "integer"
   out <- bq_table_download(tb,
-    max_results = n,
+    n_max = n,
     page_size = page_size,
     quiet = quiet,
-    max_connections = max_connections
+    max_connections = max_connections,
+    bigint = bigint
   )
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
@@ -137,24 +143,61 @@ collect.tbl_BigQueryConnection <- function(x, ...,
 
 op_can_download <- function(x) UseMethod("op_can_download")
 #' @export
-op_can_download.op <- function(x) FALSE
+op_can_download.tbl_lazy <- function(x) op_can_download(x$lazy_query)
 #' @export
-op_can_download.op_head <- function(x) op_can_download(x$x)
+op_can_download.lazy_query <- function(x) FALSE
 #' @export
-op_can_download.op_base_remote <- function(x) dbplyr::is.ident(x$x)
+op_can_download.lazy_select_query <- function(x) {
+  query_is_head_only(x)
+}
+#' @export
+op_can_download.lazy_base_query <- function(x) {
+  dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+}
+
+query_is_head_only <- function(x) {
+  if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
+  if (inherits(x$x$x, "sql")) return(FALSE)
+
+  vars_base <- dbplyr::op_vars(x$x)
+  if (!is_select_trivial(x$select, vars_base)) return(FALSE)
+
+  if (!is_empty(x$where)) return(FALSE)
+  if (!is_empty(x$order_by)) return(FALSE)
+  if (!is_false(x$distinct)) return(FALSE)
+
+  TRUE
+}
+
+is_select_trivial <- function(select, vars_prev) {
+  identical(select$name, vars_prev) &&
+    all(vapply(select$expr, is_symbol, logical(1))) &&
+    identical(syms(select$name), select$expr)
+}
+
 
 op_rows <- function(x) UseMethod("op_rows")
 #' @export
-op_rows.op_base <- function(x) Inf
+op_rows.tbl_lazy <- function(x) op_rows(x$lazy_query)
 #' @export
-op_rows.op_head <- function(x) min(x$args$n, op_rows(x$x))
+op_rows.lazy_base_query <- function(x) Inf
+#' @export
+op_rows.lazy_select_query <- function(x) {
+  min(x$limit, op_rows(x$x))
+}
 
 op_table <- function(x, con) UseMethod("op_table")
 #' @export
-op_table.op <- function(x, con) op_table(x$x, con)
+op_table.tbl_lazy <- function(x, con) op_table(x$lazy_query, con)
 #' @export
-op_table.op_base_remote <- function(x, con) {
-  x$x
+op_table.lazy_query <- function(x, con) NULL
+#' @export
+op_table.lazy_base_remote_query <- function(x, con) x$x
+#' @export
+op_table.lazy_select_query <- function(x, con) {
+  if (!query_is_head_only(x)) return(NULL)
+
+  op_table(x$x)
 }
 
 # SQL translation -------------------------------------------------------------
@@ -170,7 +213,7 @@ sql_join_suffix.BigQueryConnection <- function(con, ...) {
 }
 
 # registered onLoad
-sql_translate_env.BigQueryConnection <- function(x) {
+sql_translation.BigQueryConnection <- function(x) {
   dbplyr::sql_variant(
     dbplyr::sql_translator(.parent = dbplyr::base_scalar,
 
@@ -211,8 +254,10 @@ sql_translate_env.BigQueryConnection <- function(x) {
       pmax = sql_prefix("GREATEST"),
       pmin = sql_prefix("LEAST"),
 
-      # Median
-      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
+      runif = function(n = n(), min = 0, max = 1) {
+        RAND <- NULL # quiet R CMD check
+        dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
+      },
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
       n = function() dplyr::sql("count(*)"),
@@ -223,7 +268,12 @@ sql_translate_env.BigQueryConnection <- function(x) {
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       cor = dbplyr::sql_aggregate_2("CORR"),
-      cov = dbplyr::sql_aggregate_2("COVAR_SAMP")
+      cov = dbplyr::sql_aggregate_2("COVAR_SAMP"),
+
+      # Median
+      median = function(x, na.rm = TRUE) {
+        dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
+      }
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_win,
       all = dbplyr::win_absent("LOGICAL_AND"),
@@ -234,7 +284,9 @@ sql_translate_env.BigQueryConnection <- function(x) {
       cor = dbplyr::win_absent("CORR"),
       cov = dbplyr::win_absent("COVAR_SAMP"),
 
-      n_distinct = dbplyr::win_absent("n_distinct")
+      n_distinct = dbplyr::win_absent("n_distinct"),
+
+      median = dbplyr::win_absent("median")
     )
   )
 }

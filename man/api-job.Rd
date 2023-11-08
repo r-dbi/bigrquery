@@ -31,7 +31,7 @@ if \code{NA} displays progress bar only for long-running jobs.}
 To perform a job, see \link{api-perform}. These functions all retrieve metadata
 (in various forms) about an existing job.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}{get}

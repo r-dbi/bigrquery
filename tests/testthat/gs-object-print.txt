@@ -1,1 +1,0 @@
-<gs_object> gs://xxx/yyy

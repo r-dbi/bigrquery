@@ -79,18 +79,17 @@ can be specified. Also, the '*' wildcard character is not allowed.}
 \item \code{bq_table_copy()}, \code{bq_table_create()}, \code{bq_table_delete()}, \code{bq_table_upload()}:
 an invisible \link{bq_table}
 \item \code{bq_table_exists()}: either \code{TRUE} or \code{FALSE}.
-\item \code{bq_table_download()}: a data frame
 \item \code{bq_table_size()}: the size of the table in bytes
 \item \code{bq_table_fields()}: a \link{bq_fields}.
 }
 }
 \description{
 Basic create-read-update-delete verbs for tables, as well as functions
-for uploading and downloading data in to/from memory (\code{bq_table_upload()},
-(\code{bq_table_download()})), and saving to/loading from Google CloudStorage
-(\code{bq_table_load()}, \code{bq_table_save()}).
+uploading data (\code{bq_table_upload()}), saving to/loading from Google
+Cloud Storage (\code{bq_table_load()}, \code{bq_table_save()}), and getting
+various values from the metadata.
 }
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
@@ -103,18 +102,19 @@ for uploading and downloading data in to/from memory (\code{bq_table_upload()},
 if (bq_testable()) {
 ds <- bq_test_dataset()
 
-bq_mtcars <- bq_table_create(
-  ds,
-  "mtcars",
+bq_mtcars <- bq_table(ds, "mtcars")
+bq_table_exists(bq_mtcars)
+
+bq_table_create(
+  bq_mtcars,
+  fields = mtcars,
   friendly_name = "Motor Trend Car Road Tests",
   description = "The data was extracted from the 1974 Motor Trend US magazine",
   labels = list(category = "example")
 )
-bq_mtcars <- bq_table(ds, "mtcars")
 bq_table_exists(bq_mtcars)
 
 bq_table_upload(bq_mtcars, mtcars)
-bq_table_exists(bq_mtcars)
 
 bq_table_fields(bq_mtcars)
 bq_table_size(bq_mtcars)

@@ -11,7 +11,7 @@
 #' * `bq_perform_load()`:    [bq_table_load()].
 #' * `bq_perform_extract()`: [bq_table_save()].
 #'
-#' @section API documentation:
+#' @section Google BigQuery API documentation:
 #' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 #'
 #' Additional information at:
@@ -155,6 +155,31 @@ bq_perform_upload <- function(x, values,
   as_bq_job(res$jobReference)
 }
 
+# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
+export_json <- function(values) {
+  # Eliminate row names
+  rownames(values) <- NULL
+
+  # Convert times to canonical format
+  is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
+  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+
+  # Convert wk_wkt to text
+  is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
+  values[is_wk] <- lapply(values[is_wk], as.character)
+
+  # Unbox blobs
+  is_blob <- vapply(values, function(x) inherits(x, "blob"), logical(1))
+  values[is_blob] <- lapply(values[is_blob], function(x) {
+    vapply(x, jsonlite::base64_enc, character(1))
+  })
+
+  con <- rawConnection(raw(0), "r+")
+  defer(close(con))
+  jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
+
+  rawToChar(rawConnectionValue(con))
+}
 
 #' @export
 #' @name api-perform
@@ -263,7 +288,7 @@ bq_perform_query <- function(query, billing,
     priority = unbox(priority)
   )
 
-  if (!is.null(parameters)) {
+  if (length(parameters) > 0) {
     parameters <- as_bq_params(parameters)
     query$queryParameters <- as_json(parameters)
   }
@@ -354,4 +379,3 @@ bq_perform_copy <- function(src, dest,
   )
   as_bq_job(res$jobReference)
 }
-

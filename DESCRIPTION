@@ -1,59 +1,66 @@
 Package: bigrquery
 Title: An Interface to Google's 'BigQuery' 'API'
-Version: 1.3.2.9000
+Version: 1.4.2.9000
 Authors@R: c(
-    person("Hadley", "Wickham", , "hadley@rstudio.com", c("aut", "cre"),
-      comment = c(ORCID = "0000-0003-4757-117X")),
-    person("Jennifer", "Bryan", , "jenny@rstudio.com", "aut",
-      comment = c(ORCID = "0000-0002-6983-2759")),
-    person("Kungliga Tekniska Högskolan", role = "ctb", comment = "strptime implementation"),
-    person("The NetBSD Foundation, Inc.", role = "ctb", comment = "gmtime implementation"),
-    person("RStudio", role = c("cph", "fnd"))
-    )
+    person("Hadley", "Wickham", , "hadley@posit.co", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-4757-117X")),
+    person("Jennifer", "Bryan", , "jenny@posit.co", role = "aut",
+           comment = c(ORCID = "0000-0002-6983-2759")),
+    person("Kungliga Tekniska Högskolan", role = "ctb",
+           comment = "strptime implementation"),
+    person("The NetBSD Foundation, Inc.", role = "ctb",
+           comment = "gmtime implementation"),
+    person("Posit Software, PBC", role = c("cph", "fnd"))
+  )
 Description: Easily talk to Google's 'BigQuery' database from R.
-License: GPL-3
-URL: https://github.com/r-dbi/bigrquery
+License: MIT + file LICENSE
+URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
-    R (>= 3.2)
+    R (>= 3.6)
 Imports: 
     assertthat,
     bit64,
+    brio,
+    cli,
     curl,
     DBI,
-    gargle (>= 0.5.0),
+    gargle (>= 1.4.0),
     glue (>= 1.3.0),
     httr,
     jsonlite,
+    lifecycle,
     methods,
     prettyunits,
     progress,
     Rcpp,
-    rlang,
+    rlang (>= 0.4.9),
     tibble
 Suggests: 
-    covr,
-    DBItest,
-    dbplyr (>= 1.3.0),
-    dplyr (>= 0.7.0),
     blob,
+    covr,
+    dbplyr (>= 2.4.0),
+    dplyr (>= 1.1.0),
     hms,
-    wk (>= 0.3.2),
     readr,
     sodium,
-    testthat (>= 2.1.0),
+    testthat (>= 3.1.5),
+    wk (>= 0.3.2),
     withr
 LinkingTo: 
     progress,
     rapidjsonr,
     Rcpp
+Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: TRUE
+Config/testthat/start-first: bq-table, dplyr
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Collate: 
     'RcppExports.R'
-    'bigrquery.R'
+    'bigrquery-package.R'
     'bq-auth.R'
     'bq-dataset.R'
     'bq-download.R'
@@ -75,17 +82,6 @@ Collate:
     'dbi-result.R'
     'dplyr.R'
     'gs-object.R'
-    'old-auth.R'
-    'old-dataset.R'
-    'old-id.R'
-    'old-job-extract.R'
-    'old-job-query.R'
-    'old-job-upload.R'
-    'old-job.R'
-    'old-project.R'
-    'old-projects.R'
-    'old-query.R'
-    'old-table.R'
-    'old-tabledata.R'
+    'import-standalone-s3-register.R'
     'utils.R'
     'zzz.R'

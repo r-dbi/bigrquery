@@ -476,7 +476,7 @@ SEXP bq_parse_files(std::string schema_path,
   RProgress::RProgress pb("Parsing [:bar] ETA: :eta");
   pb.set_total(file_paths.size());
 
-  int offset = 0;
+  int total_seen = 0;
   char readBuffer[100 * 1024];
 
   for ( ; it != it_end; ++it) {
@@ -490,7 +490,7 @@ SEXP bq_parse_files(std::string schema_path,
       fclose(values_file);
     }
 
-    offset += bq_fields_set(values_doc, out, fields, offset);
+    total_seen += bq_fields_set(values_doc, out, fields, total_seen);
     if (!quiet) {
       pb.tick();
     } else {
@@ -498,6 +498,11 @@ SEXP bq_parse_files(std::string schema_path,
     };
 
     fclose(values_file);
+  }
+
+  if (total_seen != n) {
+    // Matches the error thrown from R if the first "test balloon" chunk is short.
+    Rcpp::stop("%d rows were requested, but only %d rows were received.\n  Leave `page_size` unspecified or use an even smaller value.", n, total_seen);
   }
 
   return out;

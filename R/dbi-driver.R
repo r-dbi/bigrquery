@@ -22,7 +22,7 @@ NULL
 #' )
 #' con
 #' DBI::dbListTables(con)
-#' DBI::dbReadTable(con, "natality", max_results =10)
+#' DBI::dbReadTable(con, "natality", n_max = 10)
 #'
 #' # Create a temporary dataset to explore
 #' ds <- bq_test_dataset()
@@ -72,7 +72,7 @@ setClass("BigQueryDriver", contains = "DBIDriver")
 #'   The default is `"integer"` which returns R's `integer` type but results in `NA` for
 #'   values above/below +/- 2147483647. `"integer64"` returns a [bit64::integer64],
 #'   which allows the full range of 64 bit integers.
-#' @param ... Other arguments for compatbility with generic; currently ignored.
+#' @param ... Other arguments for compatibility with generic; currently ignored.
 #' @export
 setMethod(
   "dbConnect", "BigQueryDriver",

@@ -6,42 +6,52 @@
 \usage{
 bq_table_download(
   x,
-  max_results = Inf,
-  page_size = 10000,
+  n_max = Inf,
+  page_size = NULL,
   start_index = 0L,
   max_connections = 6L,
   quiet = NA,
-  bigint = c("integer", "integer64", "numeric", "character")
+  bigint = c("integer", "integer64", "numeric", "character"),
+  max_results = deprecated()
 )
 }
 \arguments{
 \item{x}{A \link{bq_table}}
 
-\item{max_results}{Maximum number of results to retrieve. Use \code{Inf}
-retrieve all rows.}
+\item{n_max}{Maximum number of results to retrieve. Use \code{Inf} to retrieve all
+rows.}
 
-\item{page_size}{The number of rows returned per page. Make this smaller
-if you have many fields or large records and you are seeing a
-'responseTooLarge' error.}
+\item{page_size}{The number of rows requested per chunk. It is recommended to
+leave this unspecified until you have evidence that the \code{page_size}
+selected automatically by \code{bq_table_download()} is problematic.
+
+When \code{page_size = NULL} bigrquery determines a conservative, natural chunk
+size empirically. If you specify the \code{page_size}, it is important that each
+chunk fits on one page, i.e. that the requested row limit is low enough to
+prevent the API from paginating based on response size.}
 
 \item{start_index}{Starting row index (zero-based).}
 
-\item{max_connections}{Number of maximum simultaneously connections to
+\item{max_connections}{Number of maximum simultaneous connections to
 BigQuery servers.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} displays progress bar only for long-running jobs.}
 
-\item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
-The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
-values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
-which allows the full range of 64 bit integers.}
+\item{bigint}{The R type that BigQuery's 64-bit integer types should be
+mapped to. The default is \code{"integer"}, which returns R's \code{integer} type,
+but results in \code{NA} for values above/below +/- 2147483647. \code{"integer64"}
+returns a \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
+integers.}
+
+\item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
+\code{n_max} instead.}
 }
 \value{
-Because data retrieval may generalise list-cols and the data frame
-print method can have problems with list-cols, this method returns
-tibbles. If you need a data frame, coerce the results with
-\code{as.data.frame()}.
+Because data retrieval may generate list-columns and the \code{data.frame}
+print method can have problems with list-columns, this method returns
+a tibble. If you need a \code{data.frame}, coerce the results with
+\code{\link[=as.data.frame]{as.data.frame()}}.
 }
 \description{
 This retrieves rows in chunks of \code{page_size}. It is most suitable for results
@@ -54,9 +64,9 @@ bq command line tool to download locally.
 bigrquery will retrieve nested and repeated columns in to list-columns
 as follows:
 \itemize{
-\item Repeated values (arrays) will become a list-cols of vectors.
-\item Records will become list-cols of named lists.
-\item Repeated records will become list-cols of data frames.
+\item Repeated values (arrays) will become a list-column of vectors.
+\item Records will become list-columns of named lists.
+\item Repeated records will become list-columns of data frames.
 }
 }
 
@@ -65,8 +75,8 @@ as follows:
 In my timings, this code takes around 1 minute per 100 MB of data.
 If you need to download considerably more than this, I recommend:
 \itemize{
-\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}
-\item Use the \code{gsutil} command line utility to download it
+\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}.
+\item Use the \code{gsutil} command line utility to download it.
 \item Read the csv file into R with \code{readr::read_csv()} or \code{data.table::fread()}.
 }
 
@@ -75,7 +85,7 @@ the formats that BigQuery supports (arvn and ndjson) that allow for
 nested/repeated values, are not well supported in R.
 }
 
-\section{API documentation}{
+\section{Google BigQuery API documentation}{
 
 \itemize{
 \item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}{list}
@@ -84,6 +94,6 @@ nested/repeated values, are not well supported in R.
 
 \examples{
 if (bq_testable()) {
-df <- bq_table_download("publicdata.samples.natality", max_results = 35000)
+  df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
 }
 }

@@ -35,7 +35,7 @@ test_that("can parse date/times", {
     dt
   )
   expect_identical(
-    bq_parse_single(as.character(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
+    bq_parse_single(format(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
     dt
   )
 
@@ -89,7 +89,7 @@ test_that("can parse structs of simple values", {
   )
 
   x <- f(v("1"), v("a"))
-  out <- bq_parse_single(x, "record", field = fields)
+  out <- bq_parse_single(x, "record", fields = fields)
 
   expect_equal(out, list(list(x = bit64::as.integer64(1L), y = "a")))
 })
@@ -101,7 +101,7 @@ test_that("can parse structs of arrays", {
   )
 
   x <- f(v(vs("1", "2", "3")), v(vs("a", "b")))
-  out <- bq_parse_single(x, "record", field = fields)
+  out <- bq_parse_single(x, "record", fields = fields)
 
   expect_equal(out, list(list(x = bit64::as.integer64(1:3), y = c("a", "b"))))
 })
@@ -114,7 +114,7 @@ test_that("can parse arrays of structs", {
   )
 
   x <- vs(list(f = vs("1", "a")), list(f = vs("2", "b")))
-  out <- bq_parse_single(x, "record", mode = "repeated", field = fields)
+  out <- bq_parse_single(x, "record", mode = "repeated", fields = fields)
 
   expect_equal(out, list(tibble(x = bit64::as.integer64(1:2), y = c("a", "b"))))
 })
