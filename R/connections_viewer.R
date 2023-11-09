@@ -62,12 +62,19 @@ on_connection_opened <- function(con, code) {
 
     listObjectTypes = function() {
       list(
-        catalog = list(
+        project = list(
           contains = list(
-            database = list(
+            dataset = list(
+              icon = system.file("icons/dataset.svg", package = "bigrquery"),
               contains = list(
-                table = list(contains = "data"),
-                view = list(contains = "data")
+                table = list(
+                  icon = system.file("icons/table.svg", package = "bigrquery"),
+                  contains = "data"
+                ),
+                view = list(
+                  icon = system.file("icons/view.svg", package = "bigrquery"),
+                  contains = "data"
+                )
               )
             )
           )
@@ -81,8 +88,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # column enumeration code
-    listColumns = function(catalog = NULL, database = NULL, table = NULL, view = NULL, ...) {
-      x <- bq_table(catalog, database, paste0(table, view))
+    listColumns = function(project = NULL, dataset = NULL, table = NULL, view = NULL, ...) {
+      x <- bq_table(project, dataset, paste0(table, view))
       fields <- bq_table_fields(x)
       data.frame(
         name = vapply(fields, `[[`, character(1), "name"),
@@ -92,8 +99,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # table preview code
-    previewObject = function(rowLimit, catalog = NULL, database = NULL, table = NULL, view = NULL, ...) {
-      x <- bq_table(catalog, database, paste0(table, view))
+    previewObject = function(rowLimit, project = NULL, dataset = NULL, table = NULL, view = NULL, ...) {
+      x <- bq_table(project, dataset, paste0(table, view))
       bq_table_download(x, max_results = rowLimit)
     },
 
@@ -105,21 +112,21 @@ on_connection_opened <- function(con, code) {
   )
 }
 
-list_bigquery_objects <- function(con, catalog = NULL, database = NULL, ...) {
-  if (is.null(catalog)) {
-    tibble::tibble(type = "catalog", name = con@project)
-  } else if (is.null(database)) {
+list_bigquery_objects <- function(con, project = NULL, dataset = NULL, ...) {
+  if (is.null(project)) {
+    tibble::tibble(type = "project", name = con@project)
+  } else if (is.null(dataset)) {
     # Catching VPC/Permission errors to crash gracefully
     bq_datasets <- tryCatch(
-      bq_project_datasets(catalog, warn = FALSE),
+      bq_project_datasets(project, warn = FALSE),
       error = function(e) list()
     )
     datasets <- map_chr(bq_datasets, `[[`, "dataset")
 
-    tibble::tibble(type = "database", name = datasets)
+    tibble::tibble(type = "dataset", name = datasets)
   } else {
     # Catching VPC/Permission errors to crash gracefully
-    ds <- bq_dataset(catalog, database)
+    ds <- bq_dataset(project, dataset)
     bq_tables <- tryCatch(bq_dataset_tables(ds), error = function(e) list())
     tables <- map_chr(bq_tables, `[[`, "table")
     types <- map_chr(bq_tables, `[[`, "type")
