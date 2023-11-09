@@ -72,9 +72,15 @@ bq_job_show_statistics <- function(x) {
 #' @param pause amount of time to wait between status requests
 #' @export
 #' @name api-job
-bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
+bq_job_wait <- function(x,
+                        quiet = getOption("bigrquery.quiet"),
+                        pause = 0.5,
+                        call = caller_env()) {
   x <- as_bq_job(x)
+  check_bool(quiet, allow_na = TRUE)
+  check_number_decimal(pause)
 
+  quiet <- bq_quiet(quiet)
   progress <- bq_progress(
     paste0("Running job '", x, "' [:spin] :elapsed"),
     total = 1e7,
@@ -104,17 +110,13 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
       errors <- errors[-1]
     }
 
-    bullets <- vapply(errors,
-      function(x) paste0(x$message, " [", x$reason, "]"),
-      character(1)
-    )
-    names(bullets) <- rep("x", length(bullets))
-
-    abort(c(paste0("Job '", if (!isTRUE(quiet)) x, "' failed"), bullets))
+    bullets <- map_chr(errors, function(x) paste0(x$message, " [", x$reason, "]"))
+    bullets <- set_names(bullets, "x")
+    cli::cli_abort(c("Job {x} failed", bullets), call = call)
   }
 
-  if (isFALSE(quiet) || (is.na(quiet) && is_interactive())) {
-    message("Complete")
+  if (!quiet) {
+    cli::cli_inform("Job complete")
     bq_job_show_statistics(x)
   }
 

@@ -4,23 +4,24 @@ test_that("can control chattiness of bq_job_wait", {
   expect_snapshot({
     bq_job_wait(job, quiet = TRUE)
     bq_job_wait(job, quiet = FALSE)
-    bq_job_wait(job, quiet = NA)
   })
 })
 
 test_that("informative errors on failure", {
   ds <- bq_test_dataset()
+
   tb <- bq_test_table()
+  bq_table_create(tb, fields = list(bq_field("x", "integer"), bq_field("y", "string")))
 
-  fields <- bq_fields(list(bq_field("x", "integer"), bq_field("y", "string")))
-  bq_mtcars <- bq_table_create(tb, fields = fields)
+  expect_snapshot(
+    {
+      "One error"
+      bq_dataset_query(ds, "SELECT 1 +")
 
-  # TODO update the `Multiple errors` test case
-  expect_snapshot(error = TRUE, {
-    "One error"
-    bq_dataset_query(ds, "SELECT 1 +", quiet = TRUE)
-
-    "Multiple erros"
-    bq_table_upload(tb, data.frame(x = 1, y = 1:5), quiet = TRUE)
-  })
+      "Multiple errors"
+      bq_table_upload(tb, data.frame(x = "x", y = 1:5))
+    },
+    error = TRUE,
+    transform = function(x) gsub("Job (.*?) failed", "Job <bq_job> failed", x)
+  )
 })
