@@ -14,6 +14,27 @@
       <BigQueryConnection>
         Billing: p
 
+# dbQuoteIdentifier validates inputs
+
+    Code
+      DBI::dbQuoteIdentifier(con, c("x", NA))
+    Condition
+      Error in `DBI::dbQuoteIdentifier()`:
+      ! `x` must not contain missing values.
+
+# dbWriteTable errors on unsupported arguments
+
+    Code
+      DBI::dbWriteTable(con, "x", df, field.types = list())
+    Condition
+      Error in `DBI::dbWriteTable()`:
+      ! `field.types` not supported by bigrquery.
+    Code
+      DBI::dbWriteTable(con, "x", df, temporary = TRUE)
+    Condition
+      Error in `DBI::dbWriteTable()`:
+      ! `temporary = FALSE` not supported by bigrquery.
+
 # dataset is optional
 
     Code

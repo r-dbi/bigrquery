@@ -307,15 +307,16 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   h
 }
 
-bq_download_callback <- function(path, progress = NULL) {
+bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   force(path)
   function(result) {
     if (!is.null(progress)) progress$tick()
 
     bq_check_response(
-      result$status_code,
-      curl::parse_headers_list(result$headers)[["content-type"]],
-      result$content
+      status = result$status_code,
+      type = curl::parse_headers_list(result$headers)[["content-type"]],
+      content = result$content,
+      call = call
     )
 
     con <- file(path, open = "wb")

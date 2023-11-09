@@ -146,6 +146,6 @@ data_type <- function(x) {
     logical = "BOOLEAN",
     double = "FLOAT",
     integer = "INTEGER",
-    stop("Unsupported type: ", typeof(x), call. = FALSE)
+    cli::cli_abort("Unsupported type {.str {typeof(x)}}.")
   )
 }

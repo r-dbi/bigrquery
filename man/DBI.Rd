@@ -89,9 +89,9 @@
   conn,
   name,
   value,
+  ...,
   overwrite = FALSE,
   append = FALSE,
-  ...,
   field.types = NULL,
   temporary = FALSE,
   row.names = NA
@@ -101,9 +101,9 @@
   conn,
   name,
   value,
+  ...,
   overwrite = FALSE,
   append = FALSE,
-  ...,
   field.types = NULL,
   temporary = FALSE,
   row.names = NA

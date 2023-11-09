@@ -132,7 +132,7 @@ setMethod(
     }
 
     if (any(is.na(x))) {
-      stop("Identifiers must not be missing", call. = FALSE)
+      cli::cli_abort("{.arg x} must not contain missing values.")
     }
 
     if (conn@use_legacy_sql) {
@@ -177,9 +177,9 @@ setMethod(
 dbWriteTable_bq <- function(conn,
                             name,
                             value,
+                            ...,
                             overwrite = FALSE,
                             append = FALSE,
-                            ...,
                             field.types = NULL,
                             temporary = FALSE,
                             row.names = NA) {
@@ -188,10 +188,16 @@ dbWriteTable_bq <- function(conn,
   check_bool(append)
 
   if (!is.null(field.types)) {
-    stop("`field.types` not supported by bigrquery", call. = FALSE)
+    cli::cli_abort(
+      "{.arg field.types} not supported by bigrquery.",
+      call = quote(DBI::dbWriteTable())
+    )
   }
   if (!identical(temporary, FALSE)) {
-    stop("Temporary tables not supported by bigrquery", call. = FALSE)
+    cli::cli_abort(
+      "{.code temporary = FALSE} not supported by bigrquery.",
+      call = quote(DBI::dbWriteTable())
+    )
   }
 
   if (append) {

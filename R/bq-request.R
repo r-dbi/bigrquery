@@ -163,7 +163,7 @@ bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
 
 
 #' @importFrom httr http_status content parse_media status_code
-process_request <- function(req, raw = FALSE) {
+process_request <- function(req, raw = FALSE, call = caller_env()) {
   status <- status_code(req)
   # No content -> success
   if (status == 204) return(TRUE)
@@ -171,7 +171,12 @@ process_request <- function(req, raw = FALSE) {
   type <- req$headers$`Content-type`
   content <- content(req, "raw")
 
-  bq_check_response(status, type, content)
+  bq_check_response(
+    status = status,
+    type = type,
+    content = content,
+    call = call
+  )
 
   if (raw) {
     content
@@ -180,7 +185,7 @@ process_request <- function(req, raw = FALSE) {
   }
 }
 
-bq_check_response <- function(status, type, content) {
+bq_check_response <- function(status, type, content, call = caller_env()) {
   if (status >= 200 && status < 300) {
     return()
   }
@@ -188,17 +193,27 @@ bq_check_response <- function(status, type, content) {
   type <- httr::parse_media(type)
   if (type$complete == "application/json") {
     json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
-    signal_reason(json$error$errors[[1L]]$reason, json$error$message, status)
+    gargle_abort(
+      reason = json$error$errors[[1L]]$reason,
+      message = json$error$message,
+      status = status,
+      call = call
+    )
   } else {
-    text <- rawToChar(content)
-    stop("HTTP error [", status, "] ", text, call. = FALSE)
+    message <- paste0("HTTP error [", status, "]\n", text)
+    gargle_abort(
+      reason = NULL,
+      message = message,
+      status = status,
+      call = call
+    )
   }
 }
 
-signal_reason <- function(reason, message, status) {
-  if (is.null(reason)) {
-    abort(message)
-  } else {
+gargle_abort <- function(reason, message, status, call = caller_env()) {
+  class <- paste0("bigrquery_http_", status)
+
+  if (!is.null(reason)) {
     advice <- NULL
     if (reason == "responseTooLarge") {
       # If message mentions "allowLargeResults", that's the right advice to
@@ -219,9 +234,10 @@ signal_reason <- function(reason, message, status) {
       paste0(message, " [", reason, "] "),
       i = advice
     )
-
-    abort(message, class = c(paste0("bigrquery_", reason), paste0("bigrquery_http_", status)))
+    class <- c(paste0("bigrquery_", reason), class)
   }
+
+  cli::cli_abort(message, class = class, call = call)
 }
 
 # Multipart/related ------------------------------------------------------------
