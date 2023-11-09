@@ -290,7 +290,7 @@ bq_perform_query <- function(query, billing,
                              priority = "INTERACTIVE"
                              ) {
 
-  check_string(query)
+  query <- as_query(query)
   check_string(billing)
 
   check_string(create_disposition)
