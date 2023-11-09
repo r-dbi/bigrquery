@@ -88,7 +88,7 @@ db_copy_to.BigQueryConnection <- function(con,
                                           in_transaction = TRUE) {
 
   if (temporary) {
-    abort("BigQuery does not support temporary tables")
+    cli::cli_abort("BigQuery does not support temporary tables")
   }
 
   tb <- as_bq_table(con, table)
