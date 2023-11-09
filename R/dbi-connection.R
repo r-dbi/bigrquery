@@ -275,7 +275,10 @@ dbCreateTable_bq <- function(conn,
                              row.names = NULL,
                              temporary = FALSE) {
   if (!identical(temporary, FALSE)) {
-    stop("Temporary tables not supported by bigrquery", call. = FALSE)
+    cli::cli_abort(
+      "{.code temporary = FALSE} not supported by bigrquery.",
+      call = quote(DBI::dbCreateTable())
+    )
   }
 
   tb <- as_bq_table(conn, name)
@@ -314,7 +317,7 @@ setMethod(
   "dbListTables", "BigQueryConnection",
   function(conn, ...) {
     if (is.null(conn@dataset)) {
-      stop("To list table, must supply `dataset` when creating connection", call. = FALSE)
+      cli::cli_abort("Can't list tables without a connection `dataset`.")
     }
     ds <- bq_dataset(conn@project, conn@dataset)
 

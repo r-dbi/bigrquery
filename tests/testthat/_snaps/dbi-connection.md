@@ -40,8 +40,8 @@
     Code
       DBI::dbListTables(con)
     Condition
-      Error:
-      ! To list table, must supply `dataset` when creating connection
+      Error in `DBI::dbListTables()`:
+      ! Can't list tables without a connection `dataset`.
 
 ---
 
