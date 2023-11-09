@@ -415,7 +415,7 @@ setMethod(
 # Convert to bq objects ---------------------------------------------------
 
 #' @export
-as_bq_dataset.BigQueryConnection <- function(x) {
+as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
   bq_dataset(x@project, x@dataset)
 }
 
