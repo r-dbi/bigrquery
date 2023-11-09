@@ -107,7 +107,6 @@ bq_table <- function(project, dataset, table = NULL) {
     table <- dataset
     dataset <- project$dataset
     project <- project$project
-
   } else {
     check_string(project)
     check_string(dataset)
@@ -220,14 +219,16 @@ tableReference <- function(x) {
 
 # Helpers -----------------------------------------------------------------
 
-bq_from_list <- function(x, names, type) {
+bq_from_list <- function(x, names, type, error_call = caller_env()) {
   names(x) <- camelCase(names(x))
 
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue_collapse(names, sep = ", ", last = " and ")
-  stop(glue("List <{type}> must have components {names_str}"), call. = FALSE)
+  cli::cli_abort(
+    "List <{type}> must have components {.and {.str {names}}}.",
+    call = error_call
+  )
 }
 
 bq_from_string <- function(x, n, type, error_call = caller_env()) {
@@ -242,4 +243,3 @@ bq_from_string <- function(x, n, type, error_call = caller_env()) {
   }
   pieces
 }
-

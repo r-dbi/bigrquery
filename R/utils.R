@@ -31,13 +31,7 @@ bq_progress <- function(..., quiet = NA) {
 }
 
 bq_check_namespace <- function(pkg, bq_type) {
-  if (requireNamespace(pkg, quietly = TRUE)) {
-    return()
-  }
-
-  abort(glue(
-    "Package '{pkg}' must be installed to load BigQuery field with type '{bq_type}'"
-  ))
+  check_installed(pkg, sprintf("to parse BigQuery '%s' fields.", bq_type))
 }
 
 isFALSE <- function(x) identical(x, FALSE)

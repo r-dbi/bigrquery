@@ -123,8 +123,8 @@ test_that("can parse arrays of structs", {
 # Complete files ----------------------------------------------------------
 
 replay_query <- function(name, sql) {
-  schema_path <- test_path(glue("parse-schema-{name}.json"))
-  values_path <- test_path(glue("parse-values-{name}.json"))
+  schema_path <- test_path(sprintf("parse-schema-%s.json", name))
+  values_path <- test_path(sprintf("parse-values-%s.json", name))
 
   if (!file.exists(schema_path)) {
     tbl <- bq_project_query(bq_test_project(), sql)

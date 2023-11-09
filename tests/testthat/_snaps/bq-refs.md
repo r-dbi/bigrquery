@@ -41,16 +41,16 @@
     Code
       as_bq_table(list())
     Condition
-      Error:
-      ! List <bq_table> must have components projectId, datasetId and tableId
+      Error in `as_bq_table()`:
+      ! List <bq_table> must have components "projectId", "datasetId", and "tableId".
     Code
       as_bq_dataset(list())
     Condition
-      Error:
-      ! List <bq_dataset> must have components projectId and datasetId
+      Error in `as_bq_dataset()`:
+      ! List <bq_dataset> must have components "projectId" and "datasetId".
     Code
       as_bq_job(list())
     Condition
-      Error:
-      ! List <bq_job> must have components projectId, jobId and location
+      Error in `as_bq_job()`:
+      ! List <bq_job> must have components "projectId", "jobId", and "location".
 
