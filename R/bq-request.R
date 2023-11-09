@@ -12,9 +12,9 @@ prepare_bq_query <- function(query) {
 }
 
 bq_path <- function(project, dataset = NULL, table = NULL, ...) {
-  assert_that(is.null(project) || is.string(project))
-  assert_that(is.null(table) || is.string(table))
-  assert_that(is.null(dataset) || is.string(dataset))
+  check_string(project, allow_null = TRUE)
+  check_string(dataset, allow_null = TRUE)
+  check_string(table, allow_null = TRUE)
 
   components <- c(
     projects = project,
@@ -69,8 +69,8 @@ bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
 bq_get_paginated <- function(url, ..., query = NULL, token = bq_token(),
                              page_size = 50, max_pages = Inf, warn = TRUE) {
 
-  assert_that(is.numeric(max_pages), length(max_pages) == 1)
-  assert_that(is.numeric(page_size), length(page_size) == 1)
+  check_number_whole(max_pages, min = 1, allow_infinite = TRUE)
+  check_number_whole(page_size, min = 1)
 
   if (!is.null(query$fields))
     query$fields <- paste0(query$fields, ",nextPageToken")
@@ -188,14 +188,14 @@ bq_check_response <- function(status, type, content) {
   type <- httr::parse_media(type)
   if (type$complete == "application/json") {
     json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
-    signal_reason(json$error$errors[[1L]]$reason, json$error$message)
+    signal_reason(json$error$errors[[1L]]$reason, json$error$message, status)
   } else {
     text <- rawToChar(content)
     stop("HTTP error [", status, "] ", text, call. = FALSE)
   }
 }
 
-signal_reason <- function(reason, message) {
+signal_reason <- function(reason, message, status) {
   if (is.null(reason)) {
     abort(message)
   } else {
@@ -220,7 +220,7 @@ signal_reason <- function(reason, message) {
       i = advice
     )
 
-    abort(message, class = paste0("bigrquery_", reason))
+    abort(message, class = c(paste0("bigrquery_", reason), paste0("bigrquery_http_", status)))
   }
 }
 

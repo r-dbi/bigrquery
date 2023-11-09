@@ -12,8 +12,8 @@
 #' coercion functions on their first argument, allowing you to flexible specify
 #' their inputs.
 #'
-#' @param project,dataset,table,job Individual project, dataset, table,
-#'   and job identifiers (strings).
+#' @param project,dataset,table,job,type Individual project, dataset, table,
+#'   job identifiers and table type (strings).
 #'
 #'   For `bq_table()`, you if supply a `bq_dataset` as the first argument,
 #'   the 2nd argument will be interpreted as the `table`
@@ -58,7 +58,8 @@ NULL
 #' @rdname bq_refs
 #' @export
 bq_dataset <- function(project, dataset) {
-  assert_that(is.string(project), is.string(dataset))
+  check_string(project)
+  check_string(dataset)
 
   structure(
     list(
@@ -100,18 +101,24 @@ as_bq_dataset.list <- function(x) {
 
 #' @rdname bq_refs
 #' @export
-bq_table <- function(project, dataset, table = NULL) {
+bq_table <- function(project, dataset, table = NULL, type = "TABLE") {
   if (inherits(project, "bq_dataset") && is.null(table)) {
-    return(bq_table(project$project, project$dataset, dataset))
+    check_string(dataset)
+    table <- dataset
+    dataset <- project$dataset
+    project <- project$project
+  } else {
+    check_string(project)
+    check_string(dataset)
+    check_string(table)
   }
-
-  assert_that(is.string(project), is.string(dataset), is.string(table))
 
   structure(
     list(
       project = project,
       dataset = dataset,
-      table = table
+      table = table,
+      type = type
     ),
     class = "bq_table"
   )
@@ -137,13 +144,13 @@ as_bq_table.bq_table <- function(x, ...) {
 #' @export
 as_bq_table.character <- function(x, ...) {
   x <- bq_from_string(x, 3, "bq_table")
-  bq_table(x[[1]], x[[2]], x[[3]])
+  bq_table(x[[1]], x[[2]], x[[3]], ...)
 }
 
 #' @export
 as_bq_table.list <- function(x, ...) {
   x <- bq_from_list(x, c("projectId", "datasetId", "tableId"), "bq_table")
-  bq_table(x$projectId, x$datasetId, x$tableId)
+  bq_table(x$projectId, x$datasetId, x$tableId, ...)
 }
 
 # job ---------------------------------------------------------------------
@@ -213,26 +220,27 @@ tableReference <- function(x) {
 
 # Helpers -----------------------------------------------------------------
 
-bq_from_list <- function(x, names, type) {
+bq_from_list <- function(x, names, type, error_call = caller_env()) {
   names(x) <- camelCase(names(x))
 
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
-  names_str <- glue_collapse(names, sep = ", ", last = " and ")
-  stop(glue("List <{type}> must have components {names_str}"), call. = FALSE)
+  cli::cli_abort(
+    "List <{type}> must have components {.and {.str {names}}}.",
+    call = error_call
+  )
 }
 
-bq_from_string <- function(x, n, type) {
-  assert_that(is.string(x))
+bq_from_string <- function(x, n, type, error_call = caller_env()) {
+  check_string(x, call = error_call)
 
   pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
   if (length(pieces) != n) {
-    stop(
-      glue("Character <{type}> must contain {n} components when split by `.`"),
-      call. = FALSE
+    cli::cli_abort(
+      "Character <{type}> must contain {n} components when split by `.`",
+      call = error_call
     )
   }
   pieces
 }
-

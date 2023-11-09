@@ -1,9 +1,9 @@
 #' BigQuery tables
 #'
 #' Basic create-read-update-delete verbs for tables, as well as functions
-#' for uploading and downloading data in to/from memory (`bq_table_upload()`,
-#' `bq_table_download()`), and saving to/loading from Google Cloud Storage
-#' (`bq_table_load()`, `bq_table_save()`).
+#' uploading data (`bq_table_upload()`), saving to/loading from Google
+#' Cloud Storage (`bq_table_load()`, `bq_table_save()`), and getting
+#' various values from the metadata.
 #'
 #' @param x A [bq_table], or an object coercible to a `bq_table`.
 #' @inheritParams api-job
@@ -17,7 +17,6 @@
 #' * `bq_table_copy()`, `bq_table_create()`, `bq_table_delete()`, `bq_table_upload()`:
 #'   an invisible [bq_table]
 #' * `bq_table_exists()`: either `TRUE` or `FALSE`.
-#' * `bq_table_download()`: a data frame
 #' * `bq_table_size()`: the size of the table in bytes
 #' * `bq_table_fields()`: a [bq_fields].
 #'

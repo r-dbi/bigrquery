@@ -75,11 +75,18 @@ test_that("can execute a query", {
   con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
 
   DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
-  out <- dbExecute(con, glue("UPDATE {tb$table} SET x = x + 1 WHERE true"))
+  out <- dbExecute(con, sprintf("UPDATE %s SET x = x + 1 WHERE true", tb$table))
   expect_equal(out, 4)
 
-  out <- dbExecute(con, glue("DELETE {tb$table} WHERE x <= 3"))
+  out <- dbExecute(con, sprintf("DELETE %s WHERE x <= 3", tb$table))
   expect_equal(out, 2)
+})
+
+test_that("can use parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  df <- DBI::dbGetQuery(con, "SELECT @x AS value", params = list(x = 1))
+  expect_equal(df, tibble(value = 1))
 })
 
 test_that("can use DBI::Id()", {

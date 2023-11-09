@@ -107,7 +107,10 @@ collect.tbl_BigQueryConnection <- function(x, ...,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
 
-  assert_that(length(n) == 1, n > 0L)
+  check_number_whole(n, min = 0, allow_infinite = TRUE)
+  check_number_whole(max_connections, min = 1)
+  check_bool(warn_incomplete)
+
   con <- dbplyr::remote_con(x)
 
   if (op_can_download(x)) {
@@ -232,9 +235,13 @@ sql_translation.BigQueryConnection <- function(x) {
       Sys.time = sql_prefix("current_time"),
 
       # Regular expressions
-      grepl = sql_prefix("REGEXP_CONTAINS", 2),
-      gsub = function(match, replace, x) {
-        dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
+      grepl = function(pattern, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_contains
+        dbplyr::build_sql("REGEXP_CONTAINS", list(x, pattern))
+      },
+      gsub = function(pattern, replace, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_replace
+        dbplyr::build_sql("REGEXP_REPLACE", list(x, pattern, replace))
       },
 
       # Other scalar functions
@@ -252,9 +259,6 @@ sql_translation.BigQueryConnection <- function(x) {
       pmax = sql_prefix("GREATEST"),
       pmin = sql_prefix("LEAST"),
 
-      # Median
-      median = function(x) dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]"),
-
       runif = function(n = n(), min = 0, max = 1) {
         RAND <- NULL # quiet R CMD check
         dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
@@ -269,7 +273,12 @@ sql_translation.BigQueryConnection <- function(x) {
       sd =  sql_prefix("STDDEV_SAMP"),
       var = sql_prefix("VAR_SAMP"),
       cor = dbplyr::sql_aggregate_2("CORR"),
-      cov = dbplyr::sql_aggregate_2("COVAR_SAMP")
+      cov = dbplyr::sql_aggregate_2("COVAR_SAMP"),
+
+      # Median
+      median = function(x, na.rm = TRUE) {
+        dbplyr::build_sql("APPROX_QUANTILES(", x, ", 2)[SAFE_ORDINAL(2)]")
+      }
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_win,
       all = dbplyr::win_absent("LOGICAL_AND"),
@@ -280,7 +289,9 @@ sql_translation.BigQueryConnection <- function(x) {
       cor = dbplyr::win_absent("CORR"),
       cov = dbplyr::win_absent("COVAR_SAMP"),
 
-      n_distinct = dbplyr::win_absent("n_distinct")
+      n_distinct = dbplyr::win_absent("n_distinct"),
+
+      median = dbplyr::win_absent("median")
     )
   )
 }

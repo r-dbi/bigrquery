@@ -1,4 +1,19 @@
 # bigrquery (development version)
+  
+* Add support for RStudio/Workbench Connections pane when using `dbConnect` 
+  method (@meztez, #431).
+
+* If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
+  tries again (#535).
+
+* `grepl(pattern, x)` is now correctly translated to 
+  `REGEXP_CONTAINS(x, pattern)` (#416).
+
+* `median()` gets a translation that works in `summarise()` and a clear
+  error if you use it in `mutate()` (#419).
+
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
 
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).

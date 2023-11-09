@@ -1,12 +1,14 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, ...) {
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
+
   ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
   job <- bq_perform_query(sql,
     billing = conn@billing,
     default_dataset = ds,
     quiet = conn@quiet,
+    parameters = params,
     ...
   )
 
@@ -97,8 +99,7 @@ setMethod(
 setMethod(
   "dbFetch", "BigQueryResult",
   function(res, n = -1, ...) {
-    stopifnot(length(n) == 1, is.numeric(n))
-    stopifnot(n == round(n), !is.na(n), n >= -1)
+    check_number_whole(n, min = -1, allow_infinite = TRUE)
 
     if (n == -1 || n == Inf) {
       n <- res@cursor$left()

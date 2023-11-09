@@ -12,7 +12,7 @@ as.character.gs_object <- function(x, ...) {
 
 #' @export
 format.gs_object <- function(x, ...) {
-  as.character(glue_data(x, "gs://{bucket}/{object}"))
+  sprintf("gs://%s/%s", x$bucket, x$object)
 }
 
 #' @export
@@ -22,13 +22,21 @@ print.gs_object <- function(x, ...) {
 }
 
 gs_object_delete <- function(x, token = bq_token()) {
-  url <- glue_data(x, "https://storage.googleapis.com/storage/v1/b/{bucket}/o/{object}")
+  url <- sprintf(
+    "https://storage.googleapis.com/storage/v1/b/%s/o/%s",
+    x$bucket,
+    x$object
+  )
   req <- httr::DELETE(url, token, httr::user_agent(bq_ua()))
   process_request(req)
 }
 
 gs_object_exists <- function(x, token = bq_token()) {
-  url <- glue_data(x, "https://storage.googleapis.com/storage/v1/b/{bucket}/o/{object}")
+  url <- sprintf(
+    "https://storage.googleapis.com/storage/v1/b/%s/o/%s",
+    x$bucket,
+    x$object
+  )
   req <- httr::GET(url, token, httr::user_agent(bq_ua()))
   req$status_code != 404
 }

@@ -30,6 +30,8 @@ test_that("can retrieve query in pieces and that quiet is respected", {
   res <- DBI::dbSendQuery(con, "SELECT cyl, mpg FROM mtcars")
   expect_equal(DBI::dbGetRowCount(res), 0L)
 
+  expect_snapshot(DBI::dbFetch(res, NA), error = TRUE)
+
   res@quiet <- FALSE
   expect_snapshot(df <- DBI::dbFetch(res, 10))
 

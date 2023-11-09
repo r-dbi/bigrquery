@@ -101,12 +101,12 @@ bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, warn = TRUE, .
 
   data <- bq_get_paginated(
     url,
-    query = list(fields = "tables(tableReference)"),
+    query = list(fields = "tables(tableReference,type)"),
     page_size = page_size,
     max_pages = max_pages,
     warn = warn
   )
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
-  lapply(tables, function(x) as_bq_table(x$tableReference))
+  lapply(tables, function(x) as_bq_table(x$tableReference, type = x$type))
 }
