@@ -62,11 +62,12 @@ on_connection_opened <- function(con, code) {
 
     listObjectTypes = function() {
       list(
-        project = list(
+        catalog = list(
           contains = list(
-            dataset = list(
+            database = list(
               contains = list(
-                table = list(contains = "data")
+                table = list(contains = "data"),
+                view = list(contains = "data")
               )
             )
           )
@@ -80,8 +81,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # column enumeration code
-    listColumns = function(project = NULL, dataset = NULL, table = NULL, ...) {
-      x <- bq_table(project, dataset, table)
+    listColumns = function(catalog = NULL, database = NULL, table = NULL, view = NULL, ...) {
+      x <- bq_table(catalog, database, paste0(table, view))
       fields <- bq_table_fields(x)
       data.frame(
         name = vapply(fields, `[[`, character(1), "name"),
@@ -91,8 +92,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # table preview code
-    previewObject = function(rowLimit, project = NULL, dataset = NULL, table = NULL, ...) {
-      x <- bq_table(project, dataset, table)
+    previewObject = function(rowLimit, catalog = NULL, database = NULL, table = NULL, view = NULL, ...) {
+      x <- bq_table(catalog, database, paste0(table, view))
       bq_table_download(x, max_results = rowLimit)
     },
 
@@ -104,26 +105,27 @@ on_connection_opened <- function(con, code) {
   )
 }
 
-list_bigquery_objects <- function(con, project = NULL, dataset = NULL) {
-  if (is.null(project)) {
-    tibble::tibble(type = "project", name = con@project)
-  } else if (is.null(dataset)) {
+list_bigquery_objects <- function(con, catalog = NULL, database = NULL, ...) {
+  if (is.null(catalog)) {
+    tibble::tibble(type = "catalog", name = con@project)
+  } else if (is.null(database)) {
     # Catching VPC/Permission errors to crash gracefully
     bq_datasets <- tryCatch(
-      bq_project_datasets(project, warn = FALSE),
+      bq_project_datasets(catalog, warn = FALSE),
       error = function(e) list()
     )
     datasets <- map_chr(bq_datasets, `[[`, "dataset")
 
-    tibble::tibble(type = "dataset", name = datasets)
+    tibble::tibble(type = "database", name = datasets)
   } else {
     # Catching VPC/Permission errors to crash gracefully
-    # TODO: Maybe modify bq_dataset_tables to return type?
-    # Type is used to select which icon to display in the pane
-    ds <- bq_dataset(project = project, dataset = dataset)
+    ds <- bq_dataset(catalog, database)
     bq_tables <- tryCatch(bq_dataset_tables(ds), error = function(e) list())
     tables <- map_chr(bq_tables, `[[`, "table")
-    tibble::tibble(type = "table", name = tables)
+    types <- map_chr(bq_tables, `[[`, "type")
+    types <- grepl("VIEW$", types) + 1L
+    types <- c("table", "view")[types]
+    tibble::tibble(type = types, name = tables)
   }
 }
 

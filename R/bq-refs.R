@@ -12,8 +12,8 @@
 #' coercion functions on their first argument, allowing you to flexible specify
 #' their inputs.
 #'
-#' @param project,dataset,table,job Individual project, dataset, table,
-#'   and job identifiers (strings).
+#' @param project,dataset,table,job,type Individual project, dataset, table,
+#'   job identifiers and table type (strings).
 #'
 #'   For `bq_table()`, you if supply a `bq_dataset` as the first argument,
 #'   the 2nd argument will be interpreted as the `table`
@@ -101,7 +101,7 @@ as_bq_dataset.list <- function(x) {
 
 #' @rdname bq_refs
 #' @export
-bq_table <- function(project, dataset, table = NULL) {
+bq_table <- function(project, dataset, table = NULL, type = "TABLE") {
   if (inherits(project, "bq_dataset") && is.null(table)) {
     check_string(dataset)
     table <- dataset
@@ -118,7 +118,8 @@ bq_table <- function(project, dataset, table = NULL) {
     list(
       project = project,
       dataset = dataset,
-      table = table
+      table = table,
+      type = type
     ),
     class = "bq_table"
   )
@@ -144,13 +145,13 @@ as_bq_table.bq_table <- function(x, ...) {
 #' @export
 as_bq_table.character <- function(x, ...) {
   x <- bq_from_string(x, 3, "bq_table")
-  bq_table(x[[1]], x[[2]], x[[3]])
+  bq_table(x[[1]], x[[2]], x[[3]], ...)
 }
 
 #' @export
 as_bq_table.list <- function(x, ...) {
   x <- bq_from_list(x, c("projectId", "datasetId", "tableId"), "bq_table")
-  bq_table(x$projectId, x$datasetId, x$tableId)
+  bq_table(x$projectId, x$datasetId, x$tableId, ...)
 }
 
 # job ---------------------------------------------------------------------

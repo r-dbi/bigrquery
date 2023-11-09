@@ -61,6 +61,8 @@
 * `op_table.lazy_select_query()` now returns a string instead of a list, which
   fixes an error seen when printing or using functions like `head()` or
   `dplyr::glimpse()` (@clente, #509).
+  
+* Add support for RStudio/Workbench Connections pane when using `dbConnect` method (#431).
 
 # bigrquery 1.4.1
 
