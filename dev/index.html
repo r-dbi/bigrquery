@@ -109,16 +109,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    10     7          7.56</span></span>
-<span><span class="co">#&gt;  2  1969     5     9          6.62</span></span>
-<span><span class="co">#&gt;  3  1969     2     6          2.00</span></span>
-<span><span class="co">#&gt;  4  1969     1     8          8.44</span></span>
-<span><span class="co">#&gt;  5  1969     6    23          9.81</span></span>
-<span><span class="co">#&gt;  6  1969     7    31          7.19</span></span>
-<span><span class="co">#&gt;  7  1969    11     6          7.50</span></span>
-<span><span class="co">#&gt;  8  1969    12    19          7.50</span></span>
-<span><span class="co">#&gt;  9  1969     2    17          7.05</span></span>
-<span><span class="co">#&gt; 10  1969     5     3          8.50</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    11    29          8.00</span></span>
+<span><span class="co">#&gt;  2  1969     4     4          7.37</span></span>
+<span><span class="co">#&gt;  3  1969     9     6         10.9 </span></span>
+<span><span class="co">#&gt;  4  1969     5    13          3.25</span></span>
+<span><span class="co">#&gt;  5  1969     8     4          7.63</span></span>
+<span><span class="co">#&gt;  6  1969     7     6          6.88</span></span>
+<span><span class="co">#&gt;  7  1969     4    21          7.25</span></span>
+<span><span class="co">#&gt;  8  1969     9    12          8.02</span></span>
+<span><span class="co">#&gt;  9  1969     2    13          8.00</span></span>
+<span><span class="co">#&gt; 10  1969    10    22          6.81</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
@@ -145,16 +145,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    10     7          7.56</span></span>
-<span><span class="co">#&gt;  2  1969     5     9          6.62</span></span>
-<span><span class="co">#&gt;  3  1969     2     6          2.00</span></span>
-<span><span class="co">#&gt;  4  1969     1     8          8.44</span></span>
-<span><span class="co">#&gt;  5  1969     6    23          9.81</span></span>
-<span><span class="co">#&gt;  6  1969     7    31          7.19</span></span>
-<span><span class="co">#&gt;  7  1969    11     6          7.50</span></span>
-<span><span class="co">#&gt;  8  1969    12    19          7.50</span></span>
-<span><span class="co">#&gt;  9  1969     2    17          7.05</span></span>
-<span><span class="co">#&gt; 10  1969     5     3          8.50</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    11    29          8.00</span></span>
+<span><span class="co">#&gt;  2  1969     4     4          7.37</span></span>
+<span><span class="co">#&gt;  3  1969     9     6         10.9 </span></span>
+<span><span class="co">#&gt;  4  1969     5    13          3.25</span></span>
+<span><span class="co">#&gt;  5  1969     8     4          7.63</span></span>
+<span><span class="co">#&gt;  6  1969     7     6          6.88</span></span>
+<span><span class="co">#&gt;  7  1969     4    21          7.25</span></span>
+<span><span class="co">#&gt;  8  1969     9    12          8.02</span></span>
+<span><span class="co">#&gt;  9  1969     2    13          8.00</span></span>
+<span><span class="co">#&gt; 10  1969    10    22          6.81</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
@@ -163,9 +163,6 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: &lt;BigQueryConnection&gt; uses an old dbplyr interface</span></span>
-<span><span class="co">#&gt; ℹ Please install a newer version of the package or contact the maintainer</span></span>
-<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">weight_pounds</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -190,6 +187,12 @@
 <h2 id="important-details">Important details<a class="anchor" aria-label="anchor" href="#important-details"></a>
 </h2>
 <div class="section level3">
+<h3 id="bigquery-account">BigQuery account<a class="anchor" aria-label="anchor" href="#bigquery-account"></a>
+</h3>
+<p>To use bigrquery, you’ll need a BigQuery project. Fortunately, if you just want to play around with the BigQuery API, it’s easy to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data" class="external-link">public data</a> and the <a href="https://cloud.google.com/bigquery/docs/sandbox" class="external-link">BigQuery sandbox</a>. This gives you some fun data to play with along with enough free compute (1 TB of queries &amp; 10 GB of storage per month) to learn the ropes.</p>
+<p>To get started, open <a href="https://console.cloud.google.com/bigquery" class="external-link uri">https://console.cloud.google.com/bigquery</a> and create a project. Make a note of the “Project ID” as you’ll use this as the <code>billing</code> project whenever you work with free sample data; and as the <code>project</code> when you work with your own data.</p>
+</div>
+<div class="section level3">
 <h3 id="authentication-and-authorization">Authentication and authorization<a class="anchor" aria-label="anchor" href="#authentication-and-authorization"></a>
 </h3>
 <p>When using bigrquery interactively, you’ll be prompted to <a href="https://cloud.google.com/bigquery/docs/authorization" class="external-link">authorize bigrquery</a> in the browser. You’ll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:</p>
@@ -207,18 +210,6 @@
 <a href="https://gargle.r-lib.org/articles/get-api-credentials.html" class="external-link">How to get your own API credentials</a>. Instructions for getting your own OAuth client or service account token.</li>
 </ul>
 <p>Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling <code><a href="reference/api-table.html">bq_table_delete()</a></code> or <code><a href="reference/api-table.html">bq_table_upload()</a></code>). Our <a href="https://www.tidyverse.org/google_privacy_policy" class="external-link">Privacy policy</a> provides more info.</p>
-</div>
-<div class="section level3">
-<h3 id="billing-project">Billing project<a class="anchor" aria-label="anchor" href="#billing-project"></a>
-</h3>
-<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data" class="external-link">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
-<p>To create a project:</p>
-<ol style="list-style-type: decimal">
-<li><p>Open <a href="https://console.cloud.google.com/" class="external-link uri">https://console.cloud.google.com/</a> and create a project. Make a note of the “Project ID” in the “Project info” box.</p></li>
-<li><p>Click on “APIs &amp; Services”, then “Dashboard” in the left the left menu.</p></li>
-<li><p>Click on “Enable Apis and Services” at the top of the page, then search for “BigQuery API” and “Cloud storage”.</p></li>
-</ol>
-<p>Use your project ID as the <code>billing</code> project whenever you work with free sample data; and as the <code>project</code> when you work with your own data.</p>
 </div>
 </div>
 <div class="section level2">
