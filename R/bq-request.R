@@ -220,7 +220,7 @@ signal_reason <- function(reason, message, status) {
       i = advice
     )
 
-    abort(message, class = c(paste0("bigrquery_", reason), paste0("http_", status)))
+    abort(message, class = c(paste0("bigrquery_", reason), paste0("bigrquery_http_", status)))
   }
 }
 

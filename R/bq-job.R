@@ -83,22 +83,17 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
   )
 
   repeat {
+    progress$tick()
+
+    # https://cloud.google.com/bigquery/docs/error-messages
+    # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),
-      http_503 = function(err) {
-        # https://cloud.google.com/bigquery/docs/error-messages
-        # Switch to req_retry() when we move to httr2
-        for (i in 1:4) {
-          Sys.sleep(0.5)
-          progress$tick()
-        }
-        bq_job_status(x)
-      }
+      bigrquery_http_503 = function(err) NULL
     )
-    progress$tick()
-    if (status$state == "DONE") break
+
+    if (!is.null(status) && status$state == "DONE") break
     Sys.sleep(pause)
-    progress$tick()
   }
   progress$update(1)
 
