@@ -87,7 +87,7 @@ their inputs.</p>
 <span></span>
 <span><span class="fu">as_bq_dataset</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">bq_table</span><span class="op">(</span><span class="va">project</span>, <span class="va">dataset</span>, table <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">bq_table</span><span class="op">(</span><span class="va">project</span>, <span class="va">dataset</span>, table <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"TABLE"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">as_bq_table</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -98,9 +98,9 @@ their inputs.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>project, dataset, table, job</dt>
+    <dl><dt>project, dataset, table, job, type</dt>
 <dd><p>Individual project, dataset, table,
-and job identifiers (strings).</p>
+job identifiers and table type (strings).</p>
 <p>For <code>bq_table()</code>, you if supply a <code>bq_dataset</code> as the first argument,
 the 2nd argument will be interpreted as the <code>table</code></p></dd>
 
