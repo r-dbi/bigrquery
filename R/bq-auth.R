@@ -97,6 +97,16 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
   invisible()
 }
 
+has_internal_auth <- function() {
+  gargle::secret_has_key("BIGRQUERY_KEY")
+}
+
+bq_auth_internal <- function() {
+  path <- system.file("secret", "bigrquery-testing.json", package = "bigrquery")
+  json <- gargle::secret_decrypt_json(path, "BIGRQUERY_KEY")
+  bq_auth(path = json)
+}
+
 #' Clear current token
 #'
 #' Clears any currently stored token. The next time bigrquery needs a token, the
