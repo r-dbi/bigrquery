@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
+  tries again (#535).
+
 * `grepl(pattern, x)` is now correctly translated to 
   `REGEXP_CONTAINS(x, pattern)` (#416).
 

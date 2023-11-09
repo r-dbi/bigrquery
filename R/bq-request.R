@@ -188,14 +188,14 @@ bq_check_response <- function(status, type, content) {
   type <- httr::parse_media(type)
   if (type$complete == "application/json") {
     json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
-    signal_reason(json$error$errors[[1L]]$reason, json$error$message)
+    signal_reason(json$error$errors[[1L]]$reason, json$error$message, status)
   } else {
     text <- rawToChar(content)
     stop("HTTP error [", status, "] ", text, call. = FALSE)
   }
 }
 
-signal_reason <- function(reason, message) {
+signal_reason <- function(reason, message, status) {
   if (is.null(reason)) {
     abort(message)
   } else {
@@ -220,7 +220,7 @@ signal_reason <- function(reason, message) {
       i = advice
     )
 
-    abort(message, class = paste0("bigrquery_", reason))
+    abort(message, class = c(paste0("bigrquery_", reason), paste0("bigrquery_http_", status)))
   }
 }
 
