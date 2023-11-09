@@ -63,16 +63,16 @@ bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    10     7          7.56
-#>  2  1969     5     9          6.62
-#>  3  1969     2     6          2.00
-#>  4  1969     1     8          8.44
-#>  5  1969     6    23          9.81
-#>  6  1969     7    31          7.19
-#>  7  1969    11     6          7.50
-#>  8  1969    12    19          7.50
-#>  9  1969     2    17          7.05
-#> 10  1969     5     3          8.50
+#>  1  1969    11    29          8.00
+#>  2  1969     4     4          7.37
+#>  3  1969     9     6         10.9 
+#>  4  1969     5    13          3.25
+#>  5  1969     8     4          7.63
+#>  6  1969     7     6          6.88
+#>  7  1969     4    21          7.25
+#>  8  1969     9    12          8.02
+#>  9  1969     2    13          8.00
+#> 10  1969    10    22          6.81
 ```
 
 ### DBI
@@ -99,16 +99,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    10     7          7.56
-#>  2  1969     5     9          6.62
-#>  3  1969     2     6          2.00
-#>  4  1969     1     8          8.44
-#>  5  1969     6    23          9.81
-#>  6  1969     7    31          7.19
-#>  7  1969    11     6          7.50
-#>  8  1969    12    19          7.50
-#>  9  1969     2    17          7.05
-#> 10  1969     5     3          8.50
+#>  1  1969    11    29          8.00
+#>  2  1969     4     4          7.37
+#>  3  1969     9     6         10.9 
+#>  4  1969     5    13          3.25
+#>  5  1969     8     4          7.63
+#>  6  1969     7     6          6.88
+#>  7  1969     4    21          7.25
+#>  8  1969     9    12          8.02
+#>  9  1969     2    13          8.00
+#> 10  1969    10    22          6.81
 ```
 
 ### dplyr
@@ -117,9 +117,6 @@ dbGetQuery(con, sql, n = 10)
 library(dplyr)
 
 natality <- tbl(con, "natality")
-#> Warning: <BigQueryConnection> uses an old dbplyr interface
-#> ℹ Please install a newer version of the package or contact the maintainer
-#> This warning is displayed once every 8 hours.
 
 natality %>%
   select(year, month, day, weight_pounds) %>% 
@@ -141,6 +138,21 @@ natality %>%
 ```
 
 ## Important details
+
+### BigQuery account
+
+To use bigrquery, you’ll need a BigQuery project. Fortunately, if you
+just want to play around with the BigQuery API, it’s easy to start with
+Google’s free [public
+data](https://cloud.google.com/bigquery/public-data) and the [BigQuery
+sandbox](https://cloud.google.com/bigquery/docs/sandbox). This gives you
+some fun data to play with along with enough free compute (1 TB of
+queries & 10 GB of storage per month) to learn the ropes.
+
+To get started, open <https://console.cloud.google.com/bigquery> and
+create a project. Make a note of the “Project ID” as you’ll use this as
+the `billing` project whenever you work with free sample data; and as
+the `project` when you work with your own data.
 
 ### Authentication and authorization
 
@@ -172,28 +184,6 @@ never do so unless you explicitly request it (e.g. by calling
 `bq_table_delete()` or `bq_table_upload()`). Our [Privacy
 policy](https://www.tidyverse.org/google_privacy_policy) provides more
 info.
-
-### Billing project
-
-If you just want to play around with the BigQuery API, it’s easiest to
-start with Google’s free [sample
-data](https://cloud.google.com/bigquery/public-data). You’ll still need
-to create a project, but if you’re just playing around, it’s unlikely
-that you’ll go over the free limit (1 TB of queries / 10 GB of storage).
-
-To create a project:
-
-1.  Open <https://console.cloud.google.com/> and create a project. Make
-    a note of the “Project ID” in the “Project info” box.
-
-2.  Click on “APIs & Services”, then “Dashboard” in the left the left
-    menu.
-
-3.  Click on “Enable Apis and Services” at the top of the page, then
-    search for “BigQuery API” and “Cloud storage”.
-
-Use your project ID as the `billing` project whenever you work with free
-sample data; and as the `project` when you work with your own data.
 
 ## Useful links
 
