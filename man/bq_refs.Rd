@@ -13,7 +13,7 @@ bq_dataset(project, dataset)
 
 as_bq_dataset(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 
-bq_table(project, dataset, table = NULL)
+bq_table(project, dataset, table = NULL, type = "TABLE")
 
 as_bq_table(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 
@@ -22,8 +22,8 @@ bq_job(project, job, location = "US")
 as_bq_job(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 }
 \arguments{
-\item{project, dataset, table, job}{Individual project, dataset, table,
-and job identifiers (strings).
+\item{project, dataset, table, job, type}{Individual project, dataset, table,
+job identifiers and table type (strings).
 
 For \code{bq_table()}, you if supply a \code{bq_dataset} as the first argument,
 the 2nd argument will be interpreted as the \code{table}}
