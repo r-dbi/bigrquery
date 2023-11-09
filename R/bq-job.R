@@ -55,13 +55,13 @@ bq_job_show_statistics <- function(x) {
   if ("load" %in% names(stats)) {
     in_bytes <- as.numeric(stats$load$inputFileBytes)
     out_bytes <- as.numeric(stats$load$outputBytes)
-    message("Input:  ", prettyunits::pretty_bytes(in_bytes))
-    message("Output: ", prettyunits::pretty_bytes(out_bytes))
+    cli::cli_inform("Input:  {prettyunits::pretty_bytes(in_bytes)}")
+    cli::cli_inform("Output: {prettyunits::pretty_bytes(out_bytes})")
   }
 
   if ("query" %in% names(stats)) {
     bytes <- as.numeric(stats$query$totalBytesBilled)
-    message("Billed: ", prettyunits::pretty_bytes(bytes))
+    cli::cli_inform("Billed: {prettyunits::pretty_bytes(bytes)}")
   }
 
   invisible(x)

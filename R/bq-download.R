@@ -101,7 +101,7 @@ bq_table_download <-
 
     # get first chunk ----
     if (!bq_quiet(quiet)) {
-      message("Downloading first chunk of data.")
+      cli::cli_inform("Downloading first chunk of data.")
     }
 
     check_number_whole(page_size, min = 0, allow_null = TRUE)
@@ -133,7 +133,7 @@ bq_table_download <-
 
     if (n_got >= n_max) {
       if (!bq_quiet(quiet)) {
-        message("First chunk includes all requested rows.")
+        cli::cli_inform("First chunk includes all requested rows.")
       }
       return(convert_bigint(chunk_data, bigint))
     }
