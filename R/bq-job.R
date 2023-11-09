@@ -82,10 +82,7 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
     clear = FALSE
   )
 
-  status <- bq_job_status(x)
-  while (status$state != "DONE") {
-    Sys.sleep(pause)
-    progress$tick()
+  repeat {
     status <- tryCatch(
       bq_job_status(x),
       http_503 = function(err) {
@@ -98,7 +95,9 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
         bq_job_status(x)
       }
     )
-    status <- bq_job_status(x)
+    progress$tick()
+    if (status$state == "DONE") break
+    Sys.sleep(pause)
     progress$tick()
   }
   progress$update(1)
