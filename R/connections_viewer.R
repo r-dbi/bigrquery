@@ -24,38 +24,41 @@ connection_capture <- function() {
   })
 }
 
-on_connection_closed <- function(connection) {
+# https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-closed
+on_connection_closed <- function(con) {
   observer <- getOption("connectionObserver")
   if (is.null(observer))
     return(invisible(NULL))
 
-  observer$connectionClosed(bq_type, connection@project)
+  observer$connectionClosed(bq_type, con@project)
 }
 
-on_connection_updated <- function(connection) {
+# https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-updated
+on_connection_updated <- function(con) {
   observer <- getOption("connectionObserver")
   if (is.null(observer))
     return(invisible(NULL))
 
-  observer$connectionUpdated(bq_type, connection@project)
+  observer$connectionUpdated(bq_type, con@project)
 }
 
-on_connection_opened <- function(connection, code) {
+# https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-opened
+on_connection_opened <- function(con, code) {
   observer <- getOption("connectionObserver")
   if (is.null(observer))
     return(invisible(NULL))
 
   observer$connectionOpened(
     type = bq_type,
-    displayName = paste0(c(bq_type, connection@project), collapse = "-"),
-    host = connection@project,
+    displayName = paste0(c(bq_type, con@project), collapse = "-"),
+    host = con@project,
     icon = system.file("icons/bigquery-512-color.png", package = "bigrquery"),
 
     # connection code
     connectCode = code,
 
     # only action is to close connections pane
-    disconnect = function() dbDisconnect(connection),
+    disconnect = function() dbDisconnect(con),
 
     listObjectTypes = function() {
       list(
@@ -73,7 +76,7 @@ on_connection_opened <- function(connection, code) {
 
     # table enumeration code
     listObjects = function(...) {
-      list_bigquery_objects(connection, ...)
+      list_bigquery_objects(con, ...)
     },
 
     # column enumeration code
@@ -96,13 +99,11 @@ on_connection_opened <- function(connection, code) {
     # no actions
 
     # raw connection object
-    connectionObject = connection
+    connectionObject = con
 
   )
 }
 
-#' Lists BigQuery objects for the connection
-#' @noRd
 list_bigquery_objects <- function(con, project = NULL, dataset = NULL) {
   if (is.null(project)) {
     tibble::tibble(type = "project", name = con@project)
