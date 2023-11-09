@@ -91,10 +91,10 @@ on_connection_opened <- function(con, code) {
     listColumns = function(project = NULL, dataset = NULL, table = NULL, view = NULL, ...) {
       x <- bq_table(project, dataset, paste0(table, view))
       fields <- bq_table_fields(x)
-      data.frame(
+
+      tibble::tibble(
         name = vapply(fields, `[[`, character(1), "name"),
-        type = vapply(fields, `[[`, character(1), "type"),
-        stringsAsFactors = FALSE
+        type = vapply(fields, `[[`, character(1), "type")
       )
     },
 
