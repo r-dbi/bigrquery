@@ -55,8 +55,8 @@ bq_job_show_statistics <- function(x) {
   if ("load" %in% names(stats)) {
     in_bytes <- as.numeric(stats$load$inputFileBytes)
     out_bytes <- as.numeric(stats$load$outputBytes)
-    cli::cli_inform("Input:  {prettyunits::pretty_bytes(in_bytes)}")
-    cli::cli_inform("Output: {prettyunits::pretty_bytes(out_bytes})")
+    cli::cli_inform("Input: {prettyunits::pretty_bytes(in_bytes)}")
+    cli::cli_inform("Output: {prettyunits::pretty_bytes(out_bytes)}")
   }
 
   if ("query" %in% names(stats)) {
@@ -68,7 +68,7 @@ bq_job_show_statistics <- function(x) {
 }
 
 #' @param quiet If `FALSE`, displays progress bar; if `TRUE` is silent;
-#'   if `NA` displays progress bar only for long-running jobs.
+#'   if `NA` picks based on whether or not you're in an interactive context.
 #' @param pause amount of time to wait between status requests
 #' @export
 #' @name api-job
@@ -77,31 +77,32 @@ bq_job_wait <- function(x,
                         pause = 0.5,
                         call = caller_env()) {
   x <- as_bq_job(x)
-  check_bool(quiet, allow_na = TRUE)
+  quiet <- check_quiet(quiet)
   check_number_decimal(pause)
 
-  quiet <- bq_quiet(quiet)
-  progress <- bq_progress(
-    paste0("Running job '", x, "' [:spin] :elapsed"),
-    total = 1e7,
-    quiet = quiet,
-    clear = FALSE
-  )
+  if (!quiet) {
+    cli::cli_progress_bar(
+      format = "Running job {x} {cli::pb_spin} {cli::pb_elapsed}",
+      total = NA,
+      clear = FALSE
+    )
+  }
 
   repeat {
-    progress$tick()
+    if (!quiet) cli::cli_progress_update()
     # https://cloud.google.com/bigquery/docs/error-messages
     # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),
       bigrquery_http_503 = function(err) NULL
     )
-    progress$tick()
+    if (!quiet) cli::cli_progress_update()
 
     if (!is.null(status) && status$state == "DONE") break
     Sys.sleep(pause)
   }
-  progress$update(1)
+  if (!quiet) cli::cli_progress_done()
+
 
   errors <- status$errors
   if (length(errors) > 0) {

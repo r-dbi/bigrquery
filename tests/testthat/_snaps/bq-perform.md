@@ -4,13 +4,13 @@
       bq_job_wait(job, quiet = FALSE)
     Message
       Job complete
-      Input:  3.44 kB
+      Input: 3.44 kB
       Output: 2.82 kB
     Code
       bq_job_wait(job, quiet = FALSE)
     Message
       Job complete
-      Input:  3.44 kB
+      Input: 3.44 kB
       Output: 2.82 kB
 
 # bq_perform_copy creates job that succeeds

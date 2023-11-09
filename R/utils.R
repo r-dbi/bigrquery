@@ -5,28 +5,13 @@ as_df <- function(x) {
   x
 }
 
-bq_quiet <- function(x) {
+check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+  check_bool(x, allow_na = TRUE, arg = arg, call = call)
+
   if (is.na(x)) {
     !(is_interactive() || is_snapshot())
   } else {
     x
-  }
-}
-
-bq_progress <- function(..., quiet = NA) {
-  # quiet = FALSE -> show immediately; otherwise wait 1 second
-  delay <- if (isFALSE(quiet)) 0 else 1
-  quiet <- bq_quiet(quiet)
-
-  if (quiet) {
-    list(
-      tick = function(...) {},
-      update = function(...) {}
-    )
-  } else {
-    progress <- progress::progress_bar$new(..., show_after = delay)
-    progress$tick(0)
-    progress
   }
 }
 

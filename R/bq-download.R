@@ -68,7 +68,11 @@ bq_table_download <-
            bigint = c("integer", "integer64", "numeric", "character"),
            max_results = deprecated()) {
     x <- as_bq_table(x)
-    bigint <- match.arg(bigint)
+    check_number_whole(n_max, min = 0, allow_infinite = TRUE)
+    check_number_whole(start_index, min = 0)
+    check_number_whole(max_connections, min = 1)
+    quiet <- check_quiet(quiet)
+    bigint <- arg_match(bigint)
     if (lifecycle::is_present(max_results)) {
       lifecycle::deprecate_warn(
         "1.4.0", "bq_table_download(max_results)", "bq_table_download(n_max)"
@@ -92,7 +96,7 @@ bq_table_download <-
         schema_path,
         file_paths = character(),
         n = 0,
-        quiet = bq_quiet(quiet)
+        quiet = quiet
       )
       return(table_data)
     }
@@ -100,7 +104,7 @@ bq_table_download <-
     pool <- curl::new_pool()
 
     # get first chunk ----
-    if (!bq_quiet(quiet)) {
+    if (!quiet) {
       cli::cli_inform("Downloading first chunk of data.")
     }
 
@@ -132,7 +136,7 @@ bq_table_download <-
     n_got <- nrow(chunk_data)
 
     if (n_got >= n_max) {
-      if (!bq_quiet(quiet)) {
+      if (!quiet) {
         cli::cli_inform("First chunk includes all requested rows.")
       }
       return(convert_bigint(chunk_data, bigint))
@@ -148,7 +152,7 @@ bq_table_download <-
 
     # break rest of work into natural chunks ----
     if (!chunk_size_from_user) {
-      if (!bq_quiet(quiet)) {
+      if (!quiet) {
         cli::cli_inform("Received {big_mark(n_got)} rows in the first chunk.")
       }
       chunk_size <- trunc(0.75 * n_got)
@@ -162,17 +166,18 @@ bq_table_download <-
       chunk_size = chunk_size,
       start_index = start_index_new
     )
-    progress <- bq_progress(
-      "Downloading data [:bar] :percent ETA: :eta",
-      total = chunk_plan$n_chunks,
-      quiet = quiet
-    )
 
-    if (!bq_quiet(quiet)) {
+    if (!quiet) {
       cli::cli_inform(
         "Downloading the remaining {big_mark(chunk_plan$n_max)} rows in {chunk_plan$n_chunks} \\
          chunks of (up to) {big_mark(chunk_plan$chunk_size)} rows."
       )
+      progress <- cli::cli_progress_bar(
+        "Downloading data [:bar] :percent ETA: :eta",
+        total = chunk_plan$n_chunks
+      )
+    } else {
+      progress <- NULL
     }
 
     for (i in seq_len(chunk_plan$n_chunks)) {
@@ -194,7 +199,7 @@ bq_table_download <-
       schema_path,
       c(path_first_chunk, chunk_plan$dat$path),
       n = n_max,
-      quiet = bq_quiet(quiet)
+      quiet = quiet
     )
     convert_bigint(table_data, bigint)
   }
@@ -309,8 +314,10 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
 
 bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   force(path)
+  force(progress)
+
   function(result) {
-    if (!is.null(progress)) progress$tick()
+    if (!is.null(progress)) cli::cli_progress_update(id = progress)
 
     bq_check_response(
       status = result$status_code,
