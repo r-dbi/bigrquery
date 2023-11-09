@@ -14,32 +14,6 @@
 #include <fstream>
 #include <errno.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-extern "C" {
-time_t timegm(struct tm *tm);
-char* strptime (const char *buf, const char *fmt, struct tm *timeptr);
-}
-#endif
-
-#if (defined(__sun) || defined(sun))
-extern "C" {
-  time_t timegm(struct tm *tm);
-}
-#endif
-
-
-// This is currently not used in favor of parse_int64(const char* x) .
-long int parse_int(const char* x) {
-  errno = 0;
-  long int y = strtol(x, NULL, 10);
-
-  if (errno != 0 || y > INT_MAX || y < INT_MIN) {
-    return NA_INTEGER;
-  } else {
-    return y;
-  }
-}
-
 int64_t parse_int64(const char* x) {
   errno = 0;
   int64_t y = strtoll(x, NULL, 10);
@@ -63,12 +37,10 @@ enum BqType {
   BQ_BOOLEAN,
   BQ_STRING,
   BQ_TIMESTAMP,
-  BQ_TIME,
-  BQ_DATE,
-  BQ_DATETIME,
   BQ_RECORD,
   BQ_GEOGRAPHY,
-  BQ_BYTES
+  BQ_BYTES,
+  BQ_UNKNOWN
 };
 
 BqType parse_bq_type(std::string x) {
@@ -84,12 +56,6 @@ BqType parse_bq_type(std::string x) {
     return BQ_STRING;
   } else if (x == "TIMESTAMP") {
     return BQ_TIMESTAMP;
-  } else if (x == "TIME") {
-    return BQ_TIME;
-  } else if (x == "DATE") {
-    return BQ_DATE;
-  } else if (x == "DATETIME") {
-    return BQ_DATETIME;
   } else if (x == "RECORD") {
     return BQ_RECORD;
   } else if (x == "GEOGRAPHY") {
@@ -97,7 +63,7 @@ BqType parse_bq_type(std::string x) {
   } else if (x == "BYTES") {
     return BQ_BYTES;
   } else {
-    Rcpp::stop("Unknown type %s", x);
+    return BQ_UNKNOWN;
   }
 }
 
@@ -113,17 +79,18 @@ class BqField {
 private:
   std::string name_;
   BqType type_;
+  std::string type_str_;
   bool array_;
   std::vector<BqField> fields_;
 
 public:
-  BqField(std::string name, BqType type, bool array = false) :
-      name_(name), type_(type), array_(array)
+  BqField(std::string name, BqType type, std::string type_str, bool array = false) :
+      name_(name), type_(type), type_str_(type_str), array_(array)
   {
   }
 
   BqField(std::string name, std::vector<BqField> fields, bool array = false) :
-      name_(name), type_(BQ_RECORD), array_(array), fields_(fields)
+      name_(name), type_(BQ_RECORD), type_str_("RECORD"), array_(array), fields_(fields)
   {
   }
 
@@ -134,7 +101,8 @@ public:
 
     name_ = field["name"].GetString();
     array_ = field.HasMember("mode") && std::string(field["mode"].GetString()) == "REPEATED";
-    type_ = parse_bq_type(field["type"].GetString());
+    type_str_ = field["type"].GetString();
+    type_ = parse_bq_type(type_str_);
 
     if (field.HasMember("fields")) {
       const rapidjson::Value& fields = field["fields"];
@@ -166,17 +134,7 @@ public:
     case BQ_STRING:
       return Rcpp::CharacterVector(n);
     case BQ_TIMESTAMP:
-    case BQ_DATETIME:
       return Rcpp::DatetimeVector(n, "UTC");
-    case BQ_DATE:
-      return Rcpp::DateVector(n);
-    case BQ_TIME: {
-        check_namespace("hms", "TIME");
-        Rcpp::DoubleVector out(n);
-        out.attr("class") = Rcpp::CharacterVector::create("hms", "difftime");
-        out.attr("units") = "secs";
-        return out;
-      }
     case BQ_RECORD:
       return Rcpp::List(n);
     case BQ_GEOGRAPHY: {
@@ -192,9 +150,12 @@ public:
         out.attr("ptype") = Rcpp::RawVector::create();
         return out;
       }
+    case BQ_UNKNOWN: {
+      Rcpp::CharacterVector out(n);
+      out.attr("bq_type") = type_str_;
+      return out;
+      }
     }
-
-    Rcpp::stop("Unknown type");
   }
 
   SEXP vectorInit(int n) const  {
@@ -232,50 +193,13 @@ public:
         INTEGER(x)[i] = NA_LOGICAL;
       }
       break;
+    case BQ_UNKNOWN:
     case BQ_STRING:
       if (v.IsString()) {
         Rcpp::RObject chr = Rf_mkCharLenCE(v.GetString(), v.GetStringLength(), CE_UTF8);
         SET_STRING_ELT(x, i, chr);
       } else {
         SET_STRING_ELT(x, i, NA_STRING);
-      }
-      break;
-    case BQ_TIME:
-      if (v.IsString()) {
-        struct tm dtm;
-        char* parsed = strptime(v.GetString(), "%H:%M:%S", &dtm);
-
-        if (parsed == NULL) {
-          REAL(x)[i] = NA_REAL;
-        } else {
-          REAL(x)[i] = dtm.tm_hour * 3600 + dtm.tm_min * 60 + dtm.tm_sec +
-            parse_partial_seconds(parsed);
-        }
-      } else {
-        REAL(x)[i] = NA_REAL;
-      }
-      break;
-    case BQ_DATE:
-      if (v.IsString()) {
-        Rcpp::Date date(v.GetString());
-        REAL(x)[i] = date.getDate();
-      } else {
-        REAL(x)[i] = NA_REAL;
-      }
-      break;
-    case BQ_DATETIME:
-      if (v.IsString()) {
-        struct tm dtm;
-        char* parsed = strptime(v.GetString(), "%Y-%m-%dT%H:%M:%S", &dtm);
-        time_t utc = timegm(&dtm);
-
-        if (parsed == NULL || utc == -1) {
-          REAL(x)[i] = NA_REAL;
-        } else {
-          REAL(x)[i] = utc + parse_partial_seconds(parsed);
-        }
-      } else {
-        REAL(x)[i] = NA_REAL;
       }
       break;
     case BQ_RECORD:
@@ -323,6 +247,7 @@ public:
 
         int n = (field.array_) ? vs.Size() : 1;
         Rcpp::RObject col = field.vectorInit(n, false);
+
         if (field.array_) {
           for (int i = 0; i < n; ++i) {
             field.vectorSet(col, i, vs[i]["v"], false);
