@@ -65,14 +65,14 @@ on_connection_opened <- function(con, code) {
         project = list(
           contains = list(
             dataset = list(
-              icon = system.file("icons/dataset.svg", package = "bigrquery"),
+              icon = system.file("icons/dataset.png", package = "bigrquery"),
               contains = list(
                 table = list(
-                  icon = system.file("icons/table.svg", package = "bigrquery"),
+                  icon = system.file("icons/table.png", package = "bigrquery"),
                   contains = "data"
                 ),
                 view = list(
-                  icon = system.file("icons/view.svg", package = "bigrquery"),
+                  icon = system.file("icons/view.png", package = "bigrquery"),
                   contains = "data"
                 )
               )
