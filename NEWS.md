@@ -1,5 +1,9 @@
 # bigrquery (development version)
 
+* Functions generally try to do a better job of telling you when you've 
+  supplied the wrong type of input. Additionally, if you supply `SQL()` to
+  a query, you no longer get a weird warning (#498).
+
 * `grepl(pattern, x)` is now correctly translated to 
   `REGEXP_CONTAINS(x, pattern)` (#416).
 
