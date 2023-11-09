@@ -1,4 +1,7 @@
 # bigrquery (development version)
+  
+* Add support for RStudio/Workbench Connections pane when using `dbConnect` 
+  method (@meztez, #431).
 
 * If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
   tries again (#535).
