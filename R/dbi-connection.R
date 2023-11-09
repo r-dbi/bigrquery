@@ -183,7 +183,9 @@ dbWriteTable_bq <- function(conn,
                             field.types = NULL,
                             temporary = FALSE,
                             row.names = NA) {
-  assert_that(is.flag(overwrite), is.flag(append))
+
+  check_bool(overwrite)
+  check_bool(append)
 
   if (!is.null(field.types)) {
     stop("`field.types` not supported by bigrquery", call. = FALSE)

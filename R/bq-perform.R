@@ -61,9 +61,13 @@ bq_perform_extract <- function(x,
                                ...,
                                print_header = TRUE,
                                billing = x$project) {
+
   x <- as_bq_table(x)
-  destination_uris <- as.character(destination_uris)
-  assert_that(is.string(billing))
+  destination_uris <- as.character(destination_uris) # for gs_object
+  check_string(destination_format)
+  check_string(compression)
+  check_bool(print_header)
+  check_string(billing)
 
   url <- bq_path(billing, jobs = "")
   body <- list(
@@ -115,10 +119,13 @@ bq_perform_upload <- function(x, values,
                               ) {
 
   x <- as_bq_table(x)
-  assert_that(
-    is.data.frame(values),
-    is.string(billing)
-  )
+  if (!is.data.frame(values)) {
+    cli::cli_abort("{.arg values} must be a data frame.")
+  }
+  fields <- as_bq_fields(fields)
+  check_string(create_disposition)
+  check_string(write_disposition)
+  check_string(billing)
 
   load <- list(
     sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
@@ -128,9 +135,9 @@ bq_perform_upload <- function(x, values,
   )
 
   if (!is.null(fields)) {
-    fields <- as_bq_fields(fields)
     load$schema <- list(fields = as_json(fields))
-  } else if (!bq_table_exists(x)) {
+  }
+  if (!bq_table_exists(x)) {
     load$autodetect <- unbox(TRUE)
   }
 
@@ -217,7 +224,11 @@ bq_perform_load <- function(x,
                             ) {
   x <- as_bq_table(x)
   source_uris <- as.character(source_uris)
-  assert_that(is.string(billing))
+  check_string(billing)
+  check_string(source_format)
+  check_number_decimal(nskip, min = 0)
+  check_string(create_disposition)
+  check_string(write_disposition)
 
   load <- list(
     sourceUris = as.list(source_uris),
@@ -280,7 +291,14 @@ bq_perform_query <- function(query, billing,
                              use_legacy_sql = FALSE,
                              priority = "INTERACTIVE"
                              ) {
-  assert_that(is.string(query), is.string(billing))
+
+  check_string(query)
+  check_string(billing)
+
+  check_string(create_disposition)
+  check_string(write_disposition)
+  check_bool(use_legacy_sql)
+  check_string(priority)
 
   query <- list(
     query = unbox(query),
@@ -324,7 +342,9 @@ bq_perform_query_dry_run <- function(query, billing,
                                      parameters = NULL,
                                      use_legacy_sql = FALSE) {
 
-  assert_that(is.string(query), is.string(billing))
+  check_string(query)
+  check_string(billing)
+  check_bool(use_legacy_sql)
 
   query <- list(
     query = unbox(query),

@@ -107,7 +107,10 @@ collect.tbl_BigQueryConnection <- function(x, ...,
                                            n = Inf,
                                            warn_incomplete = TRUE) {
 
-  assert_that(length(n) == 1, n > 0L)
+  check_number_whole(n, min = 0, allow_infinite = TRUE)
+  check_number_whole(max_connections, min = 1)
+  check_bool(warn_incomplete)
+
   con <- dbplyr::remote_con(x)
 
   if (op_can_download(x)) {
@@ -232,9 +235,13 @@ sql_translation.BigQueryConnection <- function(x) {
       Sys.time = sql_prefix("current_time"),
 
       # Regular expressions
-      grepl = sql_prefix("REGEXP_CONTAINS", 2),
-      gsub = function(match, replace, x) {
-        dbplyr::build_sql("REGEXP_REPLACE", list(x, match, replace))
+      grepl = function(pattern, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_contains
+        dbplyr::build_sql("REGEXP_CONTAINS", list(x, pattern))
+      },
+      gsub = function(pattern, replace, x) {
+        # https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_replace
+        dbplyr::build_sql("REGEXP_REPLACE", list(x, pattern, replace))
       },
 
       # Other scalar functions
