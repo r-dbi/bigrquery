@@ -75,7 +75,7 @@ Collate:
     'bq-table.R'
     'bq-test.R'
     'camelCase.R'
-    'connections_viewer.R'
+    'connections-page.R'
     'dbi-driver.R'
     'dbi-connection.R'
     'dbi-result.R'
