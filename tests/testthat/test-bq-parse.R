@@ -23,52 +23,14 @@ test_that("gracefully handles int64 values", {
   expect_equal(bq_parse_single("-9223372036854775808", "integer"), bit64::as.integer64(NA))
 })
 
-test_that("can parse date/times", {
-  d <- as.Date("2018-01-01")
-  expect_identical(bq_parse_single(as.character(d), "date"), d)
-
-  dt <- as.POSIXct(d) + 3600 * 3
-  attr(dt, "tzone") <- "UTC"
-
-  expect_identical(
-    bq_parse_single(as.character(as.integer(dt)), "timestamp"),
-    dt
-  )
-  expect_identical(
-    bq_parse_single(format(dt, "%Y-%m-%dT%H:%M:%S"), "datetime"),
-    dt
-  )
-
-  skip_if_not_installed("hms")
-  expect_identical(
-    bq_parse_single("06:00:00", "time"),
-    hms::hms(6 * 3600)
-  )
-})
-
-test_that("unparseable date-times return NA", {
-  skip_on_os("linux")
-
-  expect_equal(
-    as.numeric(bq_parse_single("1900-01-01T12:00:00", "datetime")),
-    NA_real_
-  )
-})
-
 test_that("can parse NULLs", {
   expect_identical(bq_parse_single(NULL, "string"), NA_character_)
   expect_identical(bq_parse_single(NULL, "integer"), bit64::as.integer64(NA))
   expect_identical(bq_parse_single(NULL, "float"), NA_real_)
   expect_identical(bq_parse_single(NULL, "boolean"), NA)
 
-  expect_identical(bq_parse_single(NULL, "date"), as.Date(NA))
-
   na_dtm <- structure(as.POSIXct(NA), tzone = "UTC")
-  expect_identical(bq_parse_single(NULL, "datetime"), na_dtm)
   expect_identical(bq_parse_single(NULL, "timestamp"), na_dtm)
-
-  skip_if_not_installed("hms")
-  expect_identical(bq_parse_single(NULL, "time"), hms::hms(NA_real_))
 })
 
 

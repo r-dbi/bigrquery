@@ -133,7 +133,7 @@ bq_table_download <-
       if (!bq_quiet(quiet)) {
         message("First chunk includes all requested rows.")
       }
-      return(convert_bigint(chunk_data, bigint))
+      return(parse_postprocess(chunk_data, bigint = bigint))
     }
 
     if (chunk_size_from_user && n_got < chunk_size) {
@@ -194,30 +194,47 @@ bq_table_download <-
       n = n_max,
       quiet = bq_quiet(quiet)
     )
-    convert_bigint(table_data, bigint)
+    parse_postprocess(table_data, bigint = bigint)
   }
 
 # This function is a modified version of
 # https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R
-convert_bigint <- function(df, bigint) {
-  if (bigint == "integer64") {
-    return(df)
-  }
+parse_postprocess <- function(df, bigint) {
 
-  as_bigint <- switch(bigint,
-                      integer = as.integer,
-                      numeric = as.numeric,
-                      character = as.character
+  df <- col_apply(
+    df,
+    function(x) identical(attr(x, "bq_type"), "DATE"),
+    function(x) clock::date_parse(x)
+  )
+  df <- col_apply(
+    df,
+    function(x) identical(attr(x, "bq_type"), "DATETIME"),
+    function(x) clock::date_time_parse(x, format = "%Y-%m-%dT%H:%M:%S", zone = "UTC")
+  )
+  df <- col_apply(
+    df,
+    function(x) identical(attr(x, "bq_type"), "TIME"),
+    function(x) hms::parse_hms(x)
   )
 
-  rapply_int64(df, f = as_bigint)
+  if (bigint != "integer64") {
+    as_bigint <- switch(
+      bigint,
+      integer = as.integer,
+      numeric = as.numeric,
+      character = as.character
+    )
+    df <- col_apply(df, bit64::is.integer64, as_bigint)
+  }
+
+  df
 }
 
-rapply_int64 <- function(x, f) {
+col_apply <- function(x, p, f) {
   if (is.list(x)) {
-    x[] <- lapply(x, rapply_int64, f = f)
+    x[] <- lapply(x, col_apply, p = p, f = f)
     x
-  } else if (bit64::is.integer64(x)) {
+  } else if (p(x)) {
     f(x)
   } else {
     x

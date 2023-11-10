@@ -40,8 +40,6 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Kungliga Tekniska Högskolan (strptime implementation) [contributor]
-  \item The NetBSD Foundation, Inc. (gmtime implementation) [contributor]
   \item Posit Software, PBC [copyright holder, funder]
 }
 

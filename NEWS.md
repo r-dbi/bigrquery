@@ -1,4 +1,12 @@
 # bigrquery (development version)
+
+* `bq_table_download()` now parses dates using the clock package. This 
+  leads to a considerable performance improvement (#430) and ensures that dates
+  prior to 1970-01-01 are parsed correctly (#285).
+  
+* `bq_table_download()` now returns unknown fields as character vectors.
+  This means that BIGNUMERIC (#435) and JSON (#544) data is downloaded into
+  R for you to process as you wish.
   
 * Add support for RStudio/Workbench Connections pane when using `dbConnect` 
   method (@meztez, #431).
