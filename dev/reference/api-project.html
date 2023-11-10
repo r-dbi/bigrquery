@@ -107,14 +107,354 @@ all pages (this may take a long time!)</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="bq_test_project.html">bq_authable</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">bq_project_datasets</span><span class="op">(</span><span class="st">"bigquery-public-data"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">bq_project_datasets</span><span class="op">(</span><span class="st">"bigquery-public-data"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Only first 100 results retrieved. Adjust with `max_pages` and `page_size` parameters.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.america_health_rankings</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.austin_311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.austin_bikeshare</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.austin_crime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.austin_incidents</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.austin_waste</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.baseball</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.bbc_news</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.bigqueryml_ncaa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.bitcoin_blockchain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[11]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.blackhole_database</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[12]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.blockchain_analytics_ethereum_mainnet_us</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[13]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.bls</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[14]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.bls_qcew</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[15]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.breathe</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[16]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.broadstreet_adi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[17]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.catalonian_mobile_coverage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[18]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.catalonian_mobile_coverage_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[19]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_bureau_acs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[20]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_bureau_construction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[21]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_bureau_international</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[22]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_bureau_usa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[23]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_opportunity_atlas</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[24]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.census_utility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[25]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cfpb_complaints</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[26]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.chicago_crime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[27]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.chicago_taxi_trips</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[28]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.clemson_dice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[29]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cloud_storage_geo_index</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[30]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cms_codes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[31]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cms_medicare</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[32]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cms_synthetic_patient_data_omop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[33]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.country_codes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[34]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_aha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[35]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_covidtracking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[36]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_ecdc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[37]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_ecdc_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[38]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_genome_sequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[39]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_geotab_mobility_impact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[40]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_geotab_mobility_impact_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[41]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_google_mobility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[42]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_google_mobility_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[43]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_govt_response</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[44]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_italy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[45]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_italy_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[46]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_jhu_csse</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[47]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_jhu_csse_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[48]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_nyt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[49]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_open_data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[50]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_open_data_eu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[51]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_public_forecasts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[52]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_public_forecasts_asia_ne1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[53]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_rxrx19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[54]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_symptom_search</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[55]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_tracking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[56]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_usafacts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[57]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_vaccination_access</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[58]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_vaccination_search_insights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[59]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.covid19_weathersource_com</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[60]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_band</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[61]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_bitcoin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[62]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_bitcoin_cash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[63]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_dash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[64]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_dogecoin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[65]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_ethereum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[66]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_ethereum_classic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[67]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_iotex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[68]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_kusama</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[69]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_litecoin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[70]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_near_mainnet_us</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[71]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_polkadot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[72]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_polygon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[73]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_solana_mainnet_us</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[74]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_tezos</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[75]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_theta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[76]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_zcash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[77]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.crypto_zilliqa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[78]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.cymbal_investments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[79]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.dataflix_covid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[80]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.dataflix_traffic_safety</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[81]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.deepmind_alphafold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[82]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.deps_dev_v1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[83]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.dimensions_ai_covid19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[84]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.ebi_chembl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[85]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.ebi_surechembl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[86]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.eclipse_megamovie</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[87]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.epa_historical_air_quality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[88]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.ethereum_blockchain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[89]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.etsi_technical_standards</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[90]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.faa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[91]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fcc_political_ads</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[92]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fda_drug</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[93]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fda_food</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[94]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fdic_banks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[95]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fec</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[96]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.fhir_synthea</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[97]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.ga4_obfuscated_sample_ecommerce</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[98]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.gbif</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[99]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.gdelt_hathitrustbooks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[100]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; bigquery-public-data.gdelt_internetarchivebooks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">bq_project_datasets</span><span class="op">(</span><span class="st">"githubarchive"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; githubarchive.day</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; githubarchive.github</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; githubarchive.month</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_dataset&gt; githubarchive.year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="bq_test_project.html">bq_testable</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">bq_project_jobs</span><span class="op">(</span><span class="fu"><a href="bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span>, page_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Only first 10 results retrieved. Adjust with `max_pages` and `page_size` parameters.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_3fA1rP2JonsD1X_SPVOoXg1oyz6y.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_1lHRZF4dt0p0bC9kzaBd_cBOCwQd.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_ySdqJrCGfY1asI7jGvSwPDHkph0y.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_hP-Pdvjvsc74fyEVcCcGP7aNOES2.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job__slSWx-hQFKEJm52XtBfiQ4r9AFM.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_d2vRXMm7vwiwuGMkXMANzTnvVZNd.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_BJhyhEDNHccvmKxSWWvj10umbUyJ.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_bMakK71TxR4nc5ndel0cLqRznvcd.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_AaHZ0l44axLOXnWXoLF0AfTOgrIe.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_Y4OjELIZz3dM9jiJnTXkIr5jDg50.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
