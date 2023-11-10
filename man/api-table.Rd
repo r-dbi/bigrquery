@@ -52,7 +52,7 @@ snake_case names are automatically converted to camelCase.}
 \item{dest}{Source and destination \link{bq_table}s.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
+if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{values}{Data frame of values to insert.}
 

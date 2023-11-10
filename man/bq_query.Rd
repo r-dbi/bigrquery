@@ -30,7 +30,7 @@ queries (> 128 MB compressed).}
 \item{...}{Passed on to \code{\link[=bq_perform_query]{bq_perform_query()}}}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
+if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{billing}{If you query a dataset that you only have read access
 for, such as a public dataset, you must also submit a \code{billing} project.}

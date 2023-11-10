@@ -36,7 +36,7 @@ prevent the API from paginating based on response size.}
 BigQuery servers.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
+if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{bigint}{The R type that BigQuery's 64-bit integer types should be
 mapped to. The default is \code{"integer"}, which returns R's \code{integer} type,
