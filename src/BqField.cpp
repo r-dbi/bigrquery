@@ -150,7 +150,7 @@ public:
         out.attr("ptype") = Rcpp::RawVector::create();
         return out;
       }
-    case BQ_UNKNOWN: {
+    default: {
       Rcpp::CharacterVector out(n);
       out.attr("bq_type") = type_str_;
       return out;
