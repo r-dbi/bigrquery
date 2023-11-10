@@ -35,5 +35,7 @@ test_that("pagination warns if pages left on server", {
 })
 
 test_that("error call is forwarded all the way down", {
+  skip_if_not(bq_auth())
+
   expect_snapshot(bq_job_meta("a.b.c"), error = TRUE)
 })
