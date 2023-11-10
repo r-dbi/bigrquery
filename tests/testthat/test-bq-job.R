@@ -8,6 +8,7 @@ test_that("can control chattiness of bq_job_wait", {
 })
 
 test_that("informative errors on failure", {
+  withr::local_options(cli.progress_show_after = 10)
   ds <- bq_test_dataset()
 
   tb <- bq_test_table()
