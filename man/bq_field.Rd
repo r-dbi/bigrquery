@@ -16,15 +16,22 @@ as_bq_field(x)
 as_bq_fields(x)
 }
 \arguments{
-\item{name}{Field name}
+\item{name}{The field name. The name must contain only letters (a-z, A-Z),
+numbers (0-9), or underscores (_), and must start with a letter or
+underscore. The maximum length is 300 characters.}
 
-\item{type}{Field type}
+\item{type}{The field data type. Possible values include:
+\code{"STRING"}, \code{"BYTES"}, \code{"INTEGER"}, \code{"FLOAT"}, \code{"BOOLEAN"}, \code{"TIMESTAMP"},
+\code{"DATE"}, \code{"TIME"}, \code{"DATETIME"}, \code{"GEOGRAPHY"}, \code{"NUMERIC"},
+\code{"BIGNUMERIC"}, \code{"JSON"}, \code{"RECORD"}.}
 
-\item{mode}{Field mode}
+\item{mode}{The field mode. Possible values include: \code{"NULLABLE"},
+\code{"REQUIRED"}, and \code{"REPEATED"}.}
 
 \item{fields}{For a field of type "record", a list of sub-fields.}
 
-\item{description}{Field description}
+\item{description}{The field description. The maximum length is 1,024
+characters.}
 
 \item{x}{A list of \code{bg_fields}}
 }
@@ -42,4 +49,9 @@ as_bq_fields(list(
 
 # as_bq_fields() can also take a data frame
 as_bq_fields(mtcars)
+}
+\seealso{
+\code{bq_field()} corresponds to a \code{TableFieldSchema}, see
+\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema}
+for more details.
 }
