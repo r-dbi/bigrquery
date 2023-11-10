@@ -205,7 +205,7 @@ Additional information at:
 }
 
 \examples{
-if (bq_testable()) {
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ds <- bq_test_dataset()
 bq_mtcars <- bq_table(ds, "mtcars")
 job <- bq_perform_upload(bq_mtcars, mtcars)
@@ -214,6 +214,6 @@ bq_table_exists(bq_mtcars)
 bq_job_wait(job)
 bq_table_exists(bq_mtcars)
 head(bq_table_download(bq_mtcars))
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{internal}
