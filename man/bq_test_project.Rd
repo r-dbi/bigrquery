@@ -48,11 +48,11 @@ automatically skip if auth and a test project are not available.
 }
 
 \examples{
-if (bq_testable()) {
-  ds <- bq_test_dataset()
-  bq_mtcars <- bq_table_upload(bq_table(ds, "mtcars"), mtcars)
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+ds <- bq_test_dataset()
+bq_mtcars <- bq_table_upload(bq_table(ds, "mtcars"), mtcars)
 
-  # dataset and table will be automatically deleted when ds is GC'd
-}
+# dataset and table will be automatically deleted when ds is GC'd
+\dontshow{\}) # examplesIf}
 }
 \keyword{internal}

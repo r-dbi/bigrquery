@@ -107,6 +107,12 @@ natality %>%
 
 ## Important details
 
+### BigQuery account
+
+To use bigrquery, you'll need a BigQuery project. Fortunately, if you just want to play around with the BigQuery API, it's easy to start with Google's free [public data](https://cloud.google.com/bigquery/public-data) and the [BigQuery sandbox](https://cloud.google.com/bigquery/docs/sandbox). This gives you some fun data to play with along with enough free compute (1 TB of queries & 10 GB of storage per month) to learn the ropes. 
+
+To get started, open <https://console.cloud.google.com/bigquery> and create a project. Make a note of the "Project ID" as you'll use this as the `billing` project whenever you work with free sample data; and as the `project` when you work with your own data.
+
 ### Authentication and authorization
 
 When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the browser. You'll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:
@@ -122,22 +128,6 @@ When using bigrquery interactively, you'll be prompted to [authorize bigrquery](
   * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client or service account token.
 
 Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://www.tidyverse.org/google_privacy_policy) provides more info.
-
-### Billing project
-
-If you just want to play around with the BigQuery API, it's easiest to start with Google's free [sample data](https://cloud.google.com/bigquery/public-data). You'll still need to create a project, but if you're just playing around, it's unlikely that you'll go over the free limit (1 TB of queries / 10 GB of storage).
-
-To create a project:
-
-1. Open https://console.cloud.google.com/ and create a project.
-   Make a note of the "Project ID" in the "Project info" box.
-
-1. Click on "APIs & Services", then "Dashboard" in the left the left menu.
-
-1. Click on "Enable Apis and Services" at the top of the page, 
-   then search for "BigQuery API" and "Cloud storage".
-
-Use your project ID as the `billing` project whenever you work with free sample data; and as the `project` when you work with your own data.
 
 ## Useful links
 

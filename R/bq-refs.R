@@ -1,4 +1,4 @@
-#' S3 classes that reference remote BigQuery datasets, tables and jobs
+#' S3 classes for BigQuery datasets, tables and jobs
 #'
 #' @description
 #' Create references to BigQuery datasets, jobs, and tables. Each class
@@ -12,13 +12,14 @@
 #' coercion functions on their first argument, allowing you to flexible specify
 #' their inputs.
 #'
-#' @param project,dataset,table,job Individual project, dataset, table,
-#'   and job identifiers (strings).
+#' @param project,dataset,table,job,type Individual project, dataset, table,
+#'   job identifiers and table type (strings).
 #'
 #'   For `bq_table()`, you if supply a `bq_dataset` as the first argument,
 #'   the 2nd argument will be interpreted as the `table`
 #' @param x An object to coerce to a `bq_job`, `bq_dataset`, or `bq_table`.
 #'   Built-in methods handle strings and lists.
+#' @inheritParams rlang::args_error_context
 #' @param ... Other arguments passed on to methods.
 #' @seealso [api-job], [api-perform], [api-dataset], and [api-table] for
 #'   functions that work with these objects.
@@ -80,28 +81,61 @@ print.bq_dataset <- function(x, ...) {
 
 #' @rdname bq_refs
 #' @export
-as_bq_dataset <- function(x) UseMethod("as_bq_dataset")
+as_bq_dataset <- function(x,
+                          ...,
+                          error_arg = caller_arg(x),
+                          error_call = caller_env()) {
+  UseMethod("as_bq_dataset")
+}
 
 #' @export
-as_bq_dataset.bq_dataset <- function(x) x
+as_bq_dataset.bq_dataset <- function(x,
+                                     ...,
+                                     error_arg = caller_arg(x),
+                                     error_call = caller_env()) {
+  x
+}
 
 #' @export
-as_bq_dataset.character <- function(x) {
-  x <- bq_from_string(x, 2, "bq_dataset")
+as_bq_dataset.character <- function(x,
+                                    ...,
+                                    error_arg = caller_arg(x),
+                                    error_call = caller_env()) {
+  x <- bq_from_string(x, n = 2, error_arg = error_arg, error_call = error_call)
   bq_dataset(x[[1]], x[[2]])
 }
 
 #' @export
-as_bq_dataset.list <- function(x) {
-  x <- bq_from_list(x, c("projectId", "datasetId"), "bq_dataset")
+as_bq_dataset.list <- function(x,
+                               ...,
+                               error_arg = caller_arg(x),
+                               error_call = caller_env()) {
+  x <- bq_from_list(
+    x,
+    names = c("projectId", "datasetId"),
+    error_arg = error_arg,
+    error_call = error_call
+  )
   bq_dataset(x$projectId, x$datasetId)
 }
+
+#' @export
+as_bq_dataset.default <- function(x,
+                                  ...,
+                                  error_arg = caller_arg(x),
+                                  error_call = caller_env()) {
+  cli::cli_abort(
+    "{.arg {error_arg}} must be a string, list, or {.fun bq_dataset}.",
+    call = error_call
+  )
+}
+
 
 # table -------------------------------------------------------------------
 
 #' @rdname bq_refs
 #' @export
-bq_table <- function(project, dataset, table = NULL) {
+bq_table <- function(project, dataset, table = NULL, type = "TABLE") {
   if (inherits(project, "bq_dataset") && is.null(table)) {
     check_string(dataset)
     table <- dataset
@@ -117,7 +151,8 @@ bq_table <- function(project, dataset, table = NULL) {
     list(
       project = project,
       dataset = dataset,
-      table = table
+      table = table,
+      type = type
     ),
     class = "bq_table"
   )
@@ -133,24 +168,52 @@ print.bq_table <- function(x, ...) {
 
 #' @rdname bq_refs
 #' @export
-as_bq_table <- function(x, ...) UseMethod("as_bq_table")
+as_bq_table <- function(x,
+                        ...,
+                        error_arg = caller_arg(x),
+                        error_call = caller_env()) {
+  UseMethod("as_bq_table")
+}
 
 #' @export
-as_bq_table.bq_table <- function(x, ...) {
+as_bq_table.bq_table <- function(x,
+                                 ...,
+                                 error_arg = caller_arg(x),
+                                 error_call = caller_env()) {
   x
 }
 
 #' @export
-as_bq_table.character <- function(x, ...) {
-  x <- bq_from_string(x, 3, "bq_table")
-  bq_table(x[[1]], x[[2]], x[[3]])
+as_bq_table.character <- function(x,
+                                  ...,
+                                  error_arg = caller_arg(x),
+                                  error_call = caller_env()) {
+  x <- bq_from_string(x, n = 3, error_arg = error_arg, error_call = error_call)
+  bq_table(x[[1]], x[[2]], x[[3]], ...)
 }
 
 #' @export
-as_bq_table.list <- function(x, ...) {
-  x <- bq_from_list(x, c("projectId", "datasetId", "tableId"), "bq_table")
-  bq_table(x$projectId, x$datasetId, x$tableId)
+as_bq_table.list <- function(x, ..., error_arg = caller_arg(x), error_call = caller_env()) {
+  x <- bq_from_list(
+    x,
+    names = c("projectId", "datasetId", "tableId"),
+    error_arg = error_arg,
+    error_call = error_call
+  )
+  bq_table(x$projectId, x$datasetId, x$tableId, ...)
 }
+
+#' @export
+as_bq_table.default <- function(x,
+                                  ...,
+                                  error_arg = caller_arg(x),
+                                  error_call = caller_env()) {
+  cli::cli_abort(
+    "{.arg {error_arg}} must be a string, list, or {.fun bq_table}.",
+    call = error_call
+  )
+}
+
 
 # job ---------------------------------------------------------------------
 
@@ -170,20 +233,52 @@ bq_job <- function(project, job, location = "US") {
 
 #' @rdname bq_refs
 #' @export
-as_bq_job <- function(x) UseMethod("as_bq_job")
+as_bq_job <- function(x,
+                      ...,
+                      error_arg = caller_arg(x),
+                      error_call = caller_env()) {
+  UseMethod("as_bq_job")
+}
 
 #' @export
-as_bq_job.bq_job <- function(x) x
+as_bq_job.bq_job <- function(x,
+                             ...,
+                             error_arg = caller_arg(x),
+                             error_call = caller_env()) {
+  x
+}
 
 #' @export
-as_bq_job.list <- function(x) {
-  x <- bq_from_list(x, c("projectId", "jobId", "location"), "bq_job")
+as_bq_job.list <- function(x,
+                           ...,
+                           error_arg = caller_arg(x),
+                           error_call = caller_env()) {
+  x <- bq_from_list(
+    x,
+    c("projectId", "jobId", "location"),
+    error_arg = error_arg,
+    error_call = error_call
+  )
   bq_job(x$projectId, x$jobId, x$location)
 }
 
 #' @export
-as_bq_job.character <- function(x) {
-  x <- bq_from_string(x, 3, "bq_job")
+as_bq_job.default <- function(x,
+                              ...,
+                              error_arg = caller_arg(x),
+                              error_call = caller_env()) {
+  cli::cli_abort(
+    "{.arg {error_arg}} must be a string, list, or {.fun bq_job}.",
+    call = error_call
+  )
+}
+
+#' @export
+as_bq_job.character <- function(x,
+                                ...,
+                                error_arg = caller_arg(x),
+                                error_call = caller_env()) {
+  x <- bq_from_string(x, 3, error_arg = error_arg, error_call = error_call)
   bq_job(x[[1]], x[[2]], x[[3]])
 }
 
@@ -219,25 +314,31 @@ tableReference <- function(x) {
 
 # Helpers -----------------------------------------------------------------
 
-bq_from_list <- function(x, names, type, error_call = caller_env()) {
+bq_from_list <- function(x,
+                         names,
+                         error_arg = caller_arg(x),
+                         error_call = caller_env()) {
   names(x) <- camelCase(names(x))
 
   if (length(setdiff(names, names(x))) == 0)
     return(x)
 
   cli::cli_abort(
-    "List <{type}> must have components {.and {.str {names}}}.",
+    "When {.arg {error_arg}} is a list, it must have components {.and {.str {names}}}.",
     call = error_call
   )
 }
 
-bq_from_string <- function(x, n, type, error_call = caller_env()) {
+bq_from_string <- function(x,
+                           n,
+                           error_arg = caller_arg(x),
+                           error_call = caller_env()) {
   check_string(x, call = error_call)
 
   pieces <- strsplit(x, ".", fixed = TRUE)[[1]]
   if (length(pieces) != n) {
     cli::cli_abort(
-      "Character <{type}> must contain {n} components when split by `.`",
+      "When {.arg {error_arg}} is a string, it must contain {n} components separted by {.str .}.",
       call = error_call
     )
   }

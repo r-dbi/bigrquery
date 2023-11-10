@@ -93,7 +93,7 @@ nested/repeated values, are not well supported in R.
 }
 
 \examples{
-if (bq_testable()) {
-  df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
-}
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
+\dontshow{\}) # examplesIf}
 }

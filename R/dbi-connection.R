@@ -2,12 +2,15 @@
 NULL
 
 BigQueryConnection <- function(project,
-           dataset,
-           billing,
-           page_size = 1e4,
-           quiet = NA,
-           use_legacy_sql = FALSE,
-           bigint = c("integer", "integer64", "numeric", "character")) {
+                               dataset,
+                               billing,
+                               page_size = 1e4,
+                               quiet = NA,
+                               use_legacy_sql = FALSE,
+                               bigint = c("integer", "integer64", "numeric", "character")) {
+
+  connection_capture()
+
   new("BigQueryConnection",
     project = project,
     dataset = dataset,
@@ -65,6 +68,7 @@ setMethod(
 setMethod(
   "dbDisconnect", "BigQueryConnection",
   function(conn, ...) {
+    on_connection_closed(conn)
     invisible(TRUE)
   })
 
@@ -256,6 +260,8 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     write_disposition = "WRITE_APPEND",
     ...
   )
+  on_connection_updated(conn)
+
   invisible(TRUE)
 }
 
@@ -283,6 +289,7 @@ dbCreateTable_bq <- function(conn,
 
   tb <- as_bq_table(conn, name)
   bq_table_create(tb, fields)
+  on_connection_updated(conn)
 
   invisible(TRUE)
 }
@@ -356,6 +363,7 @@ setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
 dbRemoveTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
   bq_table_delete(tb)
+  on_connection_updated(conn)
   invisible(TRUE)
 }
 
@@ -416,7 +424,7 @@ setMethod(
 # Convert to bq objects ---------------------------------------------------
 
 #' @export
-as_bq_dataset.BigQueryConnection <- function(x) {
+as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
   bq_dataset(x@project, x@dataset)
 }
 

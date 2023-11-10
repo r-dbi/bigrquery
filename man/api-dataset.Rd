@@ -57,7 +57,7 @@ Basic create-read-update-delete verbs for datasets.
 }
 
 \examples{
-if (bq_testable()) {
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ds <- bq_dataset(bq_test_project(), "dataset_api")
 bq_dataset_exists(ds)
 
@@ -75,5 +75,5 @@ bq_table_create(bq_table(ds, "x1"))
 bq_table_create(bq_table(ds, "x2"))
 bq_table_create(bq_table(ds, "x3"))
 bq_dataset_tables(ds)
-}
+\dontshow{\}) # examplesIf}
 }

@@ -54,10 +54,8 @@
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
-#' @examples
-#' if (bq_testable()) {
-#'   df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
-#' }
+#' @examplesIf bq_testable()
+#' df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
 bq_table_download <-
   function(x,
            n_max = Inf,

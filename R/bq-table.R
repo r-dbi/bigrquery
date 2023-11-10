@@ -20,8 +20,7 @@
 #' * `bq_table_size()`: the size of the table in bytes
 #' * `bq_table_fields()`: a [bq_fields].
 #'
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' ds <- bq_test_dataset()
 #'
 #' bq_mtcars <- bq_table(ds, "mtcars")
@@ -47,7 +46,6 @@
 #'
 #' my_natality <- bq_table(ds, "mynatality")
 #' bq_table_copy("publicdata.samples.natality", my_natality)
-#' }
 #' @name api-table
 NULL
 

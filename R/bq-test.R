@@ -19,13 +19,11 @@
 #'   tied to the lifetime of the object that it returns.
 #' @export
 #' @keywords internal
-#' @examples
-#' if (bq_testable()) {
-#'   ds <- bq_test_dataset()
-#'   bq_mtcars <- bq_table_upload(bq_table(ds, "mtcars"), mtcars)
+#' @examplesIf bq_testable()
+#' ds <- bq_test_dataset()
+#' bq_mtcars <- bq_table_upload(bq_table(ds, "mtcars"), mtcars)
 #'
-#'   # dataset and table will be automatically deleted when ds is GC'd
-#' }
+#' # dataset and table will be automatically deleted when ds is GC'd
 bq_test_project <- function() {
   if (is_testing() && !bq_authable()) {
     testthat::skip("No BigQuery access credentials available")

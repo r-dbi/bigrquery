@@ -12,8 +12,7 @@
 #' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
 #' * [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list)
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' ds <- bq_dataset(bq_test_project(), "dataset_api")
 #' bq_dataset_exists(ds)
 #'
@@ -31,7 +30,6 @@
 #' bq_table_create(bq_table(ds, "x2"))
 #' bq_table_create(bq_table(ds, "x3"))
 #' bq_dataset_tables(ds)
-#' }
 #' @name api-dataset
 NULL
 
@@ -103,12 +101,12 @@ bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, warn = TRUE, .
 
   data <- bq_get_paginated(
     url,
-    query = list(fields = "tables(tableReference)"),
+    query = list(fields = "tables(tableReference,type)"),
     page_size = page_size,
     max_pages = max_pages,
     warn = warn
   )
 
   tables <- unlist(lapply(data, function(x) x$tables), recursive = FALSE)
-  lapply(tables, function(x) as_bq_table(x$tableReference))
+  lapply(tables, function(x) as_bq_table(x$tableReference, type = x$type))
 }

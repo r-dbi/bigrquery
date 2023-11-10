@@ -7,23 +7,23 @@
 \alias{as_bq_table}
 \alias{bq_job}
 \alias{as_bq_job}
-\title{S3 classes that reference remote BigQuery datasets, tables and jobs}
+\title{S3 classes for BigQuery datasets, tables and jobs}
 \usage{
 bq_dataset(project, dataset)
 
-as_bq_dataset(x)
+as_bq_dataset(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 
-bq_table(project, dataset, table = NULL)
+bq_table(project, dataset, table = NULL, type = "TABLE")
 
-as_bq_table(x, ...)
+as_bq_table(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 
 bq_job(project, job, location = "US")
 
-as_bq_job(x)
+as_bq_job(x, ..., error_arg = caller_arg(x), error_call = caller_env())
 }
 \arguments{
-\item{project, dataset, table, job}{Individual project, dataset, table,
-and job identifiers (strings).
+\item{project, dataset, table, job, type}{Individual project, dataset, table,
+job identifiers and table type (strings).
 
 For \code{bq_table()}, you if supply a \code{bq_dataset} as the first argument,
 the 2nd argument will be interpreted as the \code{table}}
@@ -32,6 +32,15 @@ the 2nd argument will be interpreted as the \code{table}}
 Built-in methods handle strings and lists.}
 
 \item{...}{Other arguments passed on to methods.}
+
+\item{error_arg}{An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.}
+
+\item{error_call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 
 \item{location}{Job location}
 }

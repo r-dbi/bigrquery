@@ -5,6 +5,10 @@
     auth_active = TRUE
   )
 
+  if (has_internal_auth() && in_pkgdown()) {
+    bq_auth_internal()
+  }
+
   # S3 methods --------------------------------------------------------------
   s3_register("dplyr::collect", "tbl_BigQueryConnection")
 

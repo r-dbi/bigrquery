@@ -6,8 +6,7 @@
 #' @section Google BigQuery API documentation:
 #' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' jobs <- bq_project_jobs(bq_test_project())
 #' jobs[[1]]
 #'
@@ -16,7 +15,6 @@
 #'
 #' # Wait for job to complete
 #' bq_job_wait(jobs[[1]])
-#' }
 #' @name api-job
 NULL
 
