@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* dplyr joins now work correctly across any bigquery connections (#433).
+
 * `bq_table_download()` now parses dates using the clock package. This 
   leads to a considerable performance improvement (#430) and ensures that dates
   prior to 1970-01-01 are parsed correctly (#285).

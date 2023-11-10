@@ -203,6 +203,12 @@ op_table.lazy_select_query <- function(x, con) {
   op_table(x$x)
 }
 
+
+# exported onLoad
+same_src.tbl_BigQueryConnection <- function(x, y) {
+  inherits(y, "tbl_BigQueryConnection")
+}
+
 # SQL translation -------------------------------------------------------------
 
 # Don't import to avoid build-time dependency
