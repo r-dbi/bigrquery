@@ -10,6 +10,7 @@
   }
 
   # S3 methods --------------------------------------------------------------
+  s3_register("dplyr::tbl", "BigQueryConnection")
   s3_register("dplyr::collect", "tbl_BigQueryConnection")
   s3_register("dplyr::same_src", "tbl_BigQueryConnection")
 

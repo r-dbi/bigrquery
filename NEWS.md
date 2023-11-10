@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* `tbl()` now works with views (#519).
+
 * dplyr joins now work correctly across any bigquery connections (#433).
 
 * `bq_table_download()` now parses dates using the clock package. This 

@@ -42,6 +42,17 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 }
 
 # registered onLoad
+tbl.BigQueryConnection <- function(src, from, ...) {
+  src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
+  tbl <- dplyr::tbl(src, from = from)
+
+  # This is ugly, but I don't see a better way of doing this
+  tb <- as_bq_table(src$con, from)
+  tbl$lazy_query$is_view <- !inherits(from, "sql") && bq_table_meta(tb, "type")$type == "VIEW"
+  tbl
+}
+
+# registered onLoad
 dbplyr_edition.BigQueryConnection <- function(con) 2L
 
 # registered onLoad
@@ -155,12 +166,18 @@ op_can_download.lazy_select_query <- function(x) {
 }
 #' @export
 op_can_download.lazy_base_query <- function(x) {
-  dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+  if (isTRUE(x$is_view)) {
+    FALSE
+  } else if (inherits(x$x, "sql")) {
+    FALSE
+  } else {
+    dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+  }
 }
 
 query_is_head_only <- function(x) {
   if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
-  if (inherits(x$x$x, "sql")) return(FALSE)
+  if (!op_can_download(x$x)) return(FALSE)
 
   vars_base <- dbplyr::op_vars(x$x)
   if (!is_select_trivial(x$select, vars_base)) return(FALSE)
