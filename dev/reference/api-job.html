@@ -115,15 +115,16 @@ mentioned in error messages as the source of the error. See the
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">jobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="api-project.html">bq_project_jobs</a></span><span class="op">(</span><span class="fu"><a href="bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Only first 100 results retrieved. Adjust with `max_pages` and `page_size` parameters.</span>
 <span class="r-in"><span><span class="va">jobs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_mBY1gCaJ6o4k7pYcYnbfu0OcDPfZ.US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_job&gt; gargle-169921.job_e82iv-Ui7kYUDNBX57rfFg_NpHhL.US</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Show statistics about job</span></span></span>
 <span class="r-in"><span><span class="fu">bq_job_show_statistics</span><span class="op">(</span><span class="va">jobs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Input: 3.44 kB</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Output: 2.82 kB</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Wait for job to complete</span></span></span>
 <span class="r-in"><span><span class="fu">bq_job_wait</span><span class="op">(</span><span class="va">jobs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> Job gargle-169921.job_e82iv-Ui7kYUDNBX57rfFg_NpHhL.US failed</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Not found: Table gargle-169921:basedata.asdfsafadsfddaf was not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   in location US [notFound]</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

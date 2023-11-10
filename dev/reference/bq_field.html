@@ -74,15 +74,21 @@ coerce from lists.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>name</dt>
-<dd><p>Field name</p></dd>
+<dd><p>The field name. The name must contain only letters (a-z, A-Z),
+numbers (0-9), or underscores (_), and must start with a letter or
+underscore. The maximum length is 300 characters.</p></dd>
 
 
 <dt>type</dt>
-<dd><p>Field type</p></dd>
+<dd><p>The field data type. Possible values include:
+<code>"STRING"</code>, <code>"BYTES"</code>, <code>"INTEGER"</code>, <code>"FLOAT"</code>, <code>"BOOLEAN"</code>, <code>"TIMESTAMP"</code>,
+<code>"DATE"</code>, <code>"TIME"</code>, <code>"DATETIME"</code>, <code>"GEOGRAPHY"</code>, <code>"NUMERIC"</code>,
+<code>"BIGNUMERIC"</code>, <code>"JSON"</code>, <code>"RECORD"</code>.</p></dd>
 
 
 <dt>mode</dt>
-<dd><p>Field mode</p></dd>
+<dd><p>The field mode. Possible values include: <code>"NULLABLE"</code>,
+<code>"REQUIRED"</code>, and <code>"REPEATED"</code>.</p></dd>
 
 
 <dt>fields</dt>
@@ -90,13 +96,20 @@ coerce from lists.</p>
 
 
 <dt>description</dt>
-<dd><p>Field description</p></dd>
+<dd><p>The field description. The maximum length is 1,024
+characters.</p></dd>
 
 
 <dt>x</dt>
 <dd><p>A list of <code>bg_fields</code></p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code>bq_field()</code> corresponds to a <code>TableFieldSchema</code>, see
+<a href="https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema" class="external-link">https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema</a>
+for more details.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
