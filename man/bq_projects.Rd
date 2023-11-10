@@ -31,7 +31,7 @@ any non-free operation.
 }
 
 \examples{
-if (bq_authable()) {
+\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bq_projects()
-}
+\dontshow{\}) # examplesIf}
 }

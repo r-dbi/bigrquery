@@ -75,6 +75,10 @@ defer <- function (expr, env = caller_env(), after = FALSE) {
   do.call(on.exit, list(thunk, TRUE, after), envir = env)
 }
 
+in_pkgdown <- function(){
+  identical(Sys.getenv("IN_PKGDOWN"), "true")
+}
+
 as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
   if (is(x, "SQL")) {
     x <- x@.Data

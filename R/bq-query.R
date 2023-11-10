@@ -13,8 +13,7 @@
 #' @param ... Passed on to [bq_perform_query()]
 #' @name bq_query
 #' @return A [bq_table]
-#' @examples
-#' if (bq_testable()) {
+#' @examplesIf bq_testable()
 #' # Querying a project requires full name in query
 #' tb <- bq_project_query(
 #'   bq_test_project(),
@@ -38,7 +37,6 @@
 #'   billing = bq_test_project()
 #' )
 #' bq_table_download(tb)
-#' }
 NULL
 
 #' @export

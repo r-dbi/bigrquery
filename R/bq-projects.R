@@ -13,10 +13,8 @@
 #' @param warn If `TRUE`, warn when there are unretrieved pages.
 #' @return A character vector.
 #' @export
-#' @examples
-#' if (bq_authable()) {
+#' @examplesIf bq_testable()
 #' bq_projects()
-#' }
 bq_projects <- function(page_size = 100, max_pages = 1, warn = TRUE) {
   pages <- bq_get_paginated(
     "projects",

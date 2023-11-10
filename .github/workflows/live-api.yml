@@ -40,6 +40,6 @@ jobs:
         with:
           upload-snapshots: true
         env:
-          BIGRQUERY_PASSWORD: ${{ secrets.BIGRQUERY_PASSWORD }}
+          BIGRQUERY_KEY: ${{ secrets.BIGRQUERY_KEY }}
           BIGQUERY_TEST_PROJECT: gargle-169921
           BIGQUERY_TEST_BUCKET: bigrquery-test-bucket-calliope
