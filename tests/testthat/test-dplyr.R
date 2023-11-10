@@ -130,6 +130,23 @@ test_that("suffixes use _", {
   expect_equal(dbplyr::sql_join_suffix(simulate_bigrquery()), c("_x", "_y"))
 })
 
+test_that("all BigQuery tbls share the same src", {
+  con1 <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project()
+  )
+  con2 <- DBI::dbConnect(
+    bigquery(),
+    project = "publicdata",
+    billing = bq_test_project()
+  )
+
+  tbl1 <- tbl(con1, "basedata.mtcars", vars = "x")
+  tbl2 <- tbl(con2, "publicdata.samples.natality", vars = "x")
+  expect_true(same_src(tbl1, tbl2))
+  expect_false(same_src(tbl1, mtcars))
+})
+
 test_that("runif is correctly translated", {
   expect_equal(
     dbplyr::translate_sql(runif(n()), con = simulate_bigrquery()),
