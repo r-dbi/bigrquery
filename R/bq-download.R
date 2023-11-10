@@ -171,7 +171,7 @@ bq_table_download <-
          chunks of (up to) {big_mark(chunk_plan$chunk_size)} rows."
       )
       progress <- cli::cli_progress_bar(
-        "Downloading data [:bar] :percent ETA: :eta",
+        format = "Downloading data {cli::pb_bar} {cli::pb_percent} ETA {cli::pb_eta}",
         total = chunk_plan$n_chunks
       )
     } else {
