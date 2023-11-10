@@ -31,6 +31,11 @@ bq_job_wait(
 if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{pause}{amount of time to wait between status requests}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 To perform a job, see \link{api-perform}. These functions all retrieve metadata

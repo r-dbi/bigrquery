@@ -191,8 +191,10 @@ bq_check_response <- function(status, type, content, call = caller_env()) {
   }
 
   type <- httr::parse_media(type)
+  text <- rawToChar(content)
+
   if (type$complete == "application/json") {
-    json <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+    json <- jsonlite::fromJSON(text, simplifyVector = FALSE)
     gargle_abort(
       reason = json$error$errors[[1L]]$reason,
       message = json$error$message,

@@ -70,6 +70,7 @@ bq_job_show_statistics <- function(x) {
 #' @param pause amount of time to wait between status requests
 #' @export
 #' @name api-job
+#' @inheritParams rlang::args_error_context
 bq_job_wait <- function(x,
                         quiet = getOption("bigrquery.quiet"),
                         pause = 0.5,
