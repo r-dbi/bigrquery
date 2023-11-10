@@ -6,10 +6,6 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-4757-117X")),
     person("Jennifer", "Bryan", , "jenny@posit.co", role = "aut",
            comment = c(ORCID = "0000-0002-6983-2759")),
-    person("Kungliga Tekniska Högskolan", role = "ctb",
-           comment = "strptime implementation"),
-    person("The NetBSD Foundation, Inc.", role = "ctb",
-           comment = "gmtime implementation"),
     person("Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Easily talk to Google's 'BigQuery' database from R.
@@ -22,6 +18,7 @@ Imports:
     bit64,
     brio,
     cli,
+    clock,
     curl,
     DBI,
     gargle (>= 1.4.0),
