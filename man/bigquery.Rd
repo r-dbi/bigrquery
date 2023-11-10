@@ -30,7 +30,7 @@ object (in order to clone an existing connection).}
 \item{page_size}{Number of items per page.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
+if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{use_legacy_sql}{If \code{TRUE} will use BigQuery's legacy SQL format.}
 

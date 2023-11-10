@@ -27,7 +27,7 @@ test_that("useful print with and without dataset", {
 })
 
 test_that("uses BigQuery quoting standards", {
-  con <-  DBI::dbConnect(bigquery(), project = "p")
+  con <- DBI::dbConnect(bigquery(), project = "p")
 
   expect_equal(DBI::dbQuoteString(con, "x"), DBI::SQL("'x'"))
   expect_equal(DBI::dbQuoteIdentifier(con, "x"), DBI::SQL("`x`"))
@@ -40,6 +40,11 @@ test_that("uses BigQuery quoting standards", {
   # Returns 0-length outputs
   expect_equal(DBI::dbQuoteString(con, character()), SQL(character()))
   expect_equal(DBI::dbQuoteIdentifier(con, character()), SQL(character()))
+})
+
+test_that("dbQuoteIdentifier validates inputs", {
+  con <- DBI::dbConnect(bigquery(), project = "")
+  expect_snapshot(DBI::dbQuoteIdentifier(con, c("x", NA)), error = TRUE)
 })
 
 test_that("can retrieve information about public dataset", {
@@ -68,6 +73,17 @@ test_that("can roundtrip a data frame", {
 
   expect_equal(nrow(df), 32)
   expect_equal(ncol(df), 11)
+})
+
+test_that("dbWriteTable errors on unsupported arguments", {
+  con <- DBI::dbConnect(bigquery(), project = "")
+  df <- data.frame(x = 1)
+
+  expect_snapshot(error = TRUE, {
+    DBI::dbWriteTable(con, "x", df, field.types = list())
+    DBI::dbWriteTable(con, "x", df, temporary = TRUE)
+  })
+
 })
 
 test_that("can execute a query", {

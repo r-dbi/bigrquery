@@ -27,7 +27,6 @@ Imports:
     lifecycle,
     methods,
     prettyunits,
-    progress,
     Rcpp,
     rlang (>= 1.1.0),
     tibble
@@ -43,7 +42,7 @@ Suggests:
     wk (>= 0.3.2),
     withr
 LinkingTo: 
-    progress,
+    cli,
     rapidjsonr,
     Rcpp
 Config/Needs/website: tidyverse/tidytemplate

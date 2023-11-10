@@ -36,14 +36,11 @@ bq_test_project <- function() {
 
   if (is_testing()) {
     testthat::skip("BIGQUERY_TEST_PROJECT not set")
+  } else {
+    cli::cli_abort(
+      "{.envvar BIGQUERY_TEST_PROJECT} envvar must to set to a project name."
+    )
   }
-
-  stop(
-    "To run bigrquery tests you must have BIGQUERY_TEST_PROJECT envvar set ",
-    "to name of project which has billing set up and to which you have ",
-    "write access",
-    call. = FALSE
-  )
 }
 
 #' @export
@@ -107,13 +104,11 @@ gs_test_bucket <- function() {
 
   if (is_testing()) {
     testthat::skip("BIGQUERY_TEST_BUCKET not set")
+  } else {
+    cli::cli_abort(
+      "{.envvar BIGQUERY_TEST_BUCKET} must be set to a bucket name."
+    )
   }
-
-  stop(
-    "To run bigrquery extract/load tests you must have BIGQUERY_TEST_BUCKET set ",
-    "to name of the bucket where `bq_test_project()` has write acess",
-    call. = FALSE
-  )
 }
 
 

@@ -1,7 +1,9 @@
 test_that("bq_perform_upload creates job that succeeds", {
-  bq_mtcars <- bq_test_table()
+  withr::local_options(cli.progress_show_after = 10)
 
+  bq_mtcars <- bq_test_table()
   job <- bq_perform_upload(bq_mtcars, mtcars)
+
   expect_s3_class(job, "bq_job")
   expect_snapshot({
     bq_job_wait(job, quiet = FALSE)

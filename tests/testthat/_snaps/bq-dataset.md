@@ -3,6 +3,6 @@
     Code
       bq_dataset_delete(ds)
     Condition
-      Error in `signal_reason()`:
-      ! Dataset gargle-169921:<DATASET> is still in use [resourceInUse] 
+      Error in `bq_delete()`:
+      ! Dataset gargle-169921:<DATASET> is still in use [resourceInUse]
 

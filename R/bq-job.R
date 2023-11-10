@@ -53,47 +53,55 @@ bq_job_show_statistics <- function(x) {
   if ("load" %in% names(stats)) {
     in_bytes <- as.numeric(stats$load$inputFileBytes)
     out_bytes <- as.numeric(stats$load$outputBytes)
-    message("Input:  ", prettyunits::pretty_bytes(in_bytes))
-    message("Output: ", prettyunits::pretty_bytes(out_bytes))
+    cli::cli_inform("Input: {prettyunits::pretty_bytes(in_bytes)}")
+    cli::cli_inform("Output: {prettyunits::pretty_bytes(out_bytes)}")
   }
 
   if ("query" %in% names(stats)) {
     bytes <- as.numeric(stats$query$totalBytesBilled)
-    message("Billed: ", prettyunits::pretty_bytes(bytes))
+    cli::cli_inform("Billed: {prettyunits::pretty_bytes(bytes)}")
   }
 
   invisible(x)
 }
 
 #' @param quiet If `FALSE`, displays progress bar; if `TRUE` is silent;
-#'   if `NA` displays progress bar only for long-running jobs.
+#'   if `NA` picks based on whether or not you're in an interactive context.
 #' @param pause amount of time to wait between status requests
 #' @export
 #' @name api-job
-bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
+#' @inheritParams rlang::args_error_context
+bq_job_wait <- function(x,
+                        quiet = getOption("bigrquery.quiet"),
+                        pause = 0.5,
+                        call = caller_env()) {
   x <- as_bq_job(x)
+  quiet <- check_quiet(quiet)
+  check_number_decimal(pause)
 
-  progress <- bq_progress(
-    paste0("Running job '", x, "' [:spin] :elapsed"),
-    total = 1e7,
-    quiet = quiet,
-    clear = FALSE
-  )
+  if (!quiet) {
+    cli::cli_progress_bar(
+      format = "Running job {x} {cli::pb_spin} {cli::pb_elapsed}",
+      total = NA,
+      clear = FALSE
+    )
+  }
 
   repeat {
-    progress$tick()
+    if (!quiet) cli::cli_progress_update()
     # https://cloud.google.com/bigquery/docs/error-messages
     # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),
       bigrquery_http_503 = function(err) NULL
     )
-    progress$tick()
+    if (!quiet) cli::cli_progress_update()
 
     if (!is.null(status) && status$state == "DONE") break
     Sys.sleep(pause)
   }
-  progress$update(1)
+  if (!quiet) cli::cli_progress_done()
+
 
   errors <- status$errors
   if (length(errors) > 0) {
@@ -102,17 +110,13 @@ bq_job_wait <- function(x, quiet = getOption("bigrquery.quiet"), pause = 0.5) {
       errors <- errors[-1]
     }
 
-    bullets <- vapply(errors,
-      function(x) paste0(x$message, " [", x$reason, "]"),
-      character(1)
-    )
-    names(bullets) <- rep("x", length(bullets))
-
-    abort(c(paste0("Job '", if (!isTRUE(quiet)) x, "' failed"), bullets))
+    bullets <- map_chr(errors, function(x) paste0(x$message, " [", x$reason, "]"))
+    bullets <- set_names(bullets, "x")
+    cli::cli_abort(c("Job {x} failed", bullets), call = call)
   }
 
-  if (isFALSE(quiet) || (is.na(quiet) && is_interactive())) {
-    message("Complete")
+  if (!quiet) {
+    cli::cli_inform("Job complete")
     bq_job_show_statistics(x)
   }
 

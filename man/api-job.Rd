@@ -14,7 +14,12 @@ bq_job_status(x)
 
 bq_job_show_statistics(x)
 
-bq_job_wait(x, quiet = getOption("bigrquery.quiet"), pause = 0.5)
+bq_job_wait(
+  x,
+  quiet = getOption("bigrquery.quiet"),
+  pause = 0.5,
+  call = caller_env()
+)
 }
 \arguments{
 \item{x}{A \link{bq_job}}
@@ -23,9 +28,14 @@ bq_job_wait(x, quiet = getOption("bigrquery.quiet"), pause = 0.5)
 \href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
-if \code{NA} displays progress bar only for long-running jobs.}
+if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{pause}{amount of time to wait between status requests}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \description{
 To perform a job, see \link{api-perform}. These functions all retrieve metadata

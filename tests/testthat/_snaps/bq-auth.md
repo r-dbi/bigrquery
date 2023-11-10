@@ -1,3 +1,12 @@
+# useful error if can't auth
+
+    Code
+      bq_auth()
+    Condition
+      Error in `bq_auth()`:
+      ! Can't get Google credentials.
+      i Try calling `bq_auth()` directly with necessary specifics.
+
 # bq_auth_configure checks its inputs
 
     Code

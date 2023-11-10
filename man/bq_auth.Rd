@@ -140,6 +140,7 @@ bq_auth(
 ## use a service account token
 bq_auth(path = "foofy-83ee9e7c9c48.json")
 }
+
 }
 \seealso{
 Other auth functions: 

@@ -3,7 +3,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include "rapidjson/filereadstream.h"
-#include <RProgress.h>
+#include <cli/progress.h>
 #include "integer64.h"
 #include "base64.h"
 
@@ -398,8 +398,10 @@ SEXP bq_parse_files(std::string schema_path,
   std::vector<std::string>::const_iterator it = file_paths.begin(),
     it_end = file_paths.end();
 
-  RProgress::RProgress pb("Parsing [:bar] ETA: :eta");
-  pb.set_total(file_paths.size());
+  const char *config_names[] = {"format", ""};
+  SEXP config = PROTECT(Rf_mkNamed(VECSXP, config_names));
+  SET_VECTOR_ELT(config, 0, Rf_mkString("Parsing {cli::pb_bar} ETA: {cli::pb_eta}"));
+  SEXP pb = PROTECT(cli_progress_bar(file_paths.size(), config));
 
   int total_seen = 0;
   char readBuffer[100 * 1024];
@@ -411,19 +413,23 @@ SEXP bq_parse_files(std::string schema_path,
     values_doc.ParseStream(values_stream);
 
     if (values_doc.HasParseError()) {
+      UNPROTECT(2);
       Rcpp::stop("Failed to parse '%s'", *it);
       fclose(values_file);
     }
 
     total_seen += bq_fields_set(values_doc, out, fields, total_seen);
     if (!quiet) {
-      pb.tick();
+      if (CLI_SHOULD_TICK) cli_progress_add(pb, 1);
     } else {
       Rcpp::checkUserInterrupt();
     };
 
     fclose(values_file);
   }
+
+  cli_progress_done(pb);
+  UNPROTECT(2);
 
   if (total_seen != n) {
     // Matches the error thrown from R if the first "test balloon" chunk is short.

@@ -46,6 +46,8 @@ gargle_lookup_table <- list(
 #' ## use a service account token
 #' bq_auth(path = "foofy-83ee9e7c9c48.json")
 #' }
+#'
+#' @importFrom gargle token_fetch
 bq_auth <- function(email = gargle::gargle_oauth_email(),
                     path = NULL,
                     scopes = c(
@@ -73,7 +75,7 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
   # By forcing here, we expose this mistake early and noisily.
   force(token)
 
-  cred <- gargle::token_fetch(
+  cred <- token_fetch(
     scopes = scopes,
     client = bq_oauth_client() %||% gargle::tidyverse_client(),
     email = email,
@@ -84,12 +86,11 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
     token = token
   )
   if (!inherits(cred, "Token2.0")) {
-    stop(
-      "Can't get Google credentials.\n",
-      "Are you running bigrquery in a non-interactive session? Consider:\n",
-      "  * Call `bq_auth()` directly with all necessary specifics.\n",
-      call. = FALSE
-    )
+    cli::cli_abort(c(
+      "Can't get Google credentials.",
+      i = if (!is_interactive())
+        "Try calling {.fun bq_auth} directly with necessary specifics."
+    ))
   }
   .auth$set_cred(cred)
   .auth$set_auth_active(TRUE)
