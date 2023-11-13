@@ -106,6 +106,11 @@ test_that("collect can identify directly download tables", {
   defer(DBI::dbExecute(con, 'DROP VIEW mtcars2'))
   bq6 <- dplyr::tbl(con, "mtcars2")
   expect_false(op_can_download(bq6))
+
+  # INFORMATION_SCHEMA.TABLES errors when we attempt to get metadata
+  bq7 <- dplyr::tbl(con, "INFORMATION_SCHEMA.PARTITIONS")
+  expect_false(op_can_download(bq7))
+  expect_false(op_can_download(head(bq7)))
 })
 
 test_that("casting uses bigquery types", {

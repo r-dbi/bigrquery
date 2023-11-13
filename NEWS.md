@@ -1,6 +1,7 @@
 # bigrquery (development version)
 
-* `tbl()` now works with views (#519).
+* `tbl()` now works with views (#519), including the views found in the 
+  `INFORMATION_SCHEMA` schema (#468).
 
 * dplyr joins now work correctly across any bigquery connections (#433).
 
