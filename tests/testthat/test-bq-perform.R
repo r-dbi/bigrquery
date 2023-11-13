@@ -14,6 +14,8 @@ test_that("bq_perform_upload creates job that succeeds", {
 })
 
 test_that("bq_perform_copy creates job that succeeds", {
+  withr::local_options(cli.progress_show_after = 10)
+
   src <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
   dst <- bq_test_table()
 
