@@ -48,7 +48,8 @@ tbl.BigQueryConnection <- function(src, from, ...) {
 
   # This is ugly, but I don't see a better way of doing this
   tb <- as_bq_table(src$con, from)
-  tbl$lazy_query$is_view <- !inherits(from, "sql") && bq_table_meta(tb, "type")$type == "VIEW"
+  tbl$lazy_query$is_view <- !inherits(from, "sql") &&
+    tryCatch(bq_table_meta(tb, "type")$type == "VIEW", bigrquery_notFound = function(e) TRUE)
   tbl
 }
 
