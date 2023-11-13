@@ -131,9 +131,9 @@ SEXP base64_encode(SEXP array) {
   return rout;
 }
 
-SEXP base64_decode(SEXP array) {
-  const unsigned char *in = (const unsigned char*) RAW(array);
-  unsigned int inlen = LENGTH(array);
+SEXP base64_decode(const char *in, unsigned int inlen) {
+  // const unsigned char *in = (const unsigned char*) RAW(array);
+  // unsigned int inlen = LENGTH(array);
   unsigned int outlen = BASE64_DECODE_OUT_SIZE(inlen);
   SEXP rout = PROTECT(allocVector(RAWSXP, outlen));
   unsigned char *out = RAW(rout);
@@ -156,7 +156,7 @@ SEXP base64_decode(SEXP array) {
       return rout;
     }
 
-    c = base64de[in[i]];
+    c = base64de[(unsigned) in[i]];
     if (c == 255) {
       UNPROTECT(1);
       return rout;

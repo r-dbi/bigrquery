@@ -27,7 +27,6 @@ Imports:
     lifecycle,
     methods,
     prettyunits,
-    Rcpp,
     rlang (>= 1.1.0),
     tibble
 Suggests: 
@@ -43,8 +42,8 @@ Suggests:
     withr
 LinkingTo: 
     cli,
-    rapidjsonr,
-    Rcpp
+    cpp11,
+    rapidjsonr
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
 Config/testthat/parallel: TRUE
@@ -53,7 +52,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Collate: 
-    'RcppExports.R'
     'bigrquery-package.R'
     'bq-auth.R'
     'bq-dataset.R'
@@ -72,6 +70,7 @@ Collate:
     'bq-test.R'
     'camelCase.R'
     'connections-page.R'
+    'cpp11.R'
     'dbi-driver.R'
     'dbi-connection.R'
     'dbi-result.R'
