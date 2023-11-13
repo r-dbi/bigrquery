@@ -39,6 +39,8 @@ test_that("can specify large integers in page params", {
 })
 
 test_that("errors when table is known to be incomplete", {
+  # If this snapshot changes, it's likely because the table has been updated
+
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.chicago_taxi_trips.taxi_trips")
