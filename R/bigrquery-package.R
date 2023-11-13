@@ -23,7 +23,6 @@ the <- new_environment()
 #' @importFrom bit64 integer64
 #' @importFrom jsonlite unbox
 #' @importFrom lifecycle deprecated
-#' @importFrom Rcpp sourceCpp
 #' @importFrom tibble tibble
 ## usethis namespace: end
 NULL

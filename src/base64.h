@@ -10,8 +10,7 @@ extern "C" {
 #endif
 
 SEXP base64_encode(SEXP array);
-SEXP base64_decode(SEXP array);
-
+SEXP base64_decode(const char *in, unsigned int inlen);
 #ifdef __cplusplus
 }
 #endif
