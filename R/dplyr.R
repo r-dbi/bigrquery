@@ -99,10 +99,6 @@ db_copy_to.BigQueryConnection <- function(con,
                                           analyze = TRUE,
                                           in_transaction = TRUE) {
 
-  if (temporary) {
-    cli::cli_abort("BigQuery does not support temporary tables")
-  }
-
   tb <- as_bq_table(con, table)
   write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
   bq_table_upload(tb, values, fields = types, write_disposition = write)

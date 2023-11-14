@@ -91,10 +91,13 @@ setMethod(
     check_bool(use_legacy_sql)
     bigint <- arg_match(bigint)
 
+    session <- bq_session_create(billing)
+
     BigQueryConnection(
       project = project,
       dataset = dataset,
       billing = billing,
+      session = session,
       page_size = page_size,
       quiet = quiet,
       use_legacy_sql = use_legacy_sql,

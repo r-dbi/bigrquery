@@ -113,6 +113,7 @@ bq_perform_upload <- function(x, values,
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_EMPTY",
                               ...,
+                              session = NULL,
                               billing = x$project
                               ) {
 

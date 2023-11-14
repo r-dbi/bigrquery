@@ -4,6 +4,7 @@ NULL
 BigQueryConnection <- function(project,
                                dataset,
                                billing,
+                               session = NULL,
                                page_size = 1e4,
                                quiet = NA,
                                use_legacy_sql = FALSE,
@@ -15,6 +16,7 @@ BigQueryConnection <- function(project,
     project = project,
     dataset = dataset,
     billing = billing,
+    session = session,
     page_size = as.integer(page_size),
     quiet = quiet,
     use_legacy_sql = use_legacy_sql,
@@ -31,6 +33,7 @@ setClass(
     project = "character",
     dataset = "ANY",
     billing = "character",
+    session = "ANY",
     use_legacy_sql = "logical",
     page_size = "integer",
     quiet = "logical",
@@ -91,6 +94,7 @@ setMethod("dbExecute", c("BigQueryConnection", "character"), function(conn, stat
 
   job <- bq_perform_query(statement,
     billing = conn@billing,
+    session = conn@session,
     default_dataset = ds,
     quiet = conn@quiet,
     ...
@@ -191,36 +195,16 @@ dbWriteTable_bq <- function(conn,
   check_bool(overwrite)
   check_bool(append)
 
-  if (!is.null(field.types)) {
-    cli::cli_abort(
-      "{.arg field.types} not supported by bigrquery.",
-      call = quote(DBI::dbWriteTable())
-    )
-  }
-  if (!identical(temporary, FALSE)) {
-    cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
-      call = quote(DBI::dbWriteTable())
-    )
-  }
-
-  if (append) {
-    create_disposition <- "CREATE_NEVER"
-    write_disposition <- "WRITE_APPEND"
-  } else {
-    create_disposition <- "CREATE_IF_NEEDED"
-    write_disposition <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
-  }
-  tb <- as_bq_table(conn, name)
-
-  bq_table_upload(
-    tb,
-    value,
-    create_disposition = create_disposition,
-    write_disposition = write_disposition,
-    billing = conn@billing,
-    ...
+  browser()
+  sql <- DBI::sqlCreateTable(
+    con,
+    name,
+    fields = field.types,
+    temporary = temporary,
+    row.names = row.names
   )
+  DBI::dbExecute(sql)
+
   invisible(TRUE)
 }
 
@@ -238,19 +222,19 @@ dbWriteTable_bq <- function(conn,
 #' @param field.types,temporary Ignored. Included for compatibility with
 #'   generic.
 #' @export
-setMethod(
-  "dbWriteTable",
-  c("BigQueryConnection", "character", "data.frame"),
-  dbWriteTable_bq
-)
-
-#' @rdname DBI
-#' @export
-setMethod(
-  "dbWriteTable",
-  c("BigQueryConnection", "Id", "data.frame"),
-  dbWriteTable_bq
-)
+#' setMethod(
+#'   "dbWriteTable",
+#'   c("BigQueryConnection", "character", "data.frame"),
+#'   dbWriteTable_bq
+#' )
+#'
+#' #' @rdname DBI
+#' #' @export
+#' setMethod(
+#'   "dbWriteTable",
+#'   c("BigQueryConnection", "Id", "data.frame"),
+#'   dbWriteTable_bq
+#' )
 
 dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
   tb <- as_bq_table(conn, name)
@@ -258,6 +242,7 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
   bq_table_upload(tb, value,
     create_disposition = "CREATE_NEVER",
     write_disposition = "WRITE_APPEND",
+    session = conn@session,
     ...
   )
   on_connection_updated(conn)
@@ -280,15 +265,9 @@ dbCreateTable_bq <- function(conn,
                              ...,
                              row.names = NULL,
                              temporary = FALSE) {
-  if (!identical(temporary, FALSE)) {
-    cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
-      call = quote(DBI::dbCreateTable())
-    )
-  }
 
   tb <- as_bq_table(conn, name)
-  bq_table_create(tb, fields)
+  bq_table_create(tb, fields, temporary = temporary, session = conn@session)
   on_connection_updated(conn)
 
   invisible(TRUE)
@@ -305,7 +284,7 @@ setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
-  bq_table_download(tb, ...)
+  bq_table_download(tb, ..., session = conn@session)
 }
 
 #' @rdname DBI
@@ -328,7 +307,7 @@ setMethod(
     }
     ds <- bq_dataset(conn@project, conn@dataset)
 
-    tbs <- bq_dataset_tables(ds, ...)
+    tbs <- bq_dataset_tables(ds, ..., session = conn@session)
     map_chr(tbs, function(x) x$table)
   })
 
@@ -347,7 +326,7 @@ setMethod("dbExistsTable", c("BigQueryConnection", "Id"), dbExistsTable_bq)
 
 dbListFields_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
-  flds <- bq_table_fields(tb)
+  flds <- bq_table_fields(tb, session = conn@session)
   map_chr(flds, function(x) x$name)
 }
 
@@ -362,7 +341,7 @@ setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
 
 dbRemoveTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
-  bq_table_delete(tb)
+  bq_table_delete(tb, session = conn@session)
   on_connection_updated(conn)
   invisible(TRUE)
 }
@@ -398,7 +377,7 @@ setMethod(
 setMethod(
   "dbBegin", "BigQueryConnection",
   function(conn, ...) {
-    testthat::skip("Not yet implemented: dbBegin(Connection)")
+    dbExecute(conn, "BEGIN TRANSACTION")
   })
 
 #' @rdname DBI
@@ -407,7 +386,7 @@ setMethod(
 setMethod(
   "dbCommit", "BigQueryConnection",
   function(conn, ...) {
-    testthat::skip("Not yet implemented: dbCommit(Connection)")
+    dbExecute(conn, "COMMIT TRANSACTION")
   })
 
 #' @rdname DBI
@@ -416,7 +395,7 @@ setMethod(
 setMethod(
   "dbRollback", "BigQueryConnection",
   function(conn, ...) {
-    testthat::skip("Not yet implemented: dbRollback(Connection)")
+    dbExecute(conn, "ROLLBACK TRANSACTION")
   })
 # nocov end
 
@@ -427,7 +406,6 @@ setMethod(
 as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
   bq_dataset(x@project, x@dataset)
 }
-
 
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
