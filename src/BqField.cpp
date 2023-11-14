@@ -272,11 +272,6 @@ public:
       out.attr("class") = {"tbl_df", "tbl", "data.frame"};
       out.attr("row.names") = {NA_INTEGER, -n};
 
-      if (n == 0) {
-        out.attr("names") = names;
-        return out;
-      }
-
       for (int i = 0; i < n; ++i) {
         const rapidjson::Value& f = v[i]["v"]["f"];
         if (!f.IsArray())
