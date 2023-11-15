@@ -108,10 +108,6 @@ setMethod("dbExecute", c("BigQueryConnection", "character"), function(conn, stat
 setMethod(
   "dbQuoteString", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    if (length(x) == 0) {
-      return(SQL(character()))
-    }
-
     out <- encodeString(x, na.encode = FALSE, quote = "'")
     out[is.na(x)] <- "NULL"
     SQL(out, names = names(x))
@@ -131,16 +127,16 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier", c("BigQueryConnection", "character"),
   function(conn, x, ...) {
-    if (length(x) == 0) {
-      return(SQL(character()))
-    }
-
     if (any(is.na(x))) {
       cli::cli_abort("{.arg x} must not contain missing values.")
     }
 
     if (conn@use_legacy_sql) {
-      out <- paste0("[", x, "]")
+      if (length(x) == 0) {
+        out <- character()
+      } else {
+        out <- paste0("[", x, "]")
+      }
     } else {
       out <- encodeString(x, quote = "`")
     }
