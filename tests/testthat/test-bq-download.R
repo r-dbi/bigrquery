@@ -180,6 +180,17 @@ test_that("can convert date time types", {
   expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
 })
 
+
+test_that("can parse fractional seconds", {
+  x <- c(
+    "2000-01-02T03:04:05.67",
+    "2000-01-02T03:04:05",
+    "2000-01-02T03:04:05.123456"
+  )
+  parsed <- as.numeric(bq_datetime_parse(x))
+  expect_equal(parsed - trunc(parsed), c(0.67, 0, 0.123456), tolerance = 1e-6)
+})
+
 test_that("correctly parse logical values" ,{
   query <- "SELECT TRUE as x"
   tb <- bq_project_query(bq_test_project(), query)
