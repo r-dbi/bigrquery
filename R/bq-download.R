@@ -214,7 +214,7 @@ parse_postprocess <- function(df, bigint) {
   df <- col_apply(
     df,
     function(x) identical(attr(x, "bq_type"), "DATETIME"),
-    function(x) clock::date_time_parse(x, format = "%Y-%m-%dT%H:%M:%S", zone = "UTC")
+    function(x) bq_datetime_parse(x)
   )
   df <- col_apply(
     df,
@@ -244,6 +244,29 @@ col_apply <- function(x, p, f) {
   } else {
     x
   }
+}
+
+bq_datetime_parse <- function(x) {
+  # `format` matches clock already.
+  # Bigquery DATETIME is documented as microsecond precision.
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#datetime_type
+  x <- clock::year_month_day_parse(x, precision = "microsecond")
+
+  # Manually retain microseconds for the POSIXct
+  microseconds <- clock::get_microsecond(x)
+  microseconds <- microseconds / 1000000
+
+  # Convert to POSIXct at second precision since that is what clock asserts
+  # the precision of a POSIXct is. Can use sys-time since we are going straight
+  # to UTC.
+  x <- clock::calendar_narrow(x, "second")
+  x <- clock::as_sys_time(x)
+  x <- as.POSIXct(x, tz = "UTC")
+
+  # Manually add microseconds back on (lossy, floating point issues!)
+  x <- x + microseconds
+
+  x
 }
 
 set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
