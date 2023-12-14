@@ -12,9 +12,8 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
-if (gargle:::secret_can_decrypt("bigrquery")) {
-  json <- gargle:::secret_read("bigrquery", "bigrquery-testing.json")
-  bigrquery::bq_auth(path = rawToChar(json))
+if (bigrquery:::has_internal_auth()) {
+  bq_auth_internal()
 } else {
   knitr::opts_chunk$set(eval = FALSE)
 }
