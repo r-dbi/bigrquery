@@ -1,56 +1,6 @@
 # bigrquery (development version)
 
-* `tbl()` now works with views (#519), including the views found in the 
-  `INFORMATION_SCHEMA` schema (#468).
-
-* dplyr joins now work correctly across any bigquery connections (#433).
-
-* `bq_table_download()` now parses dates using the clock package. This 
-  leads to a considerable performance improvement (#430) and ensures that dates
-  prior to 1970-01-01 are parsed correctly (#285).
-  
-* `bq_table_download()` now returns unknown fields as character vectors.
-  This means that BIGNUMERIC (#435) and JSON (#544) data is downloaded into
-  R for you to process as you wish.
-  
-* Add support for RStudio/Workbench Connections pane when using `dbConnect` 
-  method (@meztez, #431).
-
-* If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
-  tries again (#535).
-
-* Functions generally try to do a better job of telling you when you've 
-  supplied the wrong type of input. Additionally, if you supply `SQL()` to
-  a query, you no longer get a weird warning (#498).
-
-* `grepl(pattern, x)` is now correctly translated to 
-  `REGEXP_CONTAINS(x, pattern)` (#416).
-
-* `median()` gets a translation that works in `summarise()` and a clear
-  error if you use it in `mutate()` (#419).
-
-* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
-  the `params` argument (@byapparov, #444).
-
-* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
-  try to fetch more rows than actually exist (#501).
-
-* Now supports `dbAppendTable()` (#539), `dbCreateTable()` (#483),
-  and `dbExecute` (#502).
-
-* `dbWriteTable()` now correct uses the `billing` value set in the 
-  connection (#486).
-
-* `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
-  and `dbListFields()` now all work with `DBI::Id()` (#537).
-
-* `dbFetch()` now respects the `quiet` setting from the connection (#463).
-
-* Added a translation for `runif(n())`. This fixes the translation for
-  `slice_sample()` (@mgirlich, #448).
-
-* Add a `dbQuoteLiteral()` method for logicals to revert breaking change 
-  introduced by DBI 1.1.2 (@meztez, #478).
+## Major changes
 
 * bigrquery is now MIT licensed (#453).
 
@@ -58,15 +8,73 @@
   removed (#551). These have been superseded for a long time and were formally 
   deprecated in bigrquery 1.3.0 (2020).
 
-* Now uses 2nd edition of dbplyr interface (#508).
+* `bq_table_download()` now returns unknown fields as character vectors.
+  This means that BIGNUMERIC (#435) and JSON (#544) data is downloaded into
+  R for you to process as you wish.
+  
+  It now parses dates using the clock package. This leads to a considerable
+  performance improvement (#430) and ensures that dates prior to 1970-01-01 are
+  parsed correctly (#285).
 
-* Compatible with dbplyr 2.4.0 (#550).
+## Significant DBI improvements
 
-* `con |> tbl(sql("..."))` now works robustly once more (#540). (No more
-  "URL using bad/illegal format or missing URL" error).
+* bigquery datasets and tables will now appear in the connection pane when 
+  using `dbConnect` (@meztez, #431).
 
-* Align Google APIs URLs to Google Cloud Discovery docs. This enables support 
-  for Private and Restricted Google APIs configurations (@husseyd, #541)
+* `dbAppendTable()` (#539), `dbCreateTable()` (#483), and `dbExecute` (#502)
+  are now supported.
+
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+  the `params` argument (@byapparov, #444).
+
+* `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
+  and `dbListFields()` now all work with `DBI::Id()` (#537).
+
+## Significant dbplyr improvements
+
+* bigrquery now uses 2nd edition of dbplyr interface (#508) and is
+  compatible with dbplyr 2.4.0 (#550).
+
+* Joins now work correctly across bigrquery connections (#433).
+
+* `grepl(pattern, x)` is now correctly translated to 
+  `REGEXP_CONTAINS(x, pattern)` (#416).
+
+* `median()` gets a translation that works in `summarise()` and a clear
+  error if you use it in `mutate()` (#419).
+
+* `tbl()` now works with views (#519), including the views found in the 
+  `INFORMATION_SCHEMA` schema (#468).
+
+* `tbl(con, sql("..."))` now works robustly once more (#540), fixing the
+  "URL using bad/illegal format or missing URL" error.
+
+* `runif(n())` gains a translation so that `slice_sample()` can work
+  (@mgirlich, #448).
+
+## Minor improvements and bug fixes
+
+* Google API URLs have been aligned with the Google Cloud Discovery docs. This
+  enables support for Private and Restricted Google APIs configurations 
+  (@husseyd, #541)
+
+* Functions generally try to do a better job of telling you when you've 
+  supplied the wrong type of input. Additionally, if you supply `SQL()` to
+  a query, you no longer get a weird warning (#498).
+
+* If `bq_job_wait()` receives a 503 response, it now waits for 2 seconds and
+  tries again (#535).
+
+* `dbFetch()` now respects the `quiet` setting from the connection (#463).
+
+* `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
+  try to fetch more rows than actually exist (#501).
+
+* New `dbQuoteLiteral()` method for logicals reverts breaking change introduced 
+  by DBI 1.1.2 (@meztez, #478).
+
+* `dbWriteTable()` now correct uses the `billing` value set in the 
+  connection (#486).
 
 # bigrquery 1.4.2
 
