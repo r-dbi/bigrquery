@@ -51,6 +51,9 @@ test_that("errors when table is known to be incomplete", {
       page_size = 35000,
       bigint = "integer64"
     ),
+    transform = function(x) {
+      gsub("[0-9,]+ rows were received", "{n} rows were received", x, perl = TRUE)
+    },
     error = TRUE
   )
 })

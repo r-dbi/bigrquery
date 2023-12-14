@@ -7,6 +7,6 @@
     Condition
       Error in `bq_table_download()`:
       ! First chunk is incomplete:
-      x 35,000 rows were requested, but only 25,574 rows were received.
+      x 35,000 rows were requested, but only {n} rows were received.
       i Leave `page_size` unspecified or use an even smaller value.
 
