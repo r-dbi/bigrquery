@@ -9,8 +9,8 @@
 <title>An Interface to Googles BigQuery API' • bigrquery</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.8/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.8/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An Interface to Googles BigQuery API'">
@@ -109,16 +109,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    11    29          8.00</span></span>
-<span><span class="co">#&gt;  2  1969     4     4          7.37</span></span>
-<span><span class="co">#&gt;  3  1969     9     6         10.9 </span></span>
-<span><span class="co">#&gt;  4  1969     5    13          3.25</span></span>
-<span><span class="co">#&gt;  5  1969     8     4          7.63</span></span>
-<span><span class="co">#&gt;  6  1969     7     6          6.88</span></span>
-<span><span class="co">#&gt;  7  1969     4    21          7.25</span></span>
-<span><span class="co">#&gt;  8  1969     9    12          8.02</span></span>
-<span><span class="co">#&gt;  9  1969     2    13          8.00</span></span>
-<span><span class="co">#&gt; 10  1969    10    22          6.81</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    10     2          8.44</span></span>
+<span><span class="co">#&gt;  2  1969     8     6          7.81</span></span>
+<span><span class="co">#&gt;  3  1969     4    12          6.50</span></span>
+<span><span class="co">#&gt;  4  1969     6    13          5.88</span></span>
+<span><span class="co">#&gt;  5  1969    12    17          7.00</span></span>
+<span><span class="co">#&gt;  6  1969     7    12          7.44</span></span>
+<span><span class="co">#&gt;  7  1969     9     5          6.50</span></span>
+<span><span class="co">#&gt;  8  1969     8    21          6.94</span></span>
+<span><span class="co">#&gt;  9  1969     9    10          6.69</span></span>
+<span><span class="co">#&gt; 10  1969    11    24          8.19</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
@@ -145,16 +145,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    11    29          8.00</span></span>
-<span><span class="co">#&gt;  2  1969     4     4          7.37</span></span>
-<span><span class="co">#&gt;  3  1969     9     6         10.9 </span></span>
-<span><span class="co">#&gt;  4  1969     5    13          3.25</span></span>
-<span><span class="co">#&gt;  5  1969     8     4          7.63</span></span>
-<span><span class="co">#&gt;  6  1969     7     6          6.88</span></span>
-<span><span class="co">#&gt;  7  1969     4    21          7.25</span></span>
-<span><span class="co">#&gt;  8  1969     9    12          8.02</span></span>
-<span><span class="co">#&gt;  9  1969     2    13          8.00</span></span>
-<span><span class="co">#&gt; 10  1969    10    22          6.81</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    10     2          8.44</span></span>
+<span><span class="co">#&gt;  2  1969     8     6          7.81</span></span>
+<span><span class="co">#&gt;  3  1969     4    12          6.50</span></span>
+<span><span class="co">#&gt;  4  1969     6    13          5.88</span></span>
+<span><span class="co">#&gt;  5  1969    12    17          7.00</span></span>
+<span><span class="co">#&gt;  6  1969     7    12          7.44</span></span>
+<span><span class="co">#&gt;  7  1969     9     5          6.50</span></span>
+<span><span class="co">#&gt;  8  1969     8    21          6.94</span></span>
+<span><span class="co">#&gt;  9  1969     9    10          6.69</span></span>
+<span><span class="co">#&gt; 10  1969    11    24          8.19</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
