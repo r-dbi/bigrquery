@@ -176,7 +176,7 @@ an invisible <a href="bq_refs.html">bq_table</a></p></li>
 <span class="r-in"><span>  description <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend US magazine"</span>,</span></span>
 <span class="r-in"><span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>category <span class="op">=</span> <span class="st">"example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_table&gt; gargle-169921.TESTING_kcrlpcsayd.mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_table&gt; gargle-169921.TESTING_bbvhjbfsof.mtcars</span>
 <span class="r-in"><span><span class="fu">bq_table_exists</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
@@ -201,12 +201,12 @@ an invisible <a href="bq_refs.html">bq_table</a></p></li>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">bq_table_meta</span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ kind                   : chr "bigquery#table"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ etag                   : chr "qBHMipE7rDLljUH9RVJyjQ=="</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ id                     : chr "gargle-169921:TESTING_kcrlpcsayd.mtcars"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ selfLink               : chr "https://bigquery.googleapis.com/bigquery/v2/projects/gargle-169921/datasets/TESTING_kcrlpcsayd/tables/mtcars"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ etag                   : chr "NbLH8HN8iG/GIc1Caqi4uQ=="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ id                     : chr "gargle-169921:TESTING_bbvhjbfsof.mtcars"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ selfLink               : chr "https://bigquery.googleapis.com/bigquery/v2/projects/gargle-169921/datasets/TESTING_bbvhjbfsof/tables/mtcars"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ tableReference         :List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projectId: chr "gargle-169921"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ datasetId: chr "TESTING_kcrlpcsayd"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ datasetId: chr "TESTING_bbvhjbfsof"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ tableId  : chr "mtcars"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ friendlyName           : chr "Motor Trend Car Road Tests"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ description            : chr "The data was extracted from the 1974 Motor Trend US magazine"</span>
@@ -272,8 +272,8 @@ an invisible <a href="bq_refs.html">bq_table</a></p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ numBytes               : chr "2816"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ numLongTermBytes       : chr "0"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ numRows                : chr "32"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ creationTime           : chr "1702572193144"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ lastModifiedTime       : chr "1702572195970"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ creationTime           : chr "1702575365965"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ lastModifiedTime       : chr "1702575369061"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ type                   : chr "TABLE"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ location               : chr "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ numTotalLogicalBytes   : chr "2816"</span>
@@ -286,7 +286,7 @@ an invisible <a href="bq_refs.html">bq_table</a></p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">my_natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_refs.html">bq_table</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"mynatality"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bq_table_copy</span><span class="op">(</span><span class="st">"publicdata.samples.natality"</span>, <span class="va">my_natality</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_table&gt; gargle-169921.TESTING_kcrlpcsayd.mynatality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bq_table&gt; gargle-169921.TESTING_bbvhjbfsof.mynatality</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
