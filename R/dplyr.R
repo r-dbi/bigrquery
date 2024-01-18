@@ -82,8 +82,6 @@ db_compute.BigQueryConnection <- function(con,
   }
 
   paste0(tb$project, ".", tb$dataset, ".", tb$table)
-
-  table
 }
 
 # registered onLoad
