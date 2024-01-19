@@ -37,6 +37,6 @@ test_that("can list tables in a dataset", {
 
   expect_equal(
     bq_dataset_tables(ds),
-    list(bq_table(ds, "mtcars"))
+    list(bq_table(ds, "mtcars"), bq_table(ds, "simple-five"))
   )
 })
