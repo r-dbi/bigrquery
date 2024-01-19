@@ -40,13 +40,15 @@ test_that("can collect and compute (no dataset)", {
 
   # compute: temporary
   temp <- dplyr::compute(bq_mtcars)
+  expect_equal(dim(dplyr::collect(temp)), c(11, 11))
 
   # compute: persistent
   name <- paste0("basedata.", random_name())
-  temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
+  perm <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
   defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
+  expect_equal(dim(dplyr::collect(perm)), c(11, 11))
 })
 
 test_that("can collect and compute (with dataset)", {
@@ -62,10 +64,12 @@ test_that("can collect and compute (with dataset)", {
 
   # compute: temporary
   temp <- dplyr::compute(bq_mtcars)
+  expect_equal(dim(dplyr::collect(temp)), c(11, 11))
 
   # compute: persistent
   name <- random_name()
-  temp <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
+  perm <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
+  expect_equal(dim(dplyr::collect(perm)), c(11, 11))
   defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))

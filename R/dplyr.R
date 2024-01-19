@@ -44,7 +44,7 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 # registered onLoad
 tbl.BigQueryConnection <- function(src, from, ...) {
   src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
-  tbl <- dplyr::tbl(src, from = from)
+  tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
 
   # This is ugly, but I don't see a better way of doing this
   tb <- as_bq_table(src$con, from)
@@ -81,9 +81,7 @@ db_compute.BigQueryConnection <- function(con,
     )
   }
 
-  paste0(tb$project, ".", tb$dataset, ".", tb$table)
-
-  table
+  dbplyr::in_catalog(tb$project, tb$dataset, tb$table)
 }
 
 # registered onLoad
