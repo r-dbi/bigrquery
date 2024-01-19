@@ -34,12 +34,12 @@ on_connection_closed <- function(con) {
 }
 
 # https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-updated
-on_connection_updated <- function(con) {
+on_connection_updated <- function(con, hint) {
   observer <- getOption("connectionObserver")
   if (is.null(observer))
     return(invisible(NULL))
 
-  observer$connectionUpdated(bq_type, con@project)
+  observer$connectionUpdated(bq_type, con@project, hint = hint)
 }
 
 # https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-opened
@@ -50,7 +50,7 @@ on_connection_opened <- function(con, code) {
 
   observer$connectionOpened(
     type = bq_type,
-    displayName = paste0(c(bq_type, con@project), collapse = "-"),
+    displayName = paste0(bq_type, ": ", con@project),
     host = con@project,
     icon = system.file("icons/bigquery-512-color.png", package = "bigrquery"),
 
@@ -58,24 +58,20 @@ on_connection_opened <- function(con, code) {
     connectCode = code,
 
     # only action is to close connections pane
-    disconnect = function() dbDisconnect(con),
+    disconnect = function() {},
 
     listObjectTypes = function() {
       list(
-        project = list(
+        dataset = list(
+          icon = system.file("icons/dataset.png", package = "bigrquery"),
           contains = list(
-            dataset = list(
-              icon = system.file("icons/dataset.png", package = "bigrquery"),
-              contains = list(
-                table = list(
-                  icon = system.file("icons/table.png", package = "bigrquery"),
-                  contains = "data"
-                ),
-                view = list(
-                  icon = system.file("icons/view.png", package = "bigrquery"),
-                  contains = "data"
-                )
-              )
+            table = list(
+              icon = system.file("icons/table.png", package = "bigrquery"),
+              contains = "data"
+            ),
+            view = list(
+              icon = system.file("icons/view.png", package = "bigrquery"),
+              contains = "data"
             )
           )
         )
@@ -88,8 +84,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # column enumeration code
-    listColumns = function(project = NULL, dataset = NULL, table = NULL, view = NULL, ...) {
-      x <- bq_table(project, dataset, paste0(table, view))
+    listColumns = function(dataset = con@dataset, table = NULL, view = NULL, ...) {
+      x <- bq_table(con@project, dataset, paste0(table, view))
       fields <- bq_table_fields(x)
 
       tibble::tibble(
@@ -99,8 +95,8 @@ on_connection_opened <- function(con, code) {
     },
 
     # table preview code
-    previewObject = function(rowLimit, project = NULL, dataset = NULL, table = NULL, view = NULL, ...) {
-      x <- bq_table(project, dataset, paste0(table, view))
+    previewObject = function(rowLimit, dataset = con@dataset, table = NULL, view = NULL, ...) {
+      x <- bq_table(con@project, dataset, paste0(table, view))
       bq_table_download(x, max_results = rowLimit)
     },
 
@@ -112,13 +108,11 @@ on_connection_opened <- function(con, code) {
   )
 }
 
-list_bigquery_objects <- function(con, project = NULL, dataset = NULL, ...) {
-  if (is.null(project)) {
-    tibble::tibble(type = "project", name = con@project)
-  } else if (is.null(dataset)) {
+list_bigquery_objects <- function(con, dataset = con@dataset, ...) {
+  if (is.null(dataset)) {
     # Catching VPC/Permission errors to crash gracefully
     bq_datasets <- tryCatch(
-      bq_project_datasets(project, warn = FALSE),
+      bq_project_datasets(con@project, warn = FALSE),
       error = function(e) list()
     )
     datasets <- map_chr(bq_datasets, `[[`, "dataset")
@@ -126,7 +120,7 @@ list_bigquery_objects <- function(con, project = NULL, dataset = NULL, ...) {
     tibble::tibble(type = "dataset", name = datasets)
   } else {
     # Catching VPC/Permission errors to crash gracefully
-    ds <- bq_dataset(project, dataset)
+    ds <- bq_dataset(con@project, dataset)
     bq_tables <- tryCatch(bq_dataset_tables(ds), error = function(e) list())
     tables <- map_chr(bq_tables, `[[`, "table")
     types <- map_chr(bq_tables, `[[`, "type")
