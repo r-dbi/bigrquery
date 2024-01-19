@@ -260,7 +260,7 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     write_disposition = "WRITE_APPEND",
     ...
   )
-  on_connection_updated(conn)
+  on_connection_updated(conn, name)
 
   invisible(TRUE)
 }
@@ -289,7 +289,7 @@ dbCreateTable_bq <- function(conn,
 
   tb <- as_bq_table(conn, name)
   bq_table_create(tb, fields)
-  on_connection_updated(conn)
+  on_connection_updated(conn, name)
 
   invisible(TRUE)
 }
@@ -363,7 +363,7 @@ setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
 dbRemoveTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
   bq_table_delete(tb)
-  on_connection_updated(conn)
+  on_connection_updated(conn, name)
   invisible(TRUE)
 }
 
