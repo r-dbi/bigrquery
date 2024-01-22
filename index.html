@@ -8,9 +8,9 @@
 <meta name="description" content="Easily talk to Googles BigQuery' database from R.">
 <title>An Interface to Googles BigQuery API' • bigrquery</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.8/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.8/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An Interface to Googles BigQuery API'">
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="index.html">bigrquery</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/bigrquery-1-5-0/">bigrquery 1.5.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2021/08/bigrquery-1-4-0/">bigrquery 1.4.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/02/bigrquery-1-1-0/">bigrquery 1.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2018/04/bigrquery-1-0-0/">bigrquery 1.0.0</a>
@@ -108,16 +109,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    10     7          7.56</span></span>
-<span><span class="co">#&gt;  2  1969     5     9          6.62</span></span>
-<span><span class="co">#&gt;  3  1969     2     6          2.00</span></span>
-<span><span class="co">#&gt;  4  1969     1     8          8.44</span></span>
-<span><span class="co">#&gt;  5  1969     6    23          9.81</span></span>
-<span><span class="co">#&gt;  6  1969     7    31          7.19</span></span>
-<span><span class="co">#&gt;  7  1969    11     6          7.50</span></span>
-<span><span class="co">#&gt;  8  1969    12    19          7.50</span></span>
-<span><span class="co">#&gt;  9  1969     2    17          7.05</span></span>
-<span><span class="co">#&gt; 10  1969     5     3          8.50</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    10     2          8.44</span></span>
+<span><span class="co">#&gt;  2  1969     8     6          7.81</span></span>
+<span><span class="co">#&gt;  3  1969     4    12          6.50</span></span>
+<span><span class="co">#&gt;  4  1969     6    13          5.88</span></span>
+<span><span class="co">#&gt;  5  1969    12    17          7.00</span></span>
+<span><span class="co">#&gt;  6  1969     7    12          7.44</span></span>
+<span><span class="co">#&gt;  7  1969     9     5          6.50</span></span>
+<span><span class="co">#&gt;  8  1969     8    21          6.94</span></span>
+<span><span class="co">#&gt;  9  1969     9    10          6.69</span></span>
+<span><span class="co">#&gt; 10  1969    11    24          8.19</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
@@ -144,16 +145,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 4</span></span>
 <span><span class="co">#&gt;     year month   day weight_pounds</span></span>
 <span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  1969    10     7          7.56</span></span>
-<span><span class="co">#&gt;  2  1969     5     9          6.62</span></span>
-<span><span class="co">#&gt;  3  1969     2     6          2.00</span></span>
-<span><span class="co">#&gt;  4  1969     1     8          8.44</span></span>
-<span><span class="co">#&gt;  5  1969     6    23          9.81</span></span>
-<span><span class="co">#&gt;  6  1969     7    31          7.19</span></span>
-<span><span class="co">#&gt;  7  1969    11     6          7.50</span></span>
-<span><span class="co">#&gt;  8  1969    12    19          7.50</span></span>
-<span><span class="co">#&gt;  9  1969     2    17          7.05</span></span>
-<span><span class="co">#&gt; 10  1969     5     3          8.50</span></span></code></pre></div>
+<span><span class="co">#&gt;  1  1969    10     2          8.44</span></span>
+<span><span class="co">#&gt;  2  1969     8     6          7.81</span></span>
+<span><span class="co">#&gt;  3  1969     4    12          6.50</span></span>
+<span><span class="co">#&gt;  4  1969     6    13          5.88</span></span>
+<span><span class="co">#&gt;  5  1969    12    17          7.00</span></span>
+<span><span class="co">#&gt;  6  1969     7    12          7.44</span></span>
+<span><span class="co">#&gt;  7  1969     9     5          6.50</span></span>
+<span><span class="co">#&gt;  8  1969     8    21          6.94</span></span>
+<span><span class="co">#&gt;  9  1969     9    10          6.69</span></span>
+<span><span class="co">#&gt; 10  1969    11    24          8.19</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
@@ -162,9 +163,6 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: &lt;BigQueryConnection&gt; uses an old dbplyr interface</span></span>
-<span><span class="co">#&gt; ℹ Please install a newer version of the package or contact the maintainer</span></span>
-<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span>, <span class="va">weight_pounds</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -189,6 +187,12 @@
 <h2 id="important-details">Important details<a class="anchor" aria-label="anchor" href="#important-details"></a>
 </h2>
 <div class="section level3">
+<h3 id="bigquery-account">BigQuery account<a class="anchor" aria-label="anchor" href="#bigquery-account"></a>
+</h3>
+<p>To use bigrquery, you’ll need a BigQuery project. Fortunately, if you just want to play around with the BigQuery API, it’s easy to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data" class="external-link">public data</a> and the <a href="https://cloud.google.com/bigquery/docs/sandbox" class="external-link">BigQuery sandbox</a>. This gives you some fun data to play with along with enough free compute (1 TB of queries &amp; 10 GB of storage per month) to learn the ropes.</p>
+<p>To get started, open <a href="https://console.cloud.google.com/bigquery" class="external-link uri">https://console.cloud.google.com/bigquery</a> and create a project. Make a note of the “Project ID” as you’ll use this as the <code>billing</code> project whenever you work with free sample data; and as the <code>project</code> when you work with your own data.</p>
+</div>
+<div class="section level3">
 <h3 id="authentication-and-authorization">Authentication and authorization<a class="anchor" aria-label="anchor" href="#authentication-and-authorization"></a>
 </h3>
 <p>When using bigrquery interactively, you’ll be prompted to <a href="https://cloud.google.com/bigquery/docs/authorization" class="external-link">authorize bigrquery</a> in the browser. You’ll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:</p>
@@ -206,18 +210,6 @@
 <a href="https://gargle.r-lib.org/articles/get-api-credentials.html" class="external-link">How to get your own API credentials</a>. Instructions for getting your own OAuth client or service account token.</li>
 </ul>
 <p>Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling <code><a href="reference/api-table.html">bq_table_delete()</a></code> or <code><a href="reference/api-table.html">bq_table_upload()</a></code>). Our <a href="https://www.tidyverse.org/google_privacy_policy" class="external-link">Privacy policy</a> provides more info.</p>
-</div>
-<div class="section level3">
-<h3 id="billing-project">Billing project<a class="anchor" aria-label="anchor" href="#billing-project"></a>
-</h3>
-<p>If you just want to play around with the BigQuery API, it’s easiest to start with Google’s free <a href="https://cloud.google.com/bigquery/public-data" class="external-link">sample data</a>. You’ll still need to create a project, but if you’re just playing around, it’s unlikely that you’ll go over the free limit (1 TB of queries / 10 GB of storage).</p>
-<p>To create a project:</p>
-<ol style="list-style-type: decimal">
-<li><p>Open <a href="https://console.cloud.google.com/" class="external-link uri">https://console.cloud.google.com/</a> and create a project. Make a note of the “Project ID” in the “Project info” box.</p></li>
-<li><p>Click on “APIs &amp; Services”, then “Dashboard” in the left the left menu.</p></li>
-<li><p>Click on “Enable Apis and Services” at the top of the page, then search for “BigQuery API” and “Cloud storage”.</p></li>
-</ol>
-<p>Use your project ID as the <code>billing</code> project whenever you work with free sample data; and as the <code>project</code> when you work with your own data.</p>
 </div>
 </div>
 <div class="section level2">
@@ -250,7 +242,7 @@
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 
@@ -274,12 +266,11 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="http://hadley.nz" class="external-link">Hadley Wickham</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://hadley.nz" class="external-link">Hadley Wickham</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6983-2759" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -293,7 +284,7 @@
   <footer><div class="container">
   <div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
+<p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
