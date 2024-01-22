@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">bigrquery</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.5.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-news">News</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-news">
     <h6 class="dropdown-header" data-toc-skip>Releases</h6>
+    <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2024/01/bigrquery-1-5-0/">bigrquery 1.5.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2021/08/bigrquery-1-4-0/">bigrquery 1.4.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2019/02/bigrquery-1-1-0/">bigrquery 1.1.0</a>
     <a class="external-link dropdown-item" href="https://www.tidyverse.org/blog/2018/04/bigrquery-1-0-0/">bigrquery 1.0.0</a>
@@ -54,8 +55,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="bigrquery-development-version">bigrquery (development version)<a class="anchor" aria-label="anchor" href="#bigrquery-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.0" id="bigrquery-150">bigrquery 1.5.0<a class="anchor" aria-label="anchor" href="#bigrquery-150"></a></h2><p class="text-muted">CRAN release: 2024-01-22</p>
 <div class="section level3">
-<h3 id="major-changes-development-version">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-development-version"></a></h3>
+<h3 id="major-changes-1-5-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-1-5-0"></a></h3>
 <ul><li><p>bigrquery is now MIT licensed (<a href="https://github.com/r-dbi/bigrquery/issues/453" class="external-link">#453</a>).</p></li>
 <li><p>Deprecated functions (i.e. those not starting with <code>bq_</code>) have been removed (<a href="https://github.com/r-dbi/bigrquery/issues/551" class="external-link">#551</a>). These have been superseded for a long time and were formally deprecated in bigrquery 1.3.0 (2020).</p></li>
 <li>
@@ -64,14 +68,14 @@
 </li>
 </ul></div>
 <div class="section level3">
-<h3 id="significant-dbi-improvements-development-version">Significant DBI improvements<a class="anchor" aria-label="anchor" href="#significant-dbi-improvements-development-version"></a></h3>
+<h3 id="significant-dbi-improvements-1-5-0">Significant DBI improvements<a class="anchor" aria-label="anchor" href="#significant-dbi-improvements-1-5-0"></a></h3>
 <ul><li><p>bigquery datasets and tables will now appear in the connection pane when using <code>dbConnect</code> (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/r-dbi/bigrquery/issues/431" class="external-link">#431</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable()</a></code> (<a href="https://github.com/r-dbi/bigrquery/issues/539" class="external-link">#539</a>), <code><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">dbCreateTable()</a></code> (<a href="https://github.com/r-dbi/bigrquery/issues/483" class="external-link">#483</a>), and <code>dbExecute</code> (<a href="https://github.com/r-dbi/bigrquery/issues/502" class="external-link">#502</a>) are now supported.</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>/<code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> gains support for parameterised queries via the <code>params</code> argument (<a href="https://github.com/byapparov" class="external-link">@byapparov</a>, <a href="https://github.com/r-dbi/bigrquery/issues/444" class="external-link">#444</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbExistsTable.html" class="external-link">dbExistsTable()</a></code>, <code><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable()</a></code>, and <code><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields()</a></code> now all work with <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> (<a href="https://github.com/r-dbi/bigrquery/issues/537" class="external-link">#537</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="significant-dbplyr-improvements-development-version">Significant dbplyr improvements<a class="anchor" aria-label="anchor" href="#significant-dbplyr-improvements-development-version"></a></h3>
+<h3 id="significant-dbplyr-improvements-1-5-0">Significant dbplyr improvements<a class="anchor" aria-label="anchor" href="#significant-dbplyr-improvements-1-5-0"></a></h3>
 <ul><li><p>bigrquery now uses 2nd edition of dbplyr interface (<a href="https://github.com/r-dbi/bigrquery/issues/508" class="external-link">#508</a>) and is compatible with dbplyr 2.4.0 (<a href="https://github.com/r-dbi/bigrquery/issues/550" class="external-link">#550</a>).</p></li>
 <li><p>Joins now work correctly across bigrquery connections (<a href="https://github.com/r-dbi/bigrquery/issues/433" class="external-link">#433</a>).</p></li>
 <li><p><code>grepl(pattern, x)</code> is now correctly translated to <code>REGEXP_CONTAINS(x, pattern)</code> (<a href="https://github.com/r-dbi/bigrquery/issues/416" class="external-link">#416</a>).</p></li>
@@ -81,7 +85,7 @@
 <li><p><code>runif(n())</code> gains a translation so that <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample()</a></code> can work (<a href="https://github.com/mgirlich" class="external-link">@mgirlich</a>, <a href="https://github.com/r-dbi/bigrquery/issues/448" class="external-link">#448</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
+<h3 id="minor-improvements-and-bug-fixes-1-5-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-1-5-0"></a></h3>
 <ul><li><p>Google API URLs have been aligned with the Google Cloud Discovery docs. This enables support for Private and Restricted Google APIs configurations (<a href="https://github.com/husseyd" class="external-link">@husseyd</a>, <a href="https://github.com/r-dbi/bigrquery/issues/541" class="external-link">#541</a>)</p></li>
 <li><p>Functions generally try to do a better job of telling you when you’ve supplied the wrong type of input. Additionally, if you supply <code><a href="https://dbi.r-dbi.org/reference/SQL.html" class="external-link">SQL()</a></code> to a query, you no longer get a weird warning (<a href="https://github.com/r-dbi/bigrquery/issues/498" class="external-link">#498</a>).</p></li>
 <li><p>If <code><a href="../reference/api-job.html">bq_job_wait()</a></code> receives a 503 response, it now waits for 2 seconds and tries again (<a href="https://github.com/r-dbi/bigrquery/issues/535" class="external-link">#535</a>).</p></li>
@@ -320,7 +324,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
+  <p></p><p>Developed by <a href="https://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
