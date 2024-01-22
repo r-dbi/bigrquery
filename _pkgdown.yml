@@ -23,6 +23,8 @@ reference:
 
 news:
  releases:
+ - text: "bigrquery 1.5.0"
+   href: https://www.tidyverse.org/blog/2024/01/bigrquery-1-5-0/
  - text: "bigrquery 1.4.0"
    href: https://www.tidyverse.org/blog/2021/08/bigrquery-1-4-0/
  - text: "bigrquery 1.1.0"
