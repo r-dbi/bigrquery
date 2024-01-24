@@ -21,7 +21,7 @@ Imports:
     clock,
     curl,
     DBI,
-    gargle (>= 1.4.0),
+    gargle (>= 1.5.0),
     httr,
     jsonlite,
     lifecycle,
