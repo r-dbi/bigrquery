@@ -170,7 +170,9 @@ op_can_download.lazy_base_query <- function(x) {
   } else if (inherits(x$x, "sql")) {
     FALSE
   } else {
-    dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+    dbplyr::is.ident(x$x) ||
+      inherits(x$x, "dbplyr_table_ident") ||
+      inherits(x$x, "dbplyr_table_path")
   }
 }
 

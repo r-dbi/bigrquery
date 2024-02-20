@@ -260,7 +260,7 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     write_disposition = "WRITE_APPEND",
     ...
   )
-  on_connection_updated(conn, name)
+  on_connection_updated(conn, toString(tb))
 
   invisible(TRUE)
 }
@@ -289,7 +289,7 @@ dbCreateTable_bq <- function(conn,
 
   tb <- as_bq_table(conn, name)
   bq_table_create(tb, fields)
-  on_connection_updated(conn, name)
+  on_connection_updated(conn, toString(tb))
 
   invisible(TRUE)
 }
@@ -363,7 +363,7 @@ setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
 dbRemoveTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
   bq_table_delete(tb)
-  on_connection_updated(conn, name)
+  on_connection_updated(conn, toString(tb))
   invisible(TRUE)
 }
 
@@ -431,7 +431,9 @@ as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
 
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
-  if (inherits(name, "dbplyr_table_ident")) {
+  if (inherits(name, "dbplyr_table_path")) { # dbplyr 2.5.0
+    pieces <- dbplyr:::table_path_components(name, x)[[1]]
+  } else if (inherits(name, "dbplyr_table_ident")) { # dbplyr 2.4.0
     name <- unclass(name)
     pieces <- c(name$catalog, name$schema, name$table)
     pieces <- pieces[!is.na(pieces)]
