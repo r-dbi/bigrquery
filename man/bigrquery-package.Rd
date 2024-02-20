@@ -2,8 +2,8 @@
 % Please edit documentation in R/bigrquery-package.R
 \docType{package}
 \name{bigrquery-package}
+\alias{bigrquery}
 \alias{bigrquery-package}
-\alias{_PACKAGE}
 \title{bigrquery: An Interface to Google's 'BigQuery' 'API'}
 \description{
 Easily talk to Google's 'BigQuery' database from R.

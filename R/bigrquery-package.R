@@ -10,7 +10,6 @@
 #' }
 #'
 #' @keywords internal
-#' @aliases bigrquery-package
 #' @useDynLib bigrquery, .registration = TRUE
 #' @rawNamespace import(rlang, except = unbox)
 "_PACKAGE"
