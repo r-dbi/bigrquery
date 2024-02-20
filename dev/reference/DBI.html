@@ -246,7 +246,10 @@ or a <a href="https://dbi.r-dbi.org/reference/DBIResult-class.html" class="exter
 
 
 <dt>params</dt>
-<dd><p>A list of bindings, named or unnamed.</p></dd>
+<dd><p>For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code>, a list of values, named or unnamed,
+or a data frame, with one element/column per query parameter.
+For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBindArrow()</a></code>, values as a nanoarrow stream,
+with one column per query parameter.</p></dd>
 
 
 <dt>x</dt>
@@ -264,7 +267,7 @@ given verbatim, e.g. <code>SQL('"my_schema"."table_name"')</code></p></li>
 
 
 <dt>value</dt>
-<dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> (or coercible to data.frame).</p></dd>
+<dd><p>A <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> (or coercible to data.frame).</p></dd>
 
 
 <dt>overwrite</dt>
