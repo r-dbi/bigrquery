@@ -44,7 +44,8 @@ test_that("can collect and compute (no dataset)", {
 
   # compute: persistent
   name <- paste0("basedata.", random_name())
-  perm <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
+  if (packageVersion("dbplyr") >= "2.4.0.9000") name <- I(name)
+  perm <- dplyr::compute(bq_mtcars, name = name, temporary = FALSE)
   defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))

@@ -162,8 +162,13 @@ setOldClass("bq_table")
 
 #' @export
 print.bq_table <- function(x, ...) {
-  cat_line("<bq_table> ", x$project, ".", x$dataset, ".", x$table)
+  cat_line("<bq_table> ", toString(x))
   invisible(x)
+}
+
+#' @export
+toString.bq_table <- function(x, ...) {
+  paste0(x$project, ".", x$dataset, ".", x$table)
 }
 
 #' @rdname bq_refs

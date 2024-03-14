@@ -44,7 +44,12 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 # registered onLoad
 tbl.BigQueryConnection <- function(src, from, ...) {
   src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
-  tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
+
+  if (utils::packageVersion("dbplyr") >= "2.4.0.9000") {
+    tbl <- dplyr::tbl(src, from = from)
+  } else {
+    tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
+  }
 
   # This is ugly, but I don't see a better way of doing this
   tb <- as_bq_table(src$con, from)
@@ -170,7 +175,9 @@ op_can_download.lazy_base_query <- function(x) {
   } else if (inherits(x$x, "sql")) {
     FALSE
   } else {
-    dbplyr::is.ident(x$x) || inherits(x$x, "dbplyr_table_ident")
+    dbplyr::is.ident(x$x) ||
+      inherits(x$x, "dbplyr_table_ident") ||
+      inherits(x$x, "dbplyr_table_path")
   }
 }
 

@@ -24,18 +24,24 @@
 \alias{dbDataType,BigQueryConnection-method}
 \alias{dbWriteTable,BigQueryConnection,character,data.frame-method}
 \alias{dbWriteTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbWriteTable,BigQueryConnection,AsIs,data.frame-method}
 \alias{dbAppendTable,BigQueryConnection,character,data.frame-method}
 \alias{dbAppendTable,BigQueryConnection,Id,data.frame-method}
+\alias{dbAppendTable,BigQueryConnection,AsIs,data.frame-method}
 \alias{dbCreateTable,BigQueryConnection-method}
 \alias{dbReadTable,BigQueryConnection,character-method}
 \alias{dbReadTable,BigQueryConnection,Id-method}
+\alias{dbReadTable,BigQueryConnection,AsIs-method}
 \alias{dbListTables,BigQueryConnection-method}
 \alias{dbExistsTable,BigQueryConnection,character-method}
 \alias{dbExistsTable,BigQueryConnection,Id-method}
+\alias{dbExistsTable,BigQueryConnection,AsIs-method}
 \alias{dbListFields,BigQueryConnection,character-method}
 \alias{dbListFields,BigQueryConnection,Id-method}
+\alias{dbListFields,BigQueryConnection,AsIs-method}
 \alias{dbRemoveTable,BigQueryConnection,character-method}
 \alias{dbRemoveTable,BigQueryConnection,Id-method}
+\alias{dbRemoveTable,BigQueryConnection,AsIs-method}
 \alias{dbGetInfo,BigQueryConnection-method}
 \alias{dbBegin,BigQueryConnection-method}
 \alias{dbCommit,BigQueryConnection-method}
@@ -109,9 +115,23 @@
   row.names = NA
 )
 
+\S4method{dbWriteTable}{BigQueryConnection,AsIs,data.frame}(
+  conn,
+  name,
+  value,
+  ...,
+  overwrite = FALSE,
+  append = FALSE,
+  field.types = NULL,
+  temporary = FALSE,
+  row.names = NA
+)
+
 \S4method{dbAppendTable}{BigQueryConnection,character,data.frame}(conn, name, value, ..., row.names = NULL)
 
 \S4method{dbAppendTable}{BigQueryConnection,Id,data.frame}(conn, name, value, ..., row.names = NULL)
+
+\S4method{dbAppendTable}{BigQueryConnection,AsIs,data.frame}(conn, name, value, ..., row.names = NULL)
 
 \S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
 
@@ -121,19 +141,27 @@
 
 \S4method{dbReadTable}{BigQueryConnection,Id}(conn, name, ...)
 
+\S4method{dbReadTable}{BigQueryConnection,AsIs}(conn, name, ...)
+
 \S4method{dbListTables}{BigQueryConnection}(conn, ...)
 
 \S4method{dbExistsTable}{BigQueryConnection,character}(conn, name, ...)
 
 \S4method{dbExistsTable}{BigQueryConnection,Id}(conn, name, ...)
 
+\S4method{dbExistsTable}{BigQueryConnection,AsIs}(conn, name, ...)
+
 \S4method{dbListFields}{BigQueryConnection,character}(conn, name, ...)
 
 \S4method{dbListFields}{BigQueryConnection,Id}(conn, name, ...)
 
+\S4method{dbListFields}{BigQueryConnection,AsIs}(conn, name, ...)
+
 \S4method{dbRemoveTable}{BigQueryConnection,character}(conn, name, ...)
 
 \S4method{dbRemoveTable}{BigQueryConnection,Id}(conn, name, ...)
+
+\S4method{dbRemoveTable}{BigQueryConnection,AsIs}(conn, name, ...)
 
 \S4method{dbGetInfo}{BigQueryConnection}(dbObj, ...)
 
