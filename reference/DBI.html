@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">bigrquery</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,10 +134,26 @@
 <span>  row.names <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs,data.frame</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable</a></span><span class="op">(</span></span>
+<span>  <span class="va">conn</span>,</span>
+<span>  <span class="va">name</span>,</span>
+<span>  <span class="va">value</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  field.types <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  temporary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character,data.frame</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">value</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,Id,data.frame</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">value</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs,data.frame</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbAppendTable.html" class="external-link">dbAppendTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">value</span>, <span class="va">...</span>, row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection</span></span>
@@ -150,6 +166,9 @@
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,Id</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection</span></span>
@@ -161,16 +180,25 @@
 <span><span class="co"># S4 method for BigQueryConnection,Id</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExistsTable.html" class="external-link">dbExistsTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExistsTable.html" class="external-link">dbExistsTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,Id</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbListFields.html" class="external-link">dbListFields</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,character</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection,Id</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for BigQueryConnection,AsIs</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbRemoveTable.html" class="external-link">dbRemoveTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">name</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for BigQueryConnection</span></span>
@@ -246,7 +274,10 @@ or a <a href="https://dbi.r-dbi.org/reference/DBIResult-class.html" class="exter
 
 
 <dt>params</dt>
-<dd><p>A list of bindings, named or unnamed.</p></dd>
+<dd><p>For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code>, a list of values, named or unnamed,
+or a data frame, with one element/column per query parameter.
+For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBindArrow()</a></code>, values as a nanoarrow stream,
+with one column per query parameter.</p></dd>
 
 
 <dt>x</dt>
@@ -264,7 +295,7 @@ given verbatim, e.g. <code>SQL('"my_schema"."table_name"')</code></p></li>
 
 
 <dt>value</dt>
-<dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> (or coercible to data.frame).</p></dd>
+<dd><p>A <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> (or coercible to data.frame).</p></dd>
 
 
 <dt>overwrite</dt>
