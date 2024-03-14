@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 
 if (bigrquery:::has_internal_auth()) {
-  bq_auth_internal()
+  bigrquery:::bq_auth_internal()
 } else {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -35,7 +35,7 @@ The bigrquery package makes it easy to work with data stored in
   familiar with the REST API and you want do something not supported in the 
   higher-level APIs.
   
-* The [DBI interface](https://www.r-dbi.org) wraps the low-level API and
+* The [DBI interface](https://r-dbi.org) wraps the low-level API and
   makes working with BigQuery like working with any other database system.
   This is most convenient layer if you want to execute SQL queries in 
   BigQuery or upload smaller amounts (i.e. <100 MB) of data.

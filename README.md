@@ -24,7 +24,7 @@ of abstraction on top of BigQuery:
   you’re familiar with the REST API and you want do something not
   supported in the higher-level APIs.
 
-- The [DBI interface](https://www.r-dbi.org) wraps the low-level API and
+- The [DBI interface](https://r-dbi.org) wraps the low-level API and
   makes working with BigQuery like working with any other database
   system. This is most convenient layer if you want to execute SQL
   queries in BigQuery or upload smaller amounts (i.e. \<100 MB) of data.
@@ -63,16 +63,16 @@ bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    10     2          8.44
-#>  2  1969     8     6          7.81
-#>  3  1969     4    12          6.50
-#>  4  1969     6    13          5.88
-#>  5  1969    12    17          7.00
-#>  6  1969     7    12          7.44
-#>  7  1969     9     5          6.50
-#>  8  1969     8    21          6.94
-#>  9  1969     9    10          6.69
-#> 10  1969    11    24          8.19
+#>  1  1969    12    14          8.88
+#>  2  1969     1    22          7.44
+#>  3  1969     4    11          6.12
+#>  4  1969     3    15          9.06
+#>  5  1969    11    18          7.44
+#>  6  1969     5     5          7.00
+#>  7  1969     9    20          8.13
+#>  8  1969     3    20          7.37
+#>  9  1969     3    20          6.81
+#> 10  1969    12     1          8.50
 ```
 
 ### DBI
@@ -99,16 +99,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    10     2          8.44
-#>  2  1969     8     6          7.81
-#>  3  1969     4    12          6.50
-#>  4  1969     6    13          5.88
-#>  5  1969    12    17          7.00
-#>  6  1969     7    12          7.44
-#>  7  1969     9     5          6.50
-#>  8  1969     8    21          6.94
-#>  9  1969     9    10          6.69
-#> 10  1969    11    24          8.19
+#>  1  1969    12    14          8.88
+#>  2  1969     1    22          7.44
+#>  3  1969     4    11          6.12
+#>  4  1969     3    15          9.06
+#>  5  1969    11    18          7.44
+#>  6  1969     5     5          7.00
+#>  7  1969     9    20          8.13
+#>  8  1969     3    20          7.37
+#>  9  1969     3    20          6.81
+#> 10  1969    12     1          8.50
 ```
 
 ### dplyr
