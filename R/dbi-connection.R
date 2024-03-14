@@ -252,6 +252,15 @@ setMethod(
   dbWriteTable_bq
 )
 
+#' @rdname DBI
+#' @export
+setMethod(
+  "dbWriteTable",
+  c("BigQueryConnection", "AsIs", "data.frame"),
+  dbWriteTable_bq
+)
+
+
 dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
   tb <- as_bq_table(conn, name)
 
@@ -273,6 +282,10 @@ setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), d
 #' @rdname DBI
 #' @export
 setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbAppendTable", c("BigQueryConnection", "AsIs", "data.frame"), dbAppendTable_bq)
 
 dbCreateTable_bq <- function(conn,
                              name,
@@ -318,6 +331,10 @@ setMethod("dbReadTable", c("BigQueryConnection", "character"), dbReadTable_bq)
 setMethod("dbReadTable", c("BigQueryConnection", "Id"), dbReadTable_bq)
 
 #' @rdname DBI
+#' @export
+setMethod("dbReadTable", c("BigQueryConnection", "AsIs"), dbReadTable_bq)
+
+#' @rdname DBI
 #' @inheritParams DBI::dbListTables
 #' @export
 setMethod(
@@ -345,6 +362,10 @@ setMethod("dbExistsTable", c("BigQueryConnection", "character"), dbExistsTable_b
 #' @export
 setMethod("dbExistsTable", c("BigQueryConnection", "Id"), dbExistsTable_bq)
 
+#' @rdname DBI
+#' @export
+setMethod("dbExistsTable", c("BigQueryConnection", "AsIs"), dbExistsTable_bq)
+
 dbListFields_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
   flds <- bq_table_fields(tb)
@@ -359,6 +380,10 @@ setMethod("dbListFields", c("BigQueryConnection", "character"), dbListFields_bq)
 #' @rdname DBI
 #' @export
 setMethod("dbListFields", c("BigQueryConnection", "Id"), dbListFields_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbListFields", c("BigQueryConnection", "AsIs"), dbListFields_bq)
 
 dbRemoveTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
@@ -375,6 +400,10 @@ setMethod("dbRemoveTable", c("BigQueryConnection", "character"), dbRemoveTable_b
 #' @rdname DBI
 #' @export
 setMethod("dbRemoveTable", c("BigQueryConnection", "Id"), dbRemoveTable_bq)
+
+#' @rdname DBI
+#' @export
+setMethod("dbRemoveTable", c("BigQueryConnection", "AsIs"), dbRemoveTable_bq)
 
 # nocov start
 #' @rdname DBI
@@ -432,7 +461,7 @@ as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
   if (inherits(name, "dbplyr_table_path")) { # dbplyr 2.5.0
-    pieces <- dbplyr:::table_path_components(name, x)[[1]]
+    pieces <- dbplyr::table_path_components(name, x)[[1]]
   } else if (inherits(name, "dbplyr_table_ident")) { # dbplyr 2.4.0
     name <- unclass(name)
     pieces <- c(name$catalog, name$schema, name$table)
@@ -444,6 +473,8 @@ as_bq_table.BigQueryConnection <- function(x, name, ...) {
   } else if (is(name, "Id")) {
     pieces <- unname(name@name)
   } else if (is.character(name) && length(name) == 1) {
+    # Technically incorrect according to the DBI spec, because it should
+    # automatically quote the name; but too high risk to change now
     pieces <- strsplit(name, ".", fixed = TRUE)[[1]]
   } else {
     cli::cli_abort("{.arg name} must be a string or a dbplyr_table_ident.")

@@ -45,7 +45,7 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 tbl.BigQueryConnection <- function(src, from, ...) {
   src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
 
-  if (dbplyr_2.5.0) {
+  if (utils::packageVersion("dbplyr") >= "2.4.0.9000") {
     tbl <- dplyr::tbl(src, from = from)
   } else {
     tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
