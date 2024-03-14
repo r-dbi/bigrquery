@@ -461,7 +461,7 @@ as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
   if (inherits(name, "dbplyr_table_path")) { # dbplyr 2.5.0
-    pieces <- getFromNamespace("table_path_components", "dbplyr")(name, x)[[1]]
+    pieces <- utils::getFromNamespace("table_path_components", "dbplyr")(name, x)[[1]]
   } else if (inherits(name, "dbplyr_table_ident")) { # dbplyr 2.4.0
     name <- unclass(name)
     pieces <- c(name$catalog, name$schema, name$table)
