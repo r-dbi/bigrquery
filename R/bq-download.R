@@ -1,5 +1,6 @@
 #' Download table data
 #'
+#' This function provides two ways to download
 #' This retrieves rows in chunks of `page_size`. It is most suitable for results
 #' of smaller queries (<100 MB, say). For larger queries, it is better to
 #' export the results to a CSV file stored on google cloud and use the
@@ -43,19 +44,27 @@
 #' @param start_index Starting row index (zero-based).
 #' @param max_connections Number of maximum simultaneous connections to
 #'   BigQuery servers.
+#' @param api Which API to use? The `"json"` API works where ever bigrquery
+#'   does, but is slow and can require fiddling with the `page_size` parameter.
+#'   The `"arrow"` API is faster and more reliable, but only works if you
+#'   have also installed the bigrquerystorage package.
+#'
+#'   Because the `"arrow"` API is so much faster, it will be used automatically
+#'   if the bigrquerystorage package is installed.
 #' @inheritParams api-job
 #' @param bigint The R type that BigQuery's 64-bit integer types should be
 #'   mapped to. The default is `"integer"`, which returns R's `integer` type,
 #'   but results in `NA` for values above/below +/- 2147483647. `"integer64"`
 #'   returns a [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
+#' @param billing Identifier of project to bill.
 #' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
 #'   `n_max` instead.
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examplesIf bq_testable()
-#' df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
+#' df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 bq_table_download <-
   function(x,
            n_max = Inf,
@@ -64,6 +73,8 @@ bq_table_download <-
            max_connections = 6L,
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character"),
+           api = c("json", "arrow"),
+           billing = x$project,
            max_results = deprecated()) {
     x <- as_bq_table(x)
     check_number_whole(n_max, min = 0, allow_infinite = TRUE)
@@ -71,11 +82,40 @@ bq_table_download <-
     check_number_whole(max_connections, min = 1)
     quiet <- check_quiet(quiet)
     bigint <- arg_match(bigint)
+
+    if (missing(api)) {
+      api <- if (has_bigrquerystorage()) "arrow" else "json"
+    } else {
+      api <- arg_match(api)
+    }
+
     if (lifecycle::is_present(max_results)) {
       lifecycle::deprecate_warn(
         "1.4.0", "bq_table_download(max_results)", "bq_table_download(n_max)"
       )
       n_max <- max_results
+    }
+
+    if (api == "arrow") {
+      check_installed("bigrquerystorage", "required to download using arrow API")
+      if (!missing(page_size)) {
+        cli::cli_warn('{.arg page_size} is ignored when {.code api == "arrow"}')
+      }
+      if (!missing(start_index)) {
+        cli::cli_warn('{.arg start_index} is ignored when {.code api == "arrow"}')
+      }
+      if (!missing(max_connections)) {
+        cli::cli_warn('{.arg max_connections} is ignored when {.code api == "arrow"}')
+      }
+
+      return(bigrquerystorage::bqs_table_download(
+        x = toString(x),
+        parent = billing,
+        n_max = n_max,
+        quiet = quiet,
+        bigint = bigint,
+        as_tibble = TRUE
+      ))
     }
 
     params <- set_row_params(

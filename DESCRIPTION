@@ -39,7 +39,8 @@ Suggests:
     sodium,
     testthat (>= 3.1.5),
     wk (>= 0.3.2),
-    withr
+    withr,
+    bigrquerystorage
 LinkingTo: 
     cli,
     cpp11,

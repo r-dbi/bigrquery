@@ -71,3 +71,7 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
   check_string(x, arg = error_arg, call = error_call)
   x
 }
+
+has_bigrquerystorage <- function() {
+  is_installed("bigrquerystorage")
+}

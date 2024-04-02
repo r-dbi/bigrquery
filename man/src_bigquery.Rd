@@ -31,7 +31,7 @@ library(dplyr)
 # set up for billing
 con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 
-shakespeare <- con \%>\% tbl("publicdata.samples.shakespeare")
+shakespeare <- con \%>\% tbl(I("publicdata.samples.shakespeare"))
 shakespeare
 shakespeare \%>\%
   group_by(word) \%>\%

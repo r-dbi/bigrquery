@@ -1,5 +1,10 @@
 # bigrquery (development version)
 
+* If the bigrquerystorage package is installed, `bq_table_download()` (and
+  hence basically every function that downloads data from BigQuery) will
+  use it. This will considerably improve the speed of downloading large 
+  datasets.
+
 # bigrquery 1.5.1
 
 * Forward compatibility with upcoming dbplyr release (#601).

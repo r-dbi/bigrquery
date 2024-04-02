@@ -20,14 +20,18 @@
 #' # set up for billing
 #' con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 #'
-#' shakespeare <- con %>% tbl("publicdata.samples.shakespeare")
+#' shakespeare <- con %>% tbl(I("publicdata.samples.shakespeare"))
 #' shakespeare
 #' shakespeare %>%
 #'   group_by(word) %>%
 #'   summarise(n = sum(word_count, na.rm = TRUE)) %>%
 #'   arrange(desc(n))
 #' }
-src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
+src_bigquery <- function(project,
+                         dataset,
+                         billing = project,
+                         api = c("json", "arrow"),
+                         max_pages = 10) {
   check_installed("dbplyr")
 
   con <- DBI::dbConnect(
@@ -127,6 +131,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   check_bool(warn_incomplete)
 
   con <- dbplyr::remote_con(x)
+  billing <- con@billing
 
   if (op_can_download(x)) {
     lq <- x$lazy_query
@@ -136,7 +141,6 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   } else {
     sql <- dbplyr::db_sql_render(con, x)
 
-    billing <- con@billing
     if (is.null(con@dataset)) {
       tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
     } else {
@@ -147,13 +151,26 @@ collect.tbl_BigQueryConnection <- function(x, ...,
 
   quiet <- if (n < 100) TRUE else con@quiet
   bigint <- con@bigint %||% "integer"
-  out <- bq_table_download(tb,
-    n_max = n,
-    page_size = page_size,
-    quiet = quiet,
-    max_connections = max_connections,
-    bigint = bigint
-  )
+
+  if (has_bigrquerystorage()) {
+    out <- bq_table_download(tb,
+      n_max = n,
+      quiet = quiet,
+      bigint = bigint,
+      billing = billing,
+      api = "arrow"
+    )
+  } else {
+    out <- bq_table_download(tb,
+      n_max = n,
+      page_size = page_size,
+      quiet = quiet,
+      max_connections = max_connections,
+      bigint = bigint,
+      api = "json"
+    )
+  }
+
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
 
