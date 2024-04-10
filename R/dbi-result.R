@@ -105,13 +105,14 @@ setMethod(
       n <- res@cursor$left()
     }
 
-    # TODO: figure out what how to ignore pagination here
+    # TODO: figure out how to ignore pagination here
     data <- bq_table_download(res@bq_table,
       n_max = n,
       start_index = res@cursor$cur(),
       page_size = res@page_size,
       bigint = res@bigint,
-      quiet = res@quiet
+      quiet = res@quiet,
+      api = "json"
     )
     res@cursor$adv(nrow(data))
 
