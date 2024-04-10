@@ -1,7 +1,8 @@
 # errors when table is known to be incomplete
 
     Code
-      bq_table_download(tb, n_max = 35000, page_size = 35000, bigint = "integer64")
+      bq_table_download(tb, n_max = 35000, page_size = 35000, bigint = "integer64",
+        api = "json")
     Message
       Downloading first chunk of data.
     Condition

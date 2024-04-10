@@ -174,7 +174,7 @@ test_that("can convert date time types", {
   "
 
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
 
@@ -198,7 +198,7 @@ test_that("can parse fractional seconds", {
 test_that("correctly parse logical values" ,{
   query <- "SELECT TRUE as x"
   tb <- bq_project_query(bq_test_project(), query)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_true(df$x)
 })
@@ -209,18 +209,18 @@ test_that("the return type of integer columns is set by the bigint argument", {
   qry <- bq_project_query(bq_test_project(), sql)
 
   expect_warning(
-    out_int <- bq_table_download(qry, bigint = "integer")$x,
+    out_int <- bq_table_download(qry, bigint = "integer", api = "json")$x,
     "integer overflow"
   )
   expect_identical(out_int, suppressWarnings(as.integer(x)))
 
-  out_int64 <- bq_table_download(qry, bigint = "integer64")$x
+  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "json")$x
   expect_identical(out_int64, bit64::as.integer64(x))
 
-  out_dbl <- bq_table_download(qry, bigint = "numeric")$x
+  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "json")$x
   expect_identical(out_dbl, as.double(x))
 
-  out_chr <- bq_table_download(qry, bigint = "character")$x
+  out_chr <- bq_table_download(qry, bigint = "character", api = "json")$x
   expect_identical(out_chr, x)
 })
 
@@ -228,7 +228,7 @@ test_that("can convert geography type", {
   skip_if_not_installed("wk")
   sql <- "SELECT ST_GEOGFROMTEXT('POINT (30 10)') as geography"
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_identical(df$geography, wk::wkt("POINT(30 10)"))
 })
@@ -236,7 +236,7 @@ test_that("can convert geography type", {
 test_that("can convert bytes type", {
   sql <- "SELECT ST_ASBINARY(ST_GEOGFROMTEXT('POINT (30 10)')) as bytes"
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_identical(
     df$bytes,
