@@ -192,7 +192,7 @@ export_json <- function(values) {
 #'   Google Cloud.
 #'
 #'   For Google Cloud Storage URIs: Each URI can contain one
-#'   `'*'`` wildcard character and it must come after the 'bucket' name.
+#'   `'*'` wildcard character and it must come after the 'bucket' name.
 #'   Size limits related to load jobs apply to external data sources.
 #'
 #'   For Google Cloud Bigtable URIs: Exactly one URI can be specified and
