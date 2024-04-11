@@ -120,15 +120,32 @@ db_copy_to.BigQueryConnection <- function(con,
 # Efficient downloads -----------------------------------------------
 
 # registered onLoad
-collect.tbl_BigQueryConnection <- function(x, ...,
-                                           page_size = NULL,
-                                           max_connections = 6L,
-                                           n = Inf,
-                                           warn_incomplete = TRUE) {
 
+#' Collect a BigQuery table
+#' 
+#' This collect method is specialised for BigQuery tables, generating the
+#' SQL from your dplyr commands, then calling [bq_project_query()]
+#' or [bq_dataset_query()] to run the query, then [bq_download_table()] 
+#' to download the results. Thus the arguments are a combination of the
+#' arguments to [dplyr::collect()], `bq_project_query()`/`bq_dataset_query()`,
+#' and `bq_download_table()`.
+#' 
+#' @inheritParams dplyr::collect
+#' @inheritParams bq_table_download
+#' @param n Maximum number of results to retrieve. 
+#'   The default, `Inf`, will retrieve all rows.
+#' @param ... Other arguments passed on to 
+#'   `bq_project_query()`/`bq_project_query()`
+collect.tbl_BigQueryConnection <- function(x, ...,
+                                           n = Inf,
+                                           api = c("json", "arrow"),
+                                           page_size = NULL,
+                                           max_connections = 6L
+                                           ) {
+
+  api <- check_api(api)
   check_number_whole(n, min = 0, allow_infinite = TRUE)
   check_number_whole(max_connections, min = 1)
-  check_bool(warn_incomplete)
 
   con <- dbplyr::remote_con(x)
   billing <- con@billing
@@ -152,7 +169,7 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   quiet <- if (n < 100) TRUE else con@quiet
   bigint <- con@bigint %||% "integer"
 
-  if (has_bigrquerystorage()) {
+  if (api == "arrow") {
     out <- bq_table_download(tb,
       n_max = n,
       quiet = quiet,

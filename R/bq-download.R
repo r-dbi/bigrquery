@@ -82,12 +82,7 @@ bq_table_download <-
     check_number_whole(max_connections, min = 1)
     quiet <- check_quiet(quiet)
     bigint <- arg_match(bigint)
-
-    if (missing(api)) {
-      api <- if (has_bigrquerystorage()) "arrow" else "json"
-    } else {
-      api <- arg_match(api)
-    }
+    api <- check_api(api)
 
     if (lifecycle::is_present(max_results)) {
       lifecycle::deprecate_warn(
@@ -241,6 +236,14 @@ bq_table_download <-
     )
     parse_postprocess(table_data, bigint = bigint)
   }
+
+check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
+  if (identical(api, c("json", "arrow"))) {
+    if (has_bigrquerystorage()) "arrow" else "json"
+  } else {
+    arg_match(api, error_call = error_call)
+  }
+}
 
 # This function is a modified version of
 # https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R
