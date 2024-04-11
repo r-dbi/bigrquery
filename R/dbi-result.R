@@ -103,11 +103,14 @@ setMethod(
     if (n == -1) n <- Inf
 
     if (has_bigrquerystorage() && n == Inf && res@cursor$cur() == 0) {
+      # https://github.com/meztez/bigrquerystorage/issues/48
+      n <- res@cursor$left()
+      
       # If possible, download complete dataset using arrow
       data <- bq_table_download(res@bq_table,
+        n_max = n,
         bigint = res@bigint,
         quiet = res@quiet,
-        n_max = res@cursor$left(),
         api = "arrow"
       )
     } else {
