@@ -100,20 +100,28 @@ setMethod(
   "dbFetch", "BigQueryResult",
   function(res, n = -1, ...) {
     check_number_whole(n, min = -1, allow_infinite = TRUE)
+    if (n == -1) n <- Inf
 
-    if (n == -1 || n == Inf) {
-      n <- res@cursor$left()
+    if (has_bigrquerystorage() && n == Inf && res@cursor$cur() == 0) {
+      # If possible, download complete dataset using arrow
+      data <- bq_table_download(res@bq_table,
+        bigint = res@bigint,
+        quiet = res@quiet,
+        n_max = res@cursor$left(),
+        api = "arrow"
+      )
+    } else {
+      # Otherwise, fall back to slower JSON API
+      data <- bq_table_download(res@bq_table,
+        n_max = n,
+        start_index = res@cursor$cur(),
+        page_size = res@page_size,
+        bigint = res@bigint,
+        quiet = res@quiet,
+        api = "json"
+      )
     }
-
-    # TODO: figure out how to ignore pagination here
-    data <- bq_table_download(res@bq_table,
-      n_max = n,
-      start_index = res@cursor$cur(),
-      page_size = res@page_size,
-      bigint = res@bigint,
-      quiet = res@quiet,
-      api = "json"
-    )
+    
     res@cursor$adv(nrow(data))
 
     data
