@@ -59,6 +59,20 @@ test_that("errors when table is known to be incomplete", {
   )
 })
 
+# api = "arrow" ----------------------------------------------------------------
+
+test_that("check_api respects inputs", {
+  expect_equal(check_api("arrow"), "arrow")
+  expect_equal(check_api("json"), "json")
+})
+
+test_that("uses arrow api if bigrquerystorage installed", {
+  expect_equal(check_api(), "arrow")
+
+  local_mocked_bindings(is_installed = function(...) FALSE)
+  expect_equal(check_api(), "json")
+})
+
 # helpers around row and chunk params ------------------------------------------
 
 test_that("set_row_params() works ", {
