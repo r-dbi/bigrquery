@@ -30,6 +30,7 @@ Imports:
     rlang (>= 1.1.0),
     tibble
 Suggests: 
+    bigrquerystorage,
     blob,
     covr,
     dbplyr (>= 2.4.0),
@@ -38,9 +39,8 @@ Suggests:
     readr,
     sodium,
     testthat (>= 3.1.5),
-    wk (>= 0.3.2),
     withr,
-    bigrquerystorage
+    wk (>= 0.3.2)
 LinkingTo: 
     cli,
     cpp11,
