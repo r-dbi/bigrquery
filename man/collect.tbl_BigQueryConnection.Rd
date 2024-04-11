@@ -47,8 +47,8 @@ BigQuery servers.}
 \description{
 This collect method is specialised for BigQuery tables, generating the
 SQL from your dplyr commands, then calling \code{\link[=bq_project_query]{bq_project_query()}}
-or \code{\link[=bq_dataset_query]{bq_dataset_query()}} to run the query, then \code{\link[=bq_download_table]{bq_download_table()}}
+or \code{\link[=bq_dataset_query]{bq_dataset_query()}} to run the query, then \code{\link[=bq_table_download]{bq_table_download()}}
 to download the results. Thus the arguments are a combination of the
 arguments to \code{\link[dplyr:compute]{dplyr::collect()}}, \code{bq_project_query()}/\code{bq_dataset_query()},
-and \code{bq_download_table()}.
+and \code{bq_table_download()}.
 }

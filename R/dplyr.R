@@ -30,7 +30,6 @@
 src_bigquery <- function(project,
                          dataset,
                          billing = project,
-                         api = c("json", "arrow"),
                          max_pages = 10) {
   check_installed("dbplyr")
 
@@ -125,10 +124,10 @@ db_copy_to.BigQueryConnection <- function(con,
 #' 
 #' This collect method is specialised for BigQuery tables, generating the
 #' SQL from your dplyr commands, then calling [bq_project_query()]
-#' or [bq_dataset_query()] to run the query, then [bq_download_table()] 
+#' or [bq_dataset_query()] to run the query, then [bq_table_download()] 
 #' to download the results. Thus the arguments are a combination of the
 #' arguments to [dplyr::collect()], `bq_project_query()`/`bq_dataset_query()`,
-#' and `bq_download_table()`.
+#' and `bq_table_download()`.
 #' 
 #' @inheritParams dplyr::collect
 #' @inheritParams bq_table_download

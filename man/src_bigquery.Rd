@@ -4,13 +4,7 @@
 \alias{src_bigquery}
 \title{A BigQuery data source for dplyr.}
 \usage{
-src_bigquery(
-  project,
-  dataset,
-  billing = project,
-  api = c("json", "arrow"),
-  max_pages = 10
-)
+src_bigquery(project, dataset, billing = project, max_pages = 10)
 }
 \arguments{
 \item{project}{project id or name}
