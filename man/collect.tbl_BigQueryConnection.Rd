@@ -32,17 +32,17 @@ have also installed the bigrquerystorage package.
 Because the \code{"arrow"} API is so much faster, it will be used automatically
 if the bigrquerystorage package is installed.}
 
-\item{page_size}{The number of rows requested per chunk. It is recommended to
-leave this unspecified until you have evidence that the \code{page_size}
-selected automatically by \code{bq_table_download()} is problematic.
+\item{page_size}{(JSON only) The number of rows requested per chunk. It is
+recommended to leave this unspecified until you have evidence that the
+\code{page_size} selected automatically by \code{bq_table_download()} is problematic.
 
 When \code{page_size = NULL} bigrquery determines a conservative, natural chunk
 size empirically. If you specify the \code{page_size}, it is important that each
 chunk fits on one page, i.e. that the requested row limit is low enough to
 prevent the API from paginating based on response size.}
 
-\item{max_connections}{Number of maximum simultaneous connections to
-BigQuery servers.}
+\item{max_connections}{(JSON only) Number of maximum simultaneous
+connections to BigQuery servers.}
 }
 \description{
 This collect method is specialised for BigQuery tables, generating the

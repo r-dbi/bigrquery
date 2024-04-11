@@ -1,30 +1,27 @@
 #' Download table data
 #'
-#' This function provides two ways to download
-#' This retrieves rows in chunks of `page_size`. It is most suitable for results
-#' of smaller queries (<100 MB, say). For larger queries, it is better to
-#' export the results to a CSV file stored on google cloud and use the
-#' bq command line tool to download locally.
+#' @description
+#' This function provides two ways to download data from BigQuery, transfering
+#' data using either JSON or arrow, depending on the `api` argument. JSON is 
+#' much slower but requires no additional dependencies, and is what bigrquery 
+#' used prior to version 1.6.0. The arrow method is much much faster, but 
+#' requires the bigrquerystorage, which in turn requires the arrow package.
+#' These dependencies are fairly heavy, and can be tricky to compile on Linux,
+#' but in our opinion the massive speedup is worth the effort.
+#' 
+#' ## JSON API
+#' 
+#' The JSON API retrieves rows in chunks of `page_size`. It is most suitable 
+#' for results of smaller queries (<100 MB, say). Unfortunately due to
+#' limitations in the BigQuery API, you may need to vary this parameter 
+#' depending on the complexity of the underlying data. 
 #'
-#' @section Complex data:
-#' bigrquery will retrieve nested and repeated columns in to list-columns
+#' The JSON API will convert nested and repeated columns in to list-columns
 #' as follows:
 #'
 #' * Repeated values (arrays) will become a list-column of vectors.
 #' * Records will become list-columns of named lists.
 #' * Repeated records will become list-columns of data frames.
-#'
-#' @section Larger datasets:
-#' In my timings, this code takes around 1 minute per 100 MB of data.
-#' If you need to download considerably more than this, I recommend:
-#'
-#'  * Export a `.csv` file to Cloud Storage using [bq_table_save()].
-#'  * Use the `gsutil` command line utility to download it.
-#'  * Read the csv file into R with `readr::read_csv()` or `data.table::fread()`.
-#'
-#'  Unfortunately you can not export nested or repeated formats into CSV, and
-#'  the formats that BigQuery supports (arvn and ndjson) that allow for
-#'  nested/repeated values, are not well supported in R.
 #'
 #' @return Because data retrieval may generate list-columns and the `data.frame`
 #'   print method can have problems with list-columns, this method returns
@@ -33,17 +30,17 @@
 #' @param x A [bq_table]
 #' @param n_max Maximum number of results to retrieve. Use `Inf` to retrieve all
 #'   rows.
-#' @param page_size The number of rows requested per chunk. It is recommended to
-#'   leave this unspecified until you have evidence that the `page_size`
-#'   selected automatically by `bq_table_download()` is problematic.
+#' @param page_size (JSON only) The number of rows requested per chunk. It is 
+#'   recommended to leave this unspecified until you have evidence that the 
+#'  `page_size` selected automatically by `bq_table_download()` is problematic.
 #'
 #'   When `page_size = NULL` bigrquery determines a conservative, natural chunk
 #'   size empirically. If you specify the `page_size`, it is important that each
 #'   chunk fits on one page, i.e. that the requested row limit is low enough to
 #'   prevent the API from paginating based on response size.
-#' @param start_index Starting row index (zero-based).
-#' @param max_connections Number of maximum simultaneous connections to
-#'   BigQuery servers.
+#' @param start_index (JSON only) Starting row index (zero-based).
+#' @param max_connections (JSON only) Number of maximum simultaneous 
+#'   connections to BigQuery servers.
 #' @param api Which API to use? The `"json"` API works where ever bigrquery
 #'   does, but is slow and can require fiddling with the `page_size` parameter.
 #'   The `"arrow"` API is faster and more reliable, but only works if you
@@ -57,7 +54,9 @@
 #'   but results in `NA` for values above/below +/- 2147483647. `"integer64"`
 #'   returns a [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
-#' @param billing Identifier of project to bill.
+#' @param billing (Arrow only) Project to bill; defaults to the project of `x`,
+#'   and typically only needs to be specified if you're working with public
+#'   datasets.
 #' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
 #'   `n_max` instead.
 #' @section Google BigQuery API documentation:

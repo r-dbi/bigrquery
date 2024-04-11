@@ -23,19 +23,19 @@ bq_table_download(
 \item{n_max}{Maximum number of results to retrieve. Use \code{Inf} to retrieve all
 rows.}
 
-\item{page_size}{The number of rows requested per chunk. It is recommended to
-leave this unspecified until you have evidence that the \code{page_size}
-selected automatically by \code{bq_table_download()} is problematic.
+\item{page_size}{(JSON only) The number of rows requested per chunk. It is
+recommended to leave this unspecified until you have evidence that the
+\code{page_size} selected automatically by \code{bq_table_download()} is problematic.
 
 When \code{page_size = NULL} bigrquery determines a conservative, natural chunk
 size empirically. If you specify the \code{page_size}, it is important that each
 chunk fits on one page, i.e. that the requested row limit is low enough to
 prevent the API from paginating based on response size.}
 
-\item{start_index}{Starting row index (zero-based).}
+\item{start_index}{(JSON only) Starting row index (zero-based).}
 
-\item{max_connections}{Number of maximum simultaneous connections to
-BigQuery servers.}
+\item{max_connections}{(JSON only) Number of maximum simultaneous
+connections to BigQuery servers.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
@@ -54,7 +54,9 @@ have also installed the bigrquerystorage package.
 Because the \code{"arrow"} API is so much faster, it will be used automatically
 if the bigrquerystorage package is installed.}
 
-\item{billing}{Identifier of project to bill.}
+\item{billing}{(Arrow only) Project to bill; defaults to the project of \code{x},
+and typically only needs to be specified if you're working with public
+datasets.}
 
 \item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
 \code{n_max} instead.}
@@ -66,15 +68,21 @@ a tibble. If you need a \code{data.frame}, coerce the results with
 \code{\link[=as.data.frame]{as.data.frame()}}.
 }
 \description{
-This function provides two ways to download
-This retrieves rows in chunks of \code{page_size}. It is most suitable for results
-of smaller queries (<100 MB, say). For larger queries, it is better to
-export the results to a CSV file stored on google cloud and use the
-bq command line tool to download locally.
-}
-\section{Complex data}{
+This function provides two ways to download data from BigQuery, transfering
+data using either JSON or arrow, depending on the \code{api} argument. JSON is
+much slower but requires no additional dependencies, and is what bigrquery
+used prior to version 1.6.0. The arrow method is much much faster, but
+requires the bigrquerystorage, which in turn requires the arrow package.
+These dependencies are fairly heavy, and can be tricky to compile on Linux,
+but in our opinion the massive speedup is worth the effort.
+\subsection{JSON API}{
 
-bigrquery will retrieve nested and repeated columns in to list-columns
+The JSON API retrieves rows in chunks of \code{page_size}. It is most suitable
+for results of smaller queries (<100 MB, say). Unfortunately due to
+limitations in the BigQuery API, you may need to vary this parameter
+depending on the complexity of the underlying data.
+
+The JSON API will convert nested and repeated columns in to list-columns
 as follows:
 \itemize{
 \item Repeated values (arrays) will become a list-column of vectors.
@@ -82,22 +90,7 @@ as follows:
 \item Repeated records will become list-columns of data frames.
 }
 }
-
-\section{Larger datasets}{
-
-In my timings, this code takes around 1 minute per 100 MB of data.
-If you need to download considerably more than this, I recommend:
-\itemize{
-\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}.
-\item Use the \code{gsutil} command line utility to download it.
-\item Read the csv file into R with \code{readr::read_csv()} or \code{data.table::fread()}.
 }
-
-Unfortunately you can not export nested or repeated formats into CSV, and
-the formats that BigQuery supports (arvn and ndjson) that allow for
-nested/repeated values, are not well supported in R.
-}
-
 \section{Google BigQuery API documentation}{
 
 \itemize{
