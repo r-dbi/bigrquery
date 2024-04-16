@@ -20,6 +20,17 @@ test_that("can work with literal SQL", {
   expect_true("fips_code" %in% dbplyr::op_vars(x))
 })
 
+test_that("can work with nested table identifier", {
+  con_us <- DBI::dbConnect(
+    bigquery(),
+    project = "bigquery-public-data",
+    billing = bq_test_project()
+  )
+
+  expect_s3_class(dplyr::collect(head(dplyr::tbl(con_us, I("utility_us.country_code_iso")))), "tbl_df")
+  expect_error(dplyr::collect(head(dplyr::tbl(con_us, "utility_us.country_code_iso"))), "tbl_df")
+})
+
 test_that("can copy_to", {
   ds <- bq_test_dataset()
   con <- DBI::dbConnect(ds)
