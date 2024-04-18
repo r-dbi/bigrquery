@@ -15,7 +15,6 @@ BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
     R (>= 3.6)
 Imports: 
-    bigrquerystorage (>= 1.1.0),
     bit64,
     brio,
     cli,
@@ -31,6 +30,7 @@ Imports:
     rlang (>= 1.1.0),
     tibble
 Suggests: 
+    bigrquerystorage (>= 1.1.0),
     blob,
     covr,
     dbplyr (>= 2.4.0),
