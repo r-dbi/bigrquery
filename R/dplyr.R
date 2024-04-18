@@ -48,10 +48,18 @@ src_bigquery <- function(project,
 tbl.BigQueryConnection <- function(src, from, ...) {
   src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
 
+  sql <- dbplyr::sql_query_fields(src$con, from)
+  dataset <- if (!is.null(src$con@dataset)) as_bq_dataset(src$con)
+  schema <- bq_perform_query_schema(sql, 
+    billing = src$con@billing,
+    default_dataset = dataset
+  )
+  vars <- map_chr(schema, "[[", "name")
+
   if (utils::packageVersion("dbplyr") >= "2.4.0.9000") {
-    tbl <- dplyr::tbl(src, from = from)
+    tbl <- dplyr::tbl(src, from = from, vars = vars)
   } else {
-    tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
+    tbl <- dplyr::tbl(src, from = from, vars = vars, check_from = FALSE)
   }
 
   # This is ugly, but I don't see a better way of doing this
