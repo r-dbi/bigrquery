@@ -156,8 +156,8 @@ test_that("all BigQuery tbls share the same src", {
     billing = bq_test_project()
   )
 
-  tbl1 <- dplyr::tbl(con1, "basedata.mtcars", vars = "x")
-  tbl2 <- dplyr::tbl(con2, "publicdata.samples.natality", vars = "x")
+  tbl1 <- dplyr::tbl(con1, I("basedata.mtcars"), vars = "x")
+  tbl2 <- dplyr::tbl(con2, I("publicdata.samples.natality"), vars = "x")
   expect_true(dplyr::same_src(tbl1, tbl2))
   expect_false(dplyr::same_src(tbl1, mtcars))
 })
