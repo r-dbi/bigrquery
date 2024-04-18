@@ -7,6 +7,7 @@
 \alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_query_dry_run}
+\alias{bq_perform_query_schema}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
@@ -62,6 +63,14 @@ bq_perform_query_dry_run(
   default_dataset = NULL,
   parameters = NULL,
   use_legacy_sql = FALSE
+)
+
+bq_perform_query_schema(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL
 )
 
 bq_perform_copy(
