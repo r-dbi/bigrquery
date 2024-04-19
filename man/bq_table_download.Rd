@@ -76,8 +76,8 @@ much much faster, but requires the bigrquerystorage package.
 \subsection{Arrow API}{
 
 The arrow API is much faster, but has heavier dependencies: bigrquerystorage
-requires the arrow package, which can be tricky to compile on Linux (but in
-general you can get a binary from
+requires the arrow package, which can be tricky to compile on Linux (but you
+usually should be able to get a binary from
 \href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
 
 There are two known limitations of \code{api = "arrow"}:
