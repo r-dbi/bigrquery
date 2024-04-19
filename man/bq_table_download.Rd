@@ -69,12 +69,21 @@ a tibble. If you need a \code{data.frame}, coerce the results with
 }
 \description{
 This function provides two ways to download data from BigQuery, transfering
-data using either JSON or arrow, depending on the \code{api} argument. JSON is
-much slower but requires no additional dependencies, and is what bigrquery
-used prior to version 1.6.0. The arrow method is much much faster, but
-requires the bigrquerystorage, which in turn requires the arrow package.
-These dependencies are fairly heavy, and can be tricky to compile on Linux,
-but in our opinion the massive speedup is worth the effort.
+data using either JSON or arrow, depending on the \code{api} argument.
+\code{api = "json"} is much slower but requires no additional dependencies,
+and is what bigrquery always used prior to v1.6.0. \code{api = "arrow"} is
+much much faster, but requires the bigrquerystorage package.
+\subsection{Arrow API}{
+
+The arrow API is much faster, but has heavier dependencies: bigrquerystorage
+requires the arrow package, which can be tricky to compile on Linux (but in
+general you can get a binary from
+\href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
+
+Currently the only know limitation of \code{api = "arrow"} is that geographic
+data is returned as a string; you'll need to parse yourself using \code{wkt::wkt()}.
+}
+
 \subsection{JSON API}{
 
 The JSON API retrieves rows in chunks of \code{page_size}. It is most suitable
