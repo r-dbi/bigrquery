@@ -104,13 +104,22 @@ bq_table_download <-
     if (api == "arrow") {
       check_installed("bigrquerystorage", "required to download using arrow API")
       if (!missing(page_size)) {
-        cli::cli_warn('{.arg page_size} is ignored when {.code api == "arrow"}')
+        cli::cli_warn(
+          '{.arg page_size} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
       }
       if (!missing(start_index)) {
-        cli::cli_warn('{.arg start_index} is ignored when {.code api == "arrow"}')
+        cli::cli_warn(
+          '{.arg start_index} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
       }
       if (!missing(max_connections)) {
-        cli::cli_warn('{.arg max_connections} is ignored when {.code api == "arrow"}')
+        cli::cli_warn(
+          '{.arg max_connections} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
       }
 
       return(bigrquerystorage::bqs_table_download(

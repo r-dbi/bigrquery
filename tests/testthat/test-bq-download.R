@@ -73,6 +73,18 @@ test_that("uses arrow api if bigrquerystorage installed", {
   expect_equal(check_api(), "json")
 })
 
+test_that("warns if supplying unnused arguments", {
+  tb <- bq_project_query(bq_test_project(), "SELECT 1.0", quiet = TRUE)
+  expect_snapshot(
+    . <- bq_table_download(tb, 
+      api = "arrow",
+      page_size = 1,
+      start_index = 1,
+      max_connections = 1
+    )
+  )
+})
+
 test_that("arrow api can convert non-nested types", {
   sql <- "SELECT
     '\U0001f603' as unicode,
