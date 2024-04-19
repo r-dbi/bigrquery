@@ -73,6 +73,54 @@ test_that("uses arrow api if bigrquerystorage installed", {
   expect_equal(check_api(), "json")
 })
 
+test_that("can convert date time types", {
+  sql <- "SELECT
+    '\U0001f603' as unicode,
+    datetime,
+    TRUE as logicaltrue,
+    FALSE as logicalfalse,
+    CAST ('Hi' as BYTES) as bytes,
+    CAST (datetime as DATE) as date,
+    CAST (datetime as TIME) as time,
+    CAST (datetime as TIMESTAMP) as timestamp,
+    ST_GEOGFROMTEXT('POINT (30 10)') as geography
+    FROM (SELECT DATETIME '2000-01-02 03:04:05.67' as datetime)
+  "
+
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb, api = "arrow")
+
+  base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
+  expect_identical(df$unicode, "\U0001f603", ignore_encoding = FALSE)
+
+  expect_equal(df$logicaltrue, TRUE)
+  expect_equal(df$logicalfalse, FALSE)
+
+  expect_equal(unclass(df$bytes), list(as.raw(c(0x48, 0x69))))
+
+  expect_equal(df$date, as.Date(base))
+  expect_equal(df$timestamp, base)
+  # expect_equal(df$datetime, base)
+  expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
+
+  # expect_identical(df$geography, wk::wkt("POINT(30 10)"))
+})
+
+test_that("the return type of integer columns is set by the bigint argument", {
+  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  qry <- bq_project_query(bq_test_project(), sql)
+
+  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "arrow")$x
+  expect_identical(out_int64, bit64::as.integer64(x))
+
+  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "arrow")$x
+  expect_identical(out_dbl, as.double(x))
+
+  out_chr <- bq_table_download(qry, bigint = "character", api = "arrow")$x
+  expect_identical(out_chr, x)
+})
+
 # helpers around row and chunk params ------------------------------------------
 
 test_that("set_row_params() works ", {
