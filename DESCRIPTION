@@ -30,6 +30,7 @@ Imports:
     rlang (>= 1.1.0),
     tibble
 Suggests: 
+    bigrquerystorage (>= 1.1.0),
     blob,
     covr,
     dbplyr (>= 2.4.0),
@@ -38,8 +39,8 @@ Suggests:
     readr,
     sodium,
     testthat (>= 3.1.5),
-    wk (>= 0.3.2),
-    withr
+    withr,
+    wk (>= 0.3.2)
 LinkingTo: 
     cli,
     cpp11,
@@ -81,3 +82,5 @@ Collate:
     'import-standalone-types-check.R'
     'utils.R'
     'zzz.R'
+Remotes:  
+    meztez/bigrquerystorage#52

@@ -95,10 +95,20 @@ test_that("can supply array parameters", {
   expect_setequal(df$values, c("a", "b"))
 })
 
-test_that("can estimate cost", {
+test_that("can estimate cost and get schema", {
   cost <- bq_perform_query_dry_run(
     "SELECT count(*) FROM bigquery-public-data.moon_phases.moon_phases",
     billing = bq_test_project()
   )
   expect_equal(cost, structure(0, class = "bq_bytes"))
+
+  schema <- bq_perform_query_schema(
+    "SELECT * FROM bigquery-public-data.moon_phases.moon_phases",
+    billing = bq_test_project()
+  )
+  names <- vapply(schema, function(x) x$name, character(1))
+  expect_equal(names, c("phase", "phase_emoji", "peak_datetime"))
+
+  types <- vapply(schema, function(x) x$type, character(1))
+  expect_equal(types, c("STRING", "STRING", "DATETIME"))
 })

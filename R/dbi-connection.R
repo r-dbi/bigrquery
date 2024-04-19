@@ -318,7 +318,7 @@ setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
-  bq_table_download(tb, ...)
+  bq_table_download(tb, ..., api = "json")
 }
 
 #' @rdname DBI

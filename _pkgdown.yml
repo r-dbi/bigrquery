@@ -16,6 +16,7 @@ reference:
   contents:
   - src_bigquery
   - bigquery
+  - collect.tbl_BigQueryConnection
 
 - title: Low-level API
   contents:

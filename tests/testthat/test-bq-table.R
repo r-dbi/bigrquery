@@ -38,7 +38,7 @@ test_that("can round trip to non-default location", {
   bq_df <- bq_table(dallas, "df")
   bq_table_upload(bq_df, df1)
 
-  df2 <- bq_table_download(bq_df)
+  df2 <- bq_table_download(bq_df, api = "json")
   df2 <- df2[order(df2$x), names(df1)] # BQ doesn't guarantee order
   rownames(df2) <- NULL
 
@@ -54,7 +54,7 @@ test_that("can roundtrip via save + load", {
   defer(gs_object_delete(gs))
   bq_table_load(tb2, gs)
 
-  df <- bq_table_download(tb2)
+  df <- bq_table_download(tb2, api = "json")
   expect_equal(dim(df), c(32, 11))
 })
 
@@ -79,7 +79,7 @@ test_that("can round trip atomic vectors", {
   bq_df <- bq_test_table()
   bq_table_upload(bq_df, df1)
 
-  df2 <- bq_table_download(bq_df, bigint = "integer")
+  df2 <- bq_table_download(bq_df, bigint = "integer", api = "json")
   df2 <- df2[order(df2[[1]]), names(df1)] # BQ doesn't gaurantee order
   rownames(df2) <- NULL
 
@@ -94,7 +94,7 @@ test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
     bq_fields(list(bq_field("datetime", "TIMESTAMP")))
   )
   bq_table_upload(tb1, df)
-  df1 <- bq_table_download(tb1)
+  df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 
   tb2 <- bq_table_create(
@@ -102,7 +102,7 @@ test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
     bq_fields(list(bq_field("datetime", "DATETIME")))
   )
   bq_table_upload(tb2, df)
-  df2 <- bq_table_download(tb2)
+  df2 <- bq_table_download(tb2, api = "json")
   expect_equal(df2, df)
 })
 
@@ -117,7 +117,7 @@ test_that("can round trip data frame with list-cols", {
   )
   bq_table_upload(tb, df1)
 
-  df2 <- bq_table_download(tb, bigint = "integer")
+  df2 <- bq_table_download(tb, bigint = "integer", api = "json")
   # restore column order
   df2 <- df2[names(df1)]
   df2$struct[[1]] <- df2$struct[[1]][c("x", "y", "z")]
@@ -164,7 +164,7 @@ test_that("can round-trip GEOGRAPHY", {
 
   tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
   bq_table_upload(tb1, df)
-  df1 <- bq_table_download(tb1)
+  df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 })
 
@@ -173,6 +173,6 @@ test_that("can round-trip BYTES", {
 
   tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
   bq_table_upload(tb1, df)
-  df1 <- bq_table_download(tb1)
+  df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 })

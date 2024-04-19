@@ -128,11 +128,11 @@ test_that("can parse nested structures", {
 
 test_that("can parse empty arrays", {
   tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<INT64>[] as x")
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
   expect_equal(df$x, list(integer(length = 0)))
 
   tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<STRUCT<a INT64, b STRING>>[] as x")
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
   expect_equal(df$x, list(tibble::tibble(a = integer(length = 0), b = character())))
 })
 

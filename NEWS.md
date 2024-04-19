@@ -1,5 +1,15 @@
 # bigrquery (development version)
 
+* `tbl()` uses a more efficient method to determine variable names.
+
+* New `bq_perform_query_schema()` to determine the schema of a query
+  without executing it.
+
+* If the bigrquerystorage package is installed, `bq_table_download()` (and
+  hence `collect()`, `dbGetQuery()` and `dbFetch()` will use it. This will 
+  drastically improve the speed of downloading large datasets. A big thanks
+  to @meztez for creating the bigrquerystorage package!
+
 # bigrquery 1.5.1
 
 * Forward compatibility with upcoming dbplyr release (#601).
