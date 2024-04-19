@@ -10,12 +10,15 @@
 #' ## Arrow API
 #'
 #' The arrow API is much faster, but has heavier dependencies: bigrquerystorage
-#' requires the arrow package, which can be tricky to compile on Linux (but in
-#' general you can get a binary from 
+#' requires the arrow package, which can be tricky to compile on Linux (but you
+#' usually should be able to get a binary from 
 #' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
 #' 
-#' Currently the only know limitation of `api = "arrow"` is that geographic
-#' data is returned as a string; you'll need to parse yourself using `wkt::wkt()`.
+#' There are two known limitations of `api = "arrow"`:
+#'
+#' * Geographic data is returned as a string; you'll need to parse yourself 
+#'   using `wkt::wkt()`.
+#' * When querying public data, you'll now need to provide a `billing` project.
 #' 
 #' ## JSON API
 #' 

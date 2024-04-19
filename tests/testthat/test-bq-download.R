@@ -73,7 +73,7 @@ test_that("uses arrow api if bigrquerystorage installed", {
   expect_equal(check_api(), "json")
 })
 
-test_that("can convert date time types", {
+test_that("arrow api can convert non-nested types", {
   sql <- "SELECT
     '\U0001f603' as unicode,
     datetime,
@@ -106,7 +106,25 @@ test_that("can convert date time types", {
   # expect_identical(df$geography, wk::wkt("POINT(30 10)"))
 })
 
-test_that("the return type of integer columns is set by the bigint argument", {
+test_that("arrow api can convert nested types", {
+  skip("https://github.com/meztez/bigrquerystorage/issues/54")
+  sql <- "SELECT
+    STRUCT(1.0 AS a, 'abc' AS b) as s,
+    [1.0, 2.0, 3.0] as a,
+    [STRUCT(1.0 as a, 'a' as b), STRUCT(2.0, 'b'), STRUCT(3, 'c')] as aos,
+    STRUCT([1.0, 2.0, 3.0] as a, ['a', 'b'] as b) as soa
+  "
+
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb, api = "arrow")
+
+  expect_equal(df$s, list(list(a = 1, b = "abc")))
+  expect_equal(df$a, list(c(1, 2, 3)))
+  expect_equal(df$aos, list(tibble(a = c(1, 2, 3), b = c("a", "b", "c"))))
+  expect_equal(df$soa, list(list(a = c(1, 2, 3), b = c("a", "b"))))
+})
+
+test_that("arrow api respects bigint", {
   x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
   sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
   qry <- bq_project_query(bq_test_project(), sql)

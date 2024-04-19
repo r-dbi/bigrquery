@@ -80,8 +80,12 @@ requires the arrow package, which can be tricky to compile on Linux (but in
 general you can get a binary from
 \href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
 
-Currently the only know limitation of \code{api = "arrow"} is that geographic
-data is returned as a string; you'll need to parse yourself using \code{wkt::wkt()}.
+There are two known limitations of \code{api = "arrow"}:
+\itemize{
+\item Geographic data is returned as a string; you'll need to parse yourself
+using \code{wkt::wkt()}.
+\item When querying public data, you'll now need to provide a \code{billing} project.
+}
 }
 
 \subsection{JSON API}{
