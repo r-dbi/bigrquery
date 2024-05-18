@@ -148,16 +148,32 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
 }
 
 #' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
-  url <- paste0(upload_url, url)
-  req <- POST_multipart_related(
-    url,
-    parts = parts,
-    token,
+bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
+
+  # Post metadata
+  req <- POST(
+    paste0(upload_url, url),
+    body = metadata[["content"]],
     httr::user_agent(bq_ua()),
-    ...,
-    query = prepare_bq_query(query)
+    token,
+    add_headers("Content-Type" = metadata[["type"]]),
+    query = utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query),
+    verbose()
   )
+
+  if (status_code(req) == 200){
+
+    # Put media
+    req <- PUT(
+      headers(req_metadata)$location,
+      body = media[["content"]],
+      httr::user_agent(bq_ua()),
+      token,
+      add_headers("Content-Type" = media[["type"]])
+    )
+
+  }
+
   process_request(req)
 }
 

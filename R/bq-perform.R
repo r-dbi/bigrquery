@@ -91,6 +91,9 @@ bq_perform_extract <- function(x,
 #' @export
 #' @name api-perform
 #' @param values Data frame of values to insert.
+#' @param source_format The format of the data files:
+#'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+#'   * For parquet, specify "PARQUET".
 #' @param create_disposition Specifies whether the job is allowed to create
 #'   new tables.
 #'
@@ -110,6 +113,7 @@ bq_perform_extract <- function(x,
 #'     'duplicate' error is returned in the job result.
 bq_perform_upload <- function(x, values,
                               fields = NULL,
+                              source_format = "NEWLINE_DELIMITED_JSON",
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_EMPTY",
                               ...,
@@ -121,12 +125,13 @@ bq_perform_upload <- function(x, values,
     cli::cli_abort("{.arg values} must be a data frame.")
   }
   fields <- as_bq_fields(fields)
+  check_string(source_format)
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
 
   load <- list(
-    sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
+    sourceFormat = unbox(source_format),
     destinationTable = tableReference(x),
     createDisposition = unbox(create_disposition),
     writeDisposition = unbox(write_disposition)
@@ -139,22 +144,32 @@ bq_perform_upload <- function(x, values,
     load$autodetect <- unbox(TRUE)
   }
 
-  config <- list(configuration = list(load = load))
-  config <- bq_body(config, ...)
-  config_part <- part(
-    c("Content-type" = "application/json; charset=UTF-8"),
-    jsonlite::toJSON(config, pretty = TRUE)
+  metadata <- list(configuration = list(load = load))
+  metadata <- bq_body(metadata, ...)
+  metadata <- list(
+    "type" = "application/json; charset=UTF-8",
+    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
   )
 
-  data_part <- part(
-    c("Content-type" = "application/json; charset=UTF-8"),
-    export_json(values)
-  )
+  if (source_format == "NEWLINE_DELIMITED_JSON") {
+    media <- list(
+      "type" = "application/json; charset=UTF-8",
+      "content" = export_json(values)
+    )
+  }else if (source_format == "PARQUET") {
+    media <- list(
+      "type" = "application/vnd.apache.parquet",
+      "content" = export_parquet(values)
+    )
+  }else{
+    cli::cli_abort("Unsupported {.arg source_format}")
+  }
 
   url <- bq_path(billing, jobs = "")
   res <- bq_upload(
     url,
-    parts = c(config_part, data_part),
+    metadata,
+    media,
     query = list(fields = "jobReference")
   )
   as_bq_job(res$jobReference)
@@ -184,6 +199,29 @@ export_json <- function(values) {
   jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
 
   rawToChar(rawConnectionValue(con))
+}
+
+# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
+export_parquet <- function(values) {
+
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `serializer_parquet` to work")
+  }
+
+  tmpfile <- tempfile(fileext = ".parquet")
+
+  on.exit({
+    if (file.exists(tmpfile)) {
+      unlink(tmpfile)
+    }
+  }, add = TRUE)
+
+  # write to disk
+  arrow::write_parquet(values, tmpfile)
+
+  # read back results
+  readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+
 }
 
 #' @export
