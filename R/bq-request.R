@@ -157,8 +157,7 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
     httr::user_agent(bq_ua()),
     token,
     add_headers("Content-Type" = metadata[["type"]]),
-    query = utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query),
-    verbose()
+    query = utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
   )
 
   if (status_code(req) == 200){
