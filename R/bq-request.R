@@ -165,7 +165,7 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
 
     # Put media
     req <- PUT(
-      headers(req_metadata)$location,
+      headers(req)$location,
       body = media[["content"]],
       httr::user_agent(bq_ua()),
       token,
