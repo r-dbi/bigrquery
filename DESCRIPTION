@@ -29,7 +29,8 @@ Imports:
     prettyunits,
     rlang (>= 1.1.0),
     tibble
-Suggests: 
+Suggests:
+    arrow,
     blob,
     covr,
     dbplyr (>= 2.4.0),
