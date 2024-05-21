@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* The `bq_perform_upload()` function now allows users to choose the transmission 
+  format (JSON or PARQUET) for data sent to BigQuery (#608).
+
 # bigrquery 1.5.1
 
 * Forward compatibility with upcoming dbplyr release (#601).
