@@ -147,7 +147,7 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
   process_request(req)
 }
 
-#' @importFrom httr POST add_headers config
+#' @importFrom httr POST PUT add_headers config
 bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
 
   # Post metadata
