@@ -205,7 +205,7 @@ export_json <- function(values) {
 export_parquet <- function(values) {
 
   if (!requireNamespace("arrow", quietly = TRUE)) {
-    stop("`arrow` must be installed for `serializer_parquet` to work")
+    stop("`arrow` must be installed for source_format = `PARQUET`")
   }
 
   tmpfile <- tempfile(fileext = ".parquet")
