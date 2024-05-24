@@ -93,7 +93,7 @@ bq_perform_extract <- function(x,
 #' @param values Data frame of values to insert.
 #' @param source_format The format of the data files:
 #'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
-#'   * For parquet, specify "PARQUET".
+#'   * For parquet, specify "PARQUET" (Arrow package is required).
 #' @param create_disposition Specifies whether the job is allowed to create
 #'   new tables.
 #'
