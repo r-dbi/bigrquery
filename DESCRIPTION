@@ -13,7 +13,7 @@ License: MIT + file LICENSE
 URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends: 
-    R (>= 3.6)
+    R (>= 4.0)
 Imports: 
     bit64,
     brio,
