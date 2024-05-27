@@ -208,11 +208,7 @@ export_parquet <- function(values) {
 
   tmpfile <- tempfile(fileext = ".parquet")
 
-  on.exit({
-    if (file.exists(tmpfile)) {
-      unlink(tmpfile)
-    }
-  }, add = TRUE)
+  defer(unlink(tmpfile))
 
   # write to disk
   arrow::write_parquet(values, tmpfile)
