@@ -148,27 +148,31 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
 }
 
 #' @importFrom httr POST PUT add_headers config
+#' https://cloud.google.com/bigquery/docs/reference/api-uploads
 bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
 
-  # Post metadata
+  query <-  utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
+  config <- add_headers("Content-Type" = metadata[["type"]])
+
   req <- POST(
     paste0(upload_url, url),
     body = metadata[["content"]],
     httr::user_agent(bq_ua()),
     token,
-    add_headers("Content-Type" = metadata[["type"]]),
-    query = utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
+    config,
+    query = query
   )
 
   if (status_code(req) == 200) {
 
-    # Put media
+    config <- add_headers("Content-Type" = media[["type"]])
+
     req <- PUT(
       headers(req)$location,
       body = media[["content"]],
       httr::user_agent(bq_ua()),
       token,
-      add_headers("Content-Type" = media[["type"]])
+      config
     )
 
   }
