@@ -147,7 +147,7 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
   process_request(req)
 }
 
-#' @importFrom httr POST PUT add_headers config
+#' @importFrom httr POST PUT add_headers headers config status_code
 # https://cloud.google.com/bigquery/docs/reference/api-uploads
 bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
 
