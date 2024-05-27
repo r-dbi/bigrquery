@@ -202,9 +202,7 @@ export_json <- function(values) {
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
 export_parquet <- function(values) {
 
-  if (!requireNamespace("arrow", quietly = TRUE)) {
-    stop("`arrow` must be installed for source_format = `PARQUET`")
-  }
+  check_installed(arrow,"for source_format = `PARQUET`")
 
   tmpfile <- tempfile(fileext = ".parquet")
 
