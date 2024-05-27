@@ -148,7 +148,7 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
 }
 
 #' @importFrom httr POST PUT add_headers config
-#' https://cloud.google.com/bigquery/docs/reference/api-uploads
+# https://cloud.google.com/bigquery/docs/reference/api-uploads
 bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
 
   query <-  utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
