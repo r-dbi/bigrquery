@@ -24,7 +24,7 @@ bq_perform_upload(
   x,
   values,
   fields = NULL,
-  source_format = "NEWLINE_DELIMITED_JSON",
+  source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,

@@ -113,7 +113,7 @@ bq_perform_extract <- function(x,
 #'     'duplicate' error is returned in the job result.
 bq_perform_upload <- function(x, values,
                               fields = NULL,
-                              source_format = "NEWLINE_DELIMITED_JSON",
+                              source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_EMPTY",
                               ...,
@@ -125,7 +125,7 @@ bq_perform_upload <- function(x, values,
     cli::cli_abort("{.arg values} must be a data frame.")
   }
   fields <- as_bq_fields(fields)
-  check_string(source_format)
+  arg_match(source_format)
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
@@ -156,13 +156,11 @@ bq_perform_upload <- function(x, values,
       "type" = "application/json; charset=UTF-8",
       "content" = export_json(values)
     )
-  }else if (source_format == "PARQUET") {
+  } else {
     media <- list(
       "type" = "application/vnd.apache.parquet",
       "content" = export_parquet(values)
     )
-  }else{
-    cli::cli_abort("Unsupported {.arg source_format}")
   }
 
   url <- bq_path(billing, jobs = "")
