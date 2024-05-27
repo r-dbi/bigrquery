@@ -160,7 +160,7 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
     query = utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
   )
 
-  if (status_code(req) == 200){
+  if (status_code(req) == 200) {
 
     # Put media
     req <- PUT(
