@@ -202,17 +202,13 @@ export_json <- function(values) {
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
 export_parquet <- function(values) {
 
-  check_installed(arrow,"for source_format = `PARQUET`")
+  check_installed(arrow, "for source_format = `PARQUET`")
 
-  tmpfile <- tempfile(fileext = ".parquet")
+  con <- arrow::BufferOutputStream$create()
+  defer(con$close())
+  arrow::write_parquet(values, con)
 
-  defer(unlink(tmpfile))
-
-  # write to disk
-  arrow::write_parquet(values, tmpfile)
-
-  # read back results
-  readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+  as.raw(arrow::buffer(con))
 
 }
 
