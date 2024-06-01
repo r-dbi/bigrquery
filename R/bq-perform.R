@@ -93,7 +93,7 @@ bq_perform_extract <- function(x,
 #' @param values Data frame of values to insert.
 #' @param source_format The format of the data files:
 #'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
-#'   * For parquet, specify "PARQUET" (Arrow package is required).
+#'   * For parquet, specify "PARQUET".
 #' @param create_disposition Specifies whether the job is allowed to create
 #'   new tables.
 #'
@@ -202,13 +202,15 @@ export_json <- function(values) {
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
 export_parquet <- function(values) {
 
-  check_installed("arrow", "for source_format = `PARQUET`")
+  tmpfile <- tempfile(fileext = ".parquet")
 
-  con <- arrow::BufferOutputStream$create()
-  defer(con$close())
-  arrow::write_parquet(values, con)
+  defer(unlink(tmpfile))
 
-  as.raw(arrow::buffer(con))
+  # write to disk
+  nanoparquet::write_parquet(values, tmpfile)
+
+  # read back results
+  readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
 
 }
 

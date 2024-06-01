@@ -28,9 +28,9 @@ Imports:
     methods,
     prettyunits,
     rlang (>= 1.1.0),
-    tibble
+    tibble,
+    nanoparquet
 Suggests:
-    arrow,
     blob,
     covr,
     dbplyr (>= 2.4.0),
