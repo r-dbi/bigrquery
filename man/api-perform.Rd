@@ -24,6 +24,7 @@ bq_perform_upload(
   x,
   values,
   fields = NULL,
+  source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
@@ -103,6 +104,16 @@ snake_case names are automatically converted to camelCase.}
 (like a data frame). Leave as \code{NULL} to allow BigQuery to auto-detect
 the fields.}
 
+\item{source_format}{The format of the data files:
+\itemize{
+\item For CSV files, specify "CSV".
+\item For datastore backups, specify "DATASTORE_BACKUP".
+\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+\item For Avro, specify "AVRO".
+\item For parquet, specify "PARQUET".
+\item For orc, specify "ORC".
+}}
+
 \item{create_disposition}{Specifies whether the job is allowed to create
 new tables.
 
@@ -136,16 +147,6 @@ For Google Cloud Bigtable URIs: Exactly one URI can be specified and
 it has be a fully specified and valid HTTPS URL for a Google Cloud
 Bigtable table. For Google Cloud Datastore backups: Exactly one URI
 can be specified. Also, the '*' wildcard character is not allowed.}
-
-\item{source_format}{The format of the data files:
-\itemize{
-\item For CSV files, specify "CSV".
-\item For datastore backups, specify "DATASTORE_BACKUP".
-\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
-\item For Avro, specify "AVRO".
-\item For parquet, specify "PARQUET".
-\item For orc, specify "ORC".
-}}
 
 \item{nskip}{For \code{source_format = "CSV"}, the number of header rows to skip.}
 

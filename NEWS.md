@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* The `bq_perform_upload()` function now allows users to choose the transmission format (JSON or PARQUET) for data sent to BigQuery (@apalacio9502, #608).
+* bigrquery now requires R 4.0, in line with our version support principles.
+
 # bigrquery 1.5.1
 
 * Forward compatibility with upcoming dbplyr release (#601).
