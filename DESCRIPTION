@@ -29,7 +29,7 @@ Imports:
     prettyunits,
     rlang (>= 1.1.0),
     tibble,
-    nanoparquet
+    nanoparquet (> 0.2.0)
 Suggests:
     blob,
     covr,

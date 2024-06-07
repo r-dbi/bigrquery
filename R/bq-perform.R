@@ -202,15 +202,7 @@ export_json <- function(values) {
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
 export_parquet <- function(values) {
 
-  tmpfile <- tempfile(fileext = ".parquet")
-
-  defer(unlink(tmpfile))
-
-  # write to disk
-  nanoparquet::write_parquet(values, tmpfile)
-
-  # read back results
-  readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+  nanoparquet::write_parquet(values, ":raw:")
 
 }
 
