@@ -29,7 +29,7 @@ Imports:
     prettyunits,
     rlang (>= 1.1.0),
     tibble,
-    nanoparquet
+    nanoparquet (> 0.2.0)
 Suggests:
     blob,
     covr,
@@ -41,6 +41,8 @@ Suggests:
     testthat (>= 3.1.5),
     wk (>= 0.3.2),
     withr
+Remotes:
+    r-lib/nanoparquet
 LinkingTo: 
     cli,
     cpp11,

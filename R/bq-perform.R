@@ -157,9 +157,10 @@ bq_perform_upload <- function(x, values,
       "content" = export_json(values)
     )
   } else {
+    # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
     media <- list(
       "type" = "application/vnd.apache.parquet",
-      "content" = export_parquet(values)
+      "content" = nanoparquet::write_parquet(values, ":raw:")
     )
   }
 
@@ -197,21 +198,6 @@ export_json <- function(values) {
   jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
 
   rawToChar(rawConnectionValue(con))
-}
-
-# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
-export_parquet <- function(values) {
-
-  tmpfile <- tempfile(fileext = ".parquet")
-
-  defer(unlink(tmpfile))
-
-  # write to disk
-  nanoparquet::write_parquet(values, tmpfile)
-
-  # read back results
-  readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
-
 }
 
 #' @export
