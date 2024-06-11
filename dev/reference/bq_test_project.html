@@ -117,7 +117,6 @@ automatically skip if auth and a test project are not available.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">bq_test_dataset</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bq_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="api-table.html">bq_table_upload</a></span><span class="op">(</span><span class="fu"><a href="bq_refs.html">bq_table</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"mtcars"</span><span class="op">)</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Tried to unbox a vector of length 2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dataset and table will be automatically deleted when ds is GC'd</span></span></span>
 </code></pre></div>

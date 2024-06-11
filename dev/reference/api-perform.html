@@ -302,17 +302,22 @@ but are not rate-limited in the same way as interactive queries.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_test_project.html">bq_test_dataset</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bq_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="bq_refs.html">bq_table</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"mtcars"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">job</span> <span class="op">&lt;-</span> <span class="fu">bq_perform_upload</span><span class="op">(</span><span class="va">bq_mtcars</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Tried to unbox a vector of length 2</span>
 <span class="r-in"><span><span class="fu"><a href="api-table.html">bq_table_exists</a></span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="api-job.html">bq_job_wait</a></span><span class="op">(</span><span class="va">job</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'job' not found</span>
 <span class="r-in"><span><span class="fu"><a href="api-table.html">bq_table_exists</a></span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in bq_get(url, query = list(fields = fields)):</span> Not found: Table gargle-169921:TESTING_eexombwkke.mtcars</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> [notFound]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      am  carb    vs  qsec    wt  drat  disp    hp   cyl  gear   mpg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     0     2     1  20    3.19  3.69  147.    62     4     4  24.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     0     2     1  22.9  3.15  3.92  141.    95     4     4  22.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     0     1     1  20.0  2.46  3.7   120.    97     4     3  21.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     0     1     1  19.4  3.22  3.08  258    110     6     3  21.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     0     1     1  20.2  3.46  2.76  225    105     6     3  18.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     0     4     1  18.3  3.44  3.92  168.   123     6     4  19.2</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
