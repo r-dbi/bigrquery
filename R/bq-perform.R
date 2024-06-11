@@ -125,7 +125,7 @@ bq_perform_upload <- function(x, values,
     cli::cli_abort("{.arg values} must be a data frame.")
   }
   fields <- as_bq_fields(fields)
-  arg_match(source_format)
+  source_format <- arg_match(source_format)
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
