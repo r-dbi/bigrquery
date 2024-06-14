@@ -174,6 +174,7 @@ test_that("all BigQuery tbls share the same src", {
 })
 
 test_that("runif is correctly translated", {
+  skip_if_not_installed("dbplyr", "2.4.0")
   expect_equal(
     dbplyr::translate_sql(runif(n()), con = simulate_bigrquery()),
     dbplyr::sql("RAND()")
