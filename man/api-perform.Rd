@@ -83,13 +83,21 @@ up to 1 Gb of data per file. Use a wild card URI (e.g.
 \verb{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
 number of files.}
 
-\item{destination_format}{The exported file format. Possible values
-include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
-repeated fields cannot be exported as CSV.}
+\item{destination_format}{The exported file format:
+\itemize{
+\item For CSV files, specify "CSV" (Nested and repeated data is not supported).
+\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+\item For Avro, specify "AVRO".
+\item For parquet, specify "PARQUET".
+}}
 
-\item{compression}{The compression type to use for exported files. Possible
-values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
-"SNAPPY" are only supported for Avro.}
+\item{compression}{The compression type to use for exported files:
+\itemize{
+\item For CSV files: "GZIP" or "NONE".
+\item For newline-delimited JSON: "GZIP" or "NONE".
+\item For Avro: "DEFLATE", "SNAPPY" or "NONE".
+\item For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".
+}}
 
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
