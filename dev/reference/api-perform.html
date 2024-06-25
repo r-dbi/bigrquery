@@ -164,15 +164,19 @@ number of files.</p></dd>
 
 
 <dt>destination_format</dt>
-<dd><p>The exported file format. Possible values
-include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
-repeated fields cannot be exported as CSV.</p></dd>
+<dd><p>The exported file format:</p><ul><li><p>For CSV files, specify "CSV" (Nested and repeated data is not supported).</p></li>
+<li><p>For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".</p></li>
+<li><p>For Avro, specify "AVRO".</p></li>
+<li><p>For parquet, specify "PARQUET".</p></li>
+</ul></dd>
 
 
 <dt>compression</dt>
-<dd><p>The compression type to use for exported files. Possible
-values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
-"SNAPPY" are only supported for Avro.</p></dd>
+<dd><p>The compression type to use for exported files:</p><ul><li><p>For CSV files: "GZIP" or "NONE".</p></li>
+<li><p>For newline-delimited JSON: "GZIP" or "NONE".</p></li>
+<li><p>For Avro: "DEFLATE", "SNAPPY" or "NONE".</p></li>
+<li><p>For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".</p></li>
+</ul></dd>
 
 
 <dt>...</dt>
