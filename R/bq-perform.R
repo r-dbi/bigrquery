@@ -42,12 +42,16 @@ NULL
 #'   up to 1 Gb of data per file. Use a wild card URI (e.g.
 #'   `gs://[YOUR_BUCKET]/file-name-*.json`) to automatically create any
 #'   number of files.
-#' @param destination_format The exported file format. Possible values
-#'   include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
-#'   repeated fields cannot be exported as CSV.
-#' @param compression The compression type to use for exported files. Possible
-#'   values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
-#'   "SNAPPY" are only supported for Avro.
+#' @param destination_format The exported file format:
+#'   * For CSV files, specify "CSV" (Nested and repeated data is not supported).
+#'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+#'   * For Avro, specify "AVRO".
+#'   * For parquet, specify "PARQUET".
+#' @param compression The compression type to use for exported files:
+#'   * For CSV files: "GZIP" or "NONE".
+#'   * For newline-delimited JSON: "GZIP" or "NONE".
+#'   * For Avro: "DEFLATE", "SNAPPY" or "NONE".
+#'   * For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".
 #' @param ... Additional arguments passed on to the underlying API call.
 #'   snake_case names are automatically converted to camelCase.
 #' @param print_header Whether to print out a header row in the results.
