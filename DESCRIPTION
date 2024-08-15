@@ -29,7 +29,7 @@ Imports:
     prettyunits,
     rlang (>= 1.1.0),
     tibble,
-    nanoparquet (>= 0.3.0)
+    nanoparquet (> 0.3.1)
 Suggests:
     blob,
     covr,
@@ -41,6 +41,8 @@ Suggests:
     testthat (>= 3.1.5),
     wk (>= 0.3.2),
     withr
+Remotes:
+    r-lib/nanoparquet    
 LinkingTo: 
     cli,
     cpp11,
@@ -51,7 +53,7 @@ Config/testthat/parallel: TRUE
 Config/testthat/start-first: bq-table, dplyr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Collate: 
     'bigrquery-package.R'
     'bq-auth.R'
