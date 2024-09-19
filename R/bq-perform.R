@@ -42,12 +42,16 @@ NULL
 #'   up to 1 Gb of data per file. Use a wild card URI (e.g.
 #'   `gs://[YOUR_BUCKET]/file-name-*.json`) to automatically create any
 #'   number of files.
-#' @param destination_format The exported file format. Possible values
-#'   include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
-#'   repeated fields cannot be exported as CSV.
-#' @param compression The compression type to use for exported files. Possible
-#'   values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
-#'   "SNAPPY" are only supported for Avro.
+#' @param destination_format The exported file format:
+#'   * For CSV files, specify "CSV" (Nested and repeated data is not supported).
+#'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+#'   * For Avro, specify "AVRO".
+#'   * For parquet, specify "PARQUET".
+#' @param compression The compression type to use for exported files:
+#'   * For CSV files: "GZIP" or "NONE".
+#'   * For newline-delimited JSON: "GZIP" or "NONE".
+#'   * For Avro: "DEFLATE", "SNAPPY" or "NONE".
+#'   * For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".
 #' @param ... Additional arguments passed on to the underlying API call.
 #'   snake_case names are automatically converted to camelCase.
 #' @param print_header Whether to print out a header row in the results.
@@ -91,6 +95,9 @@ bq_perform_extract <- function(x,
 #' @export
 #' @name api-perform
 #' @param values Data frame of values to insert.
+#' @param source_format The format of the data files:
+#'   * For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+#'   * For parquet, specify "PARQUET".
 #' @param create_disposition Specifies whether the job is allowed to create
 #'   new tables.
 #'
@@ -110,6 +117,7 @@ bq_perform_extract <- function(x,
 #'     'duplicate' error is returned in the job result.
 bq_perform_upload <- function(x, values,
                               fields = NULL,
+                              source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
                               create_disposition = "CREATE_IF_NEEDED",
                               write_disposition = "WRITE_EMPTY",
                               ...,
@@ -121,12 +129,13 @@ bq_perform_upload <- function(x, values,
     cli::cli_abort("{.arg values} must be a data frame.")
   }
   fields <- as_bq_fields(fields)
+  source_format <- arg_match(source_format)
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
 
   load <- list(
-    sourceFormat = unbox("NEWLINE_DELIMITED_JSON"),
+    sourceFormat = unbox(source_format),
     destinationTable = tableReference(x),
     createDisposition = unbox(create_disposition),
     writeDisposition = unbox(write_disposition)
@@ -139,22 +148,31 @@ bq_perform_upload <- function(x, values,
     load$autodetect <- unbox(TRUE)
   }
 
-  config <- list(configuration = list(load = load))
-  config <- bq_body(config, ...)
-  config_part <- part(
-    c("Content-type" = "application/json; charset=UTF-8"),
-    jsonlite::toJSON(config, pretty = TRUE)
+  metadata <- list(configuration = list(load = load))
+  metadata <- bq_body(metadata, ...)
+  metadata <- list(
+    "type" = "application/json; charset=UTF-8",
+    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
   )
 
-  data_part <- part(
-    c("Content-type" = "application/json; charset=UTF-8"),
-    export_json(values)
-  )
+  if (source_format == "NEWLINE_DELIMITED_JSON") {
+    media <- list(
+      "type" = "application/json; charset=UTF-8",
+      "content" = export_json(values)
+    )
+  } else {
+    # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
+    media <- list(
+      "type" = "application/vnd.apache.parquet",
+      "content" = nanoparquet::write_parquet(values, ":raw:")
+    )
+  }
 
   url <- bq_path(billing, jobs = "")
   res <- bq_upload(
     url,
-    parts = c(config_part, data_part),
+    metadata,
+    media,
     query = list(fields = "jobReference")
   )
   as_bq_job(res$jobReference)

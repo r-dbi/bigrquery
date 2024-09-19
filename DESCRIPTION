@@ -12,9 +12,9 @@ Description: Easily talk to Google's 'BigQuery' database from R.
 License: MIT + file LICENSE
 URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
-Depends: 
-    R (>= 3.6)
-Imports: 
+Depends:
+    R (>= 4.0)
+Imports:
     bit64,
     brio,
     cli,
@@ -28,9 +28,9 @@ Imports:
     methods,
     prettyunits,
     rlang (>= 1.1.0),
-    tibble
-Suggests: 
-    bigrquerystorage (>= 1.1.0),
+    tibble,
+    nanoparquet (> 0.3.1)
+Suggests:
     blob,
     covr,
     dbplyr (>= 2.4.0),
@@ -39,9 +39,11 @@ Suggests:
     readr,
     sodium,
     testthat (>= 3.1.5),
-    withr,
-    wk (>= 0.3.2)
-LinkingTo: 
+    wk (>= 0.3.2),
+    withr
+Remotes:
+    r-lib/nanoparquet
+LinkingTo:
     cli,
     cpp11,
     rapidjsonr
@@ -51,8 +53,8 @@ Config/testthat/parallel: TRUE
 Config/testthat/start-first: bq-table, dplyr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
-Collate: 
+RoxygenNote: 7.3.2
+Collate:
     'bigrquery-package.R'
     'bq-auth.R'
     'bq-dataset.R'
@@ -82,5 +84,5 @@ Collate:
     'import-standalone-types-check.R'
     'utils.R'
     'zzz.R'
-Remotes:  
+Remotes:
     meztez/bigrquerystorage#52

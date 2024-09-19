@@ -147,17 +147,36 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
   process_request(req)
 }
 
-#' @importFrom httr POST add_headers config
-bq_upload <- function(url, parts, ..., query = list(), token = bq_token()) {
-  url <- paste0(upload_url, url)
-  req <- POST_multipart_related(
-    url,
-    parts = parts,
-    token,
+#' @importFrom httr POST PUT add_headers headers config status_code
+# https://cloud.google.com/bigquery/docs/reference/api-uploads
+bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
+
+  query <-  utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
+  config <- add_headers("Content-Type" = metadata[["type"]])
+
+  req <- POST(
+    paste0(upload_url, url),
+    body = metadata[["content"]],
     httr::user_agent(bq_ua()),
-    ...,
-    query = prepare_bq_query(query)
+    token,
+    config,
+    query = query
   )
+
+  if (status_code(req) == 200) {
+
+    config <- add_headers("Content-Type" = media[["type"]])
+
+    req <- PUT(
+      headers(req)$location,
+      body = media[["content"]],
+      httr::user_agent(bq_ua()),
+      token,
+      config
+    )
+
+  }
+
   process_request(req)
 }
 
@@ -240,45 +259,5 @@ gargle_abort <- function(reason, message, status, call = caller_env()) {
   }
 
   cli::cli_abort(message, class = class, call = call)
-}
-
-# Multipart/related ------------------------------------------------------------
-
-
-# http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
-POST_multipart_related <- function(url, config = NULL, parts = NULL,
-                                   query = list(), ...,
-                                   boundary = random_boundary(),
-                                   handle = NULL) {
-  if (is.null(config)) config <- config()
-
-  sep <- paste0("\n--", boundary, "\n")
-  end <- paste0("\n--", boundary, "--\n")
-
-  body <- paste0(sep, paste0(parts, collapse = sep), end)
-
-  type <- paste0("multipart/related; boundary=", boundary)
-  config <- c(config, add_headers("Content-Type" = type))
-
-  query <- utils::modifyList(list(uploadType = "multipart"), query)
-
-  POST(url, config = config, body = body, query = query, ..., handle = handle)
-}
-
-part <- function(headers, body) {
-  if (length(headers) == 0) {
-    header <- "\n"
-  } else {
-    header <- paste0(names(headers), ": ", headers, "\n", collapse = "")
-  }
-  body <- paste0(body, collapse = "\n")
-
-  paste0(header, "\n", body)
-}
-
-random_boundary <- function() {
-  valid <- c(LETTERS, letters, 0:9) # , "'", "(", ")", "+", ",", "-", ".", "/",
-  #  ":", "?")
-  paste0(sample(valid, 50, replace = TRUE), collapse = "")
 }
 

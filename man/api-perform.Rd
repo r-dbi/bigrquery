@@ -25,6 +25,7 @@ bq_perform_upload(
   x,
   values,
   fields = NULL,
+  source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
@@ -91,13 +92,21 @@ up to 1 Gb of data per file. Use a wild card URI (e.g.
 \verb{gs://[YOUR_BUCKET]/file-name-*.json}) to automatically create any
 number of files.}
 
-\item{destination_format}{The exported file format. Possible values
-include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
-repeated fields cannot be exported as CSV.}
+\item{destination_format}{The exported file format:
+\itemize{
+\item For CSV files, specify "CSV" (Nested and repeated data is not supported).
+\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+\item For Avro, specify "AVRO".
+\item For parquet, specify "PARQUET".
+}}
 
-\item{compression}{The compression type to use for exported files. Possible
-values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
-"SNAPPY" are only supported for Avro.}
+\item{compression}{The compression type to use for exported files:
+\itemize{
+\item For CSV files: "GZIP" or "NONE".
+\item For newline-delimited JSON: "GZIP" or "NONE".
+\item For Avro: "DEFLATE", "SNAPPY" or "NONE".
+\item For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".
+}}
 
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
@@ -111,6 +120,16 @@ snake_case names are automatically converted to camelCase.}
 \item{fields}{A \link{bq_fields} specification, or something coercible to it
 (like a data frame). Leave as \code{NULL} to allow BigQuery to auto-detect
 the fields.}
+
+\item{source_format}{The format of the data files:
+\itemize{
+\item For CSV files, specify "CSV".
+\item For datastore backups, specify "DATASTORE_BACKUP".
+\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+\item For Avro, specify "AVRO".
+\item For parquet, specify "PARQUET".
+\item For orc, specify "ORC".
+}}
 
 \item{create_disposition}{Specifies whether the job is allowed to create
 new tables.
@@ -145,16 +164,6 @@ For Google Cloud Bigtable URIs: Exactly one URI can be specified and
 it has be a fully specified and valid HTTPS URL for a Google Cloud
 Bigtable table. For Google Cloud Datastore backups: Exactly one URI
 can be specified. Also, the '*' wildcard character is not allowed.}
-
-\item{source_format}{The format of the data files:
-\itemize{
-\item For CSV files, specify "CSV".
-\item For datastore backups, specify "DATASTORE_BACKUP".
-\item For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
-\item For Avro, specify "AVRO".
-\item For parquet, specify "PARQUET".
-\item For orc, specify "ORC".
-}}
 
 \item{nskip}{For \code{source_format = "CSV"}, the number of header rows to skip.}
 
