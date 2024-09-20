@@ -83,5 +83,3 @@ Collate:
     'import-standalone-types-check.R'
     'utils.R'
     'zzz.R'
-Remotes:
-    meztez/bigrquerystorage#52
