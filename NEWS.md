@@ -14,26 +14,26 @@
 * bigrquery is now MIT licensed (#453).
 
 * Deprecated functions (i.e. those not starting with `bq_`) have been
-  removed (#551). These have been superseded for a long time and were formally 
+  removed (#551). These have been superseded for a long time and were formally
   deprecated in bigrquery 1.3.0 (2020).
 
 * `bq_table_download()` now returns unknown fields as character vectors.
   This means that BIGNUMERIC (#435) and JSON (#544) data is downloaded into
   R for you to process as you wish.
-  
+
   It now parses dates using the clock package. This leads to a considerable
   performance improvement (#430) and ensures that dates prior to 1970-01-01 are
   parsed correctly (#285).
 
 ## Significant DBI improvements
 
-* bigquery datasets and tables will now appear in the connection pane when 
+* bigquery datasets and tables will now appear in the connection pane when
   using `dbConnect` (@meztez, #431).
 
 * `dbAppendTable()` (#539), `dbCreateTable()` (#483), and `dbExecute` (#502)
   are now supported.
 
-* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via 
+* `dbGetQuery()`/`dbSendQuery()` gains support for parameterised queries via
   the `params` argument (@byapparov, #444).
 
 * `dbReadTable()`, `dbWriteTable()`, `dbExistsTable()`, `dbRemoveTable()`,
@@ -46,13 +46,13 @@
 
 * Joins now work correctly across bigrquery connections (#433).
 
-* `grepl(pattern, x)` is now correctly translated to 
+* `grepl(pattern, x)` is now correctly translated to
   `REGEXP_CONTAINS(x, pattern)` (#416).
 
 * `median()` gets a translation that works in `summarise()` and a clear
   error if you use it in `mutate()` (#419).
 
-* `tbl()` now works with views (#519), including the views found in the 
+* `tbl()` now works with views (#519), including the views found in the
   `INFORMATION_SCHEMA` schema (#468).
 
 * `tbl(con, sql("..."))` now works robustly once more (#540), fixing the
@@ -64,10 +64,10 @@
 ## Minor improvements and bug fixes
 
 * Google API URLs have been aligned with the Google Cloud Discovery docs. This
-  enables support for Private and Restricted Google APIs configurations 
+  enables support for Private and Restricted Google APIs configurations
   (@husseyd, #541)
 
-* Functions generally try to do a better job of telling you when you've 
+* Functions generally try to do a better job of telling you when you've
   supplied the wrong type of input. Additionally, if you supply `SQL()` to
   a query, you no longer get a weird warning (#498).
 
@@ -79,10 +79,10 @@
 * `dbGetRowCount()` and `dbHasComplete()` now return correct values when you
   try to fetch more rows than actually exist (#501).
 
-* New `dbQuoteLiteral()` method for logicals reverts breaking change introduced 
+* New `dbQuoteLiteral()` method for logicals reverts breaking change introduced
   by DBI 1.1.2 (@meztez, #478).
 
-* `dbWriteTable()` now correct uses the `billing` value set in the 
+* `dbWriteTable()` now correct uses the `billing` value set in the
   connection (#486).
 
 # bigrquery 1.4.2
@@ -108,7 +108,7 @@
 
 * bigrquery is now compatible with dbplyr 2.2.0 (@mgirlich, #495).
 
-* brio is new in Imports, replacing the use of the Suggested package readr, 
+* brio is new in Imports, replacing the use of the Suggested package readr,
   in `bq_table_download()` (@AdeelK93, #462).
 
 # bigrquery 1.4.0
@@ -133,7 +133,7 @@
 # bigrquery 1.3.2
 
 * BigQuery `BYTES` and `GEOGRAPHY` column types are now supported via
-  the [blob](https://blob.tidyverse.org/) and 
+  the [blob](https://blob.tidyverse.org/) and
   [wk](https://paleolimbot.github.io/wk/) packages, respectively
   (@paleolimbot, #354, #388).
 
@@ -159,7 +159,7 @@
 
 * When `bq_perform_*()` fails, you now see all errors, not just the first (#355).
 
-* `bq_perform_query()` can now execute parameterised query with parameters 
+* `bq_perform_query()` can now execute parameterised query with parameters
   of `ARRAY` type (@byapparov, #303). Vectors of length > 1 will be
   automatically converted to `ARRAY` type, or use `bq_param_array()` to
   be explicit.
@@ -172,14 +172,14 @@
   error for DDL queries, and it returns the number of affected rows for
   DML queries (#375).
 
-* `dbSendQuery()` (and hence `dbGetQuery()`) and `collect()` passes on `...` 
-  to `bq_perform_query()`. `collect()` gains `page_size` and `max_connection` 
+* `dbSendQuery()` (and hence `dbGetQuery()`) and `collect()` passes on `...`
+  to `bq_perform_query()`. `collect()` gains `page_size` and `max_connection`
   arguments that are passed on to `bq_table_download()` (#374).
 
 * `copy_to()` now works with BigQuery (although it doesn't support temporary
   tables so application is somewhat limited) (#337).
-  
-* `str_detect()` now correctly translated to `REGEXP_CONTAINS`  
+
+* `str_detect()` now correctly translated to `REGEXP_CONTAINS`
   (@jimmyg3g, #369).
 
 * Error messages include hints for common problems (@deflaux, #353).
@@ -192,14 +192,14 @@ bigrquery's auth functionality now comes from the [gargle package](https://gargl
 
   * Application Default Credentials
   * Service account tokens from the metadata server available to VMs running on GCE
-  
+
 Where to learn more:
-  
+
   * Help for [`bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html) *all that most users need*
   * *details for more advanced users*
     - [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html)
     - [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html)
-    - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html) 
+    - [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
 
 ### Changes that a user will notice
 
@@ -225,7 +225,7 @@ gargle and rlang are newly Imported.
 
 * `bq_field()` can now pass `description` parameter which will be applied
   in `bq_table_create()` call (@byapparov, #272).
-  
+
 * `bq_table_patch()` - allows to patch table (@byapparov, #253) with new schema.
 
 
@@ -233,14 +233,14 @@ gargle and rlang are newly Imported.
 
 ## Improved type support
 
-* `bq_table_download()` and the `DBI::dbConnect` method now has a `bigint` 
-  argument which governs how BigQuery integer columns are imported into R. As 
-  before, the default is `bigint = "integer"`. You can set 
-  `bigint = "integer64"` to import BigQuery integer columns as 
-  `bit64::integer64` columns in R which allows for values outside the range of 
+* `bq_table_download()` and the `DBI::dbConnect` method now has a `bigint`
+  argument which governs how BigQuery integer columns are imported into R. As
+  before, the default is `bigint = "integer"`. You can set
+  `bigint = "integer64"` to import BigQuery integer columns as
+  `bit64::integer64` columns in R which allows for values outside the range of
   `integer` (`-2147483647` to `2147483647`) (@rasmusab, #94).
 
-* `bq_table_download()` now treats NUMERIC columns the same was as FLOAT 
+* `bq_table_download()` now treats NUMERIC columns the same was as FLOAT
   columns (@paulsendavidjay, #282).
 
 * `bq_table_upload()` works with POSIXct/POSIXct variables (#251)
@@ -258,7 +258,7 @@ gargle and rlang are newly Imported.
 * `bq_job()` tracks location so bigrquery now works painlessly with non-US/EU
   locations (#274).
 
-* `bq_perform_upload()` will only autodetect a schema if the table does 
+* `bq_perform_upload()` will only autodetect a schema if the table does
   not already exist.
 
 * `bq_table_download()` correctly computes page ranges if both `max_results`
@@ -273,23 +273,23 @@ gargle and rlang are newly Imported.
 The system for downloading data from BigQuery into R has been rewritten from the ground up to give considerable improvements in performance and flexibility.
 
 * The two steps, downloading and parsing, now happen in sequence, rather than
-  interleaved. This means that you'll now see two progress bars: one for 
-  downloading JSON from BigQuery and one for parsing that JSON into a data 
+  interleaved. This means that you'll now see two progress bars: one for
+  downloading JSON from BigQuery and one for parsing that JSON into a data
   frame.
-  
-* Downloads now occur in parallel, using up to 6 simultaneous connections by 
+
+* Downloads now occur in parallel, using up to 6 simultaneous connections by
   default.
 
-* The parsing code has been rewritten in C++. As well as considerably improving 
-  performance, this also adds support for nested (record/struct) and repeated 
-  (array) columns (#145). These columns will yield list-columns in the 
+* The parsing code has been rewritten in C++. As well as considerably improving
+  performance, this also adds support for nested (record/struct) and repeated
+  (array) columns (#145). These columns will yield list-columns in the
   following forms:
-  
+
     * Repeated values become list-columns containing vectors.
     * Nested values become list-columns containing named lists.
     * Repeated nested values become list-columns containing data frames.
 
-* Results are now returned as tibbles, not data frames, because the base print 
+* Results are now returned as tibbles, not data frames, because the base print
   method does not handle list columns well.
 
 I can now download the first million rows of `publicdata.samples.natality` in about a minute. This data frame is about 170 MB in BigQuery and 140 MB in R; a minute to download this much data seems reasonable to me. The bottleneck for loading BigQuery data is now parsing BigQuery's json format. I don't see any obvious way to make this faster as I'm already using the fastest C++ json parser, [RapidJson](http://rapidjson.org). If this is still too slow for you (i.e. you're downloading GBs of data), see `?bq_table_download` for an alternative approach.
@@ -301,18 +301,18 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 * `dplyr::compute()` now works (@realAkhmed, #52).
 
 * `tbl()` now accepts fully (or partially) qualified table names, like
-  "publicdata.samples.shakespeare" or "samples.shakespeare". This makes it 
+  "publicdata.samples.shakespeare" or "samples.shakespeare". This makes it
   possible to join tables across datasets (#219).
 
 ### DBI
 
-* `dbConnect()` now defaults to standard SQL, rather than legacy SQL. Use 
+* `dbConnect()` now defaults to standard SQL, rather than legacy SQL. Use
   `use_legacy_sql = TRUE` if you need the previous behaviour (#147).
 
-* `dbConnect()` now allows `dataset` to be omitted; this is natural when you 
+* `dbConnect()` now allows `dataset` to be omitted; this is natural when you
   want to use tables from multiple datasets.
-  
-* `dbWriteTable()` and `dbReadTable()` now accept fully (or partially) 
+
+* `dbWriteTable()` and `dbReadTable()` now accept fully (or partially)
   qualified table names.
 
 * `dbi_driver()` is deprecated; please use `bigquery()` instead.
@@ -322,26 +322,26 @@ I can now download the first million rows of `publicdata.samples.natality` in ab
 The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.
 
 * __Consistent naming scheme__:
-  All API functions now have the form `bq_object_verb()`, e.g. 
+  All API functions now have the form `bq_object_verb()`, e.g.
   `bq_table_create()`, or `bq_dataset_delete()`.
 
 * __S3 classes__:
   `bq_table()`, `bq_dataset()`, `bq_job()`, `bq_field()` and `bq_fields()`
-  constructor functions create S3 objects corresponding to important BigQuery 
-  objects (#150). These are paired with `as_` coercion functions and used throughout 
+  constructor functions create S3 objects corresponding to important BigQuery
+  objects (#150). These are paired with `as_` coercion functions and used throughout
   the new API.
 
 * __Easier local testing__:
-  New `bq_test_project()` and `bq_test_dataset()` make it easier to run 
-  bigrquery tests locally. To run the tests yourself, you need to create a 
+  New `bq_test_project()` and `bq_test_dataset()` make it easier to run
+  bigrquery tests locally. To run the tests yourself, you need to create a
   BigQuery project, and then follow the instructions in `?bq_test_project`.
 
-* __More efficient data transfer__: 
-  The new API makes extensive use of the `fields` query parameter, ensuring 
+* __More efficient data transfer__:
+  The new API makes extensive use of the `fields` query parameter, ensuring
   that functions only download data that they actually use (#153).
 
-* __Tighter GCS connection__: 
-  New `bq_table_load()` loads data from a Google Cloud Storage URI, pairing 
+* __Tighter GCS connection__:
+  New `bq_table_load()` loads data from a Google Cloud Storage URI, pairing
   with `bq_table_save()` which saves data to a GCS URI (#155).
 
 ## Bug fixes and minor improvements
@@ -355,12 +355,12 @@ The low-level API has been completely overhauled to make it easier to use. The p
   (@edgararuiz).
 
 * If you have the development version of dbplyr installed, `print()`ing
-  a BigQuery table will not perform an unneeded query, but will instead 
+  a BigQuery table will not perform an unneeded query, but will instead
   download directly from the table (#226).
 
 ### Low-level
 
-* Request error messages now contain the "reason", which can contain 
+* Request error messages now contain the "reason", which can contain
   useful information for debugging (#209).
 
 * `bq_dataset_query()` and `bq_project_query()` can now supply query parameters
@@ -385,53 +385,53 @@ The low-level API has been completely overhauled to make it easier to use. The p
 
 * The DBI driver gets a new name: `bigquery()`.
 
-* New `insert_extract_job()` make it possible to extract data and save in 
+* New `insert_extract_job()` make it possible to extract data and save in
   google storage (@realAkhmed, #119).
 
 * New `insert_table()` allows you to insert empty tables into a dataset.
 
-* All POST requests (inserts, updates, copies and `query_exec`) now 
-  take `...`. This allows you to add arbitrary additional data to the 
-  request body making it possible to use parts of the BigQuery API 
+* All POST requests (inserts, updates, copies and `query_exec`) now
+  take `...`. This allows you to add arbitrary additional data to the
+  request body making it possible to use parts of the BigQuery API
   that are otherwise not exposed (#149). `snake_case` argument names are
-  automatically converted to `camelCase` so you can stick consistently 
+  automatically converted to `camelCase` so you can stick consistently
   to snake case in your R code.
 
-* Full support for DATE, TIME, and DATETIME types (#128). 
+* Full support for DATE, TIME, and DATETIME types (#128).
 
 ## Big fixes and minor improvements
 
 * All bigrquery requests now have a custom user agent that specifies the
   versions of bigrquery and httr that are used (#151).
 
-* `dbConnect()` gains new `use_legacy_sql`, `page_size`, and `quiet` arguments 
-  that are passed onto `query_exec()`. These allow you to control query options 
+* `dbConnect()` gains new `use_legacy_sql`, `page_size`, and `quiet` arguments
+  that are passed onto `query_exec()`. These allow you to control query options
   at the connection level.
 
 * `insert_upload_job()` now sends data in newline-delimited JSON instead
   of csv (#97). This should be considerably faster and avoids character
-  encoding issues (#45). `POSIXlt` columns are now also correctly 
+  encoding issues (#45). `POSIXlt` columns are now also correctly
   coerced to TIMESTAMPS (#98).
 
 * `insert_query_job()` and `query_exec()` gain new arguments:
 
     * `quiet = TRUE` will suppress the progress bars if needed.
-    * `use_legacy_sql = FALSE` option allows you to opt-out of the 
+    * `use_legacy_sql = FALSE` option allows you to opt-out of the
       legacy SQL system (#124, @backlin)
 
 * `list_tables()` (#108) and `list_datasets()` (#141) are now paginated.
   By default they retrieve 50 items per page, and will iterate until they
   get everything.
 
-* `list_tabledata()` and `query_exec()` now give a nicer progress bar, 
+* `list_tabledata()` and `query_exec()` now give a nicer progress bar,
   including estimated time remaining (#100).
 
-* `query_exec()` should be considerably faster because profiling revealed that 
-  ~40% of the time taken by was a single line inside a function that helps 
+* `query_exec()` should be considerably faster because profiling revealed that
+  ~40% of the time taken by was a single line inside a function that helps
   parse BigQuery's json into an R data frame. I replaced the slow R code with
   a faster C function.
 
-* `set_oauth2.0_cred()` allows user to supply their own Google OAuth 
+* `set_oauth2.0_cred()` allows user to supply their own Google OAuth
   application when setting credentials (#130, @jarodmeng)
 
 * `wait_for()` uses now reports the query total bytes billed, which is
@@ -449,12 +449,12 @@ The low-level API has been completely overhauled to make it easier to use. The p
 * Provide full DBI compliant interface (@krlmlr).
 
 * Backend now translates `iflese()` to `IF` (@realAkhmed, #53).
-  
+
 # Version 0.2.0.
 
 * Compatible with latest httr.
 
-* Computation of the SQL data type that corresponds to a given R object 
+* Computation of the SQL data type that corresponds to a given R object
   is now more robust against unknown classes. (#95, @krlmlr)
 
 * A data frame with full schema information is returned for zero-row results.
@@ -469,8 +469,8 @@ The low-level API has been completely overhauled to make it easier to use. The p
 
 * New `format_dataset()` and `format_table()`. (#81, @krlmlr)
 
-* New `list_tabledata_iter()` that allows fetching a table in chunks of 
+* New `list_tabledata_iter()` that allows fetching a table in chunks of
   varying size. (#77, #87, @krlmlr)
 
-* Add support for API keys via the `BIGRQUERY_API_KEY` environment variable. 
+* Add support for API keys via the `BIGRQUERY_API_KEY` environment variable.
   (#49)
