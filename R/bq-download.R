@@ -14,11 +14,8 @@
 #' usually should be able to get a binary from
 #' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
 #'
-#' There are two known limitations of `api = "arrow"`:
-#'
-#' * Geographic data is returned as a string; you'll need to parse yourself
-#'   using `wkt::wkt()`.
-#' * When querying public data, you'll now need to provide a `billing` project.
+#' There's one known limitation of `api = "arrow"`: when querying public data,
+#' you'll now need to provide a `billing` project.
 #'
 #' ## JSON API
 #'
