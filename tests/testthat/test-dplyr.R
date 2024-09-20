@@ -21,14 +21,25 @@ test_that("can work with literal SQL", {
 })
 
 test_that("can work with nested table identifier", {
-  con_us <- DBI::dbConnect(
+  con1 <- DBI::dbConnect(
     bigquery(),
     project = "bigquery-public-data",
     billing = bq_test_project()
   )
+  # As far as I can tell from the BigQuery API there's no way to provide
+  # a default project; you can either provide a default dataset + project or
+  # nothing
+  table_name <- I("bigquery-public-data.utility_us.country_code_iso")
+  expect_no_error(dplyr::collect(head(dplyr::tbl(con1, table_name))))
 
-  expect_s3_class(dplyr::collect(head(dplyr::tbl(con_us, I("utility_us.country_code_iso")))), "tbl_df")
-  expect_error(dplyr::collect(head(dplyr::tbl(con_us, "utility_us.country_code_iso"))), "tbl_df")
+
+  con2 <- DBI::dbConnect(
+    bigquery(),
+    project = "bigquery-public-data",
+    dataset = "utility_us",
+    billing = bq_test_project(),
+  )
+  expect_no_error(dplyr::collect(head(dplyr::tbl(con2, "country_code_iso"))))
 })
 
 test_that("can copy_to", {

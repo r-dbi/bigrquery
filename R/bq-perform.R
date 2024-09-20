@@ -361,9 +361,8 @@ bq_perform_query_dry_run <- function(query, billing,
 
   query <- bq_perform_query_data(
     query = query,
-    billing = billing, 
     default_dataset = default_dataset,
-    parameters = parameters, 
+    parameters = parameters,
     use_legacy_sql = use_legacy_sql
   )
 
@@ -388,9 +387,8 @@ bq_perform_query_schema <- function(query, billing,
 
   query <- bq_perform_query_data(
     query = query,
-    billing = billing, 
     default_dataset = default_dataset,
-    parameters = parameters, 
+    parameters = parameters,
     use_legacy_sql = FALSE
   )
 
@@ -406,14 +404,13 @@ bq_perform_query_schema <- function(query, billing,
   res$statistics$query$schema$fields
 }
 
-bq_perform_query_data <- function(query, billing,
+bq_perform_query_data <- function(query,
                                   ...,
                                   default_dataset = NULL,
                                   parameters = NULL,
-                                  use_legacy_sql = FALSE, 
+                                  use_legacy_sql = FALSE,
                                   call = caller_env()) {
   check_string(query, error_call = call)
-  check_string(billing, error_call = call)
   check_bool(use_legacy_sql, error_call = call)
 
   query <- list(

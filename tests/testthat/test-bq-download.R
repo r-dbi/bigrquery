@@ -100,7 +100,7 @@ test_that("arrow api can convert non-nested types", {
   "
 
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb, api = "arrow")
+  df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
 
   base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
   expect_identical(df$unicode, "\U0001f603", ignore_encoding = FALSE)
@@ -128,7 +128,7 @@ test_that("arrow api can convert nested types", {
   "
 
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb, api = "arrow")
+  df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
 
   expect_equal(df$s, list(list(a = 1, b = "abc")))
   expect_equal(df$a, list(c(1, 2, 3)))
@@ -141,13 +141,13 @@ test_that("arrow api respects bigint", {
   sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
   qry <- bq_project_query(bq_test_project(), sql)
 
-  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "arrow")$x
+  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "arrow", quiet = TRUE)$x
   expect_identical(out_int64, bit64::as.integer64(x))
 
-  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "arrow")$x
+  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "arrow", quiet = TRUE)$x
   expect_identical(out_dbl, as.double(x))
 
-  out_chr <- bq_table_download(qry, bigint = "character", api = "arrow")$x
+  out_chr <- bq_table_download(qry, bigint = "character", api = "arrow", quiet = TRUE)$x
   expect_identical(out_chr, x)
 })
 
