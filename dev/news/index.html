@@ -137,8 +137,7 @@
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute()</a></code> is better supported. It no longer fails with a spurious error for DDL queries, and it returns the number of affected rows for DML queries (<a href="https://github.com/r-dbi/bigrquery/issues/375" class="external-link">#375</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> (and hence <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>) and <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> passes on <code>...</code> to <code><a href="../reference/api-perform.html">bq_perform_query()</a></code>. <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> gains <code>page_size</code> and <code>max_connection</code> arguments that are passed on to <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> (<a href="https://github.com/r-dbi/bigrquery/issues/374" class="external-link">#374</a>).</p></li>
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to()</a></code> now works with BigQuery (although it doesn’t support temporary tables so application is somewhat limited) (<a href="https://github.com/r-dbi/bigrquery/issues/337" class="external-link">#337</a>).</p></li>
-<li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code><br>
-(<a href="https://github.com/jimmyg3g" class="external-link">@jimmyg3g</a>, <a href="https://github.com/r-dbi/bigrquery/issues/369" class="external-link">#369</a>).</p></li>
+<li><p><code>str_detect()</code> now correctly translated to <code>REGEXP_CONTAINS</code> (<a href="https://github.com/jimmyg3g" class="external-link">@jimmyg3g</a>, <a href="https://github.com/r-dbi/bigrquery/issues/369" class="external-link">#369</a>).</p></li>
 <li><p>Error messages include hints for common problems (<a href="https://github.com/deflaux" class="external-link">@deflaux</a>, <a href="https://github.com/r-dbi/bigrquery/issues/353" class="external-link">#353</a>).</p></li>
 </ul></div>
     <div class="section level2">
@@ -233,7 +232,7 @@
 <div class="section level4">
 <h4 id="low-level-api-1-0-0">Low-level API<a class="anchor" aria-label="anchor" href="#low-level-api-1-0-0"></a></h4>
 <p>The low-level API has been completely overhauled to make it easier to use. The primary motivation was to make bigrquery development more enjoyable for me, but it should also be helpful to you when you need to go outside of the features provided by higher-level DBI and dplyr interfaces. The old API has been soft-deprecated - it will continue to work, but no further development will occur (including bug fixes). It will be formally deprecated in the next version, and then removed in the version after that.</p>
-<ul><li><p><strong>Consistent naming scheme</strong>: All API functions now have the form <code>bq_object_verb()</code>, e.g.  <code><a href="../reference/api-table.html">bq_table_create()</a></code>, or <code><a href="../reference/api-dataset.html">bq_dataset_delete()</a></code>.</p></li>
+<ul><li><p><strong>Consistent naming scheme</strong>: All API functions now have the form <code>bq_object_verb()</code>, e.g. <code><a href="../reference/api-table.html">bq_table_create()</a></code>, or <code><a href="../reference/api-dataset.html">bq_dataset_delete()</a></code>.</p></li>
 <li><p><strong>S3 classes</strong>: <code><a href="../reference/bq_refs.html">bq_table()</a></code>, <code><a href="../reference/bq_refs.html">bq_dataset()</a></code>, <code><a href="../reference/bq_refs.html">bq_job()</a></code>, <code><a href="../reference/bq_field.html">bq_field()</a></code> and <code><a href="../reference/bq_field.html">bq_fields()</a></code> constructor functions create S3 objects corresponding to important BigQuery objects (<a href="https://github.com/r-dbi/bigrquery/issues/150" class="external-link">#150</a>). These are paired with <code>as_</code> coercion functions and used throughout the new API.</p></li>
 <li><p><strong>Easier local testing</strong>: New <code><a href="../reference/bq_test_project.html">bq_test_project()</a></code> and <code><a href="../reference/bq_test_project.html">bq_test_dataset()</a></code> make it easier to run bigrquery tests locally. To run the tests yourself, you need to create a BigQuery project, and then follow the instructions in <code><a href="../reference/bq_test_project.html">?bq_test_project</a></code>.</p></li>
 <li><p><strong>More efficient data transfer</strong>: The new API makes extensive use of the <code>fields</code> query parameter, ensuring that functions only download data that they actually use (<a href="https://github.com/r-dbi/bigrquery/issues/153" class="external-link">#153</a>).</p></li>
@@ -322,7 +321,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
   </div></footer></body></html>
