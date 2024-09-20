@@ -108,7 +108,7 @@ test_that("arrow api can convert non-nested types", {
   expect_equal(df$logicaltrue, TRUE)
   expect_equal(df$logicalfalse, FALSE)
 
-  expect_equal(df$bytes, blob::as.blob(as.raw(c(0x48, 0x69))))
+  expect_equal(df$bytes, blob::as_blob(as.raw(c(0x48, 0x69))))
 
   expect_equal(df$date, as.Date(base))
   expect_equal(df$timestamp, base)
