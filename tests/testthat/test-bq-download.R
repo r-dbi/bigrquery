@@ -76,7 +76,7 @@ test_that("uses arrow api if bigrquerystorage installed", {
 test_that("warns if supplying unnused arguments", {
   tb <- bq_project_query(bq_test_project(), "SELECT 1.0", quiet = TRUE)
   expect_snapshot(
-    . <- bq_table_download(tb, 
+    . <- bq_table_download(tb,
       api = "arrow",
       page_size = 1,
       start_index = 1,
@@ -108,14 +108,14 @@ test_that("arrow api can convert non-nested types", {
   expect_equal(df$logicaltrue, TRUE)
   expect_equal(df$logicalfalse, FALSE)
 
-  expect_equal(unclass(df$bytes), list(as.raw(c(0x48, 0x69))))
+  expect_equal(df$bytes, blob::as.blob(as.raw(c(0x48, 0x69))))
 
   expect_equal(df$date, as.Date(base))
   expect_equal(df$timestamp, base)
-  # expect_equal(df$datetime, base)
+  expect_equal(df$datetime, base)
   expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
 
-  # expect_identical(df$geography, wk::wkt("POINT(30 10)"))
+  expect_identical(df$geography, wk::wkt("POINT(30 10)"))
 })
 
 test_that("arrow api can convert nested types", {
