@@ -69,10 +69,10 @@ a tibble. If you need a \code{data.frame}, coerce the results with
 }
 \description{
 This function provides two ways to download data from BigQuery, transfering
-data using either JSON or arrow, depending on the \code{api} argument.
-\code{api = "json"} is much slower but requires no additional dependencies,
-and is what bigrquery always used prior to v1.6.0. \code{api = "arrow"} is
-much much faster, but requires the bigrquerystorage package.
+data using either JSON or arrow, depending on the \code{api} argument. If
+bigrquerystorage is installed, \code{api = "arrow"} will be used (because it's
+so much faster, but see the limitions below), otherwise you can select
+deliberately by using \code{api = "json"} or \code{api = "arrow"}.
 \subsection{Arrow API}{
 
 The arrow API is much faster, but has heavier dependencies: bigrquerystorage

@@ -2,30 +2,30 @@
 #'
 #' @description
 #' This function provides two ways to download data from BigQuery, transfering
-#' data using either JSON or arrow, depending on the `api` argument. 
-#' `api = "json"` is much slower but requires no additional dependencies, 
-#' and is what bigrquery always used prior to v1.6.0. `api = "arrow"` is 
-#' much much faster, but requires the bigrquerystorage package.
+#' data using either JSON or arrow, depending on the `api` argument. If
+#' bigrquerystorage is installed, `api = "arrow"` will be used (because it's
+#' so much faster, but see the limitions below), otherwise you can select
+#' deliberately by using `api = "json"` or `api = "arrow"`.
 #'
 #' ## Arrow API
 #'
 #' The arrow API is much faster, but has heavier dependencies: bigrquerystorage
 #' requires the arrow package, which can be tricky to compile on Linux (but you
-#' usually should be able to get a binary from 
+#' usually should be able to get a binary from
 #' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
-#' 
+#'
 #' There are two known limitations of `api = "arrow"`:
 #'
-#' * Geographic data is returned as a string; you'll need to parse yourself 
+#' * Geographic data is returned as a string; you'll need to parse yourself
 #'   using `wkt::wkt()`.
 #' * When querying public data, you'll now need to provide a `billing` project.
-#' 
+#'
 #' ## JSON API
-#' 
-#' The JSON API retrieves rows in chunks of `page_size`. It is most suitable 
+#'
+#' The JSON API retrieves rows in chunks of `page_size`. It is most suitable
 #' for results of smaller queries (<100 MB, say). Unfortunately due to
-#' limitations in the BigQuery API, you may need to vary this parameter 
-#' depending on the complexity of the underlying data. 
+#' limitations in the BigQuery API, you may need to vary this parameter
+#' depending on the complexity of the underlying data.
 #'
 #' The JSON API will convert nested and repeated columns in to list-columns
 #' as follows:
@@ -41,8 +41,8 @@
 #' @param x A [bq_table]
 #' @param n_max Maximum number of results to retrieve. Use `Inf` to retrieve all
 #'   rows.
-#' @param page_size (JSON only) The number of rows requested per chunk. It is 
-#'   recommended to leave this unspecified until you have evidence that the 
+#' @param page_size (JSON only) The number of rows requested per chunk. It is
+#'   recommended to leave this unspecified until you have evidence that the
 #'  `page_size` selected automatically by `bq_table_download()` is problematic.
 #'
 #'   When `page_size = NULL` bigrquery determines a conservative, natural chunk
@@ -50,7 +50,7 @@
 #'   chunk fits on one page, i.e. that the requested row limit is low enough to
 #'   prevent the API from paginating based on response size.
 #' @param start_index (JSON only) Starting row index (zero-based).
-#' @param max_connections (JSON only) Number of maximum simultaneous 
+#' @param max_connections (JSON only) Number of maximum simultaneous
 #'   connections to BigQuery servers.
 #' @param api Which API to use? The `"json"` API works where ever bigrquery
 #'   does, but is slow and can require fiddling with the `page_size` parameter.
