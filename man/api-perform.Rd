@@ -7,6 +7,7 @@
 \alias{bq_perform_load}
 \alias{bq_perform_query}
 \alias{bq_perform_query_dry_run}
+\alias{bq_perform_query_schema}
 \alias{bq_perform_copy}
 \title{BigQuery jobs: perform a job}
 \usage{
@@ -63,6 +64,14 @@ bq_perform_query_dry_run(
   default_dataset = NULL,
   parameters = NULL,
   use_legacy_sql = FALSE
+)
+
+bq_perform_query_schema(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL
 )
 
 bq_perform_copy(
@@ -148,7 +157,7 @@ to the table.
 Google Cloud.
 
 For Google Cloud Storage URIs: Each URI can contain one
-`'*'`` wildcard character and it must come after the 'bucket' name.
+\code{'*'} wildcard character and it must come after the 'bucket' name.
 Size limits related to load jobs apply to external data sources.
 
 For Google Cloud Bigtable URIs: Exactly one URI can be specified and

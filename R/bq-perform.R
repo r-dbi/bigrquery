@@ -210,7 +210,7 @@ export_json <- function(values) {
 #'   Google Cloud.
 #'
 #'   For Google Cloud Storage URIs: Each URI can contain one
-#'   `'*'`` wildcard character and it must come after the 'bucket' name.
+#'   `'*'` wildcard character and it must come after the 'bucket' name.
 #'   Size limits related to load jobs apply to external data sources.
 #'
 #'   For Google Cloud Bigtable URIs: Exactly one URI can be specified and
@@ -358,9 +358,60 @@ bq_perform_query_dry_run <- function(query, billing,
                                      parameters = NULL,
                                      use_legacy_sql = FALSE) {
 
-  check_string(query)
-  check_string(billing)
-  check_bool(use_legacy_sql)
+
+  query <- bq_perform_query_data(
+    query = query,
+    default_dataset = default_dataset,
+    parameters = parameters,
+    use_legacy_sql = use_legacy_sql
+  )
+
+  url <- bq_path(billing, jobs = "")
+  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+
+  res <- bq_post(
+    url,
+    body = bq_body(body, ...),
+    query = list(fields = "statistics")
+  )
+  bytes <- as.numeric(res$statistics$query$totalBytesProcessed)
+  structure(bytes, class = "bq_bytes")
+}
+
+#' @export
+#' @rdname api-perform
+bq_perform_query_schema <- function(query, billing,
+                                    ...,
+                                    default_dataset = NULL,
+                                    parameters = NULL) {
+
+  query <- bq_perform_query_data(
+    query = query,
+    default_dataset = default_dataset,
+    parameters = parameters,
+    use_legacy_sql = FALSE
+  )
+
+  url <- bq_path(billing, jobs = "")
+  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+
+  res <- bq_post(
+    url,
+    body = bq_body(body, ...),
+    query = list(fields = "statistics")
+  )
+  # https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableSchema
+  res$statistics$query$schema$fields
+}
+
+bq_perform_query_data <- function(query,
+                                  ...,
+                                  default_dataset = NULL,
+                                  parameters = NULL,
+                                  use_legacy_sql = FALSE,
+                                  call = caller_env()) {
+  check_string(query, error_call = call)
+  check_bool(use_legacy_sql, error_call = call)
 
   query <- list(
     query = unbox(query),
@@ -374,17 +425,10 @@ bq_perform_query_dry_run <- function(query, billing,
     query$defaultDataset <- datasetReference(default_dataset)
   }
 
-  url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
-
-  res <- bq_post(
-    url,
-    body = bq_body(body, ...),
-    query = list(fields = "statistics")
-  )
-  bytes <- as.numeric(res$statistics$query$totalBytesProcessed)
-  structure(bytes, class = "bq_bytes")
+  query
 }
+
+
 
 #' @export
 #' @rdname api-perform

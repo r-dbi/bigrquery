@@ -1,29 +1,35 @@
 #' Download table data
 #'
-#' This retrieves rows in chunks of `page_size`. It is most suitable for results
-#' of smaller queries (<100 MB, say). For larger queries, it is better to
-#' export the results to a CSV file stored on google cloud and use the
-#' bq command line tool to download locally.
+#' @description
+#' This function provides two ways to download data from BigQuery, transfering
+#' data using either JSON or arrow, depending on the `api` argument. If
+#' bigrquerystorage is installed, `api = "arrow"` will be used (because it's
+#' so much faster, but see the limitions below), otherwise you can select
+#' deliberately by using `api = "json"` or `api = "arrow"`.
 #'
-#' @section Complex data:
-#' bigrquery will retrieve nested and repeated columns in to list-columns
+#' ## Arrow API
+#'
+#' The arrow API is much faster, but has heavier dependencies: bigrquerystorage
+#' requires the arrow package, which can be tricky to compile on Linux (but you
+#' usually should be able to get a binary from
+#' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
+#'
+#' There's one known limitation of `api = "arrow"`: when querying public data,
+#' you'll now need to provide a `billing` project.
+#'
+#' ## JSON API
+#'
+#' The JSON API retrieves rows in chunks of `page_size`. It is most suitable
+#' for results of smaller queries (<100 MB, say). Unfortunately due to
+#' limitations in the BigQuery API, you may need to vary this parameter
+#' depending on the complexity of the underlying data.
+#'
+#' The JSON API will convert nested and repeated columns in to list-columns
 #' as follows:
 #'
 #' * Repeated values (arrays) will become a list-column of vectors.
 #' * Records will become list-columns of named lists.
 #' * Repeated records will become list-columns of data frames.
-#'
-#' @section Larger datasets:
-#' In my timings, this code takes around 1 minute per 100 MB of data.
-#' If you need to download considerably more than this, I recommend:
-#'
-#'  * Export a `.csv` file to Cloud Storage using [bq_table_save()].
-#'  * Use the `gsutil` command line utility to download it.
-#'  * Read the csv file into R with `readr::read_csv()` or `data.table::fread()`.
-#'
-#'  Unfortunately you can not export nested or repeated formats into CSV, and
-#'  the formats that BigQuery supports (arvn and ndjson) that allow for
-#'  nested/repeated values, are not well supported in R.
 #'
 #' @return Because data retrieval may generate list-columns and the `data.frame`
 #'   print method can have problems with list-columns, this method returns
@@ -32,30 +38,40 @@
 #' @param x A [bq_table]
 #' @param n_max Maximum number of results to retrieve. Use `Inf` to retrieve all
 #'   rows.
-#' @param page_size The number of rows requested per chunk. It is recommended to
-#'   leave this unspecified until you have evidence that the `page_size`
-#'   selected automatically by `bq_table_download()` is problematic.
+#' @param page_size (JSON only) The number of rows requested per chunk. It is
+#'   recommended to leave this unspecified until you have evidence that the
+#'  `page_size` selected automatically by `bq_table_download()` is problematic.
 #'
 #'   When `page_size = NULL` bigrquery determines a conservative, natural chunk
 #'   size empirically. If you specify the `page_size`, it is important that each
 #'   chunk fits on one page, i.e. that the requested row limit is low enough to
 #'   prevent the API from paginating based on response size.
-#' @param start_index Starting row index (zero-based).
-#' @param max_connections Number of maximum simultaneous connections to
-#'   BigQuery servers.
+#' @param start_index (JSON only) Starting row index (zero-based).
+#' @param max_connections (JSON only) Number of maximum simultaneous
+#'   connections to BigQuery servers.
+#' @param api Which API to use? The `"json"` API works where ever bigrquery
+#'   does, but is slow and can require fiddling with the `page_size` parameter.
+#'   The `"arrow"` API is faster and more reliable, but only works if you
+#'   have also installed the bigrquerystorage package.
+#'
+#'   Because the `"arrow"` API is so much faster, it will be used automatically
+#'   if the bigrquerystorage package is installed.
 #' @inheritParams api-job
 #' @param bigint The R type that BigQuery's 64-bit integer types should be
 #'   mapped to. The default is `"integer"`, which returns R's `integer` type,
 #'   but results in `NA` for values above/below +/- 2147483647. `"integer64"`
 #'   returns a [bit64::integer64], which allows the full range of 64 bit
 #'   integers.
+#' @param billing (Arrow only) Project to bill; defaults to the project of `x`,
+#'   and typically only needs to be specified if you're working with public
+#'   datasets.
 #' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
 #'   `n_max` instead.
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examplesIf bq_testable()
-#' df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
+#' df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 bq_table_download <-
   function(x,
            n_max = Inf,
@@ -64,6 +80,8 @@ bq_table_download <-
            max_connections = 6L,
            quiet = NA,
            bigint = c("integer", "integer64", "numeric", "character"),
+           api = c("json", "arrow"),
+           billing = x$project,
            max_results = deprecated()) {
     x <- as_bq_table(x)
     check_number_whole(n_max, min = 0, allow_infinite = TRUE)
@@ -71,11 +89,44 @@ bq_table_download <-
     check_number_whole(max_connections, min = 1)
     quiet <- check_quiet(quiet)
     bigint <- arg_match(bigint)
+    api <- check_api(api)
+
     if (lifecycle::is_present(max_results)) {
       lifecycle::deprecate_warn(
         "1.4.0", "bq_table_download(max_results)", "bq_table_download(n_max)"
       )
       n_max <- max_results
+    }
+
+    if (api == "arrow") {
+      check_installed("bigrquerystorage", "required to download using arrow API")
+      if (!missing(page_size)) {
+        cli::cli_warn(
+          '{.arg page_size} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
+      }
+      if (!missing(start_index)) {
+        cli::cli_warn(
+          '{.arg start_index} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
+      }
+      if (!missing(max_connections)) {
+        cli::cli_warn(
+          '{.arg max_connections} is ignored when {.code api == "arrow"}',
+          call = environment()
+        )
+      }
+
+      return(bigrquerystorage::bqs_table_download(
+        x = toString(x),
+        parent = billing,
+        n_max = n_max,
+        quiet = quiet,
+        bigint = bigint,
+        as_tibble = TRUE
+      ))
     }
 
     params <- set_row_params(
@@ -201,6 +252,14 @@ bq_table_download <-
     )
     parse_postprocess(table_data, bigint = bigint)
   }
+
+check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
+  if (identical(api, c("json", "arrow"))) {
+    if (has_bigrquerystorage()) "arrow" else "json"
+  } else {
+    arg_match(api, error_call = error_call)
+  }
+}
 
 # This function is a modified version of
 # https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R

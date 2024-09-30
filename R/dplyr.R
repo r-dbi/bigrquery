@@ -27,7 +27,10 @@
 #'   summarise(n = sum(word_count, na.rm = TRUE)) %>%
 #'   arrange(desc(n))
 #' }
-src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
+src_bigquery <- function(project,
+                         dataset,
+                         billing = project,
+                         max_pages = 10) {
   check_installed("dbplyr")
 
   con <- DBI::dbConnect(
@@ -45,10 +48,18 @@ src_bigquery <- function(project, dataset, billing = project, max_pages = 10) {
 tbl.BigQueryConnection <- function(src, from, ...) {
   src <- dbplyr::src_dbi(src, auto_disconnect = FALSE)
 
+  sql <- dbplyr::sql_query_fields(src$con, from)
+  dataset <- if (!is.null(src$con@dataset)) as_bq_dataset(src$con)
+  schema <- bq_perform_query_schema(sql, 
+    billing = src$con@billing,
+    default_dataset = dataset
+  )
+  vars <- map_chr(schema, "[[", "name")
+
   if (utils::packageVersion("dbplyr") >= "2.4.0.9000") {
-    tbl <- dplyr::tbl(src, from = from)
+    tbl <- dplyr::tbl(src, from = from, vars = vars)
   } else {
-    tbl <- dplyr::tbl(src, from = from, check_from = FALSE)
+    tbl <- dplyr::tbl(src, from = from, vars = vars, check_from = FALSE)
   }
 
   # This is ugly, but I don't see a better way of doing this
@@ -116,17 +127,35 @@ db_copy_to.BigQueryConnection <- function(con,
 # Efficient downloads -----------------------------------------------
 
 # registered onLoad
-collect.tbl_BigQueryConnection <- function(x, ...,
-                                           page_size = NULL,
-                                           max_connections = 6L,
-                                           n = Inf,
-                                           warn_incomplete = TRUE) {
 
+#' Collect a BigQuery table
+#' 
+#' This collect method is specialised for BigQuery tables, generating the
+#' SQL from your dplyr commands, then calling [bq_project_query()]
+#' or [bq_dataset_query()] to run the query, then [bq_table_download()] 
+#' to download the results. Thus the arguments are a combination of the
+#' arguments to [dplyr::collect()], `bq_project_query()`/`bq_dataset_query()`,
+#' and `bq_table_download()`.
+#' 
+#' @inheritParams dplyr::collect
+#' @inheritParams bq_table_download
+#' @param n Maximum number of results to retrieve. 
+#'   The default, `Inf`, will retrieve all rows.
+#' @param ... Other arguments passed on to 
+#'   `bq_project_query()`/`bq_project_query()`
+collect.tbl_BigQueryConnection <- function(x, ...,
+                                           n = Inf,
+                                           api = c("json", "arrow"),
+                                           page_size = NULL,
+                                           max_connections = 6L
+                                           ) {
+
+  api <- check_api(api)
   check_number_whole(n, min = 0, allow_infinite = TRUE)
   check_number_whole(max_connections, min = 1)
-  check_bool(warn_incomplete)
 
   con <- dbplyr::remote_con(x)
+  billing <- con@billing
 
   if (op_can_download(x)) {
     lq <- x$lazy_query
@@ -136,7 +165,6 @@ collect.tbl_BigQueryConnection <- function(x, ...,
   } else {
     sql <- dbplyr::db_sql_render(con, x)
 
-    billing <- con@billing
     if (is.null(con@dataset)) {
       tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
     } else {
@@ -147,13 +175,26 @@ collect.tbl_BigQueryConnection <- function(x, ...,
 
   quiet <- if (n < 100) TRUE else con@quiet
   bigint <- con@bigint %||% "integer"
-  out <- bq_table_download(tb,
-    n_max = n,
-    page_size = page_size,
-    quiet = quiet,
-    max_connections = max_connections,
-    bigint = bigint
-  )
+
+  if (api == "arrow") {
+    out <- bq_table_download(tb,
+      n_max = n,
+      quiet = quiet,
+      bigint = bigint,
+      billing = billing,
+      api = "arrow"
+    )
+  } else {
+    out <- bq_table_download(tb,
+      n_max = n,
+      page_size = page_size,
+      quiet = quiet,
+      max_connections = max_connections,
+      bigint = bigint,
+      api = "json"
+    )
+  }
+
   dplyr::grouped_df(out, intersect(dbplyr::op_grps(x), names(out)))
 }
 

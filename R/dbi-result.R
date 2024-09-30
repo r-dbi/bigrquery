@@ -100,18 +100,31 @@ setMethod(
   "dbFetch", "BigQueryResult",
   function(res, n = -1, ...) {
     check_number_whole(n, min = -1, allow_infinite = TRUE)
+    if (n == -1) n <- Inf
 
-    if (n == -1 || n == Inf) {
+    if (has_bigrquerystorage() && n == Inf && res@cursor$cur() == 0) {
+      # https://github.com/meztez/bigrquerystorage/issues/48
       n <- res@cursor$left()
+      
+      # If possible, download complete dataset using arrow
+      data <- bq_table_download(res@bq_table,
+        n_max = n,
+        bigint = res@bigint,
+        quiet = res@quiet,
+        api = "arrow"
+      )
+    } else {
+      # Otherwise, fall back to slower JSON API
+      data <- bq_table_download(res@bq_table,
+        n_max = n,
+        start_index = res@cursor$cur(),
+        page_size = res@page_size,
+        bigint = res@bigint,
+        quiet = res@quiet,
+        api = "json"
+      )
     }
-
-    data <- bq_table_download(res@bq_table,
-      n_max = n,
-      start_index = res@cursor$cur(),
-      page_size = res@page_size,
-      bigint = res@bigint,
-      quiet = res@quiet
-    )
+    
     res@cursor$adv(nrow(data))
 
     data

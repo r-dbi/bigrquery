@@ -12,6 +12,8 @@ bq_table_download(
   max_connections = 6L,
   quiet = NA,
   bigint = c("integer", "integer64", "numeric", "character"),
+  api = c("json", "arrow"),
+  billing = x$project,
   max_results = deprecated()
 )
 }
@@ -21,19 +23,19 @@ bq_table_download(
 \item{n_max}{Maximum number of results to retrieve. Use \code{Inf} to retrieve all
 rows.}
 
-\item{page_size}{The number of rows requested per chunk. It is recommended to
-leave this unspecified until you have evidence that the \code{page_size}
-selected automatically by \code{bq_table_download()} is problematic.
+\item{page_size}{(JSON only) The number of rows requested per chunk. It is
+recommended to leave this unspecified until you have evidence that the
+\code{page_size} selected automatically by \code{bq_table_download()} is problematic.
 
 When \code{page_size = NULL} bigrquery determines a conservative, natural chunk
 size empirically. If you specify the \code{page_size}, it is important that each
 chunk fits on one page, i.e. that the requested row limit is low enough to
 prevent the API from paginating based on response size.}
 
-\item{start_index}{Starting row index (zero-based).}
+\item{start_index}{(JSON only) Starting row index (zero-based).}
 
-\item{max_connections}{Number of maximum simultaneous connections to
-BigQuery servers.}
+\item{max_connections}{(JSON only) Number of maximum simultaneous
+connections to BigQuery servers.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
@@ -43,6 +45,18 @@ mapped to. The default is \code{"integer"}, which returns R's \code{integer} typ
 but results in \code{NA} for values above/below +/- 2147483647. \code{"integer64"}
 returns a \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
+
+\item{api}{Which API to use? The \code{"json"} API works where ever bigrquery
+does, but is slow and can require fiddling with the \code{page_size} parameter.
+The \code{"arrow"} API is faster and more reliable, but only works if you
+have also installed the bigrquerystorage package.
+
+Because the \code{"arrow"} API is so much faster, it will be used automatically
+if the bigrquerystorage package is installed.}
+
+\item{billing}{(Arrow only) Project to bill; defaults to the project of \code{x},
+and typically only needs to be specified if you're working with public
+datasets.}
 
 \item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
 \code{n_max} instead.}
@@ -54,14 +68,30 @@ a tibble. If you need a \code{data.frame}, coerce the results with
 \code{\link[=as.data.frame]{as.data.frame()}}.
 }
 \description{
-This retrieves rows in chunks of \code{page_size}. It is most suitable for results
-of smaller queries (<100 MB, say). For larger queries, it is better to
-export the results to a CSV file stored on google cloud and use the
-bq command line tool to download locally.
-}
-\section{Complex data}{
+This function provides two ways to download data from BigQuery, transfering
+data using either JSON or arrow, depending on the \code{api} argument. If
+bigrquerystorage is installed, \code{api = "arrow"} will be used (because it's
+so much faster, but see the limitions below), otherwise you can select
+deliberately by using \code{api = "json"} or \code{api = "arrow"}.
+\subsection{Arrow API}{
 
-bigrquery will retrieve nested and repeated columns in to list-columns
+The arrow API is much faster, but has heavier dependencies: bigrquerystorage
+requires the arrow package, which can be tricky to compile on Linux (but you
+usually should be able to get a binary from
+\href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
+
+There's one known limitation of \code{api = "arrow"}: when querying public data,
+you'll now need to provide a \code{billing} project.
+}
+
+\subsection{JSON API}{
+
+The JSON API retrieves rows in chunks of \code{page_size}. It is most suitable
+for results of smaller queries (<100 MB, say). Unfortunately due to
+limitations in the BigQuery API, you may need to vary this parameter
+depending on the complexity of the underlying data.
+
+The JSON API will convert nested and repeated columns in to list-columns
 as follows:
 \itemize{
 \item Repeated values (arrays) will become a list-column of vectors.
@@ -69,22 +99,7 @@ as follows:
 \item Repeated records will become list-columns of data frames.
 }
 }
-
-\section{Larger datasets}{
-
-In my timings, this code takes around 1 minute per 100 MB of data.
-If you need to download considerably more than this, I recommend:
-\itemize{
-\item Export a \code{.csv} file to Cloud Storage using \code{\link[=bq_table_save]{bq_table_save()}}.
-\item Use the \code{gsutil} command line utility to download it.
-\item Read the csv file into R with \code{readr::read_csv()} or \code{data.table::fread()}.
 }
-
-Unfortunately you can not export nested or repeated formats into CSV, and
-the formats that BigQuery supports (arvn and ndjson) that allow for
-nested/repeated values, are not well supported in R.
-}
-
 \section{Google BigQuery API documentation}{
 
 \itemize{
@@ -94,6 +109,6 @@ nested/repeated values, are not well supported in R.
 
 \examples{
 \dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-df <- bq_table_download("publicdata.samples.natality", n_max = 35000)
+df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 \dontshow{\}) # examplesIf}
 }

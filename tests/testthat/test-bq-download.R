@@ -3,8 +3,8 @@ test_that("same results regardless of page size", {
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
 
-  df3 <- bq_table_download(tb, n_max = 30, page_size = 10)
-  df1 <- bq_table_download(tb, n_max = 30, page_size = 30)
+  df3 <- bq_table_download(tb, n_max = 30, page_size = 10, api = "json")
+  df1 <- bq_table_download(tb, n_max = 30, page_size = 30, api = "json")
   expect_equal(nrow(df1), 30)
   expect_equal(df1, df3)
 })
@@ -13,7 +13,7 @@ test_that("can retrieve fraction of page size", {
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, n_max = 15, page_size = 10)
+  df <- bq_table_download(tb, n_max = 15, page_size = 10, api = "json")
   expect_equal(nrow(df), 15)
 })
 
@@ -21,7 +21,7 @@ test_that("can retrieve zero rows", {
   skip_if_no_auth()
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, n_max = 0)
+  df <- bq_table_download(tb, n_max = 0, api = "json")
   expect_equal(nrow(df), 0)
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
@@ -34,7 +34,7 @@ test_that("can specify large integers in page params", {
   withr::local_options(list(scipen = -4))
 
   tb <- as_bq_table("bigquery-public-data.moon_phases.moon_phases")
-  df <- bq_table_download(tb, n_max = 100, page_size = 20)
+  df <- bq_table_download(tb, n_max = 100, page_size = 20, api = "json")
   expect_equal(nrow(df), 100)
 })
 
@@ -49,13 +49,106 @@ test_that("errors when table is known to be incomplete", {
       tb,
       n_max = 35000,
       page_size = 35000,
-      bigint = "integer64"
+      bigint = "integer64",
+      api = "json"
     ),
     transform = function(x) {
       gsub("[0-9,]+ rows were received", "{n} rows were received", x, perl = TRUE)
     },
     error = TRUE
   )
+})
+
+# api = "arrow" ----------------------------------------------------------------
+
+test_that("check_api respects inputs", {
+  expect_equal(check_api("arrow"), "arrow")
+  expect_equal(check_api("json"), "json")
+})
+
+test_that("uses arrow api if bigrquerystorage installed", {
+  expect_equal(check_api(), "arrow")
+
+  local_mocked_bindings(is_installed = function(...) FALSE)
+  expect_equal(check_api(), "json")
+})
+
+test_that("warns if supplying unnused arguments", {
+  tb <- bq_project_query(bq_test_project(), "SELECT 1.0", quiet = TRUE)
+  expect_snapshot(
+    . <- bq_table_download(tb,
+      api = "arrow",
+      page_size = 1,
+      start_index = 1,
+      max_connections = 1
+    )
+  )
+})
+
+test_that("arrow api can convert non-nested types", {
+  sql <- "SELECT
+    '\U0001f603' as unicode,
+    datetime,
+    TRUE as logicaltrue,
+    FALSE as logicalfalse,
+    CAST ('Hi' as BYTES) as bytes,
+    CAST (datetime as DATE) as date,
+    CAST (datetime as TIME) as time,
+    CAST (datetime as TIMESTAMP) as timestamp,
+    ST_GEOGFROMTEXT('POINT (30 10)') as geography
+    FROM (SELECT DATETIME '2000-01-02 03:04:05.67' as datetime)
+  "
+
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
+
+  base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
+  expect_identical(df$unicode, "\U0001f603", ignore_encoding = FALSE)
+
+  expect_equal(df$logicaltrue, TRUE)
+  expect_equal(df$logicalfalse, FALSE)
+
+  expect_equal(df$bytes, blob::as_blob(as.raw(c(0x48, 0x69))))
+
+  expect_equal(df$date, as.Date(base))
+  expect_equal(df$timestamp, base)
+  expect_equal(df$datetime, base)
+  expect_equal(df$time, hms::hms(hours = 3, minutes = 4, seconds = 5.67))
+
+  expect_identical(df$geography, wk::wkt("POINT(30 10)"))
+})
+
+test_that("arrow api can convert nested types", {
+  skip("https://github.com/meztez/bigrquerystorage/issues/54")
+  sql <- "SELECT
+    STRUCT(1.0 AS a, 'abc' AS b) as s,
+    [1.0, 2.0, 3.0] as a,
+    [STRUCT(1.0 as a, 'a' as b), STRUCT(2.0, 'b'), STRUCT(3, 'c')] as aos,
+    STRUCT([1.0, 2.0, 3.0] as a, ['a', 'b'] as b) as soa
+  "
+
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
+
+  expect_equal(df$s, list(list(a = 1, b = "abc")))
+  expect_equal(df$a, list(c(1, 2, 3)))
+  expect_equal(df$aos, list(tibble(a = c(1, 2, 3), b = c("a", "b", "c"))))
+  expect_equal(df$soa, list(list(a = c(1, 2, 3), b = c("a", "b"))))
+})
+
+test_that("arrow api respects bigint", {
+  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  qry <- bq_project_query(bq_test_project(), sql)
+
+  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "arrow", quiet = TRUE)$x
+  expect_identical(out_int64, bit64::as.integer64(x))
+
+  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "arrow", quiet = TRUE)$x
+  expect_identical(out_dbl, as.double(x))
+
+  out_chr <- bq_table_download(qry, bigint = "character", api = "arrow", quiet = TRUE)$x
+  expect_identical(out_chr, x)
 })
 
 # helpers around row and chunk params ------------------------------------------
@@ -173,7 +266,7 @@ test_that("can convert date time types", {
   "
 
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   base <- ISOdatetime(2000, 1, 2, 3, 4, 5.67, tz = "UTC")
 
@@ -197,7 +290,7 @@ test_that("can parse fractional seconds", {
 test_that("correctly parse logical values" ,{
   query <- "SELECT TRUE as x"
   tb <- bq_project_query(bq_test_project(), query)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_true(df$x)
 })
@@ -208,18 +301,18 @@ test_that("the return type of integer columns is set by the bigint argument", {
   qry <- bq_project_query(bq_test_project(), sql)
 
   expect_warning(
-    out_int <- bq_table_download(qry, bigint = "integer")$x,
+    out_int <- bq_table_download(qry, bigint = "integer", api = "json")$x,
     "integer overflow"
   )
   expect_identical(out_int, suppressWarnings(as.integer(x)))
 
-  out_int64 <- bq_table_download(qry, bigint = "integer64")$x
+  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "json")$x
   expect_identical(out_int64, bit64::as.integer64(x))
 
-  out_dbl <- bq_table_download(qry, bigint = "numeric")$x
+  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "json")$x
   expect_identical(out_dbl, as.double(x))
 
-  out_chr <- bq_table_download(qry, bigint = "character")$x
+  out_chr <- bq_table_download(qry, bigint = "character", api = "json")$x
   expect_identical(out_chr, x)
 })
 
@@ -227,7 +320,7 @@ test_that("can convert geography type", {
   skip_if_not_installed("wk")
   sql <- "SELECT ST_GEOGFROMTEXT('POINT (30 10)') as geography"
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_identical(df$geography, wk::wkt("POINT(30 10)"))
 })
@@ -235,7 +328,7 @@ test_that("can convert geography type", {
 test_that("can convert bytes type", {
   sql <- "SELECT ST_ASBINARY(ST_GEOGFROMTEXT('POINT (30 10)')) as bytes"
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
 
   expect_identical(
     df$bytes,
