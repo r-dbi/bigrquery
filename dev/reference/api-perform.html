@@ -127,6 +127,14 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  use_legacy_sql <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">bq_perform_query_schema</span><span class="op">(</span></span>
+<span>  <span class="va">query</span>,</span>
+<span>  <span class="va">billing</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  default_dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parameters <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">bq_perform_copy</span><span class="op">(</span></span>
 <span>  <span class="va">src</span>,</span>
 <span>  <span class="va">dest</span>,</span>
@@ -227,7 +235,7 @@ to the table.</p></li>
 <dd><p>The fully-qualified URIs that point to your data in
 Google Cloud.</p>
 <p>For Google Cloud Storage URIs: Each URI can contain one
-`'*'“ wildcard character and it must come after the 'bucket' name.
+<code>'*'</code> wildcard character and it must come after the 'bucket' name.
 Size limits related to load jobs apply to external data sources.</p>
 <p>For Google Cloud Bigtable URIs: Exactly one URI can be specified and
 it has be a fully specified and valid HTTPS URL for a Google Cloud
@@ -303,13 +311,13 @@ but are not rate-limited in the same way as interactive queries.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="bq_table_download.html">bq_table_download</a></span><span class="op">(</span><span class="va">bq_mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 11</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      am  carb    vs  qsec    wt  drat  disp    hp   cyl  gear   mpg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     0     2     1  20    3.19  3.69  147.    62     4     4  24.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     0     2     1  22.9  3.15  3.92  141.    95     4     4  22.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     0     1     1  20.0  2.46  3.7   120.    97     4     3  21.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     0     1     1  19.4  3.22  3.08  258    110     6     3  21.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     0     1     1  20.2  3.46  2.76  225    105     6     3  18.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     0     4     1  18.3  3.44  3.92  168.   123     6     4  19.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     0     2     1    20     3     3   146    62     4     4    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     0     2     1    22     3     3   140    95     4     4    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     0     1     1    20     2     3   120    97     4     3    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     0     1     1    19     3     3   258   110     6     3    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     0     1     1    20     3     2   225   105     6     3    18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     0     4     1    18     3     3   167   123     6     4    19</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

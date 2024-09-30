@@ -30,6 +30,7 @@
 <url><loc>https://bigrquery.r-dbi.org/dev/reference/bq_test_project.html</loc></url>
 <url><loc>https://bigrquery.r-dbi.org/dev/reference/bq_token.html</loc></url>
 <url><loc>https://bigrquery.r-dbi.org/dev/reference/bq_user.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/dev/reference/collect.tbl_BigQueryConnection.html</loc></url>
 <url><loc>https://bigrquery.r-dbi.org/dev/reference/index.html</loc></url>
 <url><loc>https://bigrquery.r-dbi.org/dev/reference/src_bigquery.html</loc></url>
 </urlset>
