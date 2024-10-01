@@ -31,7 +31,7 @@ Imports:
     tibble,
     nanoparquet (>= 0.3.1)
 Suggests:
-    bigrquerystorage (>= 1.1.0.9000),
+    bigrquerystorage (>= 1.2.0),
     blob,
     covr,
     dbplyr (>= 2.4.0),
@@ -83,5 +83,3 @@ Collate:
     'import-standalone-types-check.R'
     'utils.R'
     'zzz.R'
-Remotes:
-    meztez/bigrquerystorage
