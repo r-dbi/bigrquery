@@ -92,6 +92,12 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
         "Try calling {.fun bq_auth} directly with necessary specifics."
     ))
   }
+  # Take a tip from httr2::oauth_token() and store the expiry time. That way
+  # we know when we need to refresh credentials before making a request.
+  expires_in <- cred$credentials$expires_in
+  if (!is.null(expires_in)) {
+    cred$credentials$expires_at <- as.numeric(Sys.time()) + expires_in
+  }
   .auth$set_cred(cred)
   .auth$set_auth_active(TRUE)
 
@@ -131,7 +137,7 @@ bq_deauth <- function() {
 #' Produce configured token
 #'
 #' @eval gargle:::PREFIX_token_description(gargle_lookup_table)
-#' @eval gargle:::PREFIX_token_return()
+#' @returns An OAuth bearer token.
 #'
 #' @family low-level API functions
 #' @export
@@ -143,7 +149,19 @@ bq_token <- function() {
   if (!bq_has_token()) {
     bq_auth()
   }
-  httr::config(token = .auth$cred)
+  # Opportunistically refresh the token, if possible. We are doing something
+  # close to httr2:::token_has_expired() here, but melded to gargle's refresh
+  # implementation.
+  token <- .auth$cred$credentials
+  if (is.null(token$expires_at) || !.auth$cred$can_refresh()) {
+    return(token$access_token)
+  }
+  deadline <- as.integer(Sys.time()) + 5
+  if (deadline > token$expires_at) {
+    .auth$cred$refresh()
+    token <- .auth$cred$credentials
+  }
+  token$access_token
 }
 
 #' Is there a token on hand?
@@ -229,7 +247,7 @@ bq_oauth_client <- function() {
 #' }
 bq_user <- function() {
   if (bq_has_token()) {
-    gargle::token_email(bq_token())
+    gargle::token_email(.auth$cred)
   } else {
     NULL
   }
