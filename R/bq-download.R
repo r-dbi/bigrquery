@@ -391,13 +391,13 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   )
 
   url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
-  url <- httr::modify_url(url, query = prepare_bq_query(query))
+  url <- httr2::url_parse(url)
+  url$query <- prepare_bq_query(query)
+  url <- httr2::url_build(url)
 
   if (bq_has_token()) {
-    token <- .auth$get_cred()
-    signed <- token$sign("GET", url)
-    url <- signed$url
-    headers <- signed$headers
+    # TODO: Did we break non-header clients here?
+    headers <- c("Authorization" = paste("Bearer", bq_token()))
   } else {
     headers <- list()
   }
@@ -416,12 +416,14 @@ bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   function(result) {
     if (!is.null(progress)) cli::cli_progress_update(id = progress)
 
-    bq_check_response(
-      status = result$status_code,
-      type = curl::parse_headers_list(result$headers)[["content-type"]],
-      content = result$content,
-      call = call
-    )
+    if (result$status_code >= 400) {
+      resp <- httr2::response(
+        status_code = result$status_code,
+        headers = result$headers,
+        body = result$content
+      )
+      cli::cli_abort(bq_error_body(resp), call = call)
+    }
 
     con <- file(path, open = "wb")
     defer(close(con))

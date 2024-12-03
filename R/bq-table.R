@@ -116,7 +116,8 @@ bq_table_exists <- function(x) {
 bq_table_delete <- function(x) {
   x <- as_bq_table(x)
   url <- bq_path(x$project, x$dataset, x$table)
-  invisible(bq_delete(url))
+  bq_delete(url)
+  invisible(x)
 }
 
 #' @export

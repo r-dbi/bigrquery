@@ -7,7 +7,7 @@
 bq_token()
 }
 \value{
-A \code{request} object (an S3 class provided by \link[httr:httr-package]{httr}).
+An OAuth bearer token.
 }
 \description{
 For internal use or for those programming around the BigQuery API.

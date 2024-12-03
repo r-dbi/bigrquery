@@ -27,8 +27,12 @@ gs_object_delete <- function(x, token = bq_token()) {
     x$bucket,
     x$object
   )
-  req <- httr::DELETE(url, token, httr::user_agent(bq_ua()))
-  process_request(req)
+  req <- request(url)
+  req <- req_method(req, "DELETE")
+  req <- req_user_agent(req, bq_ua())
+  req <- req_auth_bearer_token(req, token$auth_token)
+  req_perform(req)
+  invisible(NULL)
 }
 
 gs_object_exists <- function(x, token = bq_token()) {
@@ -37,6 +41,13 @@ gs_object_exists <- function(x, token = bq_token()) {
     x$bucket,
     x$object
   )
-  req <- httr::GET(url, token, httr::user_agent(bq_ua()))
-  req$status_code != 404
+  req <- request(url)
+  req <- req_user_agent(req, bq_ua())
+  req <- req_auth_bearer_token(req, token$auth_token)
+  # A 404 is not an error here.
+  req <- req_error(req, is_error = function(resp) {
+    resp_status(resp) != 404 && resp_status(resp) >= 400
+  })
+  resp <- req_perform(req)
+  resp_status(resp) != 404
 }

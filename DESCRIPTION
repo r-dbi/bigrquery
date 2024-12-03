@@ -22,7 +22,7 @@ Imports:
     curl,
     DBI,
     gargle (>= 1.5.0),
-    httr,
+    httr2,
     jsonlite,
     lifecycle,
     methods,

@@ -9,6 +9,8 @@
 
 * bigrquery now requires R 4.0, in line with our version support principles.
 
+* bigrquery now uses `httr2` internally instead of `httr`.
+
 # bigrquery 1.5.1
 
 * Forward compatibility with upcoming dbplyr release (#601).
