@@ -366,7 +366,7 @@ sql_translation.BigQueryConnection <- function(x) {
         dbplyr:::check_unsupported_arg(tz)
         dbplyr:::check_unsupported_arg(units, allowed = "DAY")
 
-        dbplyr::build_sql("DATE_DIFF(CAST(", time2, " AS DATE), CAST(", time1, " AS DATE), DAY)")
+        dbplyr::build_sql("DATE_DIFF(CAST(", time1, " AS DATE), CAST(", time2, " AS DATE), DAY)")
       },
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
