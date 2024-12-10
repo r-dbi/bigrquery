@@ -291,5 +291,5 @@ test_that("difftime clock function translates to correct sql", {
     ) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`time2` AS DATE), CAST(`time1` AS DATE), DAY)")
+  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`time1` AS DATE), CAST(`time2` AS DATE), DAY)")
 })
