@@ -50,7 +50,7 @@ tbl.BigQueryConnection <- function(src, from, ...) {
 
   sql <- dbplyr::sql_query_fields(src$con, from)
   dataset <- if (!is.null(src$con@dataset)) as_bq_dataset(src$con)
-  schema <- bq_perform_query_schema(sql, 
+  schema <- bq_perform_query_schema(sql,
     billing = src$con@billing,
     default_dataset = dataset
   )
@@ -129,19 +129,19 @@ db_copy_to.BigQueryConnection <- function(con,
 # registered onLoad
 
 #' Collect a BigQuery table
-#' 
+#'
 #' This collect method is specialised for BigQuery tables, generating the
 #' SQL from your dplyr commands, then calling [bq_project_query()]
-#' or [bq_dataset_query()] to run the query, then [bq_table_download()] 
+#' or [bq_dataset_query()] to run the query, then [bq_table_download()]
 #' to download the results. Thus the arguments are a combination of the
 #' arguments to [dplyr::collect()], `bq_project_query()`/`bq_dataset_query()`,
 #' and `bq_table_download()`.
-#' 
+#'
 #' @inheritParams dplyr::collect
 #' @inheritParams bq_table_download
-#' @param n Maximum number of results to retrieve. 
+#' @param n Maximum number of results to retrieve.
 #'   The default, `Inf`, will retrieve all rows.
-#' @param ... Other arguments passed on to 
+#' @param ... Other arguments passed on to
 #'   `bq_project_query()`/`bq_project_query()`
 collect.tbl_BigQueryConnection <- function(x, ...,
                                            n = Inf,
@@ -332,6 +332,41 @@ sql_translation.BigQueryConnection <- function(x) {
       runif = function(n = n(), min = 0, max = 1) {
         RAND <- NULL # quiet R CMD check
         dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
+      },
+      # clock functions
+      add_days = function(x, n, ...) {
+        check_dots_empty()
+        dbplyr::build_sql("DATE_ADD(CAST(", x, "AS DATE), INTERVAL ", n, " DAY)")
+      },
+      add_years = function(x, n, ...) {
+        check_dots_empty()
+        dbplyr::build_sql("DATE_ADD(CAST(", x, "AS DATE), INTERVAL ", n, " YEAR)")
+      },
+      date_build = function(year, month = 1L, day = 1L, ..., invalid = NULL) {
+        check_dots_empty()
+        dbplyr:::check_unsupported_arg(invalid, allow_null = TRUE)
+        dbplyr::build_sql("DATE(", year, ", ", month, ", ", day, ")")
+      },
+      date_count_between = function(start, end, precision, ..., n = 1L) {
+        check_dots_empty()
+        dbplyr:::check_unsupported_arg(precision, allowed = "DAY")
+        dbplyr:::check_unsupported_arg(n, allowed = 1L)
+        dbplyr::build_sql("DATE_DIFF(CAST(", end, " AS DATE), CAST(", start, " AS DATE), DAY)")
+      },
+      get_year = function(x) {
+        dbplyr::build_sql("EXTRACT(YEAR FROM ", x, ")")
+      },
+      get_month = function(x) {
+        dbplyr::build_sql("EXTRACT(MONTH FROM ", x, ")")
+      },
+      get_day = function(x) {
+        dbplyr::build_sql("EXTRACT(DAY FROM ", x, ")")
+      },
+      difftime = function(time1, time2, tz, units = "DAY") {
+        dbplyr:::check_unsupported_arg(tz)
+        dbplyr:::check_unsupported_arg(units, allowed = "DAY")
+
+        dbplyr::build_sql("DATE_DIFF(CAST(", time1, " AS DATE), CAST(", time2, " AS DATE), DAY)")
       },
     ),
     dbplyr::sql_translator(.parent = dbplyr::base_agg,
