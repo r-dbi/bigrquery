@@ -129,8 +129,8 @@ test_that("collect can identify directly download tables", {
   expect_false(op_can_download(bq5))
   expect_false(op_can_download(head(bq5)))
 
-  DBI::dbExecute(con, "CREATE VIEW mtcars2 AS SELECT * FROM basedata.mtcars")
-  defer(DBI::dbExecute(con, "DROP VIEW mtcars2"))
+  DBI::dbExecute(con, 'CREATE VIEW mtcars2 AS SELECT * FROM basedata.mtcars')
+  defer(DBI::dbExecute(con, 'DROP VIEW mtcars2'))
   bq6 <- dplyr::tbl(con, "mtcars2")
   expect_false(op_can_download(bq6))
 
@@ -147,8 +147,8 @@ test_that("casting uses bigquery types", {
     dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  expect_equal(sql$select[[2]], "SAFE_CAST(`x` AS INT64)")
-  expect_equal(sql$select[[3]], "SAFE_CAST(`x` AS FLOAT64)")
+  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
+  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
 })
 
 test_that("%||% translates to IFNULL", {
@@ -158,7 +158,7 @@ test_that("%||% translates to IFNULL", {
     dplyr::mutate(y = x %||% 2L) %>%
     dbplyr::sql_build(simulate_bigrquery())
 
-  expect_equal(sql$select[[2]], "IFNULL(`x`, 2)")
+  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
 })
 
 test_that("suffixes use _", {
@@ -224,7 +224,6 @@ test_that("can correctly print a lazy query", {
     )
   )
 })
-
 
 test_that("get clock functions translate to correct sql", {
   skip_if_not_installed("dbplyr")
