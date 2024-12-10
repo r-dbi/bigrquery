@@ -76,8 +76,8 @@ test_that("can collect and compute (no dataset)", {
 
 test_that("can collect and compute (with dataset)", {
   con <- DBI::dbConnect(bigquery(),
-    project = bq_test_project(),
-    dataset = "basedata"
+                        project = bq_test_project(),
+                        dataset = "basedata"
   )
   bq_mtcars <- dplyr::tbl(con, "mtcars") %>% dplyr::filter(cyl == 4)
 
@@ -224,3 +224,77 @@ test_that("can correctly print a lazy query", {
     )
   )
 })
+
+
+test_that("get clock functions translate to correct sql", {
+  skip_if_not_installed("dbplyr")
+
+  sql <- dbplyr::lazy_frame(x = "2008-12-25") %>%
+    dplyr::mutate(
+      year = get_year(x),
+      month = get_month(x),
+      day = get_day(x)
+    ) %>%
+    dbplyr::sql_build(simulate_bigrquery())
+
+  expect_equal(sql$select[[2]], "EXTRACT(YEAR FROM `x`)")
+  expect_equal(sql$select[[3]], "EXTRACT(MONTH FROM `x`)")
+  expect_equal(sql$select[[4]], "EXTRACT(DAY FROM `x`)")
+})
+
+
+test_that("add clock functions translate to correct sql", {
+  skip_if_not_installed("dbplyr")
+
+  sql <- dbplyr::lazy_frame(x = "2008-12-25") %>%
+    dplyr::mutate(
+      date1 = add_years(x, 1L),
+      date2 = add_days(x, 1L)
+    ) %>%
+    dbplyr::sql_build(simulate_bigrquery())
+
+  expect_equal(sql$select[[2]], "DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 YEAR)")
+  expect_equal(sql$select[[3]], "DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 DAY)")
+})
+
+test_that("date_build clock function translates to correct sql", {
+  skip_if_not_installed("dbplyr")
+
+  sql <- dbplyr::lazy_frame(y = "2008", m = "08", d = "1") %>%
+    dplyr::mutate(
+      full_date  = date_build(y, m, d),
+      full_date2  = date_build(y)
+    ) %>%
+    dbplyr::sql_build(simulate_bigrquery())
+
+  expect_equal(sql$select[[2]], "DATE(`y`, `m`, `d`)")
+  expect_equal(sql$select[[3]], "DATE(`y`, 1, 1)")
+
+})
+
+test_that("date_count_between clock function translates to correct sql", {
+  skip_if_not_installed("dbplyr")
+
+  sql <- dbplyr::lazy_frame(start = "2008-12-25", end = "2008-12-26") %>%
+    dplyr::mutate(
+      dcb  = date_count_between(start, end, "DAY")
+    ) %>%
+    dbplyr::sql_build(simulate_bigrquery())
+
+  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`end` AS DATE), CAST(`start` AS DATE), DAY)")
+
+})
+
+test_that("difftime clock function translates to correct sql", {
+  skip_if_not_installed("dbplyr")
+
+  sql <- dbplyr::lazy_frame(time1 = "2008-12-25", time2 = "2008-12-26") %>%
+    dplyr::mutate(
+      dcb  = difftime(time1 = time1, time2 = time2, units = "DAY")
+    ) %>%
+    dbplyr::sql_build(simulate_bigrquery())
+
+  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`time2` AS DATE), CAST(`time1` AS DATE), DAY)")
+
+})
+
