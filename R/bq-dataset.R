@@ -95,7 +95,13 @@ bq_dataset_delete <- function(x, delete_contents = FALSE) {
 
 #' @export
 #' @rdname api-dataset
-bq_dataset_tables <- function(x, page_size = 50, max_pages = Inf, warn = TRUE, ...) {
+bq_dataset_tables <- function(
+  x,
+  page_size = 50,
+  max_pages = Inf,
+  warn = TRUE,
+  ...
+) {
   x <- as_bq_dataset(x)
   url <- bq_path(x$project, x$dataset, "")
 

@@ -55,12 +55,12 @@ print.bq_bytes <- function(x, ...) {
 }
 # nocov end
 
-defer <- function (expr, env = caller_env(), after = FALSE) {
+defer <- function(expr, env = caller_env(), after = FALSE) {
   thunk <- as.call(list(function() expr))
   do.call(on.exit, list(thunk, TRUE, after), envir = env)
 }
 
-in_pkgdown <- function(){
+in_pkgdown <- function() {
   identical(Sys.getenv("IN_PKGDOWN"), "true")
 }
 

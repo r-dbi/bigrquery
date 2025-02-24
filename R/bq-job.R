@@ -71,10 +71,12 @@ bq_job_show_statistics <- function(x) {
 #' @export
 #' @name api-job
 #' @inheritParams rlang::args_error_context
-bq_job_wait <- function(x,
-                        quiet = getOption("bigrquery.quiet"),
-                        pause = 0.5,
-                        call = caller_env()) {
+bq_job_wait <- function(
+  x,
+  quiet = getOption("bigrquery.quiet"),
+  pause = 0.5,
+  call = caller_env()
+) {
   x <- as_bq_job(x)
   quiet <- check_quiet(quiet)
   check_number_decimal(pause)
@@ -102,7 +104,6 @@ bq_job_wait <- function(x,
   }
   if (!quiet) cli::cli_progress_done()
 
-
   errors <- status$errors
   if (length(errors) > 0) {
     if (length(errors) > 1) {
@@ -110,7 +111,9 @@ bq_job_wait <- function(x,
       errors <- errors[-1]
     }
 
-    bullets <- map_chr(errors, function(x) paste0(x$message, " [", x$reason, "]"))
+    bullets <- map_chr(errors, function(x) {
+      paste0(x$message, " [", x$reason, "]")
+    })
     bullets <- set_names(bullets, "x")
     cli::cli_abort(c("Job {x} failed", bullets), call = call)
   }

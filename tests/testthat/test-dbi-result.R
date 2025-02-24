@@ -74,7 +74,6 @@ test_that("can get metadata", {
   expect_equal(col_info$name, c("cyl", "mpg"))
 
   expect_equal(DBI::dbGetStatement(res), sql)
-
 })
 
 test_that("dbExecute returns modified rows", {

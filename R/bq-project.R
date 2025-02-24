@@ -26,7 +26,12 @@ NULL
 #' @rdname api-project
 #' @param x A string giving a project name.
 #' @inheritParams bq_projects
-bq_project_datasets <- function(x, page_size = 100, max_pages = 1, warn = TRUE) {
+bq_project_datasets <- function(
+  x,
+  page_size = 100,
+  max_pages = 1,
+  warn = TRUE
+) {
   check_string(x)
   check_number_whole(page_size, min = 1)
   check_number_whole(max_pages, min = 1, allow_infinite = TRUE)

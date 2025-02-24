@@ -1,6 +1,6 @@
 .onLoad <- function(libname, pkgname) {
   .auth <<- gargle::init_AuthState(
-    package     = "bigrquery",
+    package = "bigrquery",
     auth_active = TRUE
   )
 

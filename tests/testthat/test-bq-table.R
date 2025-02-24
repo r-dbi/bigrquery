@@ -135,7 +135,11 @@ test_that("can create table field description", {
 
   bq_table_create(
     partition_table,
-    fields = bq_fields(list(bq_field("id", "integer", description = "Key field")))
+    fields = bq_fields(list(bq_field(
+      "id",
+      "integer",
+      description = "Key field"
+    )))
   )
 
   meta <- bq_table_meta(partition_table)

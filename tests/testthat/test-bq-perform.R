@@ -36,7 +36,8 @@ test_that("bq_perform_copy creates job that succeeds", {
 test_that("can round trip extract + load", {
   ds_public <- bq_dataset("bigquery-public-data", "moon_phases")
 
-  tb <- bq_dataset_query(ds_public,
+  tb <- bq_dataset_query(
+    ds_public,
     query = "SELECT COUNT(*) as count FROM moon_phases",
     billing = bq_test_project()
   )

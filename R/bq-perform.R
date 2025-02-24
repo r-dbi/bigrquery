@@ -56,14 +56,15 @@ NULL
 #'   snake_case names are automatically converted to camelCase.
 #' @param print_header Whether to print out a header row in the results.
 #' @param billing Identifier of project to bill.
-bq_perform_extract <- function(x,
-                               destination_uris,
-                               destination_format = "NEWLINE_DELIMITED_JSON",
-                               compression = "NONE",
-                               ...,
-                               print_header = TRUE,
-                               billing = x$project) {
-
+bq_perform_extract <- function(
+  x,
+  destination_uris,
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  compression = "NONE",
+  ...,
+  print_header = TRUE,
+  billing = x$project
+) {
   x <- as_bq_table(x)
   destination_uris <- as.character(destination_uris) # for gs_object
   check_string(destination_format)
@@ -115,15 +116,16 @@ bq_perform_extract <- function(x,
 #'     to the table.
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
-bq_perform_upload <- function(x, values,
-                              fields = NULL,
-                              source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
-                              create_disposition = "CREATE_IF_NEEDED",
-                              write_disposition = "WRITE_EMPTY",
-                              ...,
-                              billing = x$project
-                              ) {
-
+bq_perform_upload <- function(
+  x,
+  values,
+  fields = NULL,
+  source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = x$project
+) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
     cli::cli_abort("{.arg values} must be a data frame.")
@@ -228,16 +230,17 @@ export_json <- function(values) {
 #'   (like a data frame). Leave as `NULL` to allow BigQuery to auto-detect
 #'   the fields.
 #' @param nskip For `source_format = "CSV"`, the number of header rows to skip.
-bq_perform_load <- function(x,
-                            source_uris,
-                            billing = x$project,
-                            source_format = "NEWLINE_DELIMITED_JSON",
-                            fields = NULL,
-                            nskip = 0,
-                            create_disposition = "CREATE_IF_NEEDED",
-                            write_disposition = "WRITE_EMPTY",
-                            ...
-                            ) {
+bq_perform_load <- function(
+  x,
+  source_uris,
+  billing = x$project,
+  source_format = "NEWLINE_DELIMITED_JSON",
+  fields = NULL,
+  nskip = 0,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...
+) {
   x <- as_bq_table(x)
   source_uris <- as.character(source_uris)
   check_string(billing)
@@ -297,17 +300,18 @@ bq_perform_load <- function(x,
 #'   but are not rate-limited in the same way as interactive queries.
 #' @param default_dataset A [bq_dataset] used to automatically qualify table names.
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
-bq_perform_query <- function(query, billing,
-                             ...,
-                             parameters = NULL,
-                             destination_table = NULL,
-                             default_dataset = NULL,
-                             create_disposition = "CREATE_IF_NEEDED",
-                             write_disposition = "WRITE_EMPTY",
-                             use_legacy_sql = FALSE,
-                             priority = "INTERACTIVE"
-                             ) {
-
+bq_perform_query <- function(
+  query,
+  billing,
+  ...,
+  parameters = NULL,
+  destination_table = NULL,
+  default_dataset = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  use_legacy_sql = FALSE,
+  priority = "INTERACTIVE"
+) {
   query <- as_query(query)
   check_string(billing)
 
@@ -331,8 +335,9 @@ bq_perform_query <- function(query, billing,
     query$destinationTable <- tableReference(destination_table)
     query$createDisposition <- unbox(create_disposition)
     query$writeDisposition <- unbox(write_disposition)
-    if (use_legacy_sql)
+    if (use_legacy_sql) {
       query$allowLargeResults <- unbox(TRUE)
+    }
   }
 
   if (!is.null(default_dataset)) {
@@ -352,13 +357,14 @@ bq_perform_query <- function(query, billing,
 
 #' @export
 #' @rdname api-perform
-bq_perform_query_dry_run <- function(query, billing,
-                                     ...,
-                                     default_dataset = NULL,
-                                     parameters = NULL,
-                                     use_legacy_sql = FALSE) {
-
-
+bq_perform_query_dry_run <- function(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE
+) {
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
@@ -380,11 +386,13 @@ bq_perform_query_dry_run <- function(query, billing,
 
 #' @export
 #' @rdname api-perform
-bq_perform_query_schema <- function(query, billing,
-                                    ...,
-                                    default_dataset = NULL,
-                                    parameters = NULL) {
-
+bq_perform_query_schema <- function(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL
+) {
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
@@ -404,12 +412,14 @@ bq_perform_query_schema <- function(query, billing,
   res$statistics$query$schema$fields
 }
 
-bq_perform_query_data <- function(query,
-                                  ...,
-                                  default_dataset = NULL,
-                                  parameters = NULL,
-                                  use_legacy_sql = FALSE,
-                                  call = caller_env()) {
+bq_perform_query_data <- function(
+  query,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE,
+  call = caller_env()
+) {
   check_string(query, error_call = call)
   check_bool(use_legacy_sql, error_call = call)
 
@@ -429,15 +439,16 @@ bq_perform_query_data <- function(query,
 }
 
 
-
 #' @export
 #' @rdname api-perform
-bq_perform_copy <- function(src, dest,
-                            create_disposition = "CREATE_IF_NEEDED",
-                            write_disposition = "WRITE_EMPTY",
-                            ...,
-                            billing = NULL) {
-
+bq_perform_copy <- function(
+  src,
+  dest,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = NULL
+) {
   billing <- billing %||% dest$project
   url <- bq_path(billing, jobs = "")
 

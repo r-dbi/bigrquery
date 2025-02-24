@@ -7,11 +7,11 @@
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
 gargle_lookup_table <- list(
-  PACKAGE     = "bigrquery",
-  YOUR_STUFF  = "your BigQuery projects",
-  PRODUCT     = "Google BigQuery",
-  API         = "BigQuery API",
-  PREFIX      = "bq"
+  PACKAGE = "bigrquery",
+  YOUR_STUFF = "your BigQuery projects",
+  PRODUCT = "Google BigQuery",
+  API = "BigQuery API",
+  PREFIX = "bq"
 )
 
 #' Authorize bigrquery
@@ -48,15 +48,17 @@ gargle_lookup_table <- list(
 #' }
 #'
 #' @importFrom gargle token_fetch
-bq_auth <- function(email = gargle::gargle_oauth_email(),
-                    path = NULL,
-                    scopes = c(
-                      "https://www.googleapis.com/auth/bigquery",
-                      "https://www.googleapis.com/auth/cloud-platform"
-                    ),
-                    cache = gargle::gargle_oauth_cache(),
-                    use_oob = gargle::gargle_oob_default(),
-                    token = NULL) {
+bq_auth <- function(
+  email = gargle::gargle_oauth_email(),
+  path = NULL,
+  scopes = c(
+    "https://www.googleapis.com/auth/bigquery",
+    "https://www.googleapis.com/auth/cloud-platform"
+  ),
+  cache = gargle::gargle_oauth_cache(),
+  use_oob = gargle::gargle_oob_default(),
+  token = NULL
+) {
   if (!missing(email) && !missing(path)) {
     cli::cli_warn(c(
       "It is very unusual to provide both {.arg email} and \\
@@ -249,8 +251,9 @@ bq_user <- function() {
 #' @export
 bq_oauth_app <- function() {
   lifecycle::deprecate_warn(
-    "1.4.2", "bq_oauth_app()", "bq_oauth_client()"
+    "1.4.2",
+    "bq_oauth_app()",
+    "bq_oauth_client()"
   )
   bq_oauth_client()
 }
-

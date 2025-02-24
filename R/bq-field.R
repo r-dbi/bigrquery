@@ -30,7 +30,13 @@
 #'
 #' # as_bq_fields() can also take a data frame
 #' as_bq_fields(mtcars)
-bq_field <- function(name, type, mode = "NULLABLE", fields = list(), description = NULL) {
+bq_field <- function(
+  name,
+  type,
+  mode = "NULLABLE",
+  fields = list(),
+  description = NULL
+) {
   check_string(name)
   check_string(type)
   check_string(mode)

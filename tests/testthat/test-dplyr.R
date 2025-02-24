@@ -32,7 +32,6 @@ test_that("can work with nested table identifier", {
   table_name <- I("bigquery-public-data.utility_us.country_code_iso")
   expect_no_error(dplyr::collect(head(dplyr::tbl(con1, table_name))))
 
-
   con2 <- DBI::dbConnect(
     bigquery(),
     project = "bigquery-public-data",
@@ -75,7 +74,8 @@ test_that("can collect and compute (no dataset)", {
 })
 
 test_that("can collect and compute (with dataset)", {
-  con <- DBI::dbConnect(bigquery(),
+  con <- DBI::dbConnect(
+    bigquery(),
     project = bq_test_project(),
     dataset = "basedata"
   )
@@ -203,7 +203,11 @@ test_that("string functions correctly", {
 
 test_that("median is correctly translated", {
   expect_equal(
-    dbplyr::translate_sql(median(x), con = simulate_bigrquery(), window = FALSE),
+    dbplyr::translate_sql(
+      median(x),
+      con = simulate_bigrquery(),
+      window = FALSE
+    ),
     dbplyr::sql("APPROX_QUANTILES(`x`, 2)[SAFE_ORDINAL(2)]")
   )
 })
