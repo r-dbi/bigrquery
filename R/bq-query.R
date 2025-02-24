@@ -41,12 +41,13 @@ NULL
 
 #' @export
 #' @rdname bq_query
-bq_project_query <- function(x,
-                             query,
-                             destination_table = NULL,
-                             ...,
-                             quiet = NA) {
-
+bq_project_query <- function(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  quiet = NA
+) {
   check_string(x)
   query <- as_query(query)
   if (!is.null(destination_table)) {
@@ -66,14 +67,14 @@ bq_project_query <- function(x,
 
 #' @export
 #' @rdname bq_query
-bq_dataset_query <- function(x,
-                             query,
-                             destination_table = NULL,
-                             ...,
-                             billing = NULL,
-                             quiet = NA) {
-
-
+bq_dataset_query <- function(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  billing = NULL,
+  quiet = NA
+) {
   x <- as_bq_dataset(x)
   query <- as_query(query)
   if (!is.null(destination_table)) {

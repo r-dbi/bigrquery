@@ -2,9 +2,9 @@
 NULL
 
 BigQueryResult <- function(conn, sql, params = NULL, ...) {
-
   ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
-  job <- bq_perform_query(sql,
+  job <- bq_perform_query(
+    sql,
     billing = conn@billing,
     default_dataset = ds,
     quiet = conn@quiet,
@@ -13,10 +13,13 @@ BigQueryResult <- function(conn, sql, params = NULL, ...) {
   )
 
   bq_job_wait(job, quiet = conn@quiet)
-  meta <- bq_job_meta(job, paste0(
-    "configuration(query(destinationTable)),",
-    "statistics(query(statementType,numDmlAffectedRows))"
-  ))
+  meta <- bq_job_meta(
+    job,
+    paste0(
+      "configuration(query(destinationTable)),",
+      "statistics(query(statementType,numDmlAffectedRows))"
+    )
+  )
 
   tb <- as_bq_table(meta$configuration$query$destinationTable)
 
@@ -65,21 +68,27 @@ setClass(
 #' @inheritParams methods::show
 #' @export
 setMethod(
-  "show", "BigQueryResult",
+  "show",
+  "BigQueryResult",
   function(object) {
     cat_line(
       "<BigQueryResult>\n",
-      "  Query: ", dbGetStatement(object), "\n",
-      "  Has completed: ", dbHasCompleted(object), "\n",
-      "  Rows fetched: ", dbGetRowCount(object)
+      "  Query: ",
+      dbGetStatement(object),
+      "\n  Has completed: ",
+      dbHasCompleted(object),
+      "\n  Rows fetched: ",
+      dbGetRowCount(object)
     )
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbIsValid
 #' @export
 setMethod(
-  "dbIsValid", "BigQueryResult",
+  "dbIsValid",
+  "BigQueryResult",
   function(dbObj, ...) TRUE
 )
 
@@ -87,7 +96,8 @@ setMethod(
 #' @inheritParams DBI::dbClearResult
 #' @export
 setMethod(
-  "dbClearResult", "BigQueryResult",
+  "dbClearResult",
+  "BigQueryResult",
   function(res, ...) {
     invisible(TRUE)
   }
@@ -97,7 +107,8 @@ setMethod(
 #' @inheritParams DBI::dbFetch
 #' @export
 setMethod(
-  "dbFetch", "BigQueryResult",
+  "dbFetch",
+  "BigQueryResult",
   function(res, n = -1, ...) {
     check_number_whole(n, min = -1, allow_infinite = TRUE)
     if (n == -1) n <- Inf
@@ -105,9 +116,10 @@ setMethod(
     if (has_bigrquerystorage() && n == Inf && res@cursor$cur() == 0) {
       # https://github.com/meztez/bigrquerystorage/issues/48
       n <- res@cursor$left()
-      
+
       # If possible, download complete dataset using arrow
-      data <- bq_table_download(res@bq_table,
+      data <- bq_table_download(
+        res@bq_table,
         n_max = n,
         bigint = res@bigint,
         quiet = res@quiet,
@@ -115,7 +127,8 @@ setMethod(
       )
     } else {
       # Otherwise, fall back to slower JSON API
-      data <- bq_table_download(res@bq_table,
+      data <- bq_table_download(
+        res@bq_table,
         n_max = n,
         start_index = res@cursor$cur(),
         page_size = res@page_size,
@@ -124,35 +137,41 @@ setMethod(
         api = "json"
       )
     }
-    
+
     res@cursor$adv(nrow(data))
 
     data
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbHasCompleted
 #' @export
 setMethod(
-  "dbHasCompleted", "BigQueryResult",
+  "dbHasCompleted",
+  "BigQueryResult",
   function(res, ...) {
     res@cursor$left() == 0
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbGetStatement
 #' @export
 setMethod(
-  "dbGetStatement", "BigQueryResult",
+  "dbGetStatement",
+  "BigQueryResult",
   function(res, ...) {
     res@statement
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbColumnInfo
 #' @export
 setMethod(
-  "dbColumnInfo", "BigQueryResult",
+  "dbColumnInfo",
+  "BigQueryResult",
   function(res, ...) {
     fields <- bq_table_fields(res@bq_table)
 
@@ -161,35 +180,41 @@ setMethod(
       type = vapply(fields, function(x) x$type, character(1)),
       stringsAsFactors = FALSE
     )
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbGetRowCount
 #' @export
 setMethod(
-  "dbGetRowCount", "BigQueryResult",
+  "dbGetRowCount",
+  "BigQueryResult",
   function(res, ...) {
     res@cursor$cur()
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbGetRowsAffected
 #' @export
 setMethod(
-  "dbGetRowsAffected", "BigQueryResult",
+  "dbGetRowsAffected",
+  "BigQueryResult",
   function(res, ...) {
     res@affected
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbBind
 #' @export
 setMethod(
-  "dbBind", "BigQueryResult",
+  "dbBind",
+  "BigQueryResult",
   function(res, params, ...) {
     testthat::skip("Not yet implemented: dbBind(Result)")
-  })
-
+  }
+)
 
 
 cursor <- function(nrow) {
