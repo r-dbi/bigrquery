@@ -1,5 +1,5 @@
 library(bigrquery)
-con <-  dbConnect(
+con <- dbConnect(
   bigquery(),
   project = "${1:Project}"
 )
