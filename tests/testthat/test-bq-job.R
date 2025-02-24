@@ -12,7 +12,10 @@ test_that("informative errors on failure", {
   ds <- bq_test_dataset()
 
   tb <- bq_test_table()
-  bq_table_create(tb, fields = list(bq_field("x", "integer"), bq_field("y", "string")))
+  bq_table_create(
+    tb,
+    fields = list(bq_field("x", "integer"), bq_field("y", "string"))
+  )
 
   expect_snapshot(
     {

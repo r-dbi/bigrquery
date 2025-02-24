@@ -10,17 +10,41 @@ test_that("can parse atomic vectors", {
 
 test_that("gracefully handles int64 values", {
   # Largest/smallest 32-bit int
-  expect_equal(bq_parse_single("2147483647", "integer"), bit64::as.integer64(2147483647L))
-  expect_equal(bq_parse_single("-2147483647", "integer"), bit64::as.integer64(-2147483647L))
+  expect_equal(
+    bq_parse_single("2147483647", "integer"),
+    bit64::as.integer64(2147483647L)
+  )
+  expect_equal(
+    bq_parse_single("-2147483647", "integer"),
+    bit64::as.integer64(-2147483647L)
+  )
   # 2147483647 + 1
-  expect_equal(bq_parse_single("2147483648", "integer"), bit64::as.integer64("2147483648"))
-  expect_equal(bq_parse_single("-2147483648", "integer"), bit64::as.integer64("-2147483648"))
+  expect_equal(
+    bq_parse_single("2147483648", "integer"),
+    bit64::as.integer64("2147483648")
+  )
+  expect_equal(
+    bq_parse_single("-2147483648", "integer"),
+    bit64::as.integer64("-2147483648")
+  )
   # Largest/smallest integer64
-  expect_equal(bq_parse_single("9223372036854775807", "integer"), bit64::as.integer64("9223372036854775807"))
-  expect_equal(bq_parse_single("-9223372036854775807", "integer"), bit64::as.integer64("-9223372036854775807"))
+  expect_equal(
+    bq_parse_single("9223372036854775807", "integer"),
+    bit64::as.integer64("9223372036854775807")
+  )
+  expect_equal(
+    bq_parse_single("-9223372036854775807", "integer"),
+    bit64::as.integer64("-9223372036854775807")
+  )
   # Largest/smallest integer64 + 1
-  expect_equal(bq_parse_single("9223372036854775808", "integer"), bit64::as.integer64(NA))
-  expect_equal(bq_parse_single("-9223372036854775808", "integer"), bit64::as.integer64(NA))
+  expect_equal(
+    bq_parse_single("9223372036854775808", "integer"),
+    bit64::as.integer64(NA)
+  )
+  expect_equal(
+    bq_parse_single("-9223372036854775808", "integer"),
+    bit64::as.integer64(NA)
+  )
 })
 
 test_that("can parse NULLs", {
@@ -115,7 +139,10 @@ test_that("can parse nested structures", {
   )
   expect_named(df, "x")
   expect_type(df$x, "list")
-  expect_equal(df$x[[1]], tibble(a = bit64::as.integer64(1:3), b = c("a", "b", "c")))
+  expect_equal(
+    df$x[[1]],
+    tibble(a = bit64::as.integer64(1:3), b = c("a", "b", "c"))
+  )
 
   df <- replay_query(
     "struct-array",
@@ -131,9 +158,15 @@ test_that("can parse empty arrays", {
   df <- bq_table_download(tb, api = "json")
   expect_equal(df$x, list(integer(length = 0)))
 
-  tb <- bq_project_query(bq_test_project(), "SELECT ARRAY<STRUCT<a INT64, b STRING>>[] as x")
+  tb <- bq_project_query(
+    bq_test_project(),
+    "SELECT ARRAY<STRUCT<a INT64, b STRING>>[] as x"
+  )
   df <- bq_table_download(tb, api = "json")
-  expect_equal(df$x, list(tibble::tibble(a = integer(length = 0), b = character())))
+  expect_equal(
+    df$x,
+    list(tibble::tibble(a = integer(length = 0), b = character()))
+  )
 })
 
 test_that("can parse geography", {
@@ -141,14 +174,37 @@ test_that("can parse geography", {
 
   wkt <- wk::wkt("POINT (30 10)")
   expect_identical(bq_parse_single(as.character(wkt), "geography"), wkt)
-  expect_identical(bq_parse_single(NA_character_, "geography"), wk::wkt(NA_character_))
+  expect_identical(
+    bq_parse_single(NA_character_, "geography"),
+    wk::wkt(NA_character_)
+  )
 })
 
 test_that("can parse bytes", {
   bytes <- blob::blob(
-    as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
-             0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
-             0x40))
+    as.raw(c(
+      0x01,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      0xff,
+      0xff,
+      0xff,
+      0xff,
+      0xff,
+      0xff,
+      0x3d,
+      0x40,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x24,
+      0x40
+    ))
   )
 
   expect_identical(bq_parse_single(bytes[[1]], "bytes"), bytes)
@@ -157,4 +213,3 @@ test_that("can parse bytes", {
     blob::blob(NULL)
   )
 })
-

@@ -14,7 +14,12 @@ test_that("can round-trip connection to bq_dataset", {
 })
 
 test_that("useful print with and without dataset", {
-  con1 <- DBI::dbConnect(bigquery(), project = "p", dataset = "x", billing = "b")
+  con1 <- DBI::dbConnect(
+    bigquery(),
+    project = "p",
+    dataset = "x",
+    billing = "b"
+  )
   con2 <- DBI::dbConnect(bigquery(), project = "p")
 
   expect_snapshot({
@@ -83,7 +88,6 @@ test_that("dbWriteTable errors on unsupported arguments", {
     DBI::dbWriteTable(con, "x", df, field.types = list())
     DBI::dbWriteTable(con, "x", df, temporary = TRUE)
   })
-
 })
 
 test_that("can execute a query", {
@@ -190,11 +194,27 @@ test_that("as_bq_table checks its input types", {
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
-  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
-  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  x <- c(
+    "-2147483648",
+    "-2147483647",
+    "-1",
+    "0",
+    "1",
+    "2147483647",
+    "2147483648"
+  )
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x")
 
-  con_integer64 <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "integer64")
-  con_character <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "character")
+  con_integer64 <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    bigint = "integer64"
+  )
+  con_character <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    bigint = "character"
+  )
 
   expect_equal(DBI::dbGetQuery(con_integer64, sql)$x, bit64::as.integer64(x))
   expect_equal(DBI::dbGetQuery(con_character, sql)$x, x)

@@ -7,7 +7,6 @@ test_that("useful error if can't auth", {
   local_mocked_bindings(token_fetch = function(...) NULL)
 
   expect_snapshot(bq_auth(), error = TRUE)
-
 })
 
 test_that("bq_auth_configure checks its inputs", {
