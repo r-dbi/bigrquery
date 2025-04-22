@@ -183,7 +183,7 @@ SEXP base64_decode(const char *in, unsigned int inlen) {
   /* We might have allocated to much space, because of the padding... */
   if (j + 1 < outlen) {
     SEXP rout2 = PROTECT(allocVector(RAWSXP, j));
-    memcpy(RAW(rout2), RAW(rout), j);
+    if (j) memcpy(RAW(rout2), RAW_RO(rout), j);
     UNPROTECT(2);
     return rout2;
   } else {
