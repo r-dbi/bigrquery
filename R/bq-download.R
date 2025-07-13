@@ -287,6 +287,21 @@ parse_postprocess <- function(df, bigint) {
     function(x) hms::parse_hms(x)
   )
 
+  # Fix for issue #624: Ensure NUMERIC/FLOAT columns remain as doubles
+  # Some BigQuery configurations may incorrectly return NUMERIC columns as INTEGER type
+  df <- col_apply(
+    df,
+    function(x) {
+      # Check if this is a NUMERIC or BIGNUMERIC column that got parsed as integer64
+      bq_type <- attr(x, "bq_type")
+      !is.null(bq_type) && bq_type %in% c("NUMERIC", "BIGNUMERIC") && bit64::is.integer64(x)
+    },
+    function(x) {
+      # Convert back to double to preserve decimal precision
+      as.numeric(x)
+    }
+  )
+
   if (bigint != "integer64") {
     as_bigint <- switch(
       bigint,
@@ -294,7 +309,10 @@ parse_postprocess <- function(df, bigint) {
       numeric = as.numeric,
       character = as.character
     )
-    df <- col_apply(df, bit64::is.integer64, as_bigint)
+    # Only apply bigint conversion to true INTEGER columns, not NUMERIC/FLOAT
+    df <- col_apply(df, function(x) {
+      bit64::is.integer64(x) && !attr(x, "bq_type") %in% c("NUMERIC", "BIGNUMERIC", "FLOAT")
+    }, as_bigint)
   }
 
   df
