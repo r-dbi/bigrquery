@@ -136,11 +136,28 @@ bq_table_download <-
       ))
     }
 
-    params <- set_row_params(
-      nrow = bq_table_nrow(x),
-      n_max = n_max,
-      start_index = start_index
+    # For views, bq_table_nrow() returns 0 even when the view has data
+    # because BigQuery doesn't populate numRows for views. We need to 
+    # handle views differently.
+    is_view <- tryCatch(
+      bq_table_meta(x, "type")$type == "VIEW",
+      error = function(e) FALSE
     )
+    
+    if (is_view) {
+      # For views, we can't rely on numRows, so we use the user-specified n_max
+      # and let the download process handle pagination naturally
+      params <- list(
+        n_max = if (is.infinite(n_max)) 1e9 else n_max,  # Use large number for Inf
+        start_index = start_index
+      )
+    } else {
+      params <- set_row_params(
+        nrow = bq_table_nrow(x),
+        n_max = n_max,
+        start_index = start_index
+      )
+    }
     n_max <- params$n_max
     start_index <- params$start_index
 
