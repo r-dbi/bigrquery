@@ -1,5 +1,8 @@
 # bigrquery (development version)
 
+* Functions and arguments deprecated in bigrquery 1.4.0 (released) have now
+  been removed.
+
 * Various R CMD check fixes
 
 * If the bigrquerystorage package is installed, `bq_table_download()` (and

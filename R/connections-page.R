@@ -68,8 +68,7 @@ on_connection_opened <- function(con, code) {
     connectCode = code,
 
     # only action is to close connections pane
-    disconnect = function() {
-    },
+    disconnect = function() {},
 
     listObjectTypes = function() {
       list(
@@ -119,7 +118,7 @@ on_connection_opened <- function(con, code) {
       ...
     ) {
       x <- bq_table(con@project, dataset, paste0(table, view))
-      bq_table_download(x, max_results = rowLimit)
+      bq_table_download(x, n_max = rowLimit)
     },
 
     # no actions

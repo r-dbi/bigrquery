@@ -65,8 +65,6 @@
 #' @param billing (Arrow only) Project to bill; defaults to the project of `x`,
 #'   and typically only needs to be specified if you're working with public
 #'   datasets.
-#' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
-#'   `n_max` instead.
 #' @section Google BigQuery API documentation:
 #' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
@@ -82,8 +80,7 @@ bq_table_download <-
     quiet = NA,
     bigint = c("integer", "integer64", "numeric", "character"),
     api = c("json", "arrow"),
-    billing = x$project,
-    max_results = deprecated()
+    billing = x$project
   ) {
     x <- as_bq_table(x)
     check_number_whole(n_max, min = 0, allow_infinite = TRUE)
@@ -92,15 +89,6 @@ bq_table_download <-
     quiet <- check_quiet(quiet)
     bigint <- arg_match(bigint)
     api <- check_api(api)
-
-    if (lifecycle::is_present(max_results)) {
-      lifecycle::deprecate_warn(
-        "1.4.0",
-        "bq_table_download(max_results)",
-        "bq_table_download(n_max)"
-      )
-      n_max <- max_results
-    }
 
     if (api == "arrow") {
       check_installed(
@@ -428,7 +416,9 @@ bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   force(progress)
 
   function(result) {
-    if (!is.null(progress)) cli::cli_progress_update(id = progress)
+    if (!is.null(progress)) {
+      cli::cli_progress_update(id = progress)
+    }
 
     bq_check_response(
       status = result$status_code,

@@ -13,8 +13,7 @@ bq_table_download(
   quiet = NA,
   bigint = c("integer", "integer64", "numeric", "character"),
   api = c("json", "arrow"),
-  billing = x$project,
-  max_results = deprecated()
+  billing = x$project
 )
 }
 \arguments{
@@ -57,9 +56,6 @@ if the bigrquerystorage package is installed.}
 \item{billing}{(Arrow only) Project to bill; defaults to the project of \code{x},
 and typically only needs to be specified if you're working with public
 datasets.}
-
-\item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
-\code{n_max} instead.}
 }
 \value{
 Because data retrieval may generate list-columns and the \code{data.frame}
