@@ -75,7 +75,7 @@ are used.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bq_auth_configure</span><span class="op">(</span><span class="va">client</span>, <span class="va">path</span>, app <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bq_auth_configure</span><span class="op">(</span><span class="va">client</span>, <span class="va">path</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_oauth_client</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,11 +94,6 @@ preferred to specify the client with JSON, using the <code>path</code> argument.
 <dd><p>JSON downloaded from <a href="https://console.cloud.google.com" class="external-link">Google Cloud Console</a>, containing a client id and
 secret, in one of the forms supported for the <code>txt</code> argument of
 <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::fromJSON()</a></code> (typically, a file path or JSON string).</p></dd>
-
-
-<dt id="arg-app">app<a class="anchor" aria-label="anchor" href="#arg-app"></a></dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Replaced by the <code>client</code>
-argument.</p></dd>
 
 </dl></div>
     <div class="section level2">

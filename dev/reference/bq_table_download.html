@@ -150,8 +150,7 @@ as follows:</p><ul><li><p>Repeated values (arrays) will become a list-column of 
 <span>  quiet <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  bigint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"integer"</span>, <span class="st">"integer64"</span>, <span class="st">"numeric"</span>, <span class="st">"character"</span><span class="op">)</span>,</span>
 <span>  api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"arrow"</span><span class="op">)</span>,</span>
-<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span>,</span>
-<span>  max_results <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
+<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -213,11 +212,6 @@ if the bigrquerystorage package is installed.</p></dd>
 <dd><p>(Arrow only) Project to bill; defaults to the project of <code>x</code>,
 and typically only needs to be specified if you're working with public
 datasets.</p></dd>
-
-
-<dt id="arg-max-results">max_results<a class="anchor" aria-label="anchor" href="#arg-max-results"></a></dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Deprecated. Please use
-<code>n_max</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
