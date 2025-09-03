@@ -68,8 +68,7 @@ on_connection_opened <- function(con, code) {
     connectCode = code,
 
     # only action is to close connections pane
-    disconnect = function() {
-    },
+    disconnect = function() {},
 
     listObjectTypes = function() {
       list(

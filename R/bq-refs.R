@@ -360,7 +360,9 @@ bq_from_list <- function(
 ) {
   names(x) <- camelCase(names(x))
 
-  if (length(setdiff(names, names(x))) == 0) return(x)
+  if (length(setdiff(names, names(x))) == 0) {
+    return(x)
+  }
 
   cli::cli_abort(
     "When {.arg {error_arg}} is a list, it must have components {.and {.str {names}}}.",
