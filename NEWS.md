@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.6.0
 
 ## New features
 
