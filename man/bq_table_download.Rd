@@ -74,7 +74,7 @@ deliberately by using \code{api = "json"} or \code{api = "arrow"}.
 The arrow API is much faster, but has heavier dependencies: bigrquerystorage
 requires the arrow package, which can be tricky to compile on Linux (but you
 usually should be able to get a binary from
-\href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
+\href{https://p3m.dev/}{Posit Public Package Manager}.
 
 There's one known limitation of \code{api = "arrow"}: when querying public data,
 you'll now need to provide a \code{billing} project.
