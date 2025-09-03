@@ -1,105 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bigrquery.r-dbi.org/404.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/ISSUE_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/DBI.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/api-dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/api-job.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/api-perform.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/api-project.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/api-table.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bigquery.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bigrquery-package.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_auth.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_auth_configure.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_deauth.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_field.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_has_token.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_oauth_app.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_param.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_projects.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_query.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_refs.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_table_download.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_test_project.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_token.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/bq_user.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://bigrquery.r-dbi.org/reference/src_bigquery.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://bigrquery.r-dbi.org/404.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/CONTRIBUTING.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/ISSUE_TEMPLATE.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/LICENSE-text.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/LICENSE.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/SUPPORT.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/authors.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/index.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/news/index.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/DBI.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/api-dataset.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/api-job.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/api-perform.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/api-project.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/api-table.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bigquery.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bigrquery-package.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_auth.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_auth_configure.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_deauth.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_field.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_has_token.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_param.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_projects.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_query.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_refs.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_table_download.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_test_project.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_token.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/bq_user.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/collect.tbl_BigQueryConnection.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/index.html</loc></url>
+<url><loc>https://bigrquery.r-dbi.org/reference/src_bigquery.html</loc></url>
 </urlset>
+
