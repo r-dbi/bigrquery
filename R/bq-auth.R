@@ -90,8 +90,9 @@ bq_auth <- function(
   if (!inherits(cred, "Token2.0")) {
     cli::cli_abort(c(
       "Can't get Google credentials.",
-      i = if (!is_interactive())
+      i = if (!is_interactive()) {
         "Try calling {.fun bq_auth} directly with necessary specifics."
+      }
     ))
   }
   .auth$set_cred(cred)

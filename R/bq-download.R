@@ -428,7 +428,9 @@ bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   force(progress)
 
   function(result) {
-    if (!is.null(progress)) cli::cli_progress_update(id = progress)
+    if (!is.null(progress)) {
+      cli::cli_progress_update(id = progress)
+    }
 
     bq_check_response(
       status = result$status_code,
