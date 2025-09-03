@@ -99,7 +99,7 @@ various values from the metadata.
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 ds <- bq_test_dataset()
 
 bq_mtcars <- bq_table(ds, "mtcars")

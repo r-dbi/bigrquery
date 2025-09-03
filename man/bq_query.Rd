@@ -45,7 +45,7 @@ into a table (temporary or otherwise), so these functions return a \link{bq_tabl
 which you can then query for more information.
 }
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 # Querying a project requires full name in query
 tb <- bq_project_query(
   bq_test_project(),

@@ -1,13 +1,17 @@
 # bigrquery (development version)
 
+* Various R CMD check fixes
+
 * If the bigrquerystorage package is installed, `bq_table_download()` (and
-  hence `collect()`, `dbGetQuery()` and `dbFetch()` will use it. This will
+  hence `collect()`, `dbGetQuery()` and `dbFetch()`) will use it. This will
   drastically improve the speed of downloading large datasets. A big thanks
   to @meztez for creating the bigrquerystorage package!
 
-* The `bq_perform_upload()` function now allows users to choose the transmission format (JSON or PARQUET) for data sent to BigQuery (@apalacio9502, #608).
+* The `bq_perform_upload()` function now allows users to choose the 
+  transmission format (JSON or PARQUET) for data sent to BigQuery 
+  (@apalacio9502, #608).
 
-* bigrquery now requires R 4.0, in line with our version support principles.
+* bigrquery now requires R 4.1, in line with our version support principles.
 
 # bigrquery 1.5.1
 

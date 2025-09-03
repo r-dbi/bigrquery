@@ -58,6 +58,10 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbIsValid
+#' @param dbObj An object inheriting from [DBI::DBIObject-class],
+#' i.e. [DBI::DBIDriver-class], [DBI::DBIConnection-class], or a [DBI::DBIResult-class].
+#' @param conn A [DBI::DBIConnection-class] object, as returned by
+#'   [DBI::dbConnect()].
 #' @export
 setMethod(
   "dbIsValid",

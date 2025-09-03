@@ -108,7 +108,7 @@ as follows:
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 \dontshow{\}) # examplesIf}
 }

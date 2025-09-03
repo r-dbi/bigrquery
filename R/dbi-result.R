@@ -94,6 +94,7 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbClearResult
+#' @param res An object inheriting from [DBI::DBIResult-class].
 #' @export
 setMethod(
   "dbClearResult",
@@ -111,7 +112,9 @@ setMethod(
   "BigQueryResult",
   function(res, n = -1, ...) {
     check_number_whole(n, min = -1, allow_infinite = TRUE)
-    if (n == -1) n <- Inf
+    if (n == -1) {
+      n <- Inf
+    }
 
     if (has_bigrquerystorage() && n == Inf && res@cursor$cur() == 0) {
       # https://github.com/meztez/bigrquerystorage/issues/48
