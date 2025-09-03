@@ -23,7 +23,8 @@ if (bigrquery:::has_internal_auth()) {
 <!-- badges: start -->
 [![CRAN Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
+
+[![Codecov test coverage](https://codecov.io/gh/r-dbi/bigrquery/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in 
