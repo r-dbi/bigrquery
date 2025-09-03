@@ -18,3 +18,5 @@
 ^internal$
 ^CRAN-SUBMISSION$
 ^air.toml$
+^[\.]?air\.toml$
+^\.vscode$

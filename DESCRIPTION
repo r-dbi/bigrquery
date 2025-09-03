@@ -13,7 +13,7 @@ License: MIT + file LICENSE
 URL: https://bigrquery.r-dbi.org, https://github.com/r-dbi/bigrquery
 BugReports: https://github.com/r-dbi/bigrquery/issues
 Depends:
-    R (>= 4.0)
+    R (>= 4.1)
 Imports:
     bit64,
     brio,
@@ -52,7 +52,7 @@ Config/testthat/parallel: TRUE
 Config/testthat/start-first: bq-table, dplyr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.2.9000
 Collate:
     'bigrquery-package.R'
     'bq-auth.R'
