@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.6.0
 
 * Functions and arguments deprecated in bigrquery 1.4.0 (released) have now
   been removed.
