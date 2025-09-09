@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+# bigrquery 1.6.0
+
 ## New features
 
 * If the bigrquerystorage package is installed, `bq_table_download()` (and
