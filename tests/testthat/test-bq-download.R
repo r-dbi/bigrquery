@@ -72,6 +72,7 @@ test_that("check_api respects inputs", {
 })
 
 test_that("uses arrow api if bigrquerystorage installed", {
+  local_mocked_bindings(is_installed = function(...) TRUE)
   expect_equal(check_api(), "arrow")
 
   local_mocked_bindings(is_installed = function(...) FALSE)

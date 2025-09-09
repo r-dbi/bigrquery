@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Fix test failure on CRAN.
+
 # bigrquery 1.6.0
 
 ## New features
