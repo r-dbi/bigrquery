@@ -12,7 +12,7 @@
 #' The arrow API is much faster, but has heavier dependencies: bigrquerystorage
 #' requires the arrow package, which can be tricky to compile on Linux (but you
 #' usually should be able to get a binary from
-#' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
+#' [Posit Public Package Manager](https://p3m.dev/).
 #'
 #' There's one known limitation of `api = "arrow"`: when querying public data,
 #' you'll now need to provide a `billing` project.
