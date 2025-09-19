@@ -75,3 +75,19 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 has_bigrquerystorage <- function() {
   is_installed("bigrquerystorage")
 }
+
+check_labels <- function(labels) {
+  if (!is.list(labels)) {
+    warning(paste0("Labels need to be a dictionary list - setting labels to NULL"), immediate. = TRUE)
+    return(NULL)
+  }
+
+  for (nm in names(labels)) {
+    if (!is.character(labels[[nm]]) || length(labels[[nm]]) != 1) {
+      warning(sprintf("Label '%s' must be a single string type - setting labels to NULL", nm), immediate. = TRUE)
+      return(NULL)
+    }
+  }
+
+  return(labels)
+}
