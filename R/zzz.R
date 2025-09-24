@@ -24,7 +24,7 @@
   defaults <- list(
     bigrquery.quiet = NA,
     bigrquery.page.size = 1e4,
-    bigrquery.labels = NULL
+    bigrquery.labels = list()
   )
   toset <- !(names(defaults) %in% names(op))
   if (any(toset)) {
