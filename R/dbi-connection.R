@@ -295,6 +295,7 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     value,
     create_disposition = "CREATE_NEVER",
     write_disposition = "WRITE_APPEND",
+    billing = conn@billing,
     ...
   )
   on_connection_updated(conn, toString(tb))
