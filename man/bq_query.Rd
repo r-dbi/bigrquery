@@ -6,7 +6,7 @@
 \alias{bq_dataset_query}
 \title{Submit query to BigQuery}
 \usage{
-bq_project_query(x, query, destination_table = NULL, ..., quiet = NA)
+bq_project_query(x, query, destination_table = NULL, ..., quiet = getOption("bigrquery.quiet"))
 
 bq_dataset_query(
   x,
@@ -14,7 +14,7 @@ bq_dataset_query(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = NA
+  quiet = getOption("bigrquery.quiet")
 )
 }
 \arguments{

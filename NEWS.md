@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Lookup the `"bigrquery.quiet"` option in more `bq_*` functions (#661).
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.

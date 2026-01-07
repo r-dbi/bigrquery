@@ -77,7 +77,7 @@ bq_table_download <-
     page_size = NULL,
     start_index = 0L,
     max_connections = 6L,
-    quiet = NA,
+    quiet = getOption("bigrquery.quiet"),
     bigint = c("integer", "integer64", "numeric", "character"),
     api = c("json", "arrow"),
     billing = x$project
