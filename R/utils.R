@@ -15,6 +15,18 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
   }
 }
 
+check_digits <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+  check_number_whole(x, min = 0, max = 22, allow_na = TRUE, allow_null = TRUE,
+                     arg = arg, call = call)
+  if (is.null(x) || is.na(x)) 4L else x
+}
+
+check_digits_secs <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+  check_number_whole(x, min = 0, max = 6, allow_na = TRUE, allow_null = TRUE,
+                     arg = arg, call = call)
+  if (is.null(x) || is.na(x)) 0L else x
+}
+
 bq_check_namespace <- function(pkg, bq_type) {
   check_installed(pkg, sprintf("to parse BigQuery '%s' fields.", bq_type))
 }

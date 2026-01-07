@@ -2,6 +2,27 @@
 
 * Lookup the `"bigrquery.quiet"` option in more `bq_*` functions (#661).
 
+* Add ability to change the number of digits for various jsonifying
+  steps. (#320)
+
+    * `"bigrquery.digits"` controls the number of significant digits
+      displayed in floating-point, and defaults to
+      `getOption("digits")`, this is also passed as
+      `jsonlite::stream_out(digits=)` and `jsonlite::toJSON(digits=)`
+      when provided. To use the max digits, set
+      `options(bigrquery.digits=NA)`. The default value is `digits=4`
+      to match `jsonlite`'s default value, in contrast with R's
+      default `options(digits=7)`.
+
+    * `"bigrquery.digits.secs"` is passed to `format(format="...%OS")`
+      to control the number of decimal seconds passed in timestamps.
+      For backward compatibility, the default value is 0, truncating
+      timestamps to the second.
+
+    * `"bigrquery.jsonlite.toJSON"` (a named list) can also be used to
+      override `digits=` and any other known parameters. The default
+      is empty.
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.

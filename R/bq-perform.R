@@ -187,7 +187,9 @@ export_json <- function(values) {
 
   # Convert times to canonical format
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
-  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+  digsec <- getOption("bigrquery.digits.secs")
+  digsec <- check_digits_secs(digsec)
+  values[is_time] <- lapply(values[is_time], format, paste0("%Y-%m-%d %H:%M:%OS", digsec))
 
   # Convert wk_wkt to text
   is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
@@ -201,7 +203,17 @@ export_json <- function(values) {
 
   con <- rawConnection(raw(0), "r+")
   defer(close(con))
-  jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
+
+  jsonargs <- getOption("bigrquery.jsonlite.toJSON")
+  if (!"digits" %in% names(jsonargs)) {
+    dig <- getOption("bigrquery.digits")
+    jsonargs$digits <- check_digits(dig)
+  }
+  do.call(
+    jsonlite::stream_out,
+    c(list(values, con, verbose = FALSE, na = "null"),
+      jsonargs[!names(jsonargs) %in% c("con", "verbose", "na")])
+  )
 
   rawToChar(rawConnectionValue(con))
 }
