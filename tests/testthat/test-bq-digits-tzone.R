@@ -4,7 +4,7 @@ attr(tbl$psx, "tzone") <- "America/New_York"
 
 test_that("'digits' and 'digits.secs' preserve numerical precision", {
 
-  # ds <- bq_table(bq_test_project(), "basedata", "datatypes")
+  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
   defer(try(bq_table_delete(ds), silent = TRUE))
 
   # known issue: jsonlite_2.0.0 toJSON()/stream_out() treat default
@@ -58,7 +58,7 @@ test_that("'tzone' unset and different values handled correctly", {
   # offset (i.e., not UTC)
   skip_if(Sys.timezone() %in% "UTC")
 
-  # ds <- bq_table(bq_test_project(), "basedata", "datatypes")
+  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
   defer(try(bq_table_delete(ds), silent = TRUE))
 
 
