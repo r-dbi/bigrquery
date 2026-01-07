@@ -10,7 +10,7 @@
       `getOption("digits")`, this is also passed as
       `jsonlite::stream_out(digits=)` and `jsonlite::toJSON(digits=)`
       when provided. To use the max digits, set
-      `options(bigrquery.digits=NA)`. The default value is `digits=4`
+      `options(bigrquery.digits=22)`. The default value is `digits=4`
       to match `jsonlite`'s default value, in contrast with R's
       default `options(digits=7)`.
 
@@ -21,7 +21,8 @@
 
     * `"bigrquery.jsonlite.toJSON"` (a named list) can also be used to
       override `digits=` and any other known parameters. The default
-      is empty.
+      is empty, and an alternative to setting `bigrquery.digits=22`
+      above is `options(bigrquery.jsonlite.toJSON=list(digits=NA))`.
 
 * Set the `"tzone"` attribute of uploaded `POSIXt` columns to
   `Sys.timezone()` when the timezone is empty or not defined (#660).
