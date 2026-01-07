@@ -23,6 +23,12 @@
       override `digits=` and any other known parameters. The default
       is empty.
 
+* Set the `"tzone"` attribute of uploaded `POSIXt` columns to
+  `Sys.timezone()` when the timezone is empty or not defined (#660).
+  Previously, if unset then it may be interpreted as UTC regardless of
+  the system's local timezone, resulting in a value differing by the
+  TZ offset.
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.
