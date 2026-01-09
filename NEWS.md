@@ -1,5 +1,18 @@
 # bigrquery (development version)
 
+* Add ability to change the number of digits for various jsonifying
+  steps. (#320) `options("bigrquery.digits")` controls the number of
+  significant digits uploaded in `numeric`. To get the max number of
+  digits, set `options(bigrquery.digits=22)`. The default is 4 to
+  match the default in `jsonlite::toJSON` (in contrast with R's
+  default of 7).
+
+* Add ability to change arguments passed to `jsonlite::toJSON` and
+  `jsonlite::stream_out` for uploading data. An alternative to
+  `options(bigrquery.digits=22)` is
+  `options(bigrquery.jsonlite.toJSON=list(digits=NA))`. The default is
+  an empty list; anything set must be in a named list.
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.
