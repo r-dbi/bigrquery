@@ -1,5 +1,17 @@
 # bigrquery (development version)
 
+* Add ability to change the number of digits for seconds when
+  uploading `POSIXt`-class objects (#660).
+  `options(bigrquery.digits.secs=6)` supports microseconds, as much as
+  BigQuery currently supports. The default is R's default o 0, which
+  results in timestamps' values being rounded to the nearest second.
+
+* Set the `"tzone"` attribute of uploaded `POSIXt` columns to
+  `Sys.timezone()` when the timezone is empty or not defined (#660).
+  Previously, if unset then it may be interpreted as UTC regardless of
+  the system's local timezone, resulting in a round-trip value
+  differing by the TZ offset.
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.
