@@ -193,7 +193,8 @@ export_json <- function(values) {
     if (is.null(attr(x, "tzone")) || attr(x, "tzone") %in% c(NA, "")) {
       attr(x, "tzone") <- Sys.timezone()
     }
-    paste(format(x, paste0("%Y-%m-%d %H:%M:%OS", digsec)), attr(x, "tzone"))
+    ifelse(is.na(x), NA_character_,
+           paste(format(x, paste0("%Y-%m-%d %H:%M:%OS", digsec)), attr(x, "tzone")))
   })
 
   # Convert wk_wkt to text
