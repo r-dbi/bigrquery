@@ -122,7 +122,9 @@ format.bq_fields <- function(x, ...) {
     return("")
   }
 
-  fields <- lapply(x, format)
+  dig <- getOption("bigrquery.digits")
+  dig <- check_digits(dig)
+  fields <- lapply(x, format, digits = dig)
   gsub("\\n\\s+$", "\n", indent(paste0(fields, collapse = "")))
 }
 
