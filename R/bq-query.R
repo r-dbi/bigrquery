@@ -46,7 +46,7 @@ bq_project_query <- function(
   query,
   destination_table = NULL,
   ...,
-  quiet = NA
+  quiet = getOption("bigrquery.quiet", NA)
 ) {
   check_string(x)
   query <- as_query(query)
@@ -73,7 +73,7 @@ bq_dataset_query <- function(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = NA
+  quiet = getOption("bigrquery.quiet", NA)
 ) {
   x <- as_bq_dataset(x)
   query <- as_query(query)
