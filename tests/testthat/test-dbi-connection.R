@@ -102,6 +102,44 @@ test_that("can execute a query", {
   expect_equal(out, 2)
 })
 
+test_that("can use parameters in dbExecute", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  DBI::dbExecute(con, "create table test_table (val int)")
+  defer(DBI::dbExecute(con, "drop table test_table"))
+  DBI::dbExecute(con, "insert into test_table values (1), (2)")
+
+  tbl1 <- DBI::dbGetQuery(con, "select val from test_table order by val")
+  expect_equal(tbl1$val, c(1L, 2L))
+
+  expect_silent(
+    DBI::dbExecute(con, "update test_table set val = @b where val = @a",
+                   params = list(a = 11L, b = 111L))
+  )
+  tbl2 <- DBI::dbGetQuery(con, "select val from test_table order by val")
+  expect_equal(tbl2$val, c(2L, 111L))
+})
+
+test_that("params or parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  DBI::dbExecute(con, "create table test_table (val int)")
+  defer(DBI::dbExecute(con, "drop table test_table"))
+  DBI::dbExecute(con, "insert into test_table values (1), (2)")
+
+  tbl1 <- DBI::dbGetQuery(con, "select val from test_table order by val")
+  expect_equal(tbl1$val, c(1L, 2L))
+
+  expect_warning(
+    DBI::dbExecute(con, "update test_table set val = @b where val = @a",
+                   parameters = list(a = 1L, b = 11L),
+                   params = list(a = 2L, b = 22L)),
+    "use either `params=` or `parameters=` not both, ignoring `parameters=`"
+  )
+  tbl2 <- DBI::dbGetQuery(con, "select val from test_table order by val")
+  expect_equal(tbl2$val, c(1L, 22L))
+})
+
 test_that("can use parameters", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 

@@ -1,5 +1,10 @@
 # bigrquery (development version)
 
+* Add `params=` support to the S3 method `dbExecute()`. Additionally,
+  if both `parameters=` (normal within `bigrquery`) and `params=`
+  (`DBI` standard) are used, warn and ignore `parameters=`, only one
+  is necessary (#663).
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.

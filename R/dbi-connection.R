@@ -90,7 +90,15 @@ setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
   function(conn, statement, ..., params = NULL) {
-    BigQueryResult(conn, statement, params = params, ...)
+    dots <- list(...)
+    if (!missing(params) && "parameters" %in% names(dots)) {
+      cli::cli_warn(
+        "use either `params=` or `parameters=` not both, ignoring `parameters=`",
+        call = environment()
+      )
+      dots$parameters <- NULL
+    }
+    do.call(BigQueryResult, c(list(conn, statement, params), dots))
   }
 )
 
@@ -100,15 +108,26 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
+  function(conn, statement, ..., params = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
-    job <- bq_perform_query(
-      statement,
-      billing = conn@billing,
-      default_dataset = ds,
-      quiet = conn@quiet,
-      ...
+    dots <- list(...)
+    if (!missing(params) && "parameters" %in% names(dots)) {
+      cli::cli_warn(
+        "use either `params=` or `parameters=` not both, ignoring `parameters=`",
+        call = environment()
+      )
+      dots$parameters <- NULL
+    }
+
+    job <- do.call(
+      bq_perform_query, c(list(
+        statement,
+        billing = conn@billing,
+        default_dataset = ds,
+        quiet = conn@quiet,
+        parameters = params
+      ), dots)
     )
     bq_job_wait(job, quiet = conn@quiet)
 
