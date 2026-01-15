@@ -37,7 +37,7 @@ test_that("'tzone' unset and different values handled correctly", {
 
   # the bug only produced problems when the system TZ has a non-zero
   # offset (i.e., not UTC)
-  skip_if(Sys.timezone() %in% "UTC")
+  withr::local_envvar(TZ = "America/New_York")
 
   ds <- bq_table(bq_test_project(), "basedata", "datatypes")
   defer(try(bq_table_delete(ds), silent = TRUE))
