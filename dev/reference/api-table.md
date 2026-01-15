@@ -1,0 +1,139 @@
+# BigQuery tables
+
+Basic create-read-update-delete verbs for tables, as well as functions
+uploading data (`bq_table_upload()`), saving to/loading from Google
+Cloud Storage (`bq_table_load()`, `bq_table_save()`), and getting
+various values from the metadata.
+
+## Usage
+
+``` r
+bq_table_create(x, fields = NULL, ...)
+
+bq_table_meta(x, fields = NULL)
+
+bq_table_fields(x)
+
+bq_table_size(x)
+
+bq_table_nrow(x)
+
+bq_table_exists(x)
+
+bq_table_delete(x)
+
+bq_table_copy(x, dest, ..., quiet = getOption("bigrquery.quiet", NA))
+
+bq_table_upload(x, values, ..., quiet = getOption("bigrquery.quiet", NA))
+
+bq_table_save(x, destination_uris, ..., quiet = getOption("bigrquery.quiet", NA))
+
+bq_table_load(x, source_uris, ..., quiet = getOption("bigrquery.quiet", NA))
+
+bq_table_patch(x, fields)
+```
+
+## Arguments
+
+- x:
+
+  A [bq_table](https://bigrquery.r-dbi.org/dev/reference/bq_refs.md), or
+  an object coercible to a `bq_table`.
+
+- fields:
+
+  A [bq_fields](https://bigrquery.r-dbi.org/dev/reference/bq_field.md)
+  specification, or something coercible to it (like a data frame).
+
+- ...:
+
+  Additional arguments passed on to the underlying API call. snake_case
+  names are automatically converted to camelCase.
+
+- dest:
+
+  Source and destination
+  [bq_table](https://bigrquery.r-dbi.org/dev/reference/bq_refs.md)s.
+
+- quiet:
+
+  If `FALSE`, displays progress bar; if `TRUE` is silent; if `NA` picks
+  based on whether or not you're in an interactive context.
+
+- values:
+
+  Data frame of values to insert.
+
+- destination_uris:
+
+  A character vector of fully-qualified Google Cloud Storage URIs where
+  the extracted table should be written. Can export up to 1 Gb of data
+  per file. Use a wild card URI (e.g.
+  `gs://[YOUR_BUCKET]/file-name-*.json`) to automatically create any
+  number of files.
+
+- source_uris:
+
+  The fully-qualified URIs that point to your data in Google Cloud.
+
+  For Google Cloud Storage URIs: Each URI can contain one `'*'` wildcard
+  character and it must come after the 'bucket' name. Size limits
+  related to load jobs apply to external data sources.
+
+  For Google Cloud Bigtable URIs: Exactly one URI can be specified and
+  it has be a fully specified and valid HTTPS URL for a Google Cloud
+  Bigtable table. For Google Cloud Datastore backups: Exactly one URI
+  can be specified. Also, the '\*' wildcard character is not allowed.
+
+## Value
+
+- `bq_table_copy()`, `bq_table_create()`, `bq_table_delete()`,
+  `bq_table_upload()`: an invisible
+  [bq_table](https://bigrquery.r-dbi.org/dev/reference/bq_refs.md)
+
+- `bq_table_exists()`: either `TRUE` or `FALSE`.
+
+- `bq_table_size()`: the size of the table in bytes
+
+- `bq_table_fields()`: a
+  [bq_fields](https://bigrquery.r-dbi.org/dev/reference/bq_field.md).
+
+## Google BigQuery API documentation
+
+- [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
+
+- [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
+
+- [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
+
+## Examples
+
+``` r
+if (FALSE) { # bq_testable()
+ds <- bq_test_dataset()
+
+bq_mtcars <- bq_table(ds, "mtcars")
+bq_table_exists(bq_mtcars)
+
+bq_table_create(
+  bq_mtcars,
+  fields = mtcars,
+  friendly_name = "Motor Trend Car Road Tests",
+  description = "The data was extracted from the 1974 Motor Trend US magazine",
+  labels = list(category = "example")
+)
+bq_table_exists(bq_mtcars)
+
+bq_table_upload(bq_mtcars, mtcars)
+
+bq_table_fields(bq_mtcars)
+bq_table_size(bq_mtcars)
+str(bq_table_meta(bq_mtcars))
+
+bq_table_delete(bq_mtcars)
+bq_table_exists(bq_mtcars)
+
+my_natality <- bq_table(ds, "mynatality")
+bq_table_copy("publicdata.samples.natality", my_natality)
+}
+```
