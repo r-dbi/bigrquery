@@ -1,10 +1,8 @@
 # bigrquery (development version)
 
-* Add ability to change the number of digits for seconds when
-  uploading `POSIXt`-class objects (#660).
-  `options(bigrquery.digits.secs=6)` supports microseconds, as much as
-  BigQuery currently supports. The default is R's default o 0, which
-  results in timestamps' values being rounded to the nearest second.
+* Change rendering for uploading `POSIXt`-class objects to 6 digits
+  with `"%OS6"` (#660). This means that all timestamps will have
+  microsecond resolution when uploading data.
 
 * Set the `"tzone"` attribute of uploaded `POSIXt` columns to
   `Sys.timezone()` when the timezone is empty or not defined (#660).

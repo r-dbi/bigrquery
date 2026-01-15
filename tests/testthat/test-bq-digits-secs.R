@@ -1,35 +1,15 @@
-tbl <- data.frame(psx = Sys.time())
+tbl <- data.frame(psx = trunc.Date(Sys.time(), units = "secs") + 0.123456)
 attr(tbl$psx, "tzone") <- "America/New_York"
 
-test_that("'digits' and 'digits.secs' preserve numerical precision", {
+test_that("'POSIXt' preserves microsecond precision", {
 
   ds <- bq_table(bq_test_project(), "basedata", "datatypes")
   defer(try(bq_table_delete(ds), silent = TRUE))
 
-  # known issue: jsonlite_2.0.0 toJSON()/stream_out() treat default
-  # digits differently when not provided; because of this, setting
-  # nothing results in an assumed `digits=5` despite expectation and
-  # documentation
-
-
-  withr::with_options(
-    list(bigrquery.digits.secs = NULL),
-    bq_table_upload(ds, tbl)
-  )
+  bq_table_upload(ds, tbl)
   tbl2 <- bq_table_download(ds)
-  bq_table_delete(ds)
 
-  expect_equal(log10(abs(as.numeric(tbl2$psx - tbl$psx, units = "secs"))), 0, tolerance = 0.5)
-
-
-  withr::with_options(
-    list(bigrquery.digits.secs = 6),
-    bq_table_upload(ds, tbl)
-  )
-  tbl3 <- bq_table_download(ds)
-  bq_table_delete(ds)
-
-  expect_true(log10(abs(as.numeric(tbl3$psx - tbl$psx, units = "secs"))) < -5)
+  expect_true(abs(as.numeric(tbl2$psx - tbl$psx, units = "secs")) < 1e-6)
 
 })
 

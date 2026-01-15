@@ -187,14 +187,12 @@ export_json <- function(values) {
 
   # Convert times to canonical format
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
-  digsec <- getOption("bigrquery.digits.secs")
-  digsec <- check_digits_secs(digsec)
   values[is_time] <- lapply(values[is_time], function(x) {
     if (is.null(attr(x, "tzone")) || attr(x, "tzone") %in% c(NA, "")) {
       attr(x, "tzone") <- Sys.timezone()
     }
     ifelse(is.na(x), NA_character_,
-           paste(format(x, paste0("%Y-%m-%d %H:%M:%OS", digsec)), attr(x, "tzone")))
+           paste(format(x, "%Y-%m-%d %H:%M:%OS6"), attr(x, "tzone")))
   })
 
   # Convert wk_wkt to text
