@@ -26,7 +26,12 @@ bq_table_copy(x, dest, ..., quiet = getOption("bigrquery.quiet", NA))
 
 bq_table_upload(x, values, ..., quiet = getOption("bigrquery.quiet", NA))
 
-bq_table_save(x, destination_uris, ..., quiet = getOption("bigrquery.quiet", NA))
+bq_table_save(
+  x,
+  destination_uris,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+)
 
 bq_table_load(x, source_uris, ..., quiet = getOption("bigrquery.quiet", NA))
 

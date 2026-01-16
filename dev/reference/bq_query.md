@@ -12,7 +12,13 @@ you can then query for more information.
 ## Usage
 
 ``` r
-bq_project_query(x, query, destination_table = NULL, ..., quiet = getOption("bigrquery.quiet", NA))
+bq_project_query(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+)
 
 bq_dataset_query(
   x,
