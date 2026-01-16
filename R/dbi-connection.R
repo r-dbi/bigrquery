@@ -85,20 +85,15 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
+#' @param params,parameters Named list of parameters match to query parameters.
+#'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ..., params = NULL) {
-    dots <- list(...)
-    if (!missing(params) && "parameters" %in% names(dots)) {
-      cli::cli_warn(
-        "use either `params=` or `parameters=` not both, ignoring `parameters=`",
-        call = environment()
-      )
-      dots$parameters <- NULL
-    }
-    do.call(BigQueryResult, c(list(conn, statement, params), dots))
+  function(conn, statement, ..., params = NULL, parameters = NULL) {
+    params <- check_params(params, parameters)
+    BigQueryResult(conn, statement, params = params)
   }
 )
 
@@ -108,26 +103,17 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
+  function(conn, statement, ..., params = NULL, parameters = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
-    dots <- list(...)
-    if (all(c("params", "parameters") %in% names(dots))) {
-      cli::cli_warn(
-        "use either `params=` or `parameters=` not both, ignoring `parameters=`",
-        call = environment()
-      )
-    }
-    dots$parameters <- dots$params
-    dots$params <- NULL
-
-    job <- do.call(
-      bq_perform_query, c(list(
-        statement,
-        billing = conn@billing,
-        default_dataset = ds,
-        quiet = conn@quiet
-      ), dots)
+    params <- check_params(params, parameters)
+    job <- bq_perform_query(
+      statement,
+      billing = conn@billing,
+      default_dataset = ds,
+      quiet = conn@quiet,
+      parameters = params,
+      ...
     )
     bq_job_wait(job, quiet = conn@quiet)
 
@@ -136,6 +122,22 @@ setMethod(
   }
 )
 
+check_params <- function(
+  params = NULL,
+  parameters = NULL,
+  call = caller_env()
+) {
+  if (!is.null(params) && !is.null(parameters)) {
+    cli::cli_abort(
+      "Only one of {.arg params} and {.arg parameters} may be supplied.",
+      call = call
+    )
+  } else if (is.null(params)) {
+    parameters
+  } else {
+    params
+  }
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString
