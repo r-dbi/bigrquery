@@ -12,6 +12,7 @@ test_that("'POSIXt' preserves microsecond precision", {
 })
 
 test_that("'tzone' unset and different values handled correctly", {
+  library(tibble)
   # the bug only produced problems when the system TZ has a non-zero
   # offset (i.e., not UTC)
   withr::local_envvar(TZ = "America/New_York")
