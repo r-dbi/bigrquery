@@ -4,6 +4,7 @@
   if both `parameters=` (normal within `bigrquery`) and `params=`
   (`DBI` standard) are used, warn and ignore `parameters=`, only one
   is necessary (#663).
+* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (#663).
 
 # bigrquery 1.6.1
 
