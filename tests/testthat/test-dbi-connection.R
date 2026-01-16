@@ -102,7 +102,7 @@ test_that("can execute a query", {
   expect_equal(out, 2)
 })
 
-test_that("can use parameters", {
+test_that("can use params", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 
   # in dbGetQuery
@@ -122,12 +122,17 @@ test_that("can use parameters", {
   expect_equal(out, 2)
 })
 
-test_that("check check_params() handling", {
-  expect_equal(check_params(NULL, NULL), NULL)
-  expect_equal(check_params(parameters = list(x = 1)), list(x = 1))
-  expect_equal(check_params(params = list(x = 2)), list(x = 2))
-  expect_snapshot(check_params(list(x = 1), list(x = 2)), error = TRUE)
+
+test_that("can't use parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  # in dbGetQuery
+  expect_snapshot(error = TRUE, {
+    DBI::dbGetQuery(con, "SELECT @x AS value", parameters = list(x = 1))
+    DBI::dbExecute(con, "DELETE table WHERE x <= @x", parameters = list(x = 1))
+  })
 })
+
 
 test_that("can use DBI::Id()", {
   ds <- bq_test_dataset()

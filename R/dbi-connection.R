@@ -85,14 +85,14 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
-#' @param params,parameters Named list of parameters match to query parameters.
+#' @param params Named list of parameters match to query parameters.
 #'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ..., params = NULL, parameters = NULL) {
-    params <- check_params(params, parameters)
+  function(conn, statement, ..., params = NULL) {
+    check_for_parameters(..., call = quote(dbSendQuery()))
     BigQueryResult(conn, statement, params = params)
   }
 )
@@ -103,10 +103,10 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ..., params = NULL, parameters = NULL) {
+  function(conn, statement, ..., params = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
-    params <- check_params(params, parameters)
+    check_for_parameters(..., call = quote(dbExecute()))
     job <- bq_perform_query(
       statement,
       billing = conn@billing,
@@ -122,21 +122,11 @@ setMethod(
   }
 )
 
-check_params <- function(
-  params = NULL,
-  parameters = NULL,
-  call = caller_env()
-) {
-  if (!is.null(params) && !is.null(parameters)) {
-    cli::cli_abort(
-      "Only one of {.arg params} and {.arg parameters} may be supplied.",
-      call = call
-    )
-  } else if (is.null(params)) {
-    parameters
-  } else {
-    params
+check_for_parameters <- function(..., parameters = NULL, call = caller_env()) {
+  if (is.null(parameters)) {
+    return()
   }
+  cli::cli_abort("Use {.arg params} not {.arg parameters}.", call = call)
 }
 
 #' @rdname DBI

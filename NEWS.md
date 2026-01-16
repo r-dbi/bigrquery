@@ -1,8 +1,8 @@
 # bigrquery (development version)
 
-* Add `params=` support to the `dbExecute()` method. Additionally, error if
-  both `parameters=` (normal within `bigrquery`) and `params=` (DBI standard) are supplied (#663).
-* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (#663).
+* `dbExecute()` gains `params=` support (@r2evans, #667).
+* `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
+* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
 
 # bigrquery 1.6.1
 
