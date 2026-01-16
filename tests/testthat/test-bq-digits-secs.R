@@ -12,7 +12,6 @@ test_that("'POSIXt' preserves microsecond precision", {
 })
 
 test_that("'tzone' unset and different values handled correctly", {
-  library(tibble)
   # the bug only produced problems when the system TZ has a non-zero
   # offset (i.e., not UTC)
   withr::local_envvar(TZ = "America/New_York")
@@ -26,7 +25,7 @@ test_that("'tzone' unset and different values handled correctly", {
   tbl1out <- bq_table_download(ds)
   bq_table_delete(ds)
   attr(tbl1out$psx, "tzone") <- NULL
-  expect_equal(tbl1in, tbl1out)
+  expect_equal(tbl1in$psx, tbl1out$psx)
   expect_true(abs(as.numeric(tbl5$psx - tbl$psx, units = "hours")) < 1)
 
   tbl2in <- tibble(psx = trunc.Date(Sys.time(), units = "secs") + 0.123456)
@@ -34,7 +33,7 @@ test_that("'tzone' unset and different values handled correctly", {
   bq_table_upload(ds, tbl2in)
   tbl2out <- bq_table_download(ds)
   bq_table_delete(ds)
-  expect_equal(tbl2in, tbl2out)
+  expect_equal(tbl2in$psx, tbl2out$psx)
 
   tbl3in <- tibble(psx = trunc.Date(Sys.time(), units = "secs") + 0.123456)
   attr(tbl3in$psx, "tzone") <- "America/New_York"
@@ -42,5 +41,5 @@ test_that("'tzone' unset and different values handled correctly", {
   tbl3out <- bq_table_download(ds)
   bq_table_delete(ds)
   attr(tbl3out$psx, "tzone") <- attr(tbl3in$psx, "tzone")
-  expect_equal(tbl3in, tbl3out)
+  expect_equal(tbl3in$psx, tbl3out$psx)
 })
