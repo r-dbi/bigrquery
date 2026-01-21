@@ -100,14 +100,16 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
+  function(conn, statement, ..., json_digits = NA) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
+    json_digits <- check_digits(json_digits)
     job <- bq_perform_query(
       statement,
       billing = conn@billing,
       default_dataset = ds,
       quiet = conn@quiet,
+      json_digits = json_digits,
       ...
     )
     bq_job_wait(job, quiet = conn@quiet)
@@ -331,6 +333,7 @@ dbCreateTable_bq <- function(
   conn,
   name,
   fields,
+  json_digits = NA,
   ...,
   row.names = NULL,
   temporary = FALSE
@@ -341,9 +344,10 @@ dbCreateTable_bq <- function(
       call = quote(DBI::dbCreateTable())
     )
   }
+  json_digits <- check_digits(json_digits)
 
   tb <- as_bq_table(conn, name)
-  bq_table_create(tb, fields)
+  bq_table_create(tb, fields, json_digits = json_digits)
   on_connection_updated(conn, toString(tb))
 
   invisible(TRUE)
