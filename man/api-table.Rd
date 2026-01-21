@@ -16,7 +16,7 @@
 \alias{bq_table_patch}
 \title{BigQuery tables}
 \usage{
-bq_table_create(x, fields = NULL, ...)
+bq_table_create(x, fields = NULL, ..., json_digits = NA)
 
 bq_table_meta(x, fields = NULL)
 
@@ -32,13 +32,13 @@ bq_table_delete(x)
 
 bq_table_copy(x, dest, ..., quiet = NA)
 
-bq_table_upload(x, values, ..., quiet = NA)
+bq_table_upload(x, values, ..., quiet = NA, json_digits = NA)
 
 bq_table_save(x, destination_uris, ..., quiet = NA)
 
-bq_table_load(x, source_uris, ..., quiet = NA)
+bq_table_load(x, source_uris, ..., quiet = NA, json_digits = NA)
 
-bq_table_patch(x, fields)
+bq_table_patch(x, fields, json_digits = NA)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -48,6 +48,8 @@ bq_table_patch(x, fields)
 
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
+
+\item{json_digits}{Species the number of digits for formatting.}
 
 \item{dest}{Source and destination \link{bq_table}s.}
 

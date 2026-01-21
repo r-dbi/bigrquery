@@ -116,6 +116,8 @@ bq_perform_extract <- function(
 #'     to the table.
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
+#' @param json_digits Species the number of digits for formatting
+#'   numeric values.
 bq_perform_upload <- function(
   x,
   values,
@@ -124,7 +126,8 @@ bq_perform_upload <- function(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NA
 ) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
@@ -143,8 +146,9 @@ bq_perform_upload <- function(
     writeDisposition = unbox(write_disposition)
   )
 
+  json_digits <- check_digits(json_digits)
   if (!is.null(fields)) {
-    load$schema <- list(fields = as_json(fields))
+    load$schema <- list(fields = as_json(fields, json_digits = json_digits))
   }
   if (!bq_table_exists(x)) {
     load$autodetect <- unbox(TRUE)
@@ -154,13 +158,13 @@ bq_perform_upload <- function(
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
+    "content" = jsonlite::toJSON(metadata, pretty = TRUE, digits = json_digits)
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
     media <- list(
       "type" = "application/json; charset=UTF-8",
-      "content" = export_json(values)
+      "content" = export_json(values, json_digits = json_digits)
     )
   } else {
     # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
@@ -181,7 +185,7 @@ bq_perform_upload <- function(
 }
 
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
-export_json <- function(values) {
+export_json <- function(values, json_digits = NA) {
   # Eliminate row names
   rownames(values) <- NULL
 
@@ -202,16 +206,8 @@ export_json <- function(values) {
   con <- rawConnection(raw(0), "r+")
   defer(close(con))
 
-  jsonargs <- getOption("bigrquery.jsonlite.toJSON")
-  if (!"digits" %in% names(jsonargs)) {
-    dig <- getOption("bigrquery.digits")
-    jsonargs$digits <- check_digits(dig)
-  }
-  do.call(
-    jsonlite::stream_out,
-    c(list(values, con, verbose = FALSE, na = "null"),
-      jsonargs[!names(jsonargs) %in% c("con", "verbose", "na")])
-  )
+  json_digits <- check_digits(json_digits)
+  jsonlite::stream_out(values, con, verbose = FALSE, na = "null", digits = json_digits)
 
   rawToChar(rawConnectionValue(con))
 }
@@ -249,6 +245,7 @@ bq_perform_load <- function(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
+  json_digits = NA,
   ...
 ) {
   x <- as_bq_table(x)
@@ -273,7 +270,7 @@ bq_perform_load <- function(
 
   if (!is.null(fields)) {
     fields <- as_bq_fields(fields)
-    load$schema <- list(fields = as_json(fields))
+    load$schema <- list(fields = as_json(fields, json_digits = json_digits))
   } else {
     load$autodetect <- TRUE
   }
@@ -320,7 +317,8 @@ bq_perform_query <- function(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE"
+  priority = "INTERACTIVE",
+  json_digits = NA
 ) {
   query <- as_query(query)
   check_string(billing)
@@ -338,7 +336,7 @@ bq_perform_query <- function(
 
   if (length(parameters) > 0) {
     parameters <- as_bq_params(parameters)
-    query$queryParameters <- as_json(parameters)
+    query$queryParameters <- as_json(parameters, json_digits = json_digits)
   }
 
   if (!is.null(destination_table)) {
@@ -373,13 +371,16 @@ bq_perform_query_dry_run <- function(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE
+  use_legacy_sql = FALSE,
+  json_digits = NA
 ) {
+  json_digits <- check_digits(json_digits)
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
     parameters = parameters,
-    use_legacy_sql = use_legacy_sql
+    use_legacy_sql = use_legacy_sql,
+    json_digits = json_digits
   )
 
   url <- bq_path(billing, jobs = "")
@@ -401,13 +402,16 @@ bq_perform_query_schema <- function(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL
+  parameters = NULL,
+  json_digits = NA
 ) {
+  json_digits <- check_digits(json_digits)
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
     parameters = parameters,
-    use_legacy_sql = FALSE
+    use_legacy_sql = FALSE,
+    json_digits = json_digits
   )
 
   url <- bq_path(billing, jobs = "")
@@ -428,10 +432,12 @@ bq_perform_query_data <- function(
   default_dataset = NULL,
   parameters = NULL,
   use_legacy_sql = FALSE,
-  call = caller_env()
+  call = caller_env(),
+  json_digits = NA
 ) {
   check_string(query, error_call = call)
   check_bool(use_legacy_sql, error_call = call)
+  json_digits <- check_digits(json_digits)
 
   query <- list(
     query = unbox(query),
@@ -439,7 +445,7 @@ bq_perform_query_data <- function(
   )
   if (!is.null(parameters)) {
     parameters <- as_bq_params(parameters)
-    query$queryParameters <- as_json(parameters)
+    query$queryParameters <- as_json(parameters, json_digits = json_digits)
   }
   if (!is.null(default_dataset)) {
     query$defaultDataset <- datasetReference(default_dataset)

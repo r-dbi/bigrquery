@@ -77,7 +77,7 @@
 
 \S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
-\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
+\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ..., json_digits = NA)
 
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
@@ -133,9 +133,25 @@
 
 \S4method{dbAppendTable}{BigQueryConnection,AsIs,data.frame}(conn, name, value, ..., row.names = NULL)
 
-\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
+\S4method{dbCreateTable}{BigQueryConnection}(
+  conn,
+  name,
+  fields,
+  json_digits = NA,
+  ...,
+  row.names = NULL,
+  temporary = FALSE
+)
 
-\S4method{dbCreateTable}{BigQueryConnection}(conn, name, fields, ..., row.names = NULL, temporary = FALSE)
+\S4method{dbCreateTable}{BigQueryConnection}(
+  conn,
+  name,
+  fields,
+  json_digits = NA,
+  ...,
+  row.names = NULL,
+  temporary = FALSE
+)
 
 \S4method{dbReadTable}{BigQueryConnection,character}(conn, name, ...)
 

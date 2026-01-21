@@ -53,16 +53,18 @@ NULL
 #' @rdname api-table
 #' @param fields A [bq_fields] specification, or something coercible to it
 #'   (like a data frame).
-bq_table_create <- function(x, fields = NULL, ...) {
+#' @param json_digits Species the number of digits for formatting.
+bq_table_create <- function(x, fields = NULL, ..., json_digits = NA) {
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, x$dataset, "")
   body <- list(
     tableReference = tableReference(x)
   )
+  json_digits <- check_digits(json_digits)
   if (!is.null(fields)) {
     fields <- as_bq_fields(fields)
-    body$schema <- list(fields = as_json(fields))
+    body$schema <- list(fields = as_json(fields, json_digits = json_digits))
   }
 
   bq_post(url, body = bq_body(body, ...))
@@ -136,10 +138,11 @@ bq_table_copy <- function(x, dest, ..., quiet = NA) {
 #' @export
 #' @rdname api-table
 #' @inheritParams api-perform
-bq_table_upload <- function(x, values, ..., quiet = NA) {
+bq_table_upload <- function(x, values, ..., quiet = NA, json_digits = NA) {
   x <- as_bq_table(x)
 
-  job <- bq_perform_upload(x, values, ...)
+  json_digits <- check_digits(json_digits)
+  job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
@@ -158,10 +161,11 @@ bq_table_save <- function(x, destination_uris, ..., quiet = NA) {
 
 #' @export
 #' @rdname api-table
-bq_table_load <- function(x, source_uris, ..., quiet = NA) {
+bq_table_load <- function(x, source_uris, ..., quiet = NA, json_digits = NA) {
   x <- as_bq_table(x)
 
-  job <- bq_perform_load(x, source_uris = source_uris, ...)
+  json_digits <- check_digits(json_digits)
+  job <- bq_perform_load(x, source_uris = source_uris, ..., json_digits = json_digits)
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
@@ -169,7 +173,7 @@ bq_table_load <- function(x, source_uris, ..., quiet = NA) {
 
 #' @export
 #' @rdname api-table
-bq_table_patch <- function(x, fields) {
+bq_table_patch <- function(x, fields, json_digits = NA) {
   x <- as_bq_table(x)
 
   url <- bq_path(x$project, x$dataset, x$table)
@@ -177,6 +181,7 @@ bq_table_patch <- function(x, fields) {
     tableReference = tableReference(x)
   )
   fields <- as_bq_fields(fields)
-  body$schema <- list(fields = as_json(fields))
+  json_digits <- check_digits(json_digits)
+  body$schema <- list(fields = as_json(fields, json_digits = json_digits))
   bq_patch(url, body)
 }

@@ -1,17 +1,8 @@
-bq_parse_single <- function(value, type, ...) {
+bq_parse_single <- function(value, type, ..., json_digits = NA) {
   field <- bq_field("", type, ...)
-  field_j <- jsonlite::toJSON(as_json(field))
+  field_j <- jsonlite::toJSON(as_json(field, json_digits = json_digits))
 
-  jsonargs <- getOption("bigrquery.jsonlite.toJSON")
-  if (!"digits" %in% names(jsonargs)) {
-    dig <- getOption("bigrquery.digits")
-    jsonargs$digits <- check_digits(dig)
-  }
-  value_j <- do.call(
-    jsonlite::toJSON,
-    c(list(value, auto_unbox = TRUE),
-      jsonargs[!names(jsonargs) %in% "auto_unbox"])
-  )
+  value_j <- jsonlite::toJSON(value, auto_unbox = TRUE, digits = json_digits)
 
   bq_field_init(field_j, value_j)
 }

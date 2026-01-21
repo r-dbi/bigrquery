@@ -18,7 +18,7 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
 check_digits <- function(x, arg = caller_arg(x), call = caller_env(call)) {
   check_number_whole(x, min = 0, max = 22, allow_na = TRUE, allow_null = TRUE,
                      arg = arg, call = call)
-  if (is.null(x) || is.na(x)) 4L else x
+  if (is.null(x) || is.na(x)) 22L else x
 }
 
 bq_check_namespace <- function(pkg, bq_type) {
@@ -45,14 +45,15 @@ indent <- function(x, n = 2) {
   paste0(space, gsub("\n", paste0("\n", space), x, fixed = TRUE))
 }
 
-as_json <- function(x) UseMethod("as_json")
+as_json <- function(x, json_digits = NA) UseMethod("as_json")
 
 #' @export
-as_json.NULL <- function(x) NULL
+as_json.NULL <- function(x, json_digits = NA) NULL
 
 # nocov start
-show_json <- function(x) {
-  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
+show_json <- function(x, json_digits = NA) {
+  if (is.na(json_digits)) json_digits <- 22L
+  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = json_digits)
 }
 
 #' @export

@@ -29,7 +29,8 @@ bq_perform_upload(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NA
 )
 
 bq_perform_load(
@@ -41,6 +42,7 @@ bq_perform_load(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
+  json_digits = NA,
   ...
 )
 
@@ -54,7 +56,8 @@ bq_perform_query(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE"
+  priority = "INTERACTIVE",
+  json_digits = NA
 )
 
 bq_perform_query_dry_run(
@@ -63,7 +66,8 @@ bq_perform_query_dry_run(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE
+  use_legacy_sql = FALSE,
+  json_digits = NA
 )
 
 bq_perform_query_schema(
@@ -71,7 +75,8 @@ bq_perform_query_schema(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL
+  parameters = NULL,
+  json_digits = NA
 )
 
 bq_perform_copy(
@@ -152,6 +157,9 @@ to the table.
 \item "WRITE_EMPTY": If the table already exists and contains data, a
 'duplicate' error is returned in the job result.
 }}
+
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
 
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.

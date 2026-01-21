@@ -6,7 +6,14 @@
 \alias{bq_dataset_query}
 \title{Submit query to BigQuery}
 \usage{
-bq_project_query(x, query, destination_table = NULL, ..., quiet = NA)
+bq_project_query(
+  x,
+  query,
+  destination_table = NULL,
+  ...,
+  quiet = NA,
+  json_digits = NA
+)
 
 bq_dataset_query(
   x,
@@ -14,7 +21,8 @@ bq_dataset_query(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = NA
+  quiet = NA,
+  json_digits = NA
 )
 }
 \arguments{
@@ -31,6 +39,8 @@ queries (> 128 MB compressed).}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
+
+\item{json_digits}{Species the number of digits for formatting.}
 
 \item{billing}{If you query a dataset that you only have read access
 for, such as a public dataset, you must also submit a \code{billing} project.}
