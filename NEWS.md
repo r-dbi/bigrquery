@@ -12,6 +12,8 @@
   `options(bigrquery.digits=22)` is
   `options(bigrquery.jsonlite.toJSON=list(digits=NA))`. The default is
   an empty list; anything set must be in a named list.
+  
+* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (#663).
 
 # bigrquery 1.6.1
 

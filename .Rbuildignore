@@ -20,3 +20,4 @@
 ^air.toml$
 ^[\.]?air\.toml$
 ^\.vscode$
+^\.claude$

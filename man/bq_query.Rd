@@ -11,7 +11,7 @@ bq_project_query(
   query,
   destination_table = NULL,
   ...,
-  quiet = NA,
+  quiet = getOption("bigrquery.quiet", NA),
   json_digits = NA
 )
 
@@ -21,7 +21,7 @@ bq_dataset_query(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = NA,
+  quiet = getOption("bigrquery.quiet", NA),
   json_digits = NA
 )
 }
