@@ -19,8 +19,6 @@ bq_check_namespace <- function(pkg, bq_type) {
   check_installed(pkg, sprintf("to parse BigQuery '%s' fields.", bq_type))
 }
 
-isFALSE <- function(x) identical(x, FALSE)
-
 cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
 }
