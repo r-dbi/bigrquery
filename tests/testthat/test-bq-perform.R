@@ -17,9 +17,7 @@ test_that("bq_perform_upload preserves microsecond precision", {
   tbl <- data.frame(psx = .POSIXct(0.123456))
   attr(tbl$psx, "tzone") <- "UTC"
 
-  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
-  defer(try(bq_table_delete(ds), silent = TRUE))
-
+  ds <- bq_test_table()
   bq_table_upload(ds, tbl)
   tbl2 <- bq_table_download(ds)
 
@@ -31,9 +29,7 @@ test_that("bq_perform_upload correclty assigns tzone", {
   # offset (i.e., not UTC)
   withr::local_envvar(TZ = "America/New_York")
 
-  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
-  defer(try(bq_table_delete(ds), silent = TRUE))
-
+  ds <- bq_test_table()
   df <- data.frame(
     null = .POSIXct(0, tz = NULL),
     utc = .POSIXct(0, tz = "UTC"),
