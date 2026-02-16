@@ -1,8 +1,6 @@
 # bigrquery (development version)
 
-* `bq_perform_upload()` When uploading data, change the default number of digits to 22, with
-  the option to change this with the argument `json_digits=NA` in most
-  functions.
+* `bq_perform_upload()` and friends now default to 22 digits of accuray, and now allow you to change this value with the new `json_digits` argument.
 * `dbExecute()` gains `params=` support (@r2evans, #667).
 * `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
 * Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
