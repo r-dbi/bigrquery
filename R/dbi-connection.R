@@ -85,12 +85,15 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
+#' @param params Named list of parameters match to query parameters.
+#'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
   function(conn, statement, ..., params = NULL) {
-    BigQueryResult(conn, statement, params = params, ...)
+    check_for_parameters(..., call = quote(dbSendQuery()))
+    BigQueryResult(conn, statement, params = params)
   }
 )
 
@@ -100,16 +103,18 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ..., json_digits = NA) {
+  function(conn, statement, ..., json_digits = NA, params = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
     json_digits <- check_digits(json_digits)
+    check_for_parameters(..., call = quote(dbExecute()))
     job <- bq_perform_query(
       statement,
       billing = conn@billing,
       default_dataset = ds,
       quiet = conn@quiet,
       json_digits = json_digits,
+      parameters = params,
       ...
     )
     bq_job_wait(job, quiet = conn@quiet)
@@ -119,6 +124,12 @@ setMethod(
   }
 )
 
+check_for_parameters <- function(..., parameters = NULL, call = caller_env()) {
+  if (is.null(parameters)) {
+    return()
+  }
+  cli::cli_abort("Use {.arg params} not {.arg parameters}.", call = call)
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString

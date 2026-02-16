@@ -32,8 +32,13 @@ bq_table_delete(x)
 
 bq_table_copy(x, dest, ..., quiet = getOption("bigrquery.quiet", NA))
 
-
-bq_table_upload(x, values, ..., quiet = getOption("bigrquery.quiet", NA), json_digits = NA)
+bq_table_upload(
+  x,
+  values,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NA
+)
 
 bq_table_save(
   x,
@@ -42,7 +47,13 @@ bq_table_save(
   quiet = getOption("bigrquery.quiet", NA)
 )
 
-bq_table_load(x, source_uris, ..., quiet = getOption("bigrquery.quiet", NA), json_digits = NA)
+bq_table_load(
+  x,
+  source_uris,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NA
+)
 
 bq_table_patch(x, fields, json_digits = NA)
 }
