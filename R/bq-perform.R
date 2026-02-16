@@ -205,7 +205,6 @@ export_json <- function(values, json_digits = NA) {
 
   con <- rawConnection(raw(0), "r+")
   defer(close(con))
-
   jsonlite::stream_out(
     values,
     con,

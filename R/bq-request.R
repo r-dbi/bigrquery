@@ -132,18 +132,8 @@ bq_delete <- function(url, ..., query = NULL, token = bq_token()) {
 }
 
 #' @importFrom httr POST add_headers config
-bq_post <- function(
-  url,
-  body,
-  ...,
-  query = NULL,
-  token = bq_token()
-) {
-  json <- jsonlite::toJSON(
-    body,
-    pretty = TRUE,
-    auto_unbox = TRUE
-  )
+bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
+  json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
 
   req <- POST(
     paste0(base_url, url),
@@ -158,18 +148,8 @@ bq_post <- function(
 }
 
 #' @importFrom httr PATCH add_headers config
-bq_patch <- function(
-  url,
-  body,
-  ...,
-  query = NULL,
-  token = bq_token()
-) {
-  json <- jsonlite::toJSON(
-    body,
-    pretty = TRUE,
-    auto_unbox = TRUE
-  )
+bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
+  json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
   req <- PATCH(
     paste0(base_url, url),
     body = json,

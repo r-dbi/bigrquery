@@ -149,8 +149,8 @@ bq_table_upload <- function(
   json_digits = NA
 ) {
   x <- as_bq_table(x)
-
   json_digits <- check_digits(json_digits)
+
   job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
   bq_job_wait(job, quiet = quiet)
 
@@ -183,11 +183,7 @@ bq_table_load <- function(
 ) {
   x <- as_bq_table(x)
 
-  job <- bq_perform_load(
-    x,
-    source_uris = source_uris,
-    ...
-  )
+  job <- bq_perform_load(x, source_uris = source_uris, ...)
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
