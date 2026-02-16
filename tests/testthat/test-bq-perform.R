@@ -13,6 +13,42 @@ test_that("bq_perform_upload creates job that succeeds", {
   expect_true(bq_table_exists(bq_mtcars))
 })
 
+test_that("bq_perform_upload preserves microsecond precision", {
+  tbl <- data.frame(psx = .POSIXct(0.123456))
+  attr(tbl$psx, "tzone") <- "UTC"
+
+  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
+  defer(try(bq_table_delete(ds), silent = TRUE))
+
+  bq_table_upload(ds, tbl)
+  tbl2 <- bq_table_download(ds)
+
+  expect_equal(tbl$psx, tbl2$psx)
+})
+
+test_that("bq_perform_upload correclty assigns tzone", {
+  # the bug only produced problems when the system TZ has a non-zero
+  # offset (i.e., not UTC)
+  withr::local_envvar(TZ = "America/New_York")
+
+  ds <- bq_table(bq_test_project(), "basedata", "datatypes")
+  defer(try(bq_table_delete(ds), silent = TRUE))
+
+  df <- data.frame(
+    null = .POSIXct(0, tz = NULL),
+    utc = .POSIXct(0, tz = "UTC"),
+    ny = .POSIXct(0, tz = "America/New_York"),
+    nz = .POSIXct(0, tz = "Pacific/Auckland")
+  )
+  bq_table_upload(ds, df)
+  db <- bq_table_download(ds)
+
+  expect_equal(db$utc, .POSIXct(0, tz = "UTC"))
+  expect_equal(db$null, .POSIXct(0, tz = "UTC"))
+  expect_equal(db$ny, .POSIXct(0, tz = "UTC"))
+  expect_equal(db$nz, .POSIXct(0, tz = "UTC"))
+})
+
 test_that("bq_perform_copy creates job that succeeds", {
   withr::local_options(cli.progress_show_after = 10)
 
