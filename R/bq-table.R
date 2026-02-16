@@ -123,7 +123,12 @@ bq_table_delete <- function(x) {
 #' @rdname api-table
 #' @inheritParams bq_perform_copy
 #' @param dest Source and destination [bq_table]s.
-bq_table_copy <- function(x, dest, ..., quiet = NA) {
+bq_table_copy <- function(
+  x,
+  dest,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+) {
   x <- as_bq_table(x)
   dest <- as_bq_table(dest)
 
@@ -136,7 +141,12 @@ bq_table_copy <- function(x, dest, ..., quiet = NA) {
 #' @export
 #' @rdname api-table
 #' @inheritParams api-perform
-bq_table_upload <- function(x, values, ..., quiet = NA) {
+bq_table_upload <- function(
+  x,
+  values,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+) {
   x <- as_bq_table(x)
 
   job <- bq_perform_upload(x, values, ...)
@@ -147,7 +157,12 @@ bq_table_upload <- function(x, values, ..., quiet = NA) {
 
 #' @export
 #' @rdname api-table
-bq_table_save <- function(x, destination_uris, ..., quiet = NA) {
+bq_table_save <- function(
+  x,
+  destination_uris,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+) {
   x <- as_bq_table(x)
 
   job <- bq_perform_extract(x, destination_uris = destination_uris, ...)
@@ -158,7 +173,12 @@ bq_table_save <- function(x, destination_uris, ..., quiet = NA) {
 
 #' @export
 #' @rdname api-table
-bq_table_load <- function(x, source_uris, ..., quiet = NA) {
+bq_table_load <- function(
+  x,
+  source_uris,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA)
+) {
   x <- as_bq_table(x)
 
   job <- bq_perform_load(x, source_uris = source_uris, ...)

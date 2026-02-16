@@ -10,6 +10,10 @@
   the system's local timezone, resulting in a round-trip value
   differing by the TZ offset.
 
+* `dbExecute()` gains `params=` support (@r2evans, #667).
+* `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
+* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
+
 # bigrquery 1.6.1
 
 * Fix test failure on CRAN.
