@@ -143,7 +143,13 @@ bq_table_copy <- function(
 #' @export
 #' @rdname api-table
 #' @inheritParams api-perform
-bq_table_upload <- function(x, values, ..., quiet = getOption("bigrquery.quiet", NA), json_digits = NA) {
+bq_table_upload <- function(
+  x,
+  values,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NA
+) {
   x <- as_bq_table(x)
 
   json_digits <- check_digits(json_digits)
@@ -171,11 +177,22 @@ bq_table_save <- function(
 
 #' @export
 #' @rdname api-table
-bq_table_load <- function(x, source_uris, ..., quiet = getOption("bigrquery.quiet", NA), json_digits = NA) {
+bq_table_load <- function(
+  x,
+  source_uris,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NA
+) {
   x <- as_bq_table(x)
 
   json_digits <- check_digits(json_digits)
-  job <- bq_perform_load(x, source_uris = source_uris, ..., json_digits = json_digits)
+  job <- bq_perform_load(
+    x,
+    source_uris = source_uris,
+    ...,
+    json_digits = json_digits
+  )
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)

@@ -207,7 +207,13 @@ export_json <- function(values, json_digits = NA) {
   defer(close(con))
 
   json_digits <- check_digits(json_digits)
-  jsonlite::stream_out(values, con, verbose = FALSE, na = "null", digits = json_digits)
+  jsonlite::stream_out(
+    values,
+    con,
+    verbose = FALSE,
+    na = "null",
+    digits = json_digits
+  )
 
   rawToChar(rawConnectionValue(con))
 }

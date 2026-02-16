@@ -16,8 +16,15 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
 }
 
 check_digits <- function(x, arg = caller_arg(x), call = caller_env(call)) {
-  check_number_whole(x, min = 0, max = 22, allow_na = TRUE, allow_null = TRUE,
-                     arg = arg, call = call)
+  check_number_whole(
+    x,
+    min = 0,
+    max = 22,
+    allow_na = TRUE,
+    allow_null = TRUE,
+    arg = arg,
+    call = call
+  )
   if (is.null(x) || is.na(x)) 22L else x
 }
 
@@ -52,7 +59,9 @@ as_json.NULL <- function(x, json_digits = NA) NULL
 
 # nocov start
 show_json <- function(x, json_digits = NA) {
-  if (is.na(json_digits)) json_digits <- 22L
+  if (is.na(json_digits)) {
+    json_digits <- 22L
+  }
   jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = json_digits)
 }
 
