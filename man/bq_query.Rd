@@ -11,8 +11,7 @@ bq_project_query(
   query,
   destination_table = NULL,
   ...,
-  quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  quiet = getOption("bigrquery.quiet", NA)
 )
 
 bq_dataset_query(
@@ -21,8 +20,7 @@ bq_dataset_query(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  quiet = getOption("bigrquery.quiet", NA)
 )
 }
 \arguments{
@@ -39,8 +37,6 @@ queries (> 128 MB compressed).}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
-
-\item{json_digits}{Species the number of digits for formatting.}
 
 \item{billing}{If you query a dataset that you only have read access
 for, such as a public dataset, you must also submit a \code{billing} project.}

@@ -52,17 +52,14 @@ indent <- function(x, n = 2) {
   paste0(space, gsub("\n", paste0("\n", space), x, fixed = TRUE))
 }
 
-as_json <- function(x, json_digits = NA) UseMethod("as_json")
+as_json <- function(x) UseMethod("as_json")
 
 #' @export
-as_json.NULL <- function(x, json_digits = NA) NULL
+as_json.NULL <- function(x) NULL
 
 # nocov start
-show_json <- function(x, json_digits = NA) {
-  if (is.na(json_digits)) {
-    json_digits <- 22L
-  }
-  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = json_digits)
+show_json <- function(x) {
+  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = 22L)
 }
 
 #' @export

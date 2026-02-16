@@ -16,7 +16,7 @@
 \alias{bq_table_patch}
 \title{BigQuery tables}
 \usage{
-bq_table_create(x, fields = NULL, ..., json_digits = NA)
+bq_table_create(x, fields = NULL, ...)
 
 bq_table_meta(x, fields = NULL)
 
@@ -47,15 +47,9 @@ bq_table_save(
   quiet = getOption("bigrquery.quiet", NA)
 )
 
-bq_table_load(
-  x,
-  source_uris,
-  ...,
-  quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
-)
+bq_table_load(x, source_uris, ..., quiet = getOption("bigrquery.quiet", NA))
 
-bq_table_patch(x, fields, json_digits = NA)
+bq_table_patch(x, fields)
 }
 \arguments{
 \item{x}{A \link{bq_table}, or an object coercible to a \code{bq_table}.}
@@ -66,14 +60,15 @@ bq_table_patch(x, fields, json_digits = NA)
 \item{...}{Additional arguments passed on to the underlying API call.
 snake_case names are automatically converted to camelCase.}
 
-\item{json_digits}{Species the number of digits for formatting.}
-
 \item{dest}{Source and destination \link{bq_table}s.}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{values}{Data frame of values to insert.}
+
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
 
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export

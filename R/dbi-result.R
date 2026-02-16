@@ -1,16 +1,14 @@
 #' @include dbi-connection.R
 NULL
 
-BigQueryResult <- function(conn, sql, params = NULL, ..., json_digits = NA) {
+BigQueryResult <- function(conn, sql, params = NULL, ...) {
   ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
-  json_digits <- check_digits(json_digits)
   job <- bq_perform_query(
     sql,
     billing = conn@billing,
     default_dataset = ds,
     quiet = conn@quiet,
     parameters = params,
-    json_digits = json_digits,
     ...
   )
 

@@ -79,14 +79,14 @@ as_bq_params <- function(x) {
 }
 
 #' @export
-as_json.bq_params <- function(x, json_digits = NA) {
-  json <- lapply(x, as_json, json_digits = json_digits)
+as_json.bq_params <- function(x) {
+  json <- lapply(x, as_json)
   unname(json)
 }
 
 
 #' @export
-as_json.bq_param_scalar <- function(x, json_digits = NA) {
+as_json.bq_param_scalar <- function(x) {
   list(
     name = x$name,
     parameterType = list(type = unbox(x$type)),
@@ -95,7 +95,7 @@ as_json.bq_param_scalar <- function(x, json_digits = NA) {
 }
 
 #' @export
-as_json.bq_param_array <- function(x, json_digits = NA) {
+as_json.bq_param_array <- function(x) {
   values <- unname(c(x$value))
   values <- lapply(values, function(x) list(value = unbox(x)))
   list(
@@ -109,15 +109,13 @@ as_json.bq_param_array <- function(x, json_digits = NA) {
 }
 
 #' @export
-print.bq_param <- function(x, ..., digits = NA) {
-  digits <- check_digits(digits)
-  cat(show_json(as_json(x, json_digits = digits)))
+print.bq_param <- function(x, ...) {
+  cat(show_json(as_json(x)))
   invisible(x)
 }
 
 #' @export
-print.bq_params <- function(x, ..., digits = NA) {
-  digits <- check_digits(digits)
-  cat(show_json(as_json(x, json_digits = digits)))
+print.bq_params <- function(x, ...) {
+  cat(show_json(as_json(x)))
   invisible(x)
 }

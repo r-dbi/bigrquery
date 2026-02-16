@@ -55,12 +55,12 @@ bq_field <- function(
 }
 
 #' @export
-as_json.bq_field <- function(x, json_digits = NA) {
+as_json.bq_field <- function(x) {
   list(
     name = unbox(x$name),
     type = unbox(x$type),
     mode = unbox(x$mode),
-    fields = as_json(x$fields, json_digits = json_digits),
+    fields = as_json(x$fields),
     description = unbox(x$description)
   )
 }
@@ -72,8 +72,8 @@ bq_fields <- function(x) {
 }
 
 #' @export
-as_json.bq_fields <- function(x, json_digits = NA) {
-  lapply(x, as_json, json_digits = json_digits)
+as_json.bq_fields <- function(x) {
+  lapply(x, as_json)
 }
 
 #' @export

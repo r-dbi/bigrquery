@@ -42,7 +42,6 @@ bq_perform_load(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
-  json_digits = NA,
   ...
 )
 
@@ -56,8 +55,7 @@ bq_perform_query(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE",
-  json_digits = NA
+  priority = "INTERACTIVE"
 )
 
 bq_perform_query_dry_run(
@@ -66,8 +64,7 @@ bq_perform_query_dry_run(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE,
-  json_digits = NA
+  use_legacy_sql = FALSE
 )
 
 bq_perform_query_schema(
@@ -75,8 +72,7 @@ bq_perform_query_schema(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL,
-  json_digits = NA
+  parameters = NULL
 )
 
 bq_perform_copy(

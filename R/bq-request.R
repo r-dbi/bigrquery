@@ -137,14 +137,12 @@ bq_post <- function(
   body,
   ...,
   query = NULL,
-  token = bq_token(),
-  json_digits = NA
+  token = bq_token()
 ) {
   json <- jsonlite::toJSON(
     body,
     pretty = TRUE,
-    auto_unbox = TRUE,
-    json_digits = json_digits
+    auto_unbox = TRUE
   )
 
   req <- POST(
@@ -165,14 +163,12 @@ bq_patch <- function(
   body,
   ...,
   query = NULL,
-  token = bq_token(),
-  json_digits = NA
+  token = bq_token()
 ) {
   json <- jsonlite::toJSON(
     body,
     pretty = TRUE,
-    auto_unbox = TRUE,
-    json_digits = json_digits
+    auto_unbox = TRUE
   )
   req <- PATCH(
     paste0(base_url, url),

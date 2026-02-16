@@ -11,7 +11,6 @@
 #' @inheritParams bq_perform_query
 #' @inheritParams api-job
 #' @param ... Passed on to [bq_perform_query()]
-#' @param json_digits Species the number of digits for formatting.
 #' @name bq_query
 #' @return A [bq_table]
 #' @examplesIf bq_testable()
@@ -47,8 +46,7 @@ bq_project_query <- function(
   query,
   destination_table = NULL,
   ...,
-  quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  quiet = getOption("bigrquery.quiet", NA)
 ) {
   check_string(x)
   query <- as_query(query)
@@ -56,13 +54,11 @@ bq_project_query <- function(
     destination_table <- as_bq_table(destination_table)
   }
   check_bool(quiet, allow_na = TRUE)
-  json_digits <- check_digits(json_digits)
 
   job <- bq_perform_query(
     query,
     billing = x,
     destination_table = destination_table,
-    json_digits = json_digits,
     ...
   )
   bq_job_wait(job, quiet = quiet)
@@ -77,8 +73,7 @@ bq_dataset_query <- function(
   destination_table = NULL,
   ...,
   billing = NULL,
-  quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  quiet = getOption("bigrquery.quiet", NA)
 ) {
   x <- as_bq_dataset(x)
   query <- as_query(query)
@@ -87,14 +82,12 @@ bq_dataset_query <- function(
   }
   check_string(billing, allow_null = TRUE)
   check_bool(quiet, allow_na = TRUE)
-  json_digits <- check_digits(json_digits)
 
   job <- bq_perform_query(
     query,
     billing = billing %||% x$project,
     destination_table = destination_table,
     default_dataset = x,
-    json_digits = json_digits,
     ...
   )
   bq_job_wait(job, quiet = quiet)
