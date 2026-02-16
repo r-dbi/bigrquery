@@ -77,7 +77,7 @@
 
 \S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
-\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
+\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
@@ -206,10 +206,8 @@ i.e. \link[DBI:DBIDriver-class]{DBI::DBIDriver}, \link[DBI:DBIConnection-class]{
 
 \item{statement}{a character string containing SQL.}
 
-\item{params}{For \code{dbBind()}, a list of values, named or unnamed,
-or a data frame, with one element/column per query parameter.
-For \code{dbBindArrow()}, values as a nanoarrow stream,
-with one column per query parameter.}
+\item{params}{Named list of parameters match to query parameters.
+Parameter \code{x} will be matched to placeholder \verb{@x}.}
 
 \item{x}{A character vector to quote as string.}
 
