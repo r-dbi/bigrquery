@@ -30,7 +30,7 @@ bq_perform_upload(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NA
+  json_digits = NULL
 )
 
 bq_perform_load(

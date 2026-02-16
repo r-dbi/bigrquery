@@ -37,7 +37,7 @@ bq_table_upload(
   values,
   ...,
   quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  json_digits = NULL
 )
 
 bq_table_save(

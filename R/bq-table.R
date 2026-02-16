@@ -146,7 +146,7 @@ bq_table_upload <- function(
   values,
   ...,
   quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NA
+  json_digits = NULL
 ) {
   x <- as_bq_table(x)
   json_digits <- check_digits(json_digits)

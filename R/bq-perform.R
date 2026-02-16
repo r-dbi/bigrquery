@@ -127,7 +127,7 @@ bq_perform_upload <- function(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NA
+  json_digits = NULL
 ) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
@@ -185,7 +185,7 @@ bq_perform_upload <- function(
 }
 
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
-export_json <- function(values, json_digits = NA) {
+export_json <- function(values, json_digits = NULL) {
   # Eliminate row names
   rownames(values) <- NULL
 
