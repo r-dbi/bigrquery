@@ -1,15 +1,7 @@
 # bigrquery (development version)
 
-* Change rendering for uploading `POSIXt`-class objects to 6 digits
-  with `"%OS6"` (#660). This means that all timestamps will have
-  microsecond resolution when uploading data.
-
-* Set the `"tzone"` attribute of uploaded `POSIXt` columns to
-  `Sys.timezone()` when the timezone is empty or not defined (#660).
-  Previously, if unset then it may be interpreted as UTC regardless of
-  the system's local timezone, resulting in a round-trip value
-  differing by the TZ offset.
-
+* Always upload `POSIXt` objects with 6 digits (i.e. microsecond) precision  (#660). 
+* Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to `Sys.timezone()` when the timezone is empty or not defined (@r2evans, #660). 
 * `dbExecute()` gains `params=` support (@r2evans, #667).
 * `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
 * Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
