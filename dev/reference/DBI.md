@@ -33,7 +33,7 @@ dbDisconnect(conn, ...)
 dbSendQuery(conn, statement, ..., params = NULL)
 
 # S4 method for class 'BigQueryConnection,character'
-dbExecute(conn, statement, ...)
+dbExecute(conn, statement, ..., params = NULL)
 
 # S4 method for class 'BigQueryConnection,character'
 dbQuoteString(conn, x, ...)
@@ -226,11 +226,8 @@ dbBind(res, params, ...)
 
 - params:
 
-  For [`dbBind()`](https://dbi.r-dbi.org/reference/dbBind.html), a list
-  of values, named or unnamed, or a data frame, with one element/column
-  per query parameter. For
-  [`dbBindArrow()`](https://dbi.r-dbi.org/reference/dbBind.html), values
-  as a nanoarrow stream, with one column per query parameter.
+  Named list of parameters match to query parameters. Parameter `x` will
+  be matched to placeholder `@x`.
 
 - x:
 

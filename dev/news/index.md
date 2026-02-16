@@ -2,8 +2,17 @@
 
 ## bigrquery (development version)
 
+- [`dbExecute()`](https://dbi.r-dbi.org/reference/dbExecute.html) gains
+  `params=` support ([@r2evans](https://github.com/r2evans),
+  [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
+- [`dbExecute()`](https://dbi.r-dbi.org/reference/dbExecute.html) and
+  [`dbSendQuery()`](https://dbi.r-dbi.org/reference/dbSendQuery.html)
+  error if you accidentally use `parameters`
+  ([@r2evans](https://github.com/r2evans),
+  [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
 - Check `getOption("bigrquery.quiet")` option in more `bq_*` functions
-  ([\#663](https://github.com/r-dbi/bigrquery/issues/663)).
+  ([@r2evans](https://github.com/r2evans),
+  [\#663](https://github.com/r-dbi/bigrquery/issues/663)).
 
 ## bigrquery 1.6.1
 

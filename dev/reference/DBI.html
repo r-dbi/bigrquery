@@ -76,7 +76,7 @@
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span>, params <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'BigQueryConnection,character'</span></span>
-<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">statement</span>, <span class="va">...</span>, params <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'BigQueryConnection,character'</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbQuoteString.html" class="external-link">dbQuoteString</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -263,10 +263,8 @@ i.e. <a href="https://dbi.r-dbi.org/reference/DBIDriver-class.html" class="exter
 
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
-<dd><p>For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBind()</a></code>, a list of values, named or unnamed,
-or a data frame, with one element/column per query parameter.
-For <code><a href="https://dbi.r-dbi.org/reference/dbBind.html" class="external-link">dbBindArrow()</a></code>, values as a nanoarrow stream,
-with one column per query parameter.</p></dd>
+<dd><p>Named list of parameters match to query parameters.
+Parameter <code>x</code> will be matched to placeholder <code>@x</code>.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
