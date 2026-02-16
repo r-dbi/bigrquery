@@ -13,6 +13,13 @@ test_that("bq_perform_upload creates job that succeeds", {
   expect_true(bq_table_exists(bq_mtcars))
 })
 
+test_that("bq_perform_upload preserves numerical precision", {
+  tb <- bq_test_table()
+  bq_table_upload(tb, data.frame(dbl = pi))
+  df <- bq_table_download(tb)
+  expect_identical(df$dbl, pi)
+})
+
 test_that("bq_perform_copy creates job that succeeds", {
   withr::local_options(cli.progress_show_after = 10)
 
