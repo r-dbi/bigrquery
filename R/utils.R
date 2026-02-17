@@ -5,7 +5,7 @@ as_df <- function(x) {
   x
 }
 
-check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+check_quiet <- function(x, arg = caller_arg(x), call = caller_env()) {
   check_bool(x, allow_na = TRUE, arg = arg, call = call)
 
   if (is.na(x)) {
@@ -15,7 +15,7 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
   }
 }
 
-check_digits <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+check_digits <- function(x, arg = caller_arg(x), call = caller_env()) {
   check_number_whole(
     x,
     min = 0,
