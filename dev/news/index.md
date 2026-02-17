@@ -2,6 +2,13 @@
 
 ## bigrquery (development version)
 
+- Always upload `POSIXt` objects with 6 digits (i.e. microsecond)
+  precision ([\#660](https://github.com/r-dbi/bigrquery/issues/660)).
+- Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to
+  [`Sys.timezone()`](https://rdrr.io/r/base/timezones.html) when the
+  timezone is empty or not defined
+  ([@r2evans](https://github.com/r2evans),
+  [\#660](https://github.com/r-dbi/bigrquery/issues/660)).
 - [`dbExecute()`](https://dbi.r-dbi.org/reference/dbExecute.html) gains
   `params=` support ([@r2evans](https://github.com/r2evans),
   [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
