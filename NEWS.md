@@ -1,5 +1,7 @@
 # bigrquery (development version)
 
+* Always upload `POSIXt` objects with 6 digits (i.e. microsecond) precision  (#660). 
+* Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to `Sys.timezone()` when the timezone is empty or not defined (@r2evans, #660). 
 * `dbExecute()` gains `params=` support (@r2evans, #667).
 * `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
 * Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
