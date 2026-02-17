@@ -191,7 +191,9 @@ export_json <- function(values, json_digits = NULL) {
 
   # Convert times to canonical format
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
-  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+  values[is_time] <- lapply(values[is_time], function(x) {
+    format(x, "%Y-%m-%d %H:%M:%OS6", tz = "UTC")
+  })
 
   # Convert wk_wkt to text
   is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
