@@ -32,7 +32,13 @@ bq_table_delete(x)
 
 bq_table_copy(x, dest, ..., quiet = getOption("bigrquery.quiet", NA))
 
-bq_table_upload(x, values, ..., quiet = getOption("bigrquery.quiet", NA))
+bq_table_upload(
+  x,
+  values,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NULL
+)
 
 bq_table_save(
   x,
@@ -60,6 +66,9 @@ snake_case names are automatically converted to camelCase.}
 if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{values}{Data frame of values to insert.}
+
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
 
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export

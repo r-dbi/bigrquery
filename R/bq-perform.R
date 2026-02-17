@@ -116,6 +116,8 @@ bq_perform_extract <- function(
 #'     to the table.
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
+#' @param json_digits Species the number of digits for formatting
+#'   numeric values.
 bq_perform_upload <- function(
   x,
   values,
@@ -124,7 +126,8 @@ bq_perform_upload <- function(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NULL
 ) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
@@ -135,6 +138,7 @@ bq_perform_upload <- function(
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
+  json_digits <- check_digits(json_digits)
 
   load <- list(
     sourceFormat = unbox(source_format),
@@ -154,13 +158,13 @@ bq_perform_upload <- function(
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
+    "content" = jsonlite::toJSON(metadata, pretty = TRUE, digits = json_digits)
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
     media <- list(
       "type" = "application/json; charset=UTF-8",
-      "content" = export_json(values)
+      "content" = export_json(values, json_digits = json_digits)
     )
   } else {
     # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
@@ -181,7 +185,7 @@ bq_perform_upload <- function(
 }
 
 # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
-export_json <- function(values) {
+export_json <- function(values, json_digits = NULL) {
   # Eliminate row names
   rownames(values) <- NULL
 
@@ -203,7 +207,13 @@ export_json <- function(values) {
 
   con <- rawConnection(raw(0), "r+")
   defer(close(con))
-  jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
+  jsonlite::stream_out(
+    values,
+    con,
+    verbose = FALSE,
+    na = "null",
+    digits = json_digits
+  )
 
   rawToChar(rawConnectionValue(con))
 }

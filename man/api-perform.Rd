@@ -29,7 +29,8 @@ bq_perform_upload(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NULL
 )
 
 bq_perform_load(
@@ -152,6 +153,9 @@ to the table.
 \item "WRITE_EMPTY": If the table already exists and contains data, a
 'duplicate' error is returned in the job result.
 }}
+
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
 
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.
