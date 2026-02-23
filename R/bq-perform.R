@@ -72,6 +72,8 @@ bq_perform_extract <- function(
   check_bool(print_header)
   check_string(billing)
 
+  labels <- check_labels(getOption("bigrquery.labels"))
+
   url <- bq_path(billing, jobs = "")
   body <- list(
     configuration = list(
@@ -81,7 +83,8 @@ bq_perform_extract <- function(
         destinationFormat = unbox(destination_format),
         compression = unbox(compression),
         printHeader = unbox(print_header)
-      )
+      ),
+      labels = labels
     )
   )
 
@@ -136,6 +139,8 @@ bq_perform_upload <- function(
   check_string(write_disposition)
   check_string(billing)
 
+  labels <- check_labels(getOption("bigrquery.labels"))
+
   load <- list(
     sourceFormat = unbox(source_format),
     destinationTable = tableReference(x),
@@ -150,11 +155,16 @@ bq_perform_upload <- function(
     load$autodetect <- unbox(TRUE)
   }
 
-  metadata <- list(configuration = list(load = load))
+  metadata <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
+    "content" = jsonlite::toJSON(metadata, auto_unbox = TRUE, pretty = TRUE)
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
@@ -251,6 +261,8 @@ bq_perform_load <- function(
   check_string(create_disposition)
   check_string(write_disposition)
 
+  labels <- check_labels(getOption("bigrquery.labels"))
+
   load <- list(
     sourceUris = as.list(source_uris),
     sourceFormat = unbox(source_format),
@@ -270,7 +282,12 @@ bq_perform_load <- function(
     load$autodetect <- TRUE
   }
 
-  body <- list(configuration = list(load = load))
+  body <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
 
   url <- bq_path(billing, jobs = "")
   res <- bq_post(
@@ -322,6 +339,8 @@ bq_perform_query <- function(
   check_bool(use_legacy_sql)
   check_string(priority)
 
+  labels <- check_labels(getOption("bigrquery.labels"))
+
   query <- list(
     query = unbox(query),
     useLegacySql = unbox(use_legacy_sql),
@@ -347,7 +366,12 @@ bq_perform_query <- function(
   }
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels
+    )
+  )
 
   res <- bq_post(
     url,
@@ -373,9 +397,16 @@ bq_perform_query_dry_run <- function(
     parameters = parameters,
     use_legacy_sql = use_legacy_sql
   )
+  labels <- check_labels(getOption("bigrquery.labels"))
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
@@ -402,8 +433,16 @@ bq_perform_query_schema <- function(
     use_legacy_sql = FALSE
   )
 
+  labels <- check_labels(getOption("bigrquery.labels"))
+
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
@@ -453,6 +492,7 @@ bq_perform_copy <- function(
 ) {
   billing <- billing %||% dest$project
   url <- bq_path(billing, jobs = "")
+  labels <- check_labels(getOption("bigrquery.labels"))
 
   body <- list(
     configuration = list(
@@ -461,7 +501,8 @@ bq_perform_copy <- function(
         destinationTable = tableReference(dest),
         createDisposition = unbox(create_disposition),
         writeDisposition = unbox(write_disposition)
-      )
+      ),
+      labels = labels
     )
   )
 
