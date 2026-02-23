@@ -85,3 +85,36 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 has_bigrquerystorage <- function() {
   is_installed("bigrquerystorage")
 }
+
+check_labels <- function(labels) {
+  # Handle NULL, NA, or empty inputs
+  if (is.null(labels) || length(labels) == 0 || (length(labels) == 1 && is.na(labels))) {
+    return(NULL)
+  }
+
+  if (!is.list(labels)) {
+    warning(paste0("Labels must to be a dictionary list; dropping labels"), immediate. = TRUE)
+    return(NULL)
+  }
+  nms <- names(labels)
+  if (is.null(nms) || anyNA(nms) || any(nms == "")) {
+    warning("Label keys must be non-empty strings; dropping labels", immediate. = TRUE, call. = FALSE)
+    return(NULL)
+  }
+  for (nm in names(labels)) {
+    if (!is.character(labels[[nm]]) || length(labels[[nm]]) != 1) {
+      warning(sprintf("Label '%s' must be a single string; dropping labels", nm), immediate. = TRUE)
+      return(NULL)
+    }
+    if (nm != tolower(nm)) {
+      warning(sprintf("Label key '%s' must match ^[a-z0-9_-]{0,62}$; dropping labels", nm), immediate. = TRUE)
+      return(NULL)
+    }
+    if (labels[[nm]] != tolower(labels[[nm]])) {
+      warning(sprintf("Label value '%s' must be empty or match ^[a-z0-9_-]{0,62}$; dropping labels", labels[[nm]]), immediate. = TRUE)
+      return(NULL)
+    }
+  }
+
+  return(labels)
+}
