@@ -5,7 +5,7 @@ as_df <- function(x) {
   x
 }
 
-check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+check_quiet <- function(x, arg = caller_arg(x), call = caller_env()) {
   check_bool(x, allow_na = TRUE, arg = arg, call = call)
 
   if (is.na(x)) {
@@ -13,6 +13,18 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
   } else {
     x
   }
+}
+
+check_digits <- function(x, arg = caller_arg(x), call = caller_env()) {
+  check_number_whole(
+    x,
+    min = 0,
+    max = 22,
+    allow_null = TRUE,
+    arg = arg,
+    call = call
+  )
+  x %||% 22
 }
 
 bq_check_namespace <- function(pkg, bq_type) {
@@ -46,7 +58,7 @@ as_json.NULL <- function(x) NULL
 
 # nocov start
 show_json <- function(x) {
-  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
+  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = 22L)
 }
 
 #' @export
