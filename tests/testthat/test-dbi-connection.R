@@ -252,3 +252,31 @@ test_that("DBI::sqlData return TRUE, FALSE for logical class", {
     DBI::SQL(c("TRUE", "FALSE", "NULL"))
   )
 })
+
+test_that("dbReadTable works with views (issue #633)", {
+  skip_if_no_auth()
+  
+  tb <- bq_test_table()
+  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
+  
+  # Create a test table with some data
+  test_data <- data.frame(x = 1:3, y = c("a", "b", "c"))
+  DBI::dbWriteTable(con, tb$table, test_data)
+  
+  # Create a view based on the table
+  view_name <- paste0(tb$table, "_view")
+  view_sql <- sprintf("CREATE VIEW %s AS SELECT * FROM %s", view_name, tb$table)
+  DBI::dbExecute(con, view_sql)
+  defer(DBI::dbExecute(con, sprintf("DROP VIEW %s", view_name)))
+  
+  # Test that dbReadTable works with the view (this was returning 0 rows before the fix)
+  result_view <- DBI::dbReadTable(con, view_name)
+  expect_equal(nrow(result_view), 3)
+  expect_equal(ncol(result_view), 2)
+  expect_equal(result_view$x, c(1, 2, 3))
+  
+  # Verify the table still works normally
+  result_table <- DBI::dbReadTable(con, tb$table)
+  expect_equal(nrow(result_table), 3)
+  expect_equal(result_table$x, c(1, 2, 3))
+})
