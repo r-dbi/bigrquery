@@ -49,7 +49,7 @@ To perform a job, see \link{api-perform}. These functions all retrieve metadata
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 jobs <- bq_project_jobs(bq_test_project())
 jobs[[1]]
 

@@ -58,6 +58,10 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbIsValid
+#' @param dbObj An object inheriting from [DBI::DBIObject-class],
+#' i.e. [DBI::DBIDriver-class], [DBI::DBIConnection-class], or a [DBI::DBIResult-class].
+#' @param conn A [DBI::DBIConnection-class] object, as returned by
+#'   [DBI::dbConnect()].
 #' @export
 setMethod(
   "dbIsValid",
@@ -81,12 +85,15 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
+#' @param params Named list of parameters match to query parameters.
+#'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
   function(conn, statement, ..., params = NULL) {
-    BigQueryResult(conn, statement, params = params, ...)
+    check_for_parameters(..., call = quote(dbSendQuery()))
+    BigQueryResult(conn, statement, params = params)
   }
 )
 
@@ -96,14 +103,16 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
+  function(conn, statement, ..., params = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
+    check_for_parameters(..., call = quote(dbExecute()))
     job <- bq_perform_query(
       statement,
       billing = conn@billing,
       default_dataset = ds,
       quiet = conn@quiet,
+      parameters = params,
       ...
     )
     bq_job_wait(job, quiet = conn@quiet)
@@ -113,6 +122,12 @@ setMethod(
   }
 )
 
+check_for_parameters <- function(..., parameters = NULL, call = caller_env()) {
+  if (is.null(parameters)) {
+    return()
+  }
+  cli::cli_abort("Use {.arg params} not {.arg parameters}.", call = call)
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString

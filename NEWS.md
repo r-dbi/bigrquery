@@ -1,13 +1,37 @@
 # bigrquery (development version)
 
+* `bq_perform_upload()` and friends now default to 22 digits of accuracy, and now allow you to change this value with the new `json_digits` argument.
+* Always upload `POSIXt` objects with 6 digits (i.e. microsecond) precision  (#660). 
+* Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to `Sys.timezone()` when the timezone is empty or not defined (@r2evans, #660). 
+* `dbExecute()` gains `params=` support (@r2evans, #667).
+* `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
+* Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
+
+# bigrquery 1.6.1
+
+* Fix test failure on CRAN.
+
+# bigrquery 1.6.0
+
+## New features
+
 * If the bigrquerystorage package is installed, `bq_table_download()` (and
-  hence `collect()`, `dbGetQuery()` and `dbFetch()` will use it. This will
+  hence `collect()`, `dbGetQuery()` and `dbFetch()`) will use it. This will
   drastically improve the speed of downloading large datasets. A big thanks
   to @meztez for creating the bigrquerystorage package!
 
-* The `bq_perform_upload()` function now allows users to choose the transmission format (JSON or PARQUET) for data sent to BigQuery (@apalacio9502, #608).
+## Bug fixes and minor improvements
 
-* bigrquery now requires R 4.0, in line with our version support principles.
+* Various R CMD check fixes
+
+* Functions and arguments deprecated in bigrquery 1.4.0 (released) have now
+  been removed.
+
+* The `bq_perform_upload()` function now allows users to choose the 
+  transmission format (JSON or PARQUET) for data sent to BigQuery 
+  (@apalacio9502, #608).
+
+* bigrquery now requires R 4.1, inline with our version support principles.
 
 # bigrquery 1.5.1
 

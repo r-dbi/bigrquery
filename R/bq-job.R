@@ -90,19 +90,27 @@ bq_job_wait <- function(
   }
 
   repeat {
-    if (!quiet) cli::cli_progress_update()
+    if (!quiet) {
+      cli::cli_progress_update()
+    }
     # https://cloud.google.com/bigquery/docs/error-messages
     # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),
       bigrquery_http_503 = function(err) NULL
     )
-    if (!quiet) cli::cli_progress_update()
+    if (!quiet) {
+      cli::cli_progress_update()
+    }
 
-    if (!is.null(status) && status$state == "DONE") break
+    if (!is.null(status) && status$state == "DONE") {
+      break
+    }
     Sys.sleep(pause)
   }
-  if (!quiet) cli::cli_progress_done()
+  if (!quiet) {
+    cli::cli_progress_done()
+  }
 
   errors <- status$errors
   if (length(errors) > 0) {

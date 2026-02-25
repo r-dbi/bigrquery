@@ -19,9 +19,7 @@
 )
 }
 \arguments{
-\item{drv}{an object that inherits from \linkS4class{DBIDriver},
-or an existing \linkS4class{DBIConnection}
-object (in order to clone an existing connection).}
+\item{drv}{The result of \code{bigquery()}.}
 
 \item{project, dataset}{Project and dataset identifiers}
 
@@ -45,7 +43,7 @@ which allows the full range of 64 bit integers.}
 Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.
 }
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 con <- DBI::dbConnect(
   bigquery(),
   project = "publicdata",

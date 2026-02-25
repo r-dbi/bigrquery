@@ -77,7 +77,7 @@
 
 \S4method{dbSendQuery}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
-\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ...)
+\S4method{dbExecute}{BigQueryConnection,character}(conn, statement, ..., params = NULL)
 
 \S4method{dbQuoteString}{BigQueryConnection,character}(conn, x, ...)
 
@@ -196,21 +196,18 @@
 
 \item{object}{Any R object}
 
-\item{dbObj}{An object inheriting from \linkS4class{DBIObject},
-i.e. \linkS4class{DBIDriver}, \linkS4class{DBIConnection},
-or a \linkS4class{DBIResult}}
+\item{dbObj}{An object inheriting from \link[DBI:DBIObject-class]{DBI::DBIObject},
+i.e. \link[DBI:DBIDriver-class]{DBI::DBIDriver}, \link[DBI:DBIConnection-class]{DBI::DBIConnection}, or a \link[DBI:DBIResult-class]{DBI::DBIResult}.}
 
 \item{obj}{An R object whose SQL type we want to determine.}
 
-\item{conn}{A \linkS4class{DBIConnection} object, as returned by
-\code{\link[DBI:dbConnect]{dbConnect()}}.}
+\item{conn}{A \link[DBI:DBIConnection-class]{DBI::DBIConnection} object, as returned by
+\code{\link[DBI:dbConnect]{DBI::dbConnect()}}.}
 
 \item{statement}{a character string containing SQL.}
 
-\item{params}{For \code{dbBind()}, a list of values, named or unnamed,
-or a data frame, with one element/column per query parameter.
-For \code{dbBindArrow()}, values as a nanoarrow stream,
-with one column per query parameter.}
+\item{params}{Named list of parameters match to query parameters.
+Parameter \code{x} will be matched to placeholder \verb{@x}.}
 
 \item{x}{A character vector to quote as string.}
 
@@ -250,7 +247,7 @@ Field types are unescaped.
 A data frame: field types are generated using
 \code{\link[DBI:dbDataType]{dbDataType()}}.}
 
-\item{res}{An object inheriting from \linkS4class{DBIResult}.}
+\item{res}{An object inheriting from \link[DBI:DBIResult-class]{DBI::DBIResult}.}
 
 \item{n}{maximum number of records to retrieve per fetch. Use \code{n = -1}
 or \code{n = Inf}

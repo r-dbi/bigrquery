@@ -8,8 +8,9 @@
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
+
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
@@ -63,16 +64,16 @@ bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    12    14          8.88
-#>  2  1969     1    22          7.44
-#>  3  1969     4    11          6.12
-#>  4  1969     3    15          9.06
-#>  5  1969    11    18          7.44
-#>  6  1969     5     5          7.00
-#>  7  1969     9    20          8.13
-#>  8  1969     3    20          7.37
-#>  9  1969     3    20          6.81
-#> 10  1969    12     1          8.50
+#>  1  1969     2    11          7.56
+#>  2  1969    10    31          7.25
+#>  3  1969     3    26          8.88
+#>  4  1969     1    11          7.75
+#>  5  1969    10    10          8.62
+#>  6  1969     9     4          6.25
+#>  7  1969    11    16          7.19
+#>  8  1969     3    10          8.50
+#>  9  1969    10    29          6.44
+#> 10  1969     8    26          8.56
 ```
 
 ### DBI
@@ -99,16 +100,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    12    14          8.88
-#>  2  1969     1    22          7.44
-#>  3  1969     4    11          6.12
-#>  4  1969     3    15          9.06
-#>  5  1969    11    18          7.44
-#>  6  1969     5     5          7.00
-#>  7  1969     9    20          8.13
-#>  8  1969     3    20          7.37
-#>  9  1969     3    20          6.81
-#> 10  1969    12     1          8.50
+#>  1  1969     2    11          7.56
+#>  2  1969    10    31          7.25
+#>  3  1969     3    26          8.88
+#>  4  1969     1    11          7.75
+#>  5  1969    10    10          8.62
+#>  6  1969     9     4          6.25
+#>  7  1969    11    16          7.19
+#>  8  1969     3    10          8.50
+#>  9  1969    10    29          6.44
+#> 10  1969     8    26          8.56
 ```
 
 ### dplyr
@@ -125,16 +126,16 @@ natality %>%
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  2005     5    NA          7.56
-#>  2  2005     6    NA          4.75
-#>  3  2005    11    NA          7.37
-#>  4  2005     6    NA          7.81
-#>  5  2005     5    NA          3.69
-#>  6  2005    10    NA          6.95
-#>  7  2005    12    NA          8.44
-#>  8  2005    10    NA          8.69
-#>  9  2005    10    NA          7.63
-#> 10  2005     7    NA          8.27
+#>  1  2005    11    NA          8.88
+#>  2  2005     1    NA          8.69
+#>  3  2005     3    NA          7.08
+#>  4  2005     7    NA          7.81
+#>  5  2005     1    NA          8.56
+#>  6  2005     1    NA          8.13
+#>  7  2005     7    NA          8.50
+#>  8  2005     9    NA          7.56
+#>  9  2005     9    NA          8.14
+#> 10  2005     4    NA          7.05
 ```
 
 ## Important details

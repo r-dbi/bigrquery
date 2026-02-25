@@ -234,15 +234,27 @@ op_can_download.lazy_base_query <- function(x) {
 }
 
 query_is_head_only <- function(x) {
-  if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
-  if (!op_can_download(x$x)) return(FALSE)
+  if (!inherits(x$x, "lazy_base_remote_query")) {
+    return(FALSE)
+  }
+  if (!op_can_download(x$x)) {
+    return(FALSE)
+  }
 
   vars_base <- dbplyr::op_vars(x$x)
-  if (!is_select_trivial(x$select, vars_base)) return(FALSE)
+  if (!is_select_trivial(x$select, vars_base)) {
+    return(FALSE)
+  }
 
-  if (!is_empty(x$where)) return(FALSE)
-  if (!is_empty(x$order_by)) return(FALSE)
-  if (!is_false(x$distinct)) return(FALSE)
+  if (!is_empty(x$where)) {
+    return(FALSE)
+  }
+  if (!is_empty(x$order_by)) {
+    return(FALSE)
+  }
+  if (!is_false(x$distinct)) {
+    return(FALSE)
+  }
 
   TRUE
 }
@@ -273,7 +285,9 @@ op_table.lazy_query <- function(x, con) NULL
 op_table.lazy_base_remote_query <- function(x, con) x$x
 #' @export
 op_table.lazy_select_query <- function(x, con) {
-  if (!query_is_head_only(x)) return(NULL)
+  if (!query_is_head_only(x)) {
+    return(NULL)
+  }
 
   op_table(x$x)
 }

@@ -29,7 +29,8 @@ bq_perform_upload(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NULL
 )
 
 bq_perform_load(
@@ -153,6 +154,9 @@ to the table.
 'duplicate' error is returned in the job result.
 }}
 
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
+
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.
 
@@ -223,7 +227,7 @@ Additional information at:
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 ds <- bq_test_dataset()
 bq_mtcars <- bq_table(ds, "mtcars")
 job <- bq_perform_upload(bq_mtcars, mtcars)

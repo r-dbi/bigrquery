@@ -42,7 +42,7 @@ One day we might also expose the general \href{https://cloud.google.com/resource
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 bq_project_datasets("bigquery-public-data")
 bq_project_datasets("githubarchive")
 

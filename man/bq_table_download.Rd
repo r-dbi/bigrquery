@@ -10,11 +10,10 @@ bq_table_download(
   page_size = NULL,
   start_index = 0L,
   max_connections = 6L,
-  quiet = NA,
+  quiet = getOption("bigrquery.quiet", NA),
   bigint = c("integer", "integer64", "numeric", "character"),
   api = c("json", "arrow"),
-  billing = x$project,
-  max_results = deprecated()
+  billing = x$project
 )
 }
 \arguments{
@@ -57,9 +56,6 @@ if the bigrquerystorage package is installed.}
 \item{billing}{(Arrow only) Project to bill; defaults to the project of \code{x},
 and typically only needs to be specified if you're working with public
 datasets.}
-
-\item{max_results}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated. Please use
-\code{n_max} instead.}
 }
 \value{
 Because data retrieval may generate list-columns and the \code{data.frame}
@@ -78,7 +74,7 @@ deliberately by using \code{api = "json"} or \code{api = "arrow"}.
 The arrow API is much faster, but has heavier dependencies: bigrquerystorage
 requires the arrow package, which can be tricky to compile on Linux (but you
 usually should be able to get a binary from
-\href{https://posit.co/products/cloud/public-package-manager/}{Posit Public Package Manager}.
+\href{https://p3m.dev/}{Posit Public Package Manager}.
 
 There's one known limitation of \code{api = "arrow"}: when querying public data,
 you'll now need to provide a \code{billing} project.
@@ -108,7 +104,7 @@ as follows:
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 \dontshow{\}) # examplesIf}
 }

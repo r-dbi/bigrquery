@@ -61,6 +61,7 @@ setClass("BigQueryDriver", contains = "DBIDriver")
 
 #' @rdname bigquery
 #' @inheritParams DBI::dbConnect
+#' @param drv The result of `bigquery()`.
 #' @param project,dataset Project and dataset identifiers
 #' @inheritParams bq_perform_query
 #' @inheritParams bq_projects
