@@ -12,6 +12,10 @@
   timezone is empty or not defined
   ([@r2evans](https://github.com/r2evans),
   [\#660](https://github.com/r-dbi/bigrquery/issues/660)).
+- [`dbAppendTable()`](https://dbi.r-dbi.org/reference/dbAppendTable.html)
+  now correctly uses the billing project from the connection
+  ([@eheinzen](https://github.com/eheinzen),
+  [\#638](https://github.com/r-dbi/bigrquery/issues/638)).
 - [`dbExecute()`](https://dbi.r-dbi.org/reference/dbExecute.html) gains
   `params=` support ([@r2evans](https://github.com/r2evans),
   [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
