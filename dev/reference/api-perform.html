@@ -90,7 +90,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  create_disposition <span class="op">=</span> <span class="st">"CREATE_IF_NEEDED"</span>,</span>
 <span>  write_disposition <span class="op">=</span> <span class="st">"WRITE_EMPTY"</span>,</span>
 <span>  <span class="va">...</span>,</span>
-<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span></span>
+<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span>,</span>
+<span>  json_digits <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_load</span><span class="op">(</span></span>
@@ -229,6 +230,11 @@ to the table.</p></li>
 <li><p>"WRITE_EMPTY": If the table already exists and contains data, a
 'duplicate' error is returned in the job result.</p></li>
 </ul></dd>
+
+
+<dt id="arg-json-digits">json_digits<a class="anchor" aria-label="anchor" href="#arg-json-digits"></a></dt>
+<dd><p>Species the number of digits for formatting
+numeric values.</p></dd>
 
 
 <dt id="arg-source-uris">source_uris<a class="anchor" aria-label="anchor" href="#arg-source-uris"></a></dt>

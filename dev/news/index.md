@@ -2,6 +2,9 @@
 
 ## bigrquery (development version)
 
+- [`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
+  and friends now default to 22 digits of accuracy, and now allow you to
+  change this value with the new `json_digits` argument.
 - Always upload `POSIXt` objects with 6 digits (i.e. microsecond)
   precision ([\#660](https://github.com/r-dbi/bigrquery/issues/660)).
 - Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to

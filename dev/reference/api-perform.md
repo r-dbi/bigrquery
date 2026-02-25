@@ -41,7 +41,8 @@ bq_perform_upload(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NULL
 )
 
 bq_perform_load(
@@ -199,6 +200,10 @@ bq_perform_copy(
 
   - "WRITE_EMPTY": If the table already exists and contains data, a
     'duplicate' error is returned in the job result.
+
+- json_digits:
+
+  Species the number of digits for formatting numeric values.
 
 - source_uris:
 

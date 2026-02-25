@@ -24,7 +24,13 @@ bq_table_delete(x)
 
 bq_table_copy(x, dest, ..., quiet = getOption("bigrquery.quiet", NA))
 
-bq_table_upload(x, values, ..., quiet = getOption("bigrquery.quiet", NA))
+bq_table_upload(
+  x,
+  values,
+  ...,
+  quiet = getOption("bigrquery.quiet", NA),
+  json_digits = NULL
+)
 
 bq_table_save(
   x,
@@ -68,6 +74,10 @@ bq_table_patch(x, fields)
 - values:
 
   Data frame of values to insert.
+
+- json_digits:
+
+  Species the number of digits for formatting numeric values.
 
 - destination_uris:
 
