@@ -104,7 +104,7 @@ db_compute.BigQueryConnection <- function(
     )
   }
 
-  dbplyr::in_catalog(tb$project, tb$dataset, tb$table)
+  I(paste(tb$project, tb$dataset, tb$table, sep = "."))
 }
 
 # registered onLoad
