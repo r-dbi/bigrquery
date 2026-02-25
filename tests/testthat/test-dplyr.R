@@ -144,23 +144,25 @@ test_that("collect can identify directly download tables", {
 
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")
+  con <- simulate_bigrquery()
 
-  sql <- dbplyr::lazy_frame(x = "1") %>%
-    dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
-  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
+  expect_equal(
+    dbplyr::translate_sql(as.integer(x), con = con),
+    dbplyr::sql("SAFE_CAST(`x` AS INT64)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(as.numeric(x), con = con),
+    dbplyr::sql("SAFE_CAST(`x` AS FLOAT64)")
+  )
 })
 
 test_that("%||% translates to IFNULL", {
   skip_if_not_installed("dbplyr")
 
-  sql <- dbplyr::lazy_frame(x = 1L) %>%
-    dplyr::mutate(y = x %||% 2L) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
+  expect_equal(
+    dbplyr::translate_sql(x %||% 2L, con = simulate_bigrquery()),
+    dbplyr::sql("IFNULL(`x`, 2)")
+  )
 })
 
 test_that("suffixes use _", {
