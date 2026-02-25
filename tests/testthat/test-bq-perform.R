@@ -5,10 +5,13 @@ test_that("bq_perform_upload creates job that succeeds", {
   job <- bq_perform_upload(bq_mtcars, mtcars)
 
   expect_s3_class(job, "bq_job")
-  expect_snapshot({
-    bq_job_wait(job, quiet = FALSE)
-    bq_job_wait(job, quiet = FALSE)
-  })
+  expect_snapshot(
+    {
+      bq_job_wait(job, quiet = FALSE)
+      bq_job_wait(job, quiet = FALSE)
+    },
+    transform = \(x) gsub("[0-9.]+ kB", "<xxx> kB", x)
+  )
 
   expect_true(bq_table_exists(bq_mtcars))
 })
