@@ -9,15 +9,15 @@ test_that("bq_check_namespace() works", {
 test_that("check_labels() accepts valid labels and NULL-like inputs", {
   expect_null(check_labels(NULL))
   expect_null(check_labels(NA))
-  expect_null(check_labels(list()))
+  expect_null(check_labels(character()))
 
-  expect_equal(check_labels(list(env = "prod")), list(env = "prod"))
-  expect_equal(check_labels(list(env = "prod", team = "data")), list(env = "prod", team = "data"))
+  expect_equal(check_labels(c(env = "prod")), c(env = "prod"))
+  expect_equal(check_labels(c(env = "prod", team = "data")), c(env = "prod", team = "data"))
 })
 
 test_that("check_labels() warns and returns NULL for invalid inputs", {
-  expect_warning(check_labels("not-a-list"), "dictionary list")
-  expect_warning(check_labels(list("no-name")), "non-empty strings")
-  expect_warning(check_labels(list(ENV = "prod")), "must match")
-  expect_warning(check_labels(list(env = "Prod")), "must be empty or match")
+  expect_warning(check_labels(list(env = "prod")), "named character vector")
+  expect_warning(check_labels(c("no-name")), "named character vector")
+  expect_warning(check_labels(c(ENV = "prod")), "must match")
+  expect_warning(check_labels(c(env = "Prod")), "must be empty or match")
 })
