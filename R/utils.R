@@ -87,33 +87,26 @@ has_bigrquerystorage <- function() {
 }
 
 check_labels <- function(labels) {
-  # Handle NULL, NA, or empty inputs
   if (is.null(labels) || length(labels) == 0 || (length(labels) == 1 && is.na(labels))) {
     return(NULL)
   }
 
-  if (!is.list(labels)) {
-    warning(paste0("Labels must to be a dictionary list; dropping labels"), immediate. = TRUE)
+  if (!is.character(labels) || is.null(names(labels)) || anyNA(names(labels)) || any(names(labels) == "")) {
+    warning("Labels must be a named character vector; dropping labels", immediate. = TRUE, call. = FALSE)
     return(NULL)
   }
+
   nms <- names(labels)
-  if (is.null(nms) || anyNA(nms) || any(nms == "")) {
-    warning("Label keys must be non-empty strings; dropping labels", immediate. = TRUE, call. = FALSE)
+  bad_keys <- nms[nms != tolower(nms)]
+  if (length(bad_keys) > 0) {
+    warning(sprintf("Label key '%s' must match ^[a-z0-9_-]{0,62}$; dropping labels", bad_keys[[1]]), immediate. = TRUE, call. = FALSE)
     return(NULL)
   }
-  for (nm in names(labels)) {
-    if (!is.character(labels[[nm]]) || length(labels[[nm]]) != 1) {
-      warning(sprintf("Label '%s' must be a single string; dropping labels", nm), immediate. = TRUE)
-      return(NULL)
-    }
-    if (nm != tolower(nm)) {
-      warning(sprintf("Label key '%s' must match ^[a-z0-9_-]{0,62}$; dropping labels", nm), immediate. = TRUE)
-      return(NULL)
-    }
-    if (labels[[nm]] != tolower(labels[[nm]])) {
-      warning(sprintf("Label value '%s' must be empty or match ^[a-z0-9_-]{0,62}$; dropping labels", labels[[nm]]), immediate. = TRUE)
-      return(NULL)
-    }
+
+  bad_vals <- labels[labels != tolower(labels)]
+  if (length(bad_vals) > 0) {
+    warning(sprintf("Label value '%s' must be empty or match ^[a-z0-9_-]{0,62}$; dropping labels", bad_vals[[1]]), immediate. = TRUE, call. = FALSE)
+    return(NULL)
   }
 
   return(labels)
