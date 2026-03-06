@@ -168,7 +168,7 @@ bq_perform_upload <- function(
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, auto_unbox = TRUE, pretty = TRUE)
+    "content" = jsonlite::toJSON(metadata, auto_unbox = TRUE, pretty = TRUE, digits = json_digits)
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
