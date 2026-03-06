@@ -87,27 +87,13 @@ has_bigrquerystorage <- function() {
 }
 
 check_labels <- function(labels) {
-  if (is.null(labels) || length(labels) == 0 || (length(labels) == 1 && is.na(labels))) {
+  if (is.null(labels) || length(labels) == 0) {
     return(NULL)
   }
 
-  if (!is.character(labels) || is.null(names(labels)) || anyNA(names(labels)) || any(names(labels) == "")) {
-    warning("Labels must be a named character vector; dropping labels", immediate. = TRUE, call. = FALSE)
-    return(NULL)
+  if (!is.list(labels) || any(names2(labels) == "")) {
+    cli::cli_abort("Labels must be a named list.")
   }
 
-  nms <- names(labels)
-  bad_keys <- nms[nms != tolower(nms)]
-  if (length(bad_keys) > 0) {
-    warning(sprintf("Label key '%s' must match ^[a-z0-9_-]{0,62}$; dropping labels", bad_keys[[1]]), immediate. = TRUE, call. = FALSE)
-    return(NULL)
-  }
-
-  bad_vals <- labels[labels != tolower(labels)]
-  if (length(bad_vals) > 0) {
-    warning(sprintf("Label value '%s' must be empty or match ^[a-z0-9_-]{0,62}$; dropping labels", bad_vals[[1]]), immediate. = TRUE, call. = FALSE)
-    return(NULL)
-  }
-
-  return(labels)
+  labels
 }
