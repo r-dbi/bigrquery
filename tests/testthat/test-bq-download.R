@@ -397,3 +397,27 @@ test_that("can convert bytes type", {
     )
   )
 })
+
+test_that("NUMERIC columns preserve double precision (issue #624)", {
+  # Test that NUMERIC/BIGNUMERIC columns are not converted to integers
+  # even when bigint = "integer" is used
+  
+  # Create test data that simulates NUMERIC columns incorrectly parsed as integer64
+  test_data <- data.frame(
+    value = bit64::as.integer64(c(123, 456, 789)),
+    count = bit64::as.integer64(c(1, 2, 3))
+  )
+  attr(test_data$value, "bq_type") <- "NUMERIC"  # Should remain double
+  attr(test_data$count, "bq_type") <- "INTEGER"  # Should be converted to int
+  
+  # Apply post-processing with bigint = "integer"
+  result <- parse_postprocess(test_data, bigint = "integer")
+  
+  # NUMERIC column should remain as double
+  expect_type(result$value, "double")
+  expect_equal(result$value, c(123, 456, 789))
+  
+  # INTEGER column should be converted to integer
+  expect_type(result$count, "integer")
+  expect_equal(result$count, c(1L, 2L, 3L))
+})
