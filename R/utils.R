@@ -85,3 +85,15 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 has_bigrquerystorage <- function() {
   is_installed("bigrquerystorage")
 }
+
+check_labels <- function(labels) {
+  if (is.null(labels) || length(labels) == 0) {
+    return(NULL)
+  }
+
+  if (!is.list(labels) || any(names2(labels) == "")) {
+    cli::cli_abort("Labels must be a named list.")
+  }
+
+  labels
+}
