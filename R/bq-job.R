@@ -120,7 +120,7 @@ bq_job_wait <- function(
     }
 
     bullets <- map_chr(errors, function(x) {
-      paste0(x$message, " [", x$reason, "]")
+      cli_escape(paste0(x$message, " [", x$reason, "]"))
     })
     bullets <- set_names(bullets, "x")
     cli::cli_abort(c("Job {x} failed", bullets), call = call)
