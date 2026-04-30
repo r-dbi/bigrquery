@@ -2,6 +2,10 @@
 
 ## bigrquery (development version)
 
+- BigQuery error messages containing `{` or `}` are no longer mistaken
+  for cli expressions, so the underlying server message is shown instead
+  of a cli parse failure
+  ([\#677](https://github.com/r-dbi/bigrquery/issues/677)).
 - [`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
   and friends now default to 22 digits of accuracy, and now allow you to
   change this value with the new `json_digits` argument.
