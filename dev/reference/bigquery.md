@@ -53,7 +53,7 @@ dbConnect(
   The default is `"integer"` which returns R's `integer` type but
   results in `NA` for values above/below +/- 2147483647. `"integer64"`
   returns a
-  [bit64::integer64](https://rdrr.io/pkg/bit64/man/bit64-package.html),
+  [bit64::integer64](https://bit64.r-lib.org/reference/bit64-package.html),
   which allows the full range of 64 bit integers.
 
 - ...:

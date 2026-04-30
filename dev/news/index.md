@@ -458,7 +458,7 @@ CRAN release: 2019-02-05
   columns are imported into R. As before, the default is
   `bigint = "integer"`. You can set `bigint = "integer64"` to import
   BigQuery integer columns as
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   columns in R which allows for values outside the range of `integer`
   (`-2147483647` to `2147483647`)
   ([@rasmusab](https://github.com/rasmusab),

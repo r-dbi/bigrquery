@@ -30,12 +30,14 @@ of abstraction on top of BigQuery:
 The current bigrquery release can be installed from CRAN:
 
 ``` r
+
 install.packages("bigrquery")
 ```
 
 The newest development release can be installed from GitHub:
 
 ``` r
+
 #install.packages("pak")
 pak::pak("r-dbi/bigrquery")
 ```
@@ -45,6 +47,7 @@ pak::pak("r-dbi/bigrquery")
 ### Low-level API
 
 ``` r
+
 library(bigrquery)
 billing <- bq_test_project() # replace this with your project ID 
 sql <- "SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"
@@ -69,6 +72,7 @@ bq_table_download(tb, n_max = 10)
 ### DBI
 
 ``` r
+
 library(DBI)
 
 con <- dbConnect(
@@ -105,6 +109,7 @@ dbGetQuery(con, sql, n = 10)
 ### dplyr
 
 ``` r
+
 library(dplyr)
 
 natality <- tbl(con, "natality")
