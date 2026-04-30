@@ -236,7 +236,7 @@ dbWriteTable_bq <- function(
   }
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbWriteTable())
     )
   }
@@ -349,7 +349,7 @@ dbCreateTable_bq <- function(
 ) {
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbCreateTable())
     )
   }
