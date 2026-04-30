@@ -16,6 +16,11 @@
   now correctly uses the billing project from the connection
   ([@eheinzen](https://github.com/eheinzen),
   [\#638](https://github.com/r-dbi/bigrquery/issues/638)).
+- [`dbCreateTable()`](https://dbi.r-dbi.org/reference/dbCreateTable.html)
+  and
+  [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
+  now correctly say that `temporary = TRUE` (rather than `FALSE`) is
+  unsupported ([\#670](https://github.com/r-dbi/bigrquery/issues/670)).
 - [`dbExecute()`](https://dbi.r-dbi.org/reference/dbExecute.html) gains
   `params=` support ([@r2evans](https://github.com/r2evans),
   [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
