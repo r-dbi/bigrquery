@@ -49,7 +49,7 @@ LinkingTo:
 Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
 Config/testthat/parallel: TRUE
-Config/testthat/start-first: bq-table, dplyr
+Config/testthat/start-first: bq-table, dplyr, dbi-connection
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
