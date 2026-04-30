@@ -21,7 +21,7 @@ secret, in one of the forms supported for the \code{txt} argument of
 \value{
 \itemize{
 \item \code{bq_auth_configure()}: An object of R6 class
-\link[gargle:AuthState-class]{gargle::AuthState}, invisibly.
+\link[gargle:AuthState]{gargle::AuthState}, invisibly.
 \item \code{bq_oauth_client()}: the current user-configured OAuth client.
 }
 }
@@ -60,8 +60,8 @@ bq_oauth_client()
 bq_auth_configure(client = original_client)
 }
 \seealso{
-Other auth functions: 
-\code{\link{bq_auth}()},
-\code{\link{bq_deauth}()}
+Other auth functions:
+\code{\link[=bq_auth]{bq_auth()}},
+\code{\link[=bq_deauth]{bq_deauth()}}
 }
 \concept{auth functions}

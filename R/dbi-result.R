@@ -9,6 +9,7 @@ BigQueryResult <- function(conn, sql, params = NULL, ...) {
     default_dataset = ds,
     quiet = conn@quiet,
     parameters = params,
+    labels = conn@labels,
     ...
   )
 

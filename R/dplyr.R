@@ -50,7 +50,8 @@ tbl.BigQueryConnection <- function(src, from, ...) {
   schema <- bq_perform_query_schema(
     sql,
     billing = src$con@billing,
-    default_dataset = dataset
+    default_dataset = dataset,
+    labels = src$con@labels
   )
   vars <- map_chr(schema, "[[", "name")
 
@@ -94,7 +95,8 @@ db_compute.BigQueryConnection <- function(
     tb <- bq_project_query(
       con@project,
       sql,
-      destination_table = destination_table
+      destination_table = destination_table,
+      labels = con@labels
     )
   } else {
     ds <- bq_dataset(con@project, con@dataset)
@@ -103,7 +105,8 @@ db_compute.BigQueryConnection <- function(
     tb <- bq_dataset_query(
       ds,
       query = sql,
-      destination_table = destination_table
+      destination_table = destination_table,
+      labels = con@labels
     )
   }
 
@@ -133,7 +136,13 @@ db_copy_to.BigQueryConnection <- function(
 
   tb <- as_bq_table(con, table)
   write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
-  bq_table_upload(tb, values, fields = types, write_disposition = write)
+  bq_table_upload(
+    tb,
+    values,
+    fields = types,
+    write_disposition = write,
+    labels = con@labels
+  )
 
   table
 }
@@ -181,10 +190,23 @@ collect.tbl_BigQueryConnection <- function(
     sql <- dbplyr::db_sql_render(con, x)
 
     if (is.null(con@dataset)) {
-      tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
+      tb <- bq_project_query(
+        billing,
+        sql,
+        quiet = con@quiet,
+        labels = con@labels,
+        ...
+      )
     } else {
       ds <- as_bq_dataset(con)
-      tb <- bq_dataset_query(ds, sql, quiet = con@quiet, billing = billing, ...)
+      tb <- bq_dataset_query(
+        ds,
+        sql,
+        quiet = con@quiet,
+        billing = billing,
+        labels = con@labels,
+        ...
+      )
     }
   }
 

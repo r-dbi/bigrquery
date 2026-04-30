@@ -10,3 +10,25 @@ test_that("connecting yields a BigQueryConnection", {
   con <- dbConnect(bigquery(), project = bq_test_project())
   expect_s4_class(con, "BigQueryConnection")
 })
+
+test_that("dbConnect() captures labels", {
+  con <- dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    labels = list(env = "test")
+  )
+  expect_equal(con@labels, list(env = "test"))
+})
+
+test_that("dbConnect() validates labels", {
+  expect_snapshot(
+    error = TRUE,
+    dbConnect(bigquery(), project = bq_test_project(), labels = "oops")
+  )
+})
+
+test_that("dbConnect() reads bigrquery.labels option", {
+  withr::local_options(bigrquery.labels = list(env = "from-option"))
+  con <- dbConnect(bigquery(), project = bq_test_project())
+  expect_equal(con@labels, list(env = "from-option"))
+})

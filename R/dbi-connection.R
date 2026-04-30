@@ -8,7 +8,8 @@ BigQueryConnection <- function(
   page_size = 1e4,
   quiet = NA,
   use_legacy_sql = FALSE,
-  bigint = c("integer", "integer64", "numeric", "character")
+  bigint = c("integer", "integer64", "numeric", "character"),
+  labels = NULL
 ) {
   connection_capture()
 
@@ -20,7 +21,8 @@ BigQueryConnection <- function(
     page_size = as.integer(page_size),
     quiet = quiet,
     use_legacy_sql = use_legacy_sql,
-    bigint = match.arg(bigint)
+    bigint = match.arg(bigint),
+    labels = labels
   )
 }
 
@@ -36,7 +38,8 @@ setClass(
     use_legacy_sql = "logical",
     page_size = "integer",
     quiet = "logical",
-    bigint = "character"
+    bigint = "character",
+    labels = "ANY"
   )
 )
 
@@ -113,6 +116,7 @@ setMethod(
       default_dataset = ds,
       quiet = conn@quiet,
       parameters = params,
+      labels = conn@labels,
       ...
     )
     bq_job_wait(job, quiet = conn@quiet)
@@ -256,6 +260,7 @@ dbWriteTable_bq <- function(
     create_disposition = create_disposition,
     write_disposition = write_disposition,
     billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   invisible(TRUE)
@@ -307,6 +312,7 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     create_disposition = "CREATE_NEVER",
     write_disposition = "WRITE_APPEND",
     billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   on_connection_updated(conn, toString(tb))

@@ -42,7 +42,7 @@ if \code{NA} picks based on whether or not you're in an interactive context.}
 \item{bigint}{The R type that BigQuery's 64-bit integer types should be
 mapped to. The default is \code{"integer"}, which returns R's \code{integer} type,
 but results in \code{NA} for values above/below +/- 2147483647. \code{"integer64"}
-returns a \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
+returns a \link[bit64:integer64]{bit64::integer64}, which allows the full range of 64 bit
 integers.}
 
 \item{api}{Which API to use? The \code{"json"} API works where ever bigrquery
