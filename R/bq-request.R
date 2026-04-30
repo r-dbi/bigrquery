@@ -275,10 +275,12 @@ gargle_abort <- function(reason, message, status, call = caller_env()) {
       advice <- "Try increasing the `page_size` value of `bq_table_download()`"
     }
     message <- c(
-      paste0(message, " [", reason, "] "),
+      cli_escape(paste0(message, " [", reason, "] ")),
       i = advice
     )
     class <- c(paste0("bigrquery_", reason), class)
+  } else {
+    message <- cli_escape(message)
   }
 
   cli::cli_abort(message, class = class, call = call)
