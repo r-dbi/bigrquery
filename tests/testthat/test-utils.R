@@ -26,3 +26,8 @@ test_that("check_labels() errors on invalid inputs", {
     check_labels(list(env = 1))
   })
 })
+
+test_that("cli_escape() doubles cli braces", {
+  expect_equal(cli_escape("no braces"), "no braces")
+  expect_equal(cli_escape("{x}"), "{{x}}")
+})
