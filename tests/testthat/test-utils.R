@@ -5,3 +5,8 @@ test_that("bq_check_namespace() works", {
     error = TRUE
   )
 })
+
+test_that("cli_escape() doubles cli braces", {
+  expect_equal(cli_escape("no braces"), "no braces")
+  expect_equal(cli_escape("{x}"), "{{x}}")
+})
