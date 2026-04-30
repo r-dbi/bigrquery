@@ -87,7 +87,8 @@ test_that("warns if supplying unnused arguments", {
       api = "arrow",
       page_size = 1,
       start_index = 1,
-      max_connections = 1
+      max_connections = 1,
+      quiet = TRUE
     )
   )
 })

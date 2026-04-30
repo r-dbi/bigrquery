@@ -1,4 +1,5 @@
 test_that("can control chattiness of bq_job_wait", {
+  withr::local_options(cli.progress_show_after = Inf)
   job <- bq_perform_query("SELECT 1 + 1", bq_test_project())
 
   expect_snapshot({
@@ -8,7 +9,7 @@ test_that("can control chattiness of bq_job_wait", {
 })
 
 test_that("informative errors on failure", {
-  withr::local_options(cli.progress_show_after = 10)
+  withr::local_options(cli.progress_show_after = Inf)
   ds <- bq_test_dataset()
 
   tb <- bq_test_table()
