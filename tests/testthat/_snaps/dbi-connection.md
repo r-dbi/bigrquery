@@ -33,7 +33,7 @@
       DBI::dbWriteTable(con, "x", df, temporary = TRUE)
     Condition
       Error in `DBI::dbWriteTable()`:
-      ! `temporary = FALSE` not supported by bigrquery.
+      ! `temporary = TRUE` not supported by bigrquery.
 
 # can't use parameters
 
