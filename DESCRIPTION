@@ -31,7 +31,7 @@ Imports:
     rlang (>= 1.1.0),
     tibble
 Suggests:
-    bigrquerystorage (>= 1.2.1),
+    bigrquerystorage (>= 1.2.2),
     blob,
     covr,
     dbplyr (>= 2.4.0),

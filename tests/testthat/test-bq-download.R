@@ -127,7 +127,6 @@ test_that("arrow api can convert non-nested types", {
 })
 
 test_that("arrow api can convert nested types", {
-  skip("https://github.com/meztez/bigrquerystorage/issues/54")
   sql <- "SELECT
     STRUCT(1.0 AS a, 'abc' AS b) as s,
     [1.0, 2.0, 3.0] as a,
@@ -138,10 +137,10 @@ test_that("arrow api can convert nested types", {
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
   df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
 
-  expect_equal(df$s, list(list(a = 1, b = "abc")))
+  expect_equal(df$s, tibble(a = 1, b = "abc"))
   expect_equal(df$a, list(c(1, 2, 3)))
   expect_equal(df$aos, list(tibble(a = c(1, 2, 3), b = c("a", "b", "c"))))
-  expect_equal(df$soa, list(list(a = c(1, 2, 3), b = c("a", "b"))))
+  expect_equal(df$soa, tibble(a = list(c(1, 2, 3)), b = list(c("a", "b"))))
 })
 
 test_that("arrow api respects bigint", {
