@@ -131,9 +131,13 @@ test_that("collect can identify directly download tables", {
   expect_false(op_can_download(bq5))
   expect_false(op_can_download(head(bq5)))
 
-  DBI::dbExecute(con, 'CREATE VIEW mtcars2 AS SELECT * FROM basedata.mtcars')
-  defer(DBI::dbExecute(con, 'DROP VIEW mtcars2'))
-  bq6 <- dplyr::tbl(con, "mtcars2")
+  view_name <- random_name()
+  DBI::dbExecute(
+    con,
+    paste0("CREATE VIEW ", view_name, " AS SELECT * FROM basedata.mtcars")
+  )
+  defer(DBI::dbExecute(con, paste0("DROP VIEW ", view_name)))
+  bq6 <- dplyr::tbl(con, view_name)
   expect_false(op_can_download(bq6))
 
   # INFORMATION_SCHEMA.TABLES errors when we attempt to get metadata

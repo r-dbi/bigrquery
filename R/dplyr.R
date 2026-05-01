@@ -104,7 +104,10 @@ db_compute.BigQueryConnection <- function(
     )
   }
 
-  I(paste(tb$project, tb$dataset, tb$table, sep = "."))
+  dbplyr::as_table_path(
+    I(paste(tb$project, tb$dataset, tb$table, sep = ".")),
+    con
+  )
 }
 
 # registered onLoad
