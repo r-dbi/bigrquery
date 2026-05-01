@@ -18,6 +18,13 @@ test_that("can work with literal SQL", {
 
   expect_s3_class(x, "tbl")
   expect_true("fips_code" %in% dbplyr::op_vars(x))
+
+  # If if has three or more periods (#611)
+  y <- dplyr::tbl(
+    con_us,
+    dplyr::sql("SELECT c.fips_code, c.country_name FROM country_code_iso c")
+  )
+  expect_s3_class(y, "tbl")
 })
 
 test_that("can work with nested table identifier", {
