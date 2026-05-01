@@ -33,6 +33,9 @@
   error if you accidentally use `parameters`
   ([@r2evans](https://github.com/r2evans),
   [\#667](https://github.com/r-dbi/bigrquery/issues/667)).
+- [`tbl()`](https://dplyr.tidyverse.org/reference/tbl.html) no longer
+  errors when given a literal SQL query that contains three or more
+  periods ([\#611](https://github.com/r-dbi/bigrquery/issues/611)).
 - Check `getOption("bigrquery.quiet")` option in more `bq_*` functions
   ([@r2evans](https://github.com/r2evans),
   [\#663](https://github.com/r-dbi/bigrquery/issues/663)).

@@ -56,6 +56,8 @@
 <code><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute()</a></code> gains <code>params=</code> support (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/r-dbi/bigrquery/issues/667" class="external-link">#667</a>).</li>
 <li>
 <code><a href="https://dbi.r-dbi.org/reference/dbExecute.html" class="external-link">dbExecute()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbSendQuery.html" class="external-link">dbSendQuery()</a></code> error if you accidentally use <code>parameters</code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/r-dbi/bigrquery/issues/667" class="external-link">#667</a>).</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl()</a></code> no longer errors when given a literal SQL query that contains three or more periods (<a href="https://github.com/r-dbi/bigrquery/issues/611" class="external-link">#611</a>).</li>
 <li>Check <code>getOption("bigrquery.quiet")</code> option in more <code>bq_*</code> functions (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/r-dbi/bigrquery/issues/663" class="external-link">#663</a>).</li>
 </ul></div>
     <div class="section level2">
