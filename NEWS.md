@@ -8,6 +8,7 @@
 * `dbCreateTable()` and `dbWriteTable()` now correctly say that `temporary = TRUE` (rather than `FALSE`) is unsupported (#670).
 * `dbExecute()` gains `params=` support (@r2evans, #667).
 * `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
+* `tbl()` no longer errors when given a literal SQL query that contains three or more periods (#611).
 * Check `getOption("bigrquery.quiet")` option in more `bq_*` functions (@r2evans, #663).
 
 # bigrquery 1.6.1
