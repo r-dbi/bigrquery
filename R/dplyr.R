@@ -166,6 +166,7 @@ db_copy_to.BigQueryConnection <- function(
 #'   The default, `Inf`, will retrieve all rows.
 #' @param ... Other arguments passed on to
 #'   `bq_project_query()`/`bq_project_query()`
+#' @method collect tbl_BigQueryConnection
 collect.tbl_BigQueryConnection <- function(
   x,
   ...,
