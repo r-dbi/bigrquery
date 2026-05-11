@@ -6,7 +6,7 @@
   : A BigQuery data source for dplyr.
 - [`dbConnect(`*`<BigQueryDriver>`*`)`](https://bigrquery.r-dbi.org/dev/reference/bigquery.md)
   : BigQuery DBI driver
-- [`collect.tbl_BigQueryConnection()`](https://bigrquery.r-dbi.org/dev/reference/collect.tbl_BigQueryConnection.md)
+- [`collect(`*`<tbl_BigQueryConnection>`*`)`](https://bigrquery.r-dbi.org/dev/reference/collect.tbl_BigQueryConnection.md)
   : Collect a BigQuery table
 
 ## Low-level API

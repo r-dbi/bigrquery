@@ -16,6 +16,7 @@ dbConnect(
   quiet = NA,
   use_legacy_sql = FALSE,
   bigint = c("integer", "integer64", "numeric", "character"),
+  labels = getOption("bigrquery.labels"),
   ...
 )
 ```
@@ -55,6 +56,14 @@ dbConnect(
   returns a
   [bit64::integer64](https://bit64.r-lib.org/reference/bit64-package.html),
   which allows the full range of 64 bit integers.
+
+- labels:
+
+  A named list of strings used to attach [BigQuery
+  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
+  resulting job, e.g. `list(env = "prod", team = "data")`. This is most
+  useful for cost allocation and other FinOps reporting. Defaults to the
+  value of `getOption("bigrquery.labels")`.
 
 - ...:
 

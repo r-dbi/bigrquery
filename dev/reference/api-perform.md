@@ -30,7 +30,8 @@ bq_perform_extract(
   compression = "NONE",
   ...,
   print_header = TRUE,
-  billing = x$project
+  billing = x$project,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_upload(
@@ -42,7 +43,8 @@ bq_perform_upload(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NULL
+  json_digits = NULL,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_load(
@@ -54,7 +56,8 @@ bq_perform_load(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
-  ...
+  ...,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query(
@@ -67,7 +70,8 @@ bq_perform_query(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE"
+  priority = "INTERACTIVE",
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query_dry_run(
@@ -76,7 +80,8 @@ bq_perform_query_dry_run(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE
+  use_legacy_sql = FALSE,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query_schema(
@@ -84,7 +89,8 @@ bq_perform_query_schema(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL
+  parameters = NULL,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_copy(
@@ -93,7 +99,8 @@ bq_perform_copy(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = NULL
+  billing = NULL,
+  labels = getOption("bigrquery.labels")
 )
 ```
 
@@ -148,6 +155,14 @@ bq_perform_copy(
 - billing:
 
   Identifier of project to bill.
+
+- labels:
+
+  A named list of strings used to attach [BigQuery
+  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
+  resulting job, e.g. `list(env = "prod", team = "data")`. This is most
+  useful for cost allocation and other FinOps reporting. Defaults to the
+  value of `getOption("bigrquery.labels")`.
 
 - values:
 

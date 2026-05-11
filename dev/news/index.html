@@ -43,7 +43,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="bigrquery-development-version">bigrquery (development version)<a class="anchor" aria-label="anchor" href="#bigrquery-development-version"></a></h2>
-<ul><li>BigQuery error messages containing <code>{</code> or <code>}</code> are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (<a href="https://github.com/r-dbi/bigrquery/issues/677" class="external-link">#677</a>).</li>
+<ul><li>
+<code><a href="../reference/api-perform.html">bq_perform_query()</a></code> and friends gain a <code>labels</code> argument that attaches <a href="https://cloud.google.com/bigquery/docs/labels-intro" class="external-link">BigQuery labels</a> to the resulting job, useful for cost allocation. <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code> gains a matching <code>labels</code> argument that is forwarded to every job run on the connection. Defaults to <code>getOption("bigrquery.labels")</code> (<a href="https://github.com/JulianUmbhau" class="external-link">@JulianUmbhau</a>, <a href="https://github.com/r-dbi/bigrquery/issues/673" class="external-link">#673</a>).</li>
+<li>BigQuery error messages containing <code>{</code> or <code>}</code> are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (<a href="https://github.com/r-dbi/bigrquery/issues/677" class="external-link">#677</a>).</li>
 <li>
 <code><a href="../reference/api-perform.html">bq_perform_upload()</a></code> and friends now default to 22 digits of accuracy, and now allow you to change this value with the new <code>json_digits</code> argument.</li>
 <li>Always upload <code>POSIXt</code> objects with 6 digits (i.e. microsecond) precision (<a href="https://github.com/r-dbi/bigrquery/issues/660" class="external-link">#660</a>).</li>

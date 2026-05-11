@@ -31,6 +31,9 @@ Useful links:
 
 Authors:
 
+- Hadley Wickham <hadley@posit.co>
+  ([ORCID](https://orcid.org/0000-0003-4757-117X))
+
 - Jennifer Bryan <jenny@posit.co>
   ([ORCID](https://orcid.org/0000-0002-6983-2759))
 

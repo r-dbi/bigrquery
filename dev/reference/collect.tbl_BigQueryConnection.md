@@ -17,7 +17,8 @@ and
 ## Usage
 
 ``` r
-collect.tbl_BigQueryConnection(
+# S3 method for class 'tbl_BigQueryConnection'
+collect(
   x,
   ...,
   n = Inf,

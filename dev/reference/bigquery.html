@@ -58,6 +58,7 @@
 <span>  quiet <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  use_legacy_sql <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  bigint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"integer"</span>, <span class="st">"integer64"</span>, <span class="st">"numeric"</span>, <span class="st">"character"</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -96,6 +97,14 @@ if <code>NA</code> picks based on whether or not you're in an interactive contex
 The default is <code>"integer"</code> which returns R's <code>integer</code> type but results in <code>NA</code> for
 values above/below +/- 2147483647. <code>"integer64"</code> returns a <a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a>,
 which allows the full range of 64 bit integers.</p></dd>
+
+
+<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
+<dd><p>A named list of strings used to attach
+<a href="https://cloud.google.com/bigquery/docs/labels-intro" class="external-link">BigQuery labels</a>
+to the resulting job, e.g. <code>list(env = "prod", team = "data")</code>. This
+is most useful for cost allocation and other FinOps reporting.
+Defaults to the value of <code>getOption("bigrquery.labels")</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

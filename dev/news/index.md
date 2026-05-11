@@ -2,6 +2,15 @@
 
 ## bigrquery (development version)
 
+- [`bq_perform_query()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
+  and friends gain a `labels` argument that attaches [BigQuery
+  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
+  resulting job, useful for cost allocation.
+  [`dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html) gains
+  a matching `labels` argument that is forwarded to every job run on the
+  connection. Defaults to `getOption("bigrquery.labels")`
+  ([@JulianUmbhau](https://github.com/JulianUmbhau),
+  [\#673](https://github.com/r-dbi/bigrquery/issues/673)).
 - BigQuery error messages containing `{` or `}` are no longer mistaken
   for cli expressions, so the underlying server message is shown instead
   of a cli parse failure
