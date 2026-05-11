@@ -15,6 +15,7 @@
   quiet = NA,
   use_legacy_sql = FALSE,
   bigint = c("integer", "integer64", "numeric", "character"),
+  labels = getOption("bigrquery.labels"),
   ...
 )
 }
@@ -34,8 +35,14 @@ if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
 The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
-values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
+values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:integer64]{bit64::integer64},
 which allows the full range of 64 bit integers.}
+
+\item{labels}{A named list of strings used to attach
+\href{https://cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
+to the resulting job, e.g. \code{list(env = "prod", team = "data")}. This
+is most useful for cost allocation and other FinOps reporting.
+Defaults to the value of \code{getOption("bigrquery.labels")}.}
 
 \item{...}{Other arguments for compatibility with generic; currently ignored.}
 }

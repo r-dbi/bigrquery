@@ -56,6 +56,11 @@ NULL
 #'   snake_case names are automatically converted to camelCase.
 #' @param print_header Whether to print out a header row in the results.
 #' @param billing Identifier of project to bill.
+#' @param labels A named list of strings used to attach
+#'   [BigQuery labels](https://cloud.google.com/bigquery/docs/labels-intro)
+#'   to the resulting job, e.g. `list(env = "prod", team = "data")`. This
+#'   is most useful for cost allocation and other FinOps reporting.
+#'   Defaults to the value of `getOption("bigrquery.labels")`.
 bq_perform_extract <- function(
   x,
   destination_uris,
@@ -63,7 +68,8 @@ bq_perform_extract <- function(
   compression = "NONE",
   ...,
   print_header = TRUE,
-  billing = x$project
+  billing = x$project,
+  labels = getOption("bigrquery.labels")
 ) {
   x <- as_bq_table(x)
   destination_uris <- as.character(destination_uris) # for gs_object
@@ -71,6 +77,7 @@ bq_perform_extract <- function(
   check_string(compression)
   check_bool(print_header)
   check_string(billing)
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
   body <- list(
@@ -81,7 +88,8 @@ bq_perform_extract <- function(
         destinationFormat = unbox(destination_format),
         compression = unbox(compression),
         printHeader = unbox(print_header)
-      )
+      ),
+      labels = labels
     )
   )
 
@@ -127,7 +135,8 @@ bq_perform_upload <- function(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NULL
+  json_digits = NULL,
+  labels = getOption("bigrquery.labels")
 ) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
@@ -139,6 +148,7 @@ bq_perform_upload <- function(
   check_string(write_disposition)
   check_string(billing)
   json_digits <- check_digits(json_digits)
+  check_labels(labels)
 
   load <- list(
     sourceFormat = unbox(source_format),
@@ -154,11 +164,21 @@ bq_perform_upload <- function(
     load$autodetect <- unbox(TRUE)
   }
 
-  metadata <- list(configuration = list(load = load))
+  metadata <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, pretty = TRUE, digits = json_digits)
+    "content" = jsonlite::toJSON(
+      metadata,
+      auto_unbox = TRUE,
+      pretty = TRUE,
+      digits = json_digits
+    )
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
@@ -251,7 +271,8 @@ bq_perform_load <- function(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
-  ...
+  ...,
+  labels = getOption("bigrquery.labels")
 ) {
   x <- as_bq_table(x)
   source_uris <- as.character(source_uris)
@@ -260,6 +281,7 @@ bq_perform_load <- function(
   check_number_decimal(nskip, min = 0)
   check_string(create_disposition)
   check_string(write_disposition)
+  check_labels(labels)
 
   load <- list(
     sourceUris = as.list(source_uris),
@@ -280,7 +302,12 @@ bq_perform_load <- function(
     load$autodetect <- TRUE
   }
 
-  body <- list(configuration = list(load = load))
+  body <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
 
   url <- bq_path(billing, jobs = "")
   res <- bq_post(
@@ -322,7 +349,8 @@ bq_perform_query <- function(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE"
+  priority = "INTERACTIVE",
+  labels = getOption("bigrquery.labels")
 ) {
   query <- as_query(query)
   check_string(billing)
@@ -331,6 +359,7 @@ bq_perform_query <- function(
   check_string(write_disposition)
   check_bool(use_legacy_sql)
   check_string(priority)
+  check_labels(labels)
 
   query <- list(
     query = unbox(query),
@@ -357,7 +386,12 @@ bq_perform_query <- function(
   }
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels
+    )
+  )
 
   res <- bq_post(
     url,
@@ -375,7 +409,8 @@ bq_perform_query_dry_run <- function(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE
+  use_legacy_sql = FALSE,
+  labels = getOption("bigrquery.labels")
 ) {
   query <- bq_perform_query_data(
     query = query,
@@ -383,9 +418,16 @@ bq_perform_query_dry_run <- function(
     parameters = parameters,
     use_legacy_sql = use_legacy_sql
   )
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
@@ -403,7 +445,8 @@ bq_perform_query_schema <- function(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL
+  parameters = NULL,
+  labels = getOption("bigrquery.labels")
 ) {
   query <- bq_perform_query_data(
     query = query,
@@ -411,9 +454,16 @@ bq_perform_query_schema <- function(
     parameters = parameters,
     use_legacy_sql = FALSE
   )
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
@@ -459,10 +509,12 @@ bq_perform_copy <- function(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = NULL
+  billing = NULL,
+  labels = getOption("bigrquery.labels")
 ) {
   billing <- billing %||% dest$project
   url <- bq_path(billing, jobs = "")
+  check_labels(labels)
 
   body <- list(
     configuration = list(
@@ -471,7 +523,8 @@ bq_perform_copy <- function(
         destinationTable = tableReference(dest),
         createDisposition = unbox(create_disposition),
         writeDisposition = unbox(write_disposition)
-      )
+      ),
+      labels = labels
     )
   )
 
