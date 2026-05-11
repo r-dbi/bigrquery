@@ -8,10 +8,10 @@
 #' @inheritParams bq_projects
 #'
 #' @section Google BigQuery API documentation:
-#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get)
-#' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
-#' * [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
-#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list)
+#' * [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get)
+#' * [insert](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
+#' * [delete](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
+#' * [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/list)
 #' @examplesIf bq_testable()
 #' ds <- bq_dataset(bq_test_project(), "dataset_api")
 #' bq_dataset_exists(ds)

@@ -10,9 +10,9 @@
 #' @inheritParams api-perform
 #' @inheritParams bq_projects
 #' @section Google BigQuery API documentation:
-#' * [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
-#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
-#' * [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
+#' * [insert](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
+#' * [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
+#' * [delete](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
 #' @return
 #' * `bq_table_copy()`, `bq_table_create()`, `bq_table_delete()`, `bq_table_upload()`:
 #'   an invisible [bq_table]

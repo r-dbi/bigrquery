@@ -124,7 +124,7 @@ snake_case names are automatically converted to camelCase.}
 \item{billing}{Identifier of project to bill.}
 
 \item{labels}{A named list of strings used to attach
-\href{https://cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
+\href{https://docs.cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
 to the resulting job, e.g. \code{list(env = "prod", team = "data")}. This
 is most useful for cost allocation and other FinOps reporting.
 Defaults to the value of \code{getOption("bigrquery.labels")}.}
@@ -193,7 +193,7 @@ Generally, you can supply R vectors and they will be automatically
 converted to the correct type. If you need greater control, you can call
 \code{\link[=bq_param_scalar]{bq_param_scalar()}} or \code{\link[=bq_param_array]{bq_param_array()}} explicitly.
 
-See \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+See \url{https://docs.cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.
@@ -227,15 +227,15 @@ you should use instead:
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}
 }
 
 Additional information at:
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/exporting-data}{exporting data}
-\item \href{https://cloud.google.com/bigquery/docs/loading-data}{loading data}
-\item \href{https://cloud.google.com/bigquery/docs/writing-results}{writing queries}
-\item \href{https://cloud.google.com/bigquery/docs/managing-tables#copy-table}{copying a table}
+\item \href{https://docs.cloud.google.com/bigquery/docs/exporting-data}{exporting data}
+\item \href{https://docs.cloud.google.com/bigquery/docs/loading-data}{loading data}
+\item \href{https://docs.cloud.google.com/bigquery/docs/writing-results}{writing queries}
+\item \href{https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table}{copying a table}
 }
 }
 

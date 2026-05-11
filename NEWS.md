@@ -2,7 +2,7 @@
 
 * BigQuery error messages containing `{` or `}` are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (#677).
 * `bq_dataset_query()`, `bq_project_query()`, `bq_table_copy()`, `bq_table_download()`, `bq_table_load()`, `bq_table_save()`, and `bq_table_upload()` now respect `getOption("bigrquery.quiet")` as the default for `quiet` (@r2evans, #663).
-* `bq_perform_query()` and friends gain a `labels` argument that attaches [BigQuery labels](https://cloud.google.com/bigquery/docs/labels-intro) to the resulting job, useful for cost allocation. `dbConnect()` gains a matching `labels` argument that is forwarded to every job run on the connection. Defaults to `getOption("bigrquery.labels")` (@JulianUmbhau, #673).
+* `bq_perform_query()` and friends gain a `labels` argument that attaches [BigQuery labels](https://docs.cloud.google.com/bigquery/docs/labels-intro) to the resulting job, useful for cost allocation. `dbConnect()` gains a matching `labels` argument that is forwarded to every job run on the connection. Defaults to `getOption("bigrquery.labels")` (@JulianUmbhau, #673).
 * `bq_perform_upload()` and friends now default to 22 digits of accuracy, and allow you to change this value with the new `json_digits` argument. They now also upload `POSIXt` objects with 6 digits (i.e. microsecond) precision (#660), and correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to `Sys.timezone()` when the timezone is empty or not defined (@r2evans, #660).
 * `dbAppendTable()` now correctly uses the billing project from the connection (@eheinzen, #638).
 * `dbCreateTable()` and `dbWriteTable()` now correctly say that `temporary = TRUE` (rather than `FALSE`) is unsupported (#670).

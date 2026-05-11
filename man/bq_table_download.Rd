@@ -99,7 +99,7 @@ as follows:
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}{list}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list}{list}
 }
 }
 

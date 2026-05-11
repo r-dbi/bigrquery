@@ -19,14 +19,14 @@ A character vector.
 }
 \description{
 List all projects that you have access to. You can also work with
-\href{https://cloud.google.com/bigquery/public-data/}{public datasets},
+\href{https://docs.cloud.google.com/bigquery/public-data/}{public datasets},
 but you will need to provide a \code{billing} project whenever you perform
 any non-free operation.
 }
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/list}{list}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/projects/list}{list}
 }
 }
 

@@ -31,7 +31,7 @@ bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
 snake_case names are automatically converted to camelCase.}
 
 \item{fields}{An optional field specification for
-\href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
+\href{https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
 
 \item{delete_contents}{If \code{TRUE}, will recursively delete all tables in
 the dataset. Set to \code{FALSE} by default for safety.}
@@ -49,10 +49,10 @@ Basic create-read-update-delete verbs for datasets.
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get}{get}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert}{insert}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete}{delete}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list}{list}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get}{get}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert}{insert}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete}{delete}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/list}{list}
 }
 }
 

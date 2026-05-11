@@ -106,9 +106,9 @@ various values from the metadata.
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get}{get}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete}{delete}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert}{insert}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/get}{get}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete}{delete}
 }
 }
 

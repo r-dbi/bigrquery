@@ -34,11 +34,9 @@ is a simple string.
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list}{datasets}
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list}{jobs}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list}{datasets}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list}{jobs}
 }
-
-One day we might also expose the general \href{https://cloud.google.com/resource-manager/reference/rest/v1/projects}{project metadata}.
 }
 
 \examples{

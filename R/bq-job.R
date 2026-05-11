@@ -4,7 +4,7 @@
 #' (in various forms) about an existing job.
 #'
 #' @section Google BigQuery API documentation:
-#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
+#' * [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
 #' @examplesIf bq_testable()
 #' jobs <- bq_project_jobs(bq_test_project())
@@ -22,7 +22,7 @@ NULL
 #' @name api-job
 #' @param x A [bq_job]
 #' @param fields An optional field specification for
-#'   [partial response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
+#'   [partial response](https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response)
 bq_job_meta <- function(x, fields = NULL) {
   x <- as_bq_job(x)
   bq_get(
@@ -93,7 +93,7 @@ bq_job_wait <- function(
     if (!quiet) {
       cli::cli_progress_update()
     }
-    # https://cloud.google.com/bigquery/docs/error-messages
+    # https://docs.cloud.google.com/bigquery/docs/error-messages
     # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),

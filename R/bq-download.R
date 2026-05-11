@@ -66,7 +66,7 @@
 #'   and typically only needs to be specified if you're working with public
 #'   datasets.
 #' @section Google BigQuery API documentation:
-#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
+#' * [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examplesIf bq_testable()
 #' df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
@@ -302,7 +302,7 @@ col_apply <- function(x, p, f) {
 bq_datetime_parse <- function(x) {
   # `format` matches clock already.
   # Bigquery DATETIME is documented as microsecond precision.
-  # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#datetime_type
+  # https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/data-types#datetime_type
   x <- clock::year_month_day_parse(x, precision = "microsecond")
 
   # Manually retain microseconds for the POSIXct

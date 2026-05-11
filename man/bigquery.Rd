@@ -39,7 +39,7 @@ values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:inte
 which allows the full range of 64 bit integers.}
 
 \item{labels}{A named list of strings used to attach
-\href{https://cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
+\href{https://docs.cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
 to the resulting job, e.g. \code{list(env = "prod", team = "data")}. This
 is most useful for cost allocation and other FinOps reporting.
 Defaults to the value of \code{getOption("bigrquery.labels")}.}

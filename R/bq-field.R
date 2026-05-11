@@ -17,7 +17,7 @@
 #'   characters.
 #' @param x A list of `bg_fields`
 #' @seealso `bq_field()` corresponds to a `TableFieldSchema`, see
-#' <https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
+#' <https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
 #' for more details.
 #' @export
 #' @examples

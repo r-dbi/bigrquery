@@ -12,13 +12,13 @@
 #' * `bq_perform_extract()`: [bq_table_save()].
 #'
 #' @section Google BigQuery API documentation:
-#' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
+#' * [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 #'
 #' Additional information at:
-#' * [exporting data](https://cloud.google.com/bigquery/docs/exporting-data)
-#' * [loading data](https://cloud.google.com/bigquery/docs/loading-data)
-#' * [writing queries](https://cloud.google.com/bigquery/docs/writing-results)
-#' * [copying a table](https://cloud.google.com/bigquery/docs/managing-tables#copy-table)
+#' * [exporting data](https://docs.cloud.google.com/bigquery/docs/exporting-data)
+#' * [loading data](https://docs.cloud.google.com/bigquery/docs/loading-data)
+#' * [writing queries](https://docs.cloud.google.com/bigquery/docs/writing-results)
+#' * [copying a table](https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table)
 #'
 #' @return A [bq_job].
 #' @keywords internal
@@ -57,7 +57,7 @@ NULL
 #' @param print_header Whether to print out a header row in the results.
 #' @param billing Identifier of project to bill.
 #' @param labels A named list of strings used to attach
-#'   [BigQuery labels](https://cloud.google.com/bigquery/docs/labels-intro)
+#'   [BigQuery labels](https://docs.cloud.google.com/bigquery/docs/labels-intro)
 #'   to the resulting job, e.g. `list(env = "prod", team = "data")`. This
 #'   is most useful for cost allocation and other FinOps reporting.
 #'   Defaults to the value of `getOption("bigrquery.labels")`.
@@ -187,7 +187,7 @@ bq_perform_upload <- function(
       "content" = export_json(values, json_digits = json_digits)
     )
   } else {
-    # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
+    # https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
     media <- list(
       "type" = "application/vnd.apache.parquet",
       "content" = nanoparquet::write_parquet(values, ":raw:")
@@ -204,7 +204,7 @@ bq_perform_upload <- function(
   as_bq_job(res$jobReference)
 }
 
-# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
+# https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
 export_json <- function(values, json_digits = NULL) {
   # Eliminate row names
   rownames(values) <- NULL
@@ -328,7 +328,7 @@ bq_perform_load <- function(
 #'   converted to the correct type. If you need greater control, you can call
 #'   [bq_param_scalar()] or [bq_param_array()] explicitly.
 #'
-#'   See <https://cloud.google.com/bigquery/docs/parameterized-queries>
+#'   See <https://docs.cloud.google.com/bigquery/docs/parameterized-queries>
 #'   for more details.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
@@ -470,7 +470,7 @@ bq_perform_query_schema <- function(
     body = bq_body(body, ...),
     query = list(fields = "statistics")
   )
-  # https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableSchema
+  # https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableSchema
   res$statistics$query$schema$fields
 }
 

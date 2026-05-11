@@ -28,7 +28,7 @@ if (bigrquery:::has_internal_auth()) {
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in 
-[Google BigQuery](https://cloud.google.com/bigquery/docs) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
+[Google BigQuery](https://docs.cloud.google.com/bigquery/docs) by allowing you to query BigQuery tables and retrieve metadata about your projects, datasets, tables, and jobs. The bigrquery package provides three levels of abstraction on top of BigQuery:
 
 * The low-level API provides thin wrappers over the underlying REST API. All 
   the low-level functions start with `bq_`, and mostly have the form 
@@ -109,13 +109,13 @@ natality %>%
 
 ### BigQuery account
 
-To use bigrquery, you'll need a BigQuery project. Fortunately, if you just want to play around with the BigQuery API, it's easy to start with Google's free [public data](https://cloud.google.com/bigquery/public-data) and the [BigQuery sandbox](https://cloud.google.com/bigquery/docs/sandbox). This gives you some fun data to play with along with enough free compute (1 TB of queries & 10 GB of storage per month) to learn the ropes. 
+To use bigrquery, you'll need a BigQuery project. Fortunately, if you just want to play around with the BigQuery API, it's easy to start with Google's free [public data](https://docs.cloud.google.com/bigquery/public-data) and the [BigQuery sandbox](https://docs.cloud.google.com/bigquery/docs/sandbox). This gives you some fun data to play with along with enough free compute (1 TB of queries & 10 GB of storage per month) to learn the ropes. 
 
 To get started, open <https://console.cloud.google.com/bigquery> and create a project. Make a note of the "Project ID" as you'll use this as the `billing` project whenever you work with free sample data; and as the `project` when you work with your own data.
 
 ### Authentication and authorization
 
-When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the browser. You'll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:
+When using bigrquery interactively, you'll be prompted to [authorize bigrquery](https://docs.cloud.google.com/bigquery/docs/authorization) in the browser. You'll be asked if you want to cache tokens for reuse in future sessions. For non-interactive usage, it is preferred to use a service account token, if possible. More places to learn about auth:
 
   * Help for [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
   * [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
@@ -127,12 +127,12 @@ When using bigrquery interactively, you'll be prompted to [authorize bigrquery](
     how to set up a project when code must run without any user interaction.
   * [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html). Instructions for getting your own OAuth client or service account token.
 
-Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://www.tidyverse.org/google_privacy_policy) provides more info.
+Note that bigrquery requests permission to modify your data; but it will never do so unless you explicitly request it (e.g. by calling `bq_table_delete()` or `bq_table_upload()`). Our [Privacy policy](https://tidyverse.org/google_privacy_policy/) provides more info.
 
 ## Useful links
 
-* [SQL reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
-* [API reference](https://cloud.google.com/bigquery/docs/reference/rest)
+* [SQL reference](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
+* [API reference](https://docs.cloud.google.com/bigquery/docs/reference/rest)
 * [Query/job console](https://console.cloud.google.com/bigquery/)
 * [Billing console](https://console.cloud.google.com/)
 
@@ -140,4 +140,4 @@ Note that bigrquery requests permission to modify your data; but it will never d
 
 Please note that the 'bigrquery' project is released with a [Contributor Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
-[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+[Privacy policy](https://tidyverse.org/google_privacy_policy/)
