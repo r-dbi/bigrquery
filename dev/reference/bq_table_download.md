@@ -118,7 +118,7 @@ tibble. If you need a `data.frame`, coerce the results with
 
 ## Google BigQuery API documentation
 
-- [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
+- [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 
 ## Examples
 

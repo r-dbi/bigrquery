@@ -159,10 +159,10 @@ bq_perform_copy(
 - labels:
 
   A named list of strings used to attach [BigQuery
-  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
-  resulting job, e.g. `list(env = "prod", team = "data")`. This is most
-  useful for cost allocation and other FinOps reporting. Defaults to the
-  value of `getOption("bigrquery.labels")`.
+  labels](https://docs.cloud.google.com/bigquery/docs/labels-intro) to
+  the resulting job, e.g. `list(env = "prod", team = "data")`. This is
+  most useful for cost allocation and other FinOps reporting. Defaults
+  to the value of `getOption("bigrquery.labels")`.
 
 - values:
 
@@ -254,8 +254,9 @@ bq_perform_copy(
   [`bq_param_array()`](https://bigrquery.r-dbi.org/dev/reference/bq_param.md)
   explicitly.
 
-  See <https://cloud.google.com/bigquery/docs/parameterized-queries> for
-  more details.
+  See
+  <https://docs.cloud.google.com/bigquery/docs/parameterized-queries>
+  for more details.
 
 - destination_table:
 
@@ -285,20 +286,21 @@ A [bq_job](https://bigrquery.r-dbi.org/dev/reference/bq_refs.md).
 
 ## Google BigQuery API documentation
 
-- [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
+- [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 
 Additional information at:
 
 - [exporting
-  data](https://cloud.google.com/bigquery/docs/exporting-data)
+  data](https://docs.cloud.google.com/bigquery/docs/exporting-data)
 
-- [loading data](https://cloud.google.com/bigquery/docs/loading-data)
+- [loading
+  data](https://docs.cloud.google.com/bigquery/docs/loading-data)
 
 - [writing
-  queries](https://cloud.google.com/bigquery/docs/writing-results)
+  queries](https://docs.cloud.google.com/bigquery/docs/writing-results)
 
 - [copying a
-  table](https://cloud.google.com/bigquery/docs/managing-tables#copy-table)
+  table](https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table)
 
 ## Examples
 

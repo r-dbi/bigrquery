@@ -60,10 +60,10 @@ dbConnect(
 - labels:
 
   A named list of strings used to attach [BigQuery
-  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
-  resulting job, e.g. `list(env = "prod", team = "data")`. This is most
-  useful for cost allocation and other FinOps reporting. Defaults to the
-  value of `getOption("bigrquery.labels")`.
+  labels](https://docs.cloud.google.com/bigquery/docs/labels-intro) to
+  the resulting job, e.g. `list(env = "prod", team = "data")`. This is
+  most useful for cost allocation and other FinOps reporting. Defaults
+  to the value of `getOption("bigrquery.labels")`.
 
 - ...:
 

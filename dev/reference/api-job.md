@@ -31,7 +31,7 @@ bq_job_wait(
 - fields:
 
   An optional field specification for [partial
-  response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
+  response](https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response)
 
 - quiet:
 
@@ -52,7 +52,7 @@ bq_job_wait(
 
 ## Google BigQuery API documentation
 
-- [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
+- [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 
 ## Examples
 

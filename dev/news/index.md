@@ -2,25 +2,36 @@
 
 ## bigrquery (development version)
 
+- BigQuery error messages containing `{` or `}` are no longer mistaken
+  for cli expressions, so the underlying server message is shown instead
+  of a cli parse failure
+  ([\#677](https://github.com/r-dbi/bigrquery/issues/677)).
+- [`bq_dataset_query()`](https://bigrquery.r-dbi.org/dev/reference/bq_query.md),
+  [`bq_project_query()`](https://bigrquery.r-dbi.org/dev/reference/bq_query.md),
+  [`bq_table_copy()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md),
+  [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md),
+  [`bq_table_load()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md),
+  [`bq_table_save()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md),
+  and
+  [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
+  now respect `getOption("bigrquery.quiet")` as the default for `quiet`
+  ([@r2evans](https://github.com/r2evans),
+  [\#663](https://github.com/r-dbi/bigrquery/issues/663)).
 - [`bq_perform_query()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
   and friends gain a `labels` argument that attaches [BigQuery
-  labels](https://cloud.google.com/bigquery/docs/labels-intro) to the
-  resulting job, useful for cost allocation.
+  labels](https://docs.cloud.google.com/bigquery/docs/labels-intro) to
+  the resulting job, useful for cost allocation.
   [`dbConnect()`](https://dbi.r-dbi.org/reference/dbConnect.html) gains
   a matching `labels` argument that is forwarded to every job run on the
   connection. Defaults to `getOption("bigrquery.labels")`
   ([@JulianUmbhau](https://github.com/JulianUmbhau),
   [\#673](https://github.com/r-dbi/bigrquery/issues/673)).
-- BigQuery error messages containing `{` or `}` are no longer mistaken
-  for cli expressions, so the underlying server message is shown instead
-  of a cli parse failure
-  ([\#677](https://github.com/r-dbi/bigrquery/issues/677)).
 - [`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
-  and friends now default to 22 digits of accuracy, and now allow you to
-  change this value with the new `json_digits` argument.
-- Always upload `POSIXt` objects with 6 digits (i.e. microsecond)
-  precision ([\#660](https://github.com/r-dbi/bigrquery/issues/660)).
-- Correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to
+  and friends now default to 22 digits of accuracy, and allow you to
+  change this value with the new `json_digits` argument. They now also
+  upload `POSIXt` objects with 6 digits (i.e. microsecond) precision
+  ([\#660](https://github.com/r-dbi/bigrquery/issues/660)), and
+  correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to
   [`Sys.timezone()`](https://rdrr.io/r/base/timezones.html) when the
   timezone is empty or not defined
   ([@r2evans](https://github.com/r2evans),
@@ -45,9 +56,6 @@
 - [`tbl()`](https://dplyr.tidyverse.org/reference/tbl.html) no longer
   errors when given a literal SQL query that contains three or more
   periods ([\#611](https://github.com/r-dbi/bigrquery/issues/611)).
-- Check `getOption("bigrquery.quiet")` option in more `bq_*` functions
-  ([@r2evans](https://github.com/r2evans),
-  [\#663](https://github.com/r-dbi/bigrquery/issues/663)).
 
 ## bigrquery 1.6.1
 

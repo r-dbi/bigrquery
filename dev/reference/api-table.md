@@ -115,11 +115,11 @@ bq_table_patch(x, fields)
 
 ## Google BigQuery API documentation
 
-- [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
+- [insert](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/insert)
 
-- [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
+- [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/get)
 
-- [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
+- [delete](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/delete)
 
 ## Examples
 

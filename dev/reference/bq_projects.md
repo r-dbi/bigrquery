@@ -1,9 +1,9 @@
 # List available projects
 
 List all projects that you have access to. You can also work with
-[public datasets](https://cloud.google.com/bigquery/public-data/), but
-you will need to provide a `billing` project whenever you perform any
-non-free operation.
+[public datasets](https://docs.cloud.google.com/bigquery/public-data/),
+but you will need to provide a `billing` project whenever you perform
+any non-free operation.
 
 ## Usage
 
@@ -32,7 +32,7 @@ A character vector.
 
 ## Google BigQuery API documentation
 
-- [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/projects/list)
+- [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/projects/list)
 
 ## Examples
 

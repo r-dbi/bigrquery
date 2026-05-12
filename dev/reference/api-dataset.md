@@ -36,7 +36,7 @@ bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
 - fields:
 
   An optional field specification for [partial
-  response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
+  response](https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response)
 
 - delete_contents:
 
@@ -58,13 +58,13 @@ bq_dataset_tables(x, page_size = 50, max_pages = Inf, warn = TRUE, ...)
 
 ## Google BigQuery API documentation
 
-- [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get)
+- [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get)
 
-- [insert](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
+- [insert](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert)
 
-- [delete](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
+- [delete](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/delete)
 
-- [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list)
+- [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables/list)
 
 ## Examples
 

@@ -41,12 +41,9 @@ bq_project_jobs(x, page_size = 100, max_pages = 1, warn = TRUE)
 
 ## Google BigQuery API documentation
 
-- [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
+- [datasets](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
 
-- [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
-
-One day we might also expose the general [project
-metadata](https://cloud.google.com/resource-manager/reference/rest/v1/projects).
+- [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
 
 ## Examples
 

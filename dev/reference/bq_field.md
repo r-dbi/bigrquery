@@ -50,7 +50,7 @@ as_bq_fields(x)
 ## See also
 
 `bq_field()` corresponds to a `TableFieldSchema`, see
-<https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
+<https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
 for more details.
 
 ## Examples
