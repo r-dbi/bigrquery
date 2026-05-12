@@ -1,4 +1,4 @@
-# bigrquery (development version)
+# bigrquery 1.6.2
 
 * BigQuery error messages containing `{` or `}` are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (#677).
 * `bq_dataset_query()`, `bq_project_query()`, `bq_table_copy()`, `bq_table_download()`, `bq_table_load()`, `bq_table_save()`, and `bq_table_upload()` now respect `getOption("bigrquery.quiet")` as the default for `quiet` (@r2evans, #663).
