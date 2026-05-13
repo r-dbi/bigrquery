@@ -17,7 +17,7 @@ bq_perform_upload():  bq_table_upload().
 bq_perform_load():    bq_table_load().
 bq_perform_extract(): bq_table_save().
 
-"><script defer data-domain="bigrquery.r-dbi.org" src="https://plausible.io/js/plausible.js"></script></head><body>
+"><script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="bigrquery.r-dbi.org" src="https://plausible.io/js/plausible.js"></script></head><body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
@@ -25,7 +25,7 @@ bq_perform_extract(): bq_table_save().
 
     <a class="navbar-brand me-2" href="../index.html">bigrquery</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  compression <span class="op">=</span> <span class="st">"NONE"</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  print_header <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span></span>
+<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_upload</span><span class="op">(</span></span>
@@ -90,7 +91,9 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  create_disposition <span class="op">=</span> <span class="st">"CREATE_IF_NEEDED"</span>,</span>
 <span>  write_disposition <span class="op">=</span> <span class="st">"WRITE_EMPTY"</span>,</span>
 <span>  <span class="va">...</span>,</span>
-<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span></span>
+<span>  billing <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">project</span>,</span>
+<span>  json_digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_load</span><span class="op">(</span></span>
@@ -102,7 +105,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  nskip <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  create_disposition <span class="op">=</span> <span class="st">"CREATE_IF_NEEDED"</span>,</span>
 <span>  write_disposition <span class="op">=</span> <span class="st">"WRITE_EMPTY"</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_query</span><span class="op">(</span></span>
@@ -115,7 +119,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  create_disposition <span class="op">=</span> <span class="st">"CREATE_IF_NEEDED"</span>,</span>
 <span>  write_disposition <span class="op">=</span> <span class="st">"WRITE_EMPTY"</span>,</span>
 <span>  use_legacy_sql <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  priority <span class="op">=</span> <span class="st">"INTERACTIVE"</span></span>
+<span>  priority <span class="op">=</span> <span class="st">"INTERACTIVE"</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_query_dry_run</span><span class="op">(</span></span>
@@ -124,7 +129,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  <span class="va">...</span>,</span>
 <span>  default_dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  use_legacy_sql <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  use_legacy_sql <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_query_schema</span><span class="op">(</span></span>
@@ -132,7 +138,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  <span class="va">billing</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  default_dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parameters <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  parameters <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_perform_copy</span><span class="op">(</span></span>
@@ -141,7 +148,8 @@ you should use instead:</p><ul><li><p><code>bq_perform_copy()</code>:    <code><
 <span>  create_disposition <span class="op">=</span> <span class="st">"CREATE_IF_NEEDED"</span>,</span>
 <span>  write_disposition <span class="op">=</span> <span class="st">"WRITE_EMPTY"</span>,</span>
 <span>  <span class="va">...</span>,</span>
-<span>  billing <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  billing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.labels"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -190,6 +198,14 @@ snake_case names are automatically converted to camelCase.</p></dd>
 <dd><p>Identifier of project to bill.</p></dd>
 
 
+<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
+<dd><p>A named list of strings used to attach
+<a href="https://docs.cloud.google.com/bigquery/docs/labels-intro" class="external-link">BigQuery labels</a>
+to the resulting job, e.g. <code>list(env = "prod", team = "data")</code>. This
+is most useful for cost allocation and other FinOps reporting.
+Defaults to the value of <code>getOption("bigrquery.labels")</code>.</p></dd>
+
+
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
 <dd><p>Data frame of values to insert.</p></dd>
 
@@ -231,6 +247,11 @@ to the table.</p></li>
 </ul></dd>
 
 
+<dt id="arg-json-digits">json_digits<a class="anchor" aria-label="anchor" href="#arg-json-digits"></a></dt>
+<dd><p>Species the number of digits for formatting
+numeric values.</p></dd>
+
+
 <dt id="arg-source-uris">source_uris<a class="anchor" aria-label="anchor" href="#arg-source-uris"></a></dt>
 <dd><p>The fully-qualified URIs that point to your data in
 Google Cloud.</p>
@@ -257,7 +278,7 @@ Parameter <code>x</code> will be matched to placeholder <code>@x</code>.</p>
 <p>Generally, you can supply R vectors and they will be automatically
 converted to the correct type. If you need greater control, you can call
 <code><a href="bq_param.html">bq_param_scalar()</a></code> or <code><a href="bq_param.html">bq_param_array()</a></code> explicitly.</p>
-<p>See <a href="https://cloud.google.com/bigquery/docs/parameterized-queries" class="external-link">https://cloud.google.com/bigquery/docs/parameterized-queries</a>
+<p>See <a href="https://docs.cloud.google.com/bigquery/docs/parameterized-queries" class="external-link">https://docs.cloud.google.com/bigquery/docs/parameterized-queries</a>
 for more details.</p></dd>
 
 
@@ -290,11 +311,11 @@ but are not rate-limited in the same way as interactive queries.</p></dd>
     <h2 id="google-bigquery-api-documentation">Google BigQuery API documentation<a class="anchor" aria-label="anchor" href="#google-bigquery-api-documentation"></a></h2>
 
 
-<ul><li><p><a href="https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs" class="external-link">jobs</a></p></li>
-</ul><p>Additional information at:</p><ul><li><p><a href="https://cloud.google.com/bigquery/docs/exporting-data" class="external-link">exporting data</a></p></li>
-<li><p><a href="https://cloud.google.com/bigquery/docs/loading-data" class="external-link">loading data</a></p></li>
-<li><p><a href="https://cloud.google.com/bigquery/docs/writing-results" class="external-link">writing queries</a></p></li>
-<li><p><a href="https://cloud.google.com/bigquery/docs/managing-tables#copy-table" class="external-link">copying a table</a></p></li>
+<ul><li><p><a href="https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs" class="external-link">jobs</a></p></li>
+</ul><p>Additional information at:</p><ul><li><p><a href="https://docs.cloud.google.com/bigquery/docs/exporting-data" class="external-link">exporting data</a></p></li>
+<li><p><a href="https://docs.cloud.google.com/bigquery/docs/loading-data" class="external-link">loading data</a></p></li>
+<li><p><a href="https://docs.cloud.google.com/bigquery/docs/writing-results" class="external-link">writing queries</a></p></li>
+<li><p><a href="https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table" class="external-link">copying a table</a></p></li>
 </ul></div>
 
     <div class="section level2">
@@ -322,7 +343,7 @@ but are not rate-limited in the same way as interactive queries.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>
