@@ -17,13 +17,13 @@ Source:
 [`DESCRIPTION`](https://github.com/r-dbi/bigrquery/blob/main/DESCRIPTION)
 
 Wickham H, Bryan J (2026). *bigrquery: An Interface to Google's
-'BigQuery' 'API'*. R package version 1.6.1.9000,
+'BigQuery' 'API'*. R package version 1.6.2.9000,
 <https://bigrquery.r-dbi.org>.
 
     @Manual{,
       title = {bigrquery: An Interface to Google's 'BigQuery' 'API'},
       author = {Hadley Wickham and Jennifer Bryan},
       year = {2026},
-      note = {R package version 1.6.1.9000},
+      note = {R package version 1.6.2.9000},
       url = {https://bigrquery.r-dbi.org},
     }

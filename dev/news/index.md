@@ -2,6 +2,10 @@
 
 ## bigrquery (development version)
 
+## bigrquery 1.6.2
+
+CRAN release: 2026-05-12
+
 - BigQuery error messages containing `{` or `}` are no longer mistaken
   for cli expressions, so the underlying server message is shown instead
   of a cli parse failure
