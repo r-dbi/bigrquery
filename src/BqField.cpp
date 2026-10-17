@@ -299,6 +299,7 @@ std::vector<BqField> bq_fields_parse(const rapidjson::Value& meta) {
   int p = schema_fields.Size();
 
   std::vector<BqField> fields;
+  fields.reserve(p);
   for (int j = 0; j < p; ++j) {
     fields.push_back(BqField(schema_fields[j]));
   }
