@@ -36,6 +36,7 @@ bq_table_upload(
   x,
   values,
   ...,
+  api = c("json", "arrow"),
   quiet = getOption("bigrquery.quiet", NA),
   json_digits = NULL
 )
@@ -66,6 +67,11 @@ snake_case names are automatically converted to camelCase.}
 if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{values}{Data frame of values to insert.}
+
+\item{api}{Which API to use? \code{"json"} uploads using a BigQuery load job
+(\code{bq_perform_upload()}), while \code{"arrow"} streams data via the BigQuery
+Storage Write API (\code{bigrquerystorage::bqs_table_upload()}). If
+bigrquerystorage is installed, \code{api = "arrow"} is used by default.}
 
 \item{json_digits}{Species the number of digits for formatting
 numeric values.}
