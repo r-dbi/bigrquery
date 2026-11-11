@@ -180,3 +180,50 @@ test_that("can round-trip BYTES", {
   df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 })
+
+# api = "arrow" upload ----------------------------------------------------
+
+test_that("arrow upload can round-trip atomic vectors, POSIXt, GEOGRAPHY, BYTES, and list-cols", {
+  skip_if_not_installed("bigrquerystorage")
+  skip_if_not_installed("wk")
+
+  df1 <- tibble(
+    lgl = c(FALSE, TRUE, NA),
+    int = c(-1L, 1L, NA),
+    dbl = c(-1.5, 1.5, NA),
+    chr = c("A", "B", NA),
+    ts = as.POSIXct(c("2020-01-01 09:00:00", "2020-01-02 10:00:00", NA), tz = "UTC"),
+    geo = wk::wkt(c("POINT(30 10)", "POINT(15 5)", NA)),
+    raw_bytes = blob::blob(charToRaw("hi!"), charToRaw("bye"), NULL),
+    array = list(1L:3L, integer(), 4L:5L),
+    struct = tibble(x = c("a", "b", NA), y = c(1.5, 2.5, NA), z = c(2L, 3L, NA)),
+    array_struct = list(
+      tibble(x = c("a", "b"), y = c(1.5, 2.5), z = c(2L, 3L)),
+      tibble(x = character(), y = double(), z = integer()),
+      tibble(x = "c", y = 3.5, z = 4L)
+    )
+  )
+
+  bq_df <- bq_test_table()
+  bq_table_upload(bq_df, df1, api = "arrow")
+
+  df2 <- bq_table_download(bq_df, bigint = "integer", api = "arrow")
+  expect_equal(df2, df1)
+
+  df3 <- bq_table_download(bq_df, bigint = "integer", api = "json")
+  expect_equal(df3$lgl, df1$lgl)
+  expect_equal(df3$int, df1$int)
+  expect_equal(df3$dbl, df1$dbl)
+  expect_equal(df3$chr, df1$chr)
+})
+
+test_that("arrow upload warns when json_digits is supplied", {
+  skip_if_not_installed("bigrquerystorage")
+
+  tb <- bq_test_table()
+  expect_warning(
+    bq_table_upload(tb, data.frame(x = 1.5), api = "arrow", json_digits = 4),
+    "json_digits"
+  )
+})
+

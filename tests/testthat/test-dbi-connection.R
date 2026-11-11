@@ -158,13 +158,13 @@ test_that("can create an empty dataset then append to it", {
   DBI::dbCreateTable(con, tb$table, df)
   expect_equal(bq_table_nrow(tb), 0)
 
-  # With dbWriteTable
+  # Storage Write API does not immediately update `numRows` in REST metadata
   DBI::dbWriteTable(con, tb$table, df, append = TRUE)
-  expect_equal(bq_table_nrow(tb), 1)
+  expect_equal(nrow(DBI::dbReadTable(con, tb$table)), 1)
 
   # Or with dbAppend
   DBI::dbAppendTable(con, tb$table, df)
-  expect_equal(bq_table_nrow(tb), 2)
+  expect_equal(nrow(DBI::dbReadTable(con, tb$table)), 2)
 })
 
 test_that("dataset is optional", {
