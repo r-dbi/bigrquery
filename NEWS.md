@@ -1,5 +1,9 @@
 # bigrquery (development version)
 
+## New features
+
+* If the bigrquerystorage (>= 1.3.0) package is installed, `bq_table_upload()` (and hence `db_copy_to()` and `dbWriteTable()` will use it (@meztez, #695).
+
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
 
 # bigrquery 1.6.2
