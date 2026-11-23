@@ -49,7 +49,7 @@ test_that("can work with nested table identifier", {
 })
 
 test_that("can copy_to", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
 
   expect_snapshot(dplyr::copy_to(con, mtcars), error = TRUE)
