@@ -36,18 +36,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      # TEMPORARY: diagnose segfault in arrow nested-types test
-      - name: Valgrind arrow nested-types test
-        continue-on-error: true
-        run: |
-          sudo apt-get update && sudo apt-get install -y valgrind
-          R CMD INSTALL .
-          R -d "valgrind --track-origins=yes" --vanilla -e 'testthat::test_file("tests/testthat/test-bq-download.R", desc = "arrow api can convert nested types", package = "bigrquery", load_package = "installed")'
-        env:
-          BIGRQUERY_KEY: ${{ secrets.BIGRQUERY_KEY }}
-          BIGQUERY_TEST_PROJECT: gargle-169921
-          BIGQUERY_TEST_BUCKET: bigrquery-test-bucket-calliope
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
