@@ -120,7 +120,7 @@ bq_table_download <-
         n_max = n_max,
         quiet = quiet,
         bigint = bigint,
-        as_tibble = TRUE
+        type = "tibble"
       ))
     }
 
