@@ -127,8 +127,6 @@ test_that("arrow api can convert non-nested types", {
 })
 
 test_that("arrow api can convert nested types", {
-  # Use-after-free in bigrquerystorage 1.3.0 segfaults on Linux
-  skip("Segfaults with bigrquerystorage 1.3.0")
   sql <- "SELECT
     STRUCT(1.0 AS a, 'abc' AS b) as s,
     [1.0, 2.0, 3.0] as a,
