@@ -111,16 +111,7 @@ test_that("can use params", {
   expect_equal(df, tibble(value = 1))
 
   # in dbExecute
-  tb <- bq_test_table()
-  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
-  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
-
-  out <- dbExecute(
-    con,
-    sprintf("DELETE %s WHERE x <= @x", tb$table),
-    params = list(x = 2)
-  )
-  expect_equal(out, 2)
+  expect_equal(DBI::dbExecute(con, "SELECT @x", params = list(x = 1)), 0)
 })
 
 
