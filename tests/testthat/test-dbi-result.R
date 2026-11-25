@@ -86,6 +86,9 @@ test_that("dbExecute returns modified rows", {
     DBI::dbExecute(con, sprintf("INSERT INTO %s VALUES (1), (2), (3)", name)),
     3
   )
-  expect_equal(DBI::dbExecute(con, sprintf("DELETE FROM %s WHERE a >= 2", name)), 2)
+  expect_equal(
+    DBI::dbExecute(con, sprintf("DELETE FROM %s WHERE a >= 2", name)),
+    2
+  )
   DBI::dbExecute(con, sprintf("DROP TABLE %s", name))
 })
