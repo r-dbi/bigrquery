@@ -88,3 +88,12 @@
       Error in `as_bq_table()`:
       ! `name` must be a string or a dbplyr_table_ident.
 
+# quoted dbplyr path containing . suggests I() (#656)
+
+    Code
+      as_bq_table(con, path)
+    Condition
+      Error in `as_bq_table()`:
+      ! `name` ("x.y.z") is a single identifier containing ".".
+      i Use `I("x.y.z")` to refer to a table by its full path.
+

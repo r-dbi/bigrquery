@@ -1,6 +1,7 @@
 # bigrquery (development version)
 
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
+* `collect()` now gives a more informative error when a table name like `tbl(con, "project.dataset.table")` is treated as a single identifier, suggesting `I()` instead (#656).
 
 # bigrquery 1.6.2
 
