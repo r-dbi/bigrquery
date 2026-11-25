@@ -53,6 +53,8 @@
 <li>dbplyr translations now support the clock functions <code>add_days()</code>, <code>add_years()</code>, <code>date_build()</code>, <code>date_count_between()</code>, <code>get_year()</code>, <code>get_month()</code>, and <code>get_day()</code>, as well as <code><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime()</a></code> (<a href="https://github.com/IoannaNika" class="external-link">@IoannaNika</a>).</li>
 <li>
 <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now preserves column types when the result has zero rows (<a href="https://github.com/r-dbi/bigrquery/issues/615" class="external-link">#615</a>).</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now gives a more informative error when a table name like <code>tbl(con, "project.dataset.table")</code> is treated as a single identifier, suggesting <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> instead (<a href="https://github.com/r-dbi/bigrquery/issues/656" class="external-link">#656</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.2" id="bigrquery-162">bigrquery 1.6.2<a class="anchor" aria-label="anchor" href="#bigrquery-162"></a></h2><p class="text-muted">CRAN release: 2026-05-12</p>

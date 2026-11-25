@@ -36,6 +36,11 @@
 - [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md)
   now preserves column types when the result has zero rows
   ([\#615](https://github.com/r-dbi/bigrquery/issues/615)).
+- [`collect()`](https://dplyr.tidyverse.org/reference/compute.html) now
+  gives a more informative error when a table name like
+  `tbl(con, "project.dataset.table")` is treated as a single identifier,
+  suggesting [`I()`](https://rdrr.io/r/base/AsIs.html) instead
+  ([\#656](https://github.com/r-dbi/bigrquery/issues/656)).
 
 ## bigrquery 1.6.2
 
