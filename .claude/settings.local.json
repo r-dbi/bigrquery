@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr *)",
+      "Bash(curl -sI \"https://cloud.google.com/resource-manager/reference/rest/v1/projects\")",
+      "Bash(curl -sI \"https://cloud.google.com/bigquery/docs\")",
+      "Bash(curl -sI \"https://cloud.google.com/resource-manager/docs/reference/rest/v3/projects\")",
+      "Bash(curl -sI \"https://www.tidyverse.org/google_privacy_policy\")",
+      "Bash(curl -sI \"https://docs.cloud.google.com/bigquery/docs\")",
+      "Bash(curl -sI \"https://docs.cloud.google.com/bigquery/docs/labels-intro\")",
+      "Bash(curl -sI \"https://tidyverse.org/google_privacy_policy/\")",
+      "Bash(curl -sIL \"https://cloud.google.com/resource-manager/docs/apis\")"
+    ]
+  }
+}
