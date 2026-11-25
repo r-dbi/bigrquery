@@ -44,6 +44,10 @@ map_chr <- function(x, f, ...) {
   vapply(x, f, ..., FUN.VALUE = character(1))
 }
 
+map_lgl <- function(x, f, ...) {
+  vapply(x, f, ..., FUN.VALUE = logical(1))
+}
+
 indent <- function(x, n = 2) {
   space <- paste(rep(" ", n), collapse = "")
   paste0(space, gsub("\n", paste0("\n", space), x, fixed = TRUE))

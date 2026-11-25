@@ -23,6 +23,15 @@ test_that("bq_perform_upload preserves numerical precision", {
   expect_identical(df$dbl, pi)
 })
 
+test_that("bq_perform_upload uses data frame types and column order (#624)", {
+  tb <- bq_test_table()
+  bq_table_upload(tb, data.frame(a = 5.4, b = 5.0))
+
+  fields <- bq_table_fields(tb)
+  expect_equal(map_chr(fields, \(x) x$name), c("a", "b"))
+  expect_equal(map_chr(fields, \(x) x$type), c("FLOAT", "FLOAT"))
+})
+
 test_that("bq_perform_upload preserves microsecond precision", {
   tbl <- data.frame(psx = .POSIXct(0.123456))
   attr(tbl$psx, "tzone") <- "UTC"
