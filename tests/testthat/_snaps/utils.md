@@ -24,3 +24,23 @@
       Error:
       ! `list(env = 1)` must be a named list of strings, not a list.
 
+# check_unsupported_arg() gives informative errors
+
+    Code
+      f(1)
+    Condition
+      Error in `f()`:
+      ! Argument `x` isn't supported in BigQuery translation.
+    Code
+      f("HOUR", allowed = "DAY")
+    Condition
+      Error in `f()`:
+      ! `x = "HOUR"` isn't supported in BigQuery translation.
+      i It must be "DAY" instead.
+    Code
+      f("HOUR", allowed = "DAY", allow_null = TRUE)
+    Condition
+      Error in `f()`:
+      ! `x = "HOUR"` isn't supported in BigQuery translation.
+      i It must be "DAY" or `NULL` instead.
+
