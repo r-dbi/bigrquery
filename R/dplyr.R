@@ -502,6 +502,7 @@ bq_date_unit <- function(unit, call = caller_env()) {
 }
 
 bq_floor_date <- function(x, unit) {
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/date_functions#date_trunc
   dbplyr::sql_glue("DATE_TRUNC({x}, {.sql unit})")
 }
 
@@ -510,6 +511,7 @@ bq_ceiling_date <- function(x, unit) {
   # TIMESTAMPs can't add units larger than a day, so for larger units add
   # enough days to reach the next period, then truncate again
   days <- c(WEEK = 7L, MONTH = 31L, QUARTER = 92L, YEAR = 366L)
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/date_functions#date_add
   if (unit %in% names(days)) {
     next_floor <- bq_floor_date(
       dbplyr::sql_glue("DATE_ADD({floor}, INTERVAL {days[[unit]]} DAY)"),
