@@ -26,7 +26,6 @@ Imports:
     jsonlite,
     lifecycle,
     methods,
-    nanoparquet (>= 0.3.1),
     prettyunits,
     rlang (>= 1.1.0),
     tibble
@@ -37,6 +36,7 @@ Suggests:
     dbplyr (>= 2.6.0),
     dplyr (>= 1.1.0),
     hms,
+    nanoparquet (>= 0.3.1),
     readr,
     sodium,
     testthat (>= 3.1.5),

@@ -26,6 +26,15 @@ test_that("can retrieve zero rows", {
   expect_named(df, c("phase", "phase_emoji", "peak_datetime"))
 })
 
+test_that("zero row query results preserve column types (#615)", {
+  skip_if_no_auth()
+
+  sql <- "SELECT DATE '2000-01-01' AS d, 1 AS i LIMIT 0"
+  tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
+  df <- bq_table_download(tb, api = "json")
+  expect_equal(df, tibble::tibble(d = as.Date(character()), i = integer()))
+})
+
 test_that("can specify large integers in page params", {
   skip_if_no_auth()
 
