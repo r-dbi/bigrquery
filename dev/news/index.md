@@ -5,15 +5,42 @@
 - bigrquery now displays a startup message recommending that you install
   (or update) bigrquerystorage if it is not available
   ([\#695](https://github.com/r-dbi/bigrquery/issues/695)).
-
-- If the bigrquerystorage (\>= 1.3.0) package is installed,
-  [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
+- The BigQuery API host can now be overridden with the
+  `BIGQUERY_EMULATOR_HOST` env var, matching other BigQuery SDKs. This
+  is useful for local emulators and proxies; when it is set, bigrquery
+  no longer requires authentication
+  ([\#648](https://github.com/r-dbi/bigrquery/issues/648)).
+- dbplyr translations now support the clock functions `add_days()`,
+  `add_years()`, `date_build()`, `date_count_between()`, `get_year()`,
+  `get_month()`, and `get_day()`, as well as
+  [`difftime()`](https://rdrr.io/r/base/difftime.html)
+  ([@IoannaNika](https://github.com/IoannaNika)).
+- dbplyr translations now support lubridate’s `floor_date()`,
+  `ceiling_date()`, and `round_date()` for `DATE`, `DATETIME`, and
+  `TIMESTAMP` columns
+  ([\#536](https://github.com/r-dbi/bigrquery/issues/536)).
+- nanoparquet is now a suggested dependency, since it’s only needed for
+  `bq_perform_upload(source_format = "PARQUET")`
+  ([\#690](https://github.com/r-dbi/bigrquery/issues/690)).
+- `bq_perform_upload(api = "json")` and friends now default to
+  `json_digits = NA`, which formats doubles with 15 significant digits.
+  This avoids floating point artifacts, so values like `1.06` can once
+  again be uploaded to `NUMERIC` columns. Use `json_digits = 22` if you
+  need every double to round-trip exactly
+  ([\#692](https://github.com/r-dbi/bigrquery/issues/692)).
+- [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md)
+  now preserves column types when the result has zero rows
+  ([\#615](https://github.com/r-dbi/bigrquery/issues/615)).
+- [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
   (and hence
   [`copy_to()`](https://dplyr.tidyverse.org/reference/copy_to.html) and
   [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html))
-  will use it ([@meztez](https://github.com/meztez),
+  now uses bigrquerystorage if version 1.3.0 or later is installed. This
+  uses the BigQuery Storage Write API for much faster, higher-fidelity
+  uploads. You can explicitly select this API with `api = "arrow"`, or
+  use `api = "json"` to retain the previous behavior
+  ([@meztez](https://github.com/meztez),
   [\#695](https://github.com/r-dbi/bigrquery/issues/695)).
-
 - [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
   and
   [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
@@ -21,54 +48,19 @@
   frame, rather than relying on BigQuery’s schema autodetection, which
   turned whole-number doubles into integers and could reorder columns
   ([\#624](https://github.com/r-dbi/bigrquery/issues/624)).
-
-- The BigQuery API host can now be overridden with the
-  `BIGQUERY_EMULATOR_HOST` env var, matching other BigQuery SDKs. This
-  is useful for local emulators and proxies; when it is set, bigrquery
-  no longer requires authentication
-  ([\#648](https://github.com/r-dbi/bigrquery/issues/648)).
-
-- nanoparquet is now a suggested dependency, since it’s only needed for
-  `bq_perform_upload(source_format = "PARQUET")`
-  ([\#690](https://github.com/r-dbi/bigrquery/issues/690)).
-
-- [`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)
-  and friends now default to `json_digits = NA`, which formats doubles
-  with 15 significant digits. This avoids floating point artefacts, so
-  values like `1.06` can once again be uploaded to `NUMERIC` columns.
-  Use `json_digits = 22` if you need every double to round-trip exactly
-  ([\#692](https://github.com/r-dbi/bigrquery/issues/692)).
-
-- [`dbGetQuery()`](https://dbi.r-dbi.org/reference/dbGetQuery.html) and
-  [`dbFetch()`](https://dbi.r-dbi.org/reference/dbFetch.html) now return
-  results from multi-statement scripts (e.g. queries that use
-  `DECLARE`), rather than zero rows
-  ([\#635](https://github.com/r-dbi/bigrquery/issues/635)).
-
-- dbplyr translations now support the clock functions `add_days()`,
-  `add_years()`, `date_build()`, `date_count_between()`, `get_year()`,
-  `get_month()`, and `get_day()`, as well as
-  [`difftime()`](https://rdrr.io/r/base/difftime.html)
-  ([@IoannaNika](https://github.com/IoannaNika)).
-
-- [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md)
-  now preserves column types when the result has zero rows
-  ([\#615](https://github.com/r-dbi/bigrquery/issues/615)).
-
 - [`collect()`](https://dplyr.tidyverse.org/reference/compute.html) now
   gives a more informative error when a table name like
   `tbl(con, "project.dataset.table")` is treated as a single identifier,
   suggesting [`I()`](https://rdrr.io/r/base/AsIs.html) instead
   ([\#656](https://github.com/r-dbi/bigrquery/issues/656)).
-
+- [`dbGetQuery()`](https://dbi.r-dbi.org/reference/dbGetQuery.html) and
+  [`dbFetch()`](https://dbi.r-dbi.org/reference/dbFetch.html) now return
+  results from multi-statement scripts (e.g. queries that use
+  `DECLARE`), rather than zero rows
+  ([\#635](https://github.com/r-dbi/bigrquery/issues/635)).
 - [`dbReadTable()`](https://dbi.r-dbi.org/reference/dbReadTable.html)
   now returns all rows when reading a view, rather than 0 rows
   ([\#633](https://github.com/r-dbi/bigrquery/issues/633)).
-
-- dbplyr translations now support lubridate’s `floor_date()`,
-  `ceiling_date()`, and `round_date()` for `DATE`, `DATETIME`, and
-  `TIMESTAMP` columns
-  ([\#536](https://github.com/r-dbi/bigrquery/issues/536)).
 
 ## bigrquery 1.6.2
 
