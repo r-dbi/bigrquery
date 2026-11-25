@@ -255,11 +255,11 @@ test_that("clock functions translate to correct sql", {
 
   expect_equal(
     tr(add_years(x, 1L)),
-    dbplyr::sql("DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 YEAR)")
+    dbplyr::sql("DATE_ADD(CAST(`x` AS DATE), INTERVAL 1 YEAR)")
   )
   expect_equal(
     tr(add_days(x, 1L)),
-    dbplyr::sql("DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 DAY)")
+    dbplyr::sql("DATE_ADD(CAST(`x` AS DATE), INTERVAL 1 DAY)")
   )
 
   expect_equal(tr(date_build(y, m, d)), dbplyr::sql("DATE(`y`, `m`, `d`)"))
