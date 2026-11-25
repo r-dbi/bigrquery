@@ -227,6 +227,23 @@ test_that("median is correctly translated", {
   )
 })
 
+test_that("$ translates nested struct fields", {
+  con <- simulate_bigrquery()
+
+  expect_equal(
+    dbplyr::translate_sql(x$y, con = con),
+    dbplyr::sql("`x`.`y`")
+  )
+  expect_equal(
+    dbplyr::translate_sql(x$y$z, con = con),
+    dbplyr::sql("`x`.`y`.`z`")
+  )
+  expect_equal(
+    dbplyr::translate_sql(f(x)$y, con = con),
+    dbplyr::sql("f(`x`).`y`")
+  )
+})
+
 test_that("can correctly print a lazy query", {
   con <- DBI::dbConnect(
     bigquery(),
