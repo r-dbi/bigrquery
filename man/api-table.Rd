@@ -36,8 +36,9 @@ bq_table_upload(
   x,
   values,
   ...,
+  api = c("json", "arrow"),
   quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NULL
+  json_digits = NA
 )
 
 bq_table_save(
@@ -67,8 +68,22 @@ if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{values}{Data frame of values to insert.}
 
-\item{json_digits}{Species the number of digits for formatting
-numeric values.}
+\item{api}{Which API to use? \code{"json"} uploads using a BigQuery load job
+(\code{bq_perform_upload()}), while \code{"arrow"} streams data via the BigQuery
+Storage Write API (\code{bigrquerystorage::bqs_table_upload()}). If
+bigrquerystorage is installed, \code{api = "arrow"} is used by default.}
+
+\item{json_digits}{Controls how doubles are formatted when uploading as
+JSON. Passed on to the \code{digits} argument of \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}:
+\itemize{
+\item \code{NA} (the default) uses 15 significant digits. This is the
+maximum number of digits that a double can reliably represent, and
+avoids floating point artefacts (e.g. \code{1.06} becoming
+\code{1.0600000000000001}) that \code{NUMERIC} columns reject.
+\item A whole number uses at most that many digits after the decimal point.
+Use \code{22} to preserve every bit of a double, but note that the extra
+digits may cause uploads to \code{NUMERIC} columns to fail.
+}}
 
 \item{destination_uris}{A character vector of fully-qualified Google Cloud
 Storage URIs where the extracted table should be written. Can export

@@ -18,9 +18,31 @@ test_that("bq_perform_upload creates job that succeeds", {
 
 test_that("bq_perform_upload preserves numerical precision", {
   tb <- bq_test_table()
-  bq_table_upload(tb, data.frame(dbl = pi))
+  bq_table_upload(tb, data.frame(dbl = pi), api = "json")
   df <- bq_table_download(tb)
-  expect_identical(df$dbl, pi)
+  expect_equal(df$dbl, pi)
+})
+
+test_that("bq_perform_upload can upload doubles to NUMERIC columns (#692)", {
+  tb <- bq_test_table()
+  bq_table_create(tb, fields = list(bq_field("num", "NUMERIC")))
+  bq_table_upload(
+    tb,
+    data.frame(num = 1.06),
+    api = "json",
+    write_disposition = "WRITE_APPEND"
+  )
+  df <- bq_table_download(tb)
+  expect_equal(df$num, 1.06)
+})
+
+test_that("bq_perform_upload uses data frame types and column order (#624)", {
+  tb <- bq_test_table()
+  bq_table_upload(tb, data.frame(a = 5.4, b = 5.0))
+
+  fields <- bq_table_fields(tb)
+  expect_equal(map_chr(fields, \(x) x$name), c("a", "b"))
+  expect_equal(map_chr(fields, \(x) x$type), c("FLOAT", "FLOAT"))
 })
 
 test_that("bq_perform_upload preserves microsecond precision", {

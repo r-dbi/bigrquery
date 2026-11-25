@@ -91,10 +91,6 @@ bq_table_download <-
     api <- check_api(api)
 
     if (api == "arrow") {
-      check_installed(
-        "bigrquerystorage",
-        "required to download using arrow API"
-      )
       if (!missing(page_size)) {
         cli::cli_warn(
           '{.arg page_size} is ignored when {.code api == "arrow"}',
@@ -124,13 +120,28 @@ bq_table_download <-
       ))
     }
 
-    params <- set_row_params(
-      nrow = bq_table_nrow(x),
-      n_max = n_max,
-      start_index = start_index
-    )
-    n_max <- params$n_max
-    start_index <- params$start_index
+    if (n_max == 0) {
+      schema_path <- bq_download_schema(x, tempfile())
+      defer(unlink(schema_path))
+      table_data <- bq_parse_files(
+        schema_path,
+        file_paths = character(),
+        n = 0,
+        quiet = quiet
+      )
+      return(table_data)
+    }
+
+    nrow <- bq_table_nrow(x)
+    if (nrow > 0) {
+      params <- set_row_params(
+        nrow = nrow,
+        n_max = n_max,
+        start_index = start_index
+      )
+      n_max <- params$n_max
+      start_index <- params$start_index
+    }
 
     schema_path <- bq_download_schema(x, tempfile())
     defer(unlink(schema_path))
@@ -157,7 +168,7 @@ bq_table_download <-
     chunk_size <- page_size
 
     chunk_plan <- bq_download_plan(
-      n_max,
+      if (is.infinite(n_max)) page_size %||% 1e4 else n_max,
       chunk_size = chunk_size,
       n_chunks = 1,
       start_index = start_index
@@ -179,7 +190,9 @@ bq_table_download <-
     chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
 
-    if (n_got >= n_max) {
+    if (
+      n_got >= n_max || (nrow == 0 && (is.null(page_size) || n_got < page_size))
+    ) {
       if (!quiet) {
         cli::cli_inform("First chunk includes all requested rows.")
       }
@@ -252,7 +265,16 @@ check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
   if (identical(api, c("json", "arrow"))) {
     if (has_bigrquerystorage()) "arrow" else "json"
   } else {
-    arg_match(api, error_call = error_call)
+    api <- arg_match(api, error_call = error_call)
+    if (api == "arrow") {
+      check_installed(
+        "bigrquerystorage",
+        "required to use the arrow API",
+        version = "1.3.0",
+        call = error_call
+      )
+    }
+    api
   }
 }
 

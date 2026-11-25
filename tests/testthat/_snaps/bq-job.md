@@ -18,7 +18,7 @@
       x Syntax error: Unexpected end of script at [1:11] [invalidQuery]
     Code
       # Multiple errors
-      bq_table_upload(tb, data.frame(x = "x", y = 1:5))
+      bq_table_upload(tb, data.frame(x = "x", y = 1:5), api = "json")
     Condition
       Error in `bq_table_upload()`:
       ! Job <bq_job> failed

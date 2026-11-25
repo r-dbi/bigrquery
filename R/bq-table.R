@@ -141,19 +141,41 @@ bq_table_copy <- function(
 #' @export
 #' @rdname api-table
 #' @inheritParams api-perform
+#' @param api Which API to use? `"json"` uploads using a BigQuery load job
+#'   (`bq_perform_upload()`), while `"arrow"` streams data via the BigQuery
+#'   Storage Write API (`bigrquerystorage::bqs_table_upload()`). If
+#'   bigrquerystorage is installed, `api = "arrow"` is used by default.
 bq_table_upload <- function(
   x,
   values,
   ...,
+  api = c("json", "arrow"),
   quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NULL
+  json_digits = NA
 ) {
   x <- as_bq_table(x)
-  json_digits <- check_digits(json_digits)
+  api <- check_api(api)
+  quiet <- check_quiet(quiet)
 
-  job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
-  bq_job_wait(job, quiet = quiet)
+  if (api == "arrow") {
+    if (!missing(json_digits)) {
+      cli::cli_warn(
+        '{.arg json_digits} is ignored when {.code api == "arrow"}',
+        call = environment()
+      )
+    }
+    bigrquerystorage::bqs_table_upload(
+      x = x,
+      values = values,
+      quiet = quiet,
+      ...
+    )
+  } else {
+    json_digits <- check_digits(json_digits)
 
+    job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
+    bq_job_wait(job, quiet = quiet)
+  }
   invisible(x)
 }
 
