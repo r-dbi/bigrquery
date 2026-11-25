@@ -81,6 +81,28 @@ test_that("can roundtrip a data frame", {
   expect_equal(ncol(df), 11)
 })
 
+test_that("can read a view", {
+  ds <- bq_test_shared_dataset()
+  con <- DBI::dbConnect(ds)
+  name <- random_name()
+  DBI::dbWriteTable(con, name, mtcars)
+  view_name <- random_name()
+  DBI::dbExecute(
+    con,
+    paste0(
+      "CREATE VIEW ",
+      view_name,
+      " AS SELECT * FROM ",
+      ds$dataset,
+      ".",
+      name
+    )
+  )
+
+  df <- DBI::dbReadTable(con, view_name)
+  expect_equal(dim(df), c(32, 11))
+})
+
 test_that("dbWriteTable errors on unsupported arguments", {
   con <- DBI::dbConnect(bigquery(), project = "")
   df <- data.frame(x = 1)

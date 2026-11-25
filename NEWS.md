@@ -10,6 +10,8 @@
 * `bq_table_download()` now preserves column types when the result has zero rows (#615).
 * `collect()` now gives a more informative error when a table name like `tbl(con, "project.dataset.table")` is treated as a single identifier, suggesting `I()` instead (#656).
 
+* `dbReadTable()` now returns all rows when reading a view, rather than 0 rows (#633).
+
 # bigrquery 1.6.2
 
 * BigQuery error messages containing `{` or `}` are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (#677).
