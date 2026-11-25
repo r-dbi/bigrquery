@@ -163,11 +163,19 @@ bq_table_save <- function(
   x,
   destination_uris,
   ...,
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  compression = "NONE",
   quiet = getOption("bigrquery.quiet", NA)
 ) {
   x <- as_bq_table(x)
 
-  job <- bq_perform_extract(x, destination_uris = destination_uris, ...)
+  job <- bq_perform_extract(
+    x,
+    destination_uris = destination_uris,
+    destination_format = destination_format,
+    compression = compression,
+    ...
+  )
   bq_job_wait(job, quiet = quiet)
 
   invisible(x)
