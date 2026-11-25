@@ -87,7 +87,7 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 }
 
 has_bigrquerystorage <- function() {
-  is_installed("bigrquerystorage")
+  is_installed("bigrquerystorage", version = "1.3.0")
 }
 
 cli_escape <- function(x) {
