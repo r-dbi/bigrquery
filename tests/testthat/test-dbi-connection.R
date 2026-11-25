@@ -70,11 +70,12 @@ test_that("can retrieve information about public dataset", {
 })
 
 test_that("can roundtrip a data frame", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
+  name <- random_name()
 
-  DBI::dbWriteTable(con, "mtcars", mtcars)
-  df <- DBI::dbReadTable(con, "mtcars")
+  DBI::dbWriteTable(con, name, mtcars)
+  df <- DBI::dbReadTable(con, name)
 
   expect_equal(nrow(df), 32)
   expect_equal(ncol(df), 11)
@@ -110,16 +111,7 @@ test_that("can use params", {
   expect_equal(df, tibble(value = 1))
 
   # in dbExecute
-  tb <- bq_test_table()
-  con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
-  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
-
-  out <- dbExecute(
-    con,
-    sprintf("DELETE %s WHERE x <= @x", tb$table),
-    params = list(x = 2)
-  )
-  expect_equal(out, 2)
+  expect_equal(DBI::dbExecute(con, "SELECT @x", params = list(x = 1)), 0)
 })
 
 
@@ -135,11 +127,11 @@ test_that("can't use parameters", {
 
 
 test_that("can use DBI::Id()", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
 
   df <- data.frame(x = 1:10)
-  id <- DBI::Id(table = "mytable")
+  id <- DBI::Id(table = random_name())
 
   expect_no_error(DBI::dbCreateTable(con, id, df))
   expect_no_error(DBI::dbAppendTable(con, id, df))
