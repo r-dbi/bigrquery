@@ -20,11 +20,11 @@ check_digits <- function(x, arg = caller_arg(x), call = caller_env()) {
     x,
     min = 0,
     max = 22,
-    allow_null = TRUE,
+    allow_na = TRUE,
     arg = arg,
     call = call
   )
-  x %||% 22
+  x
 }
 
 bq_check_namespace <- function(pkg, bq_type) {
@@ -42,6 +42,10 @@ big_mark <- function(x, ...) {
 
 map_chr <- function(x, f, ...) {
   vapply(x, f, ..., FUN.VALUE = character(1))
+}
+
+map_lgl <- function(x, f, ...) {
+  vapply(x, f, ..., FUN.VALUE = logical(1))
 }
 
 indent <- function(x, n = 2) {
@@ -83,7 +87,7 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 }
 
 has_bigrquerystorage <- function() {
-  is_installed("bigrquerystorage")
+  is_installed("bigrquerystorage", version = "1.3.0")
 }
 
 cli_escape <- function(x) {

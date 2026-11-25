@@ -50,6 +50,12 @@ The newest development release can be installed from GitHub:
 pak::pak("r-dbi/bigrquery")
 ```
 
+We also recommend installing [bigrquerystorage](https://github.com/meztez/bigrquerystorage), which bigrquery will use automatically when available. It uses the BigQuery Storage API, which gives higher fidelity data transfer and is 20-40x faster for downloading and 10-20x faster for uploading:
+
+``` r
+install.packages("bigrquerystorage")
+```
+
 ## Usage
 
 ### Low-level API

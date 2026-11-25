@@ -31,7 +31,7 @@ bq_perform_upload(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NULL,
+  json_digits = NA,
   labels = getOption("bigrquery.labels")
 )
 
@@ -167,8 +167,17 @@ to the table.
 'duplicate' error is returned in the job result.
 }}
 
-\item{json_digits}{Species the number of digits for formatting
-numeric values.}
+\item{json_digits}{Controls how doubles are formatted when uploading as
+JSON. Passed on to the \code{digits} argument of \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}:
+\itemize{
+\item \code{NA} (the default) uses 15 significant digits. This is the
+maximum number of digits that a double can reliably represent, and
+avoids floating point artefacts (e.g. \code{1.06} becoming
+\code{1.0600000000000001}) that \code{NUMERIC} columns reject.
+\item A whole number uses at most that many digits after the decimal point.
+Use \code{22} to preserve every bit of a double, but note that the extra
+digits may cause uploads to \code{NUMERIC} columns to fail.
+}}
 
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.

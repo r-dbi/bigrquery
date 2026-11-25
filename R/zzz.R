@@ -34,5 +34,19 @@
   invisible()
 }
 
+.onAttach <- function(libname, pkgname) {
+  if (has_bigrquerystorage()) {
+    return(NULL)
+  }
+
+  action <- if (is_installed("bigrquerystorage")) "Update" else "Install"
+  msg <- paste0(
+    action,
+    " bigrquerystorage (>= 1.3.0) for much faster data transfer."
+  )
+  packageStartupMessage(msg)
+}
+
+
 PACKAGE_NAME <- utils::packageName()
 PACKAGE_VERSION <- utils::packageVersion(PACKAGE_NAME)
