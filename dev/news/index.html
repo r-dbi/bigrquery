@@ -43,10 +43,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="bigrquery-development-version">bigrquery (development version)<a class="anchor" aria-label="anchor" href="#bigrquery-development-version"></a></h2>
-<ul><li>
+<ul><li>bigrquery now displays a startup message recommending that you install (or update) bigrquerystorage if it is not available (<a href="https://github.com/r-dbi/bigrquery/issues/695" class="external-link">#695</a>).</li>
+<li>If the bigrquerystorage (&gt;= 1.3.0) package is installed, <code><a href="../reference/api-table.html">bq_table_upload()</a></code> (and hence <code><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code>) will use it (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/r-dbi/bigrquery/issues/695" class="external-link">#695</a>).</li>
+<li>
 <code><a href="../reference/api-table.html">bq_table_upload()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> now create new tables using the column types and order of the data frame, rather than relying on BigQuery’s schema autodetection, which turned whole-number doubles into integers and could reorder columns (<a href="https://github.com/r-dbi/bigrquery/issues/624" class="external-link">#624</a>).</li>
 <li>nanoparquet is now a suggested dependency, since it’s only needed for <code>bq_perform_upload(source_format = "PARQUET")</code> (<a href="https://github.com/r-dbi/bigrquery/issues/690" class="external-link">#690</a>).</li>
 <li>dbplyr translations now support the clock functions <code>add_days()</code>, <code>add_years()</code>, <code>date_build()</code>, <code>date_count_between()</code>, <code>get_year()</code>, <code>get_month()</code>, and <code>get_day()</code>, as well as <code><a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime()</a></code> (<a href="https://github.com/IoannaNika" class="external-link">@IoannaNika</a>).</li>
+<li>
+<code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now preserves column types when the result has zero rows (<a href="https://github.com/r-dbi/bigrquery/issues/615" class="external-link">#615</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.2" id="bigrquery-162">bigrquery 1.6.2<a class="anchor" aria-label="anchor" href="#bigrquery-162"></a></h2><p class="text-muted">CRAN release: 2026-05-12</p>

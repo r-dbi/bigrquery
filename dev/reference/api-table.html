@@ -77,6 +77,7 @@ various values from the metadata.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">values</span>,</span>
 <span>  <span class="va">...</span>,</span>
+<span>  api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"arrow"</span><span class="op">)</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.quiet"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  json_digits <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
@@ -122,6 +123,13 @@ if <code>NA</code> picks based on whether or not you're in an interactive contex
 
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
 <dd><p>Data frame of values to insert.</p></dd>
+
+
+<dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
+<dd><p>Which API to use? <code>"json"</code> uploads using a BigQuery load job
+(<code><a href="api-perform.html">bq_perform_upload()</a></code>), while <code>"arrow"</code> streams data via the BigQuery
+Storage Write API (<code><a href="https://rdrr.io/pkg/bigrquerystorage/man/bqs_table_upload.html" class="external-link">bigrquerystorage::bqs_table_upload()</a></code>). If
+bigrquerystorage is installed, <code>api = "arrow"</code> is used by default.</p></dd>
 
 
 <dt id="arg-json-digits">json_digits<a class="anchor" aria-label="anchor" href="#arg-json-digits"></a></dt>

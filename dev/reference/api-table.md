@@ -28,6 +28,7 @@ bq_table_upload(
   x,
   values,
   ...,
+  api = c("json", "arrow"),
   quiet = getOption("bigrquery.quiet", NA),
   json_digits = NULL
 )
@@ -74,6 +75,14 @@ bq_table_patch(x, fields)
 - values:
 
   Data frame of values to insert.
+
+- api:
+
+  Which API to use? `"json"` uploads using a BigQuery load job
+  ([`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)),
+  while `"arrow"` streams data via the BigQuery Storage Write API
+  ([`bigrquerystorage::bqs_table_upload()`](https://rdrr.io/pkg/bigrquerystorage/man/bqs_table_upload.html)).
+  If bigrquerystorage is installed, `api = "arrow"` is used by default.
 
 - json_digits:
 

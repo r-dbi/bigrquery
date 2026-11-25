@@ -2,6 +2,16 @@
 
 ## bigrquery (development version)
 
+- bigrquery now displays a startup message recommending that you install
+  (or update) bigrquerystorage if it is not available
+  ([\#695](https://github.com/r-dbi/bigrquery/issues/695)).
+- If the bigrquerystorage (\>= 1.3.0) package is installed,
+  [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
+  (and hence
+  [`copy_to()`](https://dplyr.tidyverse.org/reference/copy_to.html) and
+  [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html))
+  will use it ([@meztez](https://github.com/meztez),
+  [\#695](https://github.com/r-dbi/bigrquery/issues/695)).
 - [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
   and
   [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
@@ -17,6 +27,9 @@
   `get_month()`, and `get_day()`, as well as
   [`difftime()`](https://rdrr.io/r/base/difftime.html)
   ([@IoannaNika](https://github.com/IoannaNika)).
+- [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md)
+  now preserves column types when the result has zero rows
+  ([\#615](https://github.com/r-dbi/bigrquery/issues/615)).
 
 ## bigrquery 1.6.2
 

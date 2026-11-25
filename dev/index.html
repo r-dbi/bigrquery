@@ -82,6 +82,9 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-dbi/bigrquery"</span><span class="op">)</span></span></code></pre></div>
+<p>We also recommend installing <a href="https://github.com/meztez/bigrquerystorage" class="external-link">bigrquerystorage</a>, which bigrquery will use automatically when available. It uses the BigQuery Storage API, which gives higher fidelity data transfer and is 20-40x faster for downloading and 10-20x faster for uploading:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bigrquerystorage"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -89,7 +92,7 @@
 <div class="section level3">
 <h3 id="low-level-api">Low-level API<a class="anchor" aria-label="anchor" href="#low-level-api"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bigrquery.r-dbi.org">bigrquery</a></span><span class="op">)</span></span>
 <span><span class="va">billing</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bq_test_project.html">bq_test_project</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># replace this with your project ID </span></span>
 <span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT year, month, day, weight_pounds FROM `publicdata.samples.natality`"</span></span>
@@ -113,7 +116,7 @@
 <div class="section level3">
 <h3 id="dbi">DBI<a class="anchor" aria-label="anchor" href="#dbi"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span></span>
@@ -149,7 +152,7 @@
 <div class="section level3">
 <h3 id="dplyr">dplyr<a class="anchor" aria-label="anchor" href="#dplyr"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">natality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"natality"</span><span class="op">)</span></span>
