@@ -247,30 +247,47 @@ test_that("can correctly print a lazy query", {
 test_that("clock functions translate to correct sql", {
   skip_if_not_installed("dbplyr")
   con <- simulate_bigrquery()
-  tr <- function(x) dbplyr::translate_sql(!!rlang::enquo(x), con = con)
-
-  expect_equal(tr(get_year(x)), dbplyr::sql("EXTRACT(YEAR FROM `x`)"))
-  expect_equal(tr(get_month(x)), dbplyr::sql("EXTRACT(MONTH FROM `x`)"))
-  expect_equal(tr(get_day(x)), dbplyr::sql("EXTRACT(DAY FROM `x`)"))
 
   expect_equal(
-    tr(add_years(x, 1L)),
+    dbplyr::translate_sql(get_year(x), con = con),
+    dbplyr::sql("EXTRACT(YEAR FROM `x`)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(get_month(x), con = con),
+    dbplyr::sql("EXTRACT(MONTH FROM `x`)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(get_day(x), con = con),
+    dbplyr::sql("EXTRACT(DAY FROM `x`)")
+  )
+
+  expect_equal(
+    dbplyr::translate_sql(add_years(x, 1L), con = con),
     dbplyr::sql("DATE_ADD(CAST(`x` AS DATE), INTERVAL 1 YEAR)")
   )
   expect_equal(
-    tr(add_days(x, 1L)),
+    dbplyr::translate_sql(add_days(x, 1L), con = con),
     dbplyr::sql("DATE_ADD(CAST(`x` AS DATE), INTERVAL 1 DAY)")
   )
 
-  expect_equal(tr(date_build(y, m, d)), dbplyr::sql("DATE(`y`, `m`, `d`)"))
-  expect_equal(tr(date_build(y)), dbplyr::sql("DATE(`y`, 1, 1)"))
+  expect_equal(
+    dbplyr::translate_sql(date_build(y, m, d), con = con),
+    dbplyr::sql("DATE(`y`, `m`, `d`)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(date_build(y), con = con),
+    dbplyr::sql("DATE(`y`, 1, 1)")
+  )
 
   expect_equal(
-    tr(date_count_between(start, end, "DAY")),
+    dbplyr::translate_sql(date_count_between(start, end, "DAY"), con = con),
     dbplyr::sql("DATE_DIFF(CAST(`end` AS DATE), CAST(`start` AS DATE), DAY)")
   )
   expect_equal(
-    tr(difftime(time1 = time1, time2 = time2, units = "DAY")),
+    dbplyr::translate_sql(
+      difftime(time1 = time1, time2 = time2, units = "DAY"),
+      con = con
+    ),
     dbplyr::sql("DATE_DIFF(CAST(`time1` AS DATE), CAST(`time2` AS DATE), DAY)")
   )
 })
