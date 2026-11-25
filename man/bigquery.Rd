@@ -15,13 +15,12 @@
   quiet = NA,
   use_legacy_sql = FALSE,
   bigint = c("integer", "integer64", "numeric", "character"),
+  labels = getOption("bigrquery.labels"),
   ...
 )
 }
 \arguments{
-\item{drv}{an object that inherits from \linkS4class{DBIDriver},
-or an existing \linkS4class{DBIConnection}
-object (in order to clone an existing connection).}
+\item{drv}{The result of \code{bigquery()}.}
 
 \item{project, dataset}{Project and dataset identifiers}
 
@@ -36,8 +35,14 @@ if \code{NA} picks based on whether or not you're in an interactive context.}
 
 \item{bigint}{The R type that BigQuery's 64-bit integer types should be mapped to.
 The default is \code{"integer"} which returns R's \code{integer} type but results in \code{NA} for
-values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:bit64-package]{bit64::integer64},
+values above/below +/- 2147483647. \code{"integer64"} returns a \link[bit64:integer64]{bit64::integer64},
 which allows the full range of 64 bit integers.}
+
+\item{labels}{A named list of strings used to attach
+\href{https://docs.cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
+to the resulting job, e.g. \code{list(env = "prod", team = "data")}. This
+is most useful for cost allocation and other FinOps reporting.
+Defaults to the value of \code{getOption("bigrquery.labels")}.}
 
 \item{...}{Other arguments for compatibility with generic; currently ignored.}
 }
@@ -45,7 +50,7 @@ which allows the full range of 64 bit integers.}
 Creates a BigQuery DBI driver for use in \code{\link[DBI:dbConnect]{DBI::dbConnect()}}.
 }
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 con <- DBI::dbConnect(
   bigquery(),
   project = "publicdata",

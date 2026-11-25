@@ -84,8 +84,9 @@ bq_get_paginated <- function(
   check_number_whole(max_pages, min = 1, allow_infinite = TRUE)
   check_number_whole(page_size, min = 1)
 
-  if (!is.null(query$fields))
+  if (!is.null(query$fields)) {
     query$fields <- paste0(query$fields, ",nextPageToken")
+  }
 
   query <- utils::modifyList(list(maxResults = page_size), query %||% list())
   pages <- list()
@@ -205,7 +206,9 @@ bq_upload <- function(
 process_request <- function(req, raw = FALSE, call = caller_env()) {
   status <- status_code(req)
   # No content -> success
-  if (status == 204) return(TRUE)
+  if (status == 204) {
+    return(TRUE)
+  }
 
   type <- req$headers$`Content-type`
   content <- content(req, "raw")
@@ -272,10 +275,12 @@ gargle_abort <- function(reason, message, status, call = caller_env()) {
       advice <- "Try increasing the `page_size` value of `bq_table_download()`"
     }
     message <- c(
-      paste0(message, " [", reason, "] "),
+      cli_escape(paste0(message, " [", reason, "] ")),
       i = advice
     )
     class <- c(paste0("bigrquery_", reason), class)
+  } else {
+    message <- cli_escape(message)
   }
 
   cli::cli_abort(message, class = class, call = call)

@@ -20,8 +20,8 @@ bq_deauth()
 }
 }
 \seealso{
-Other auth functions: 
-\code{\link{bq_auth}()},
-\code{\link{bq_auth_configure}()}
+Other auth functions:
+\code{\link[=bq_auth]{bq_auth()}},
+\code{\link[=bq_auth_configure]{bq_auth_configure()}}
 }
 \concept{auth functions}

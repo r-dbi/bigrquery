@@ -8,7 +8,8 @@ BigQueryConnection <- function(
   page_size = 1e4,
   quiet = NA,
   use_legacy_sql = FALSE,
-  bigint = c("integer", "integer64", "numeric", "character")
+  bigint = c("integer", "integer64", "numeric", "character"),
+  labels = NULL
 ) {
   connection_capture()
 
@@ -20,7 +21,8 @@ BigQueryConnection <- function(
     page_size = as.integer(page_size),
     quiet = quiet,
     use_legacy_sql = use_legacy_sql,
-    bigint = match.arg(bigint)
+    bigint = match.arg(bigint),
+    labels = labels
   )
 }
 
@@ -36,7 +38,8 @@ setClass(
     use_legacy_sql = "logical",
     page_size = "integer",
     quiet = "logical",
-    bigint = "character"
+    bigint = "character",
+    labels = "ANY"
   )
 )
 
@@ -58,6 +61,10 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbIsValid
+#' @param dbObj An object inheriting from [DBI::DBIObject-class],
+#' i.e. [DBI::DBIDriver-class], [DBI::DBIConnection-class], or a [DBI::DBIResult-class].
+#' @param conn A [DBI::DBIConnection-class] object, as returned by
+#'   [DBI::dbConnect()].
 #' @export
 setMethod(
   "dbIsValid",
@@ -81,12 +88,15 @@ setMethod(
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
+#' @param params Named list of parameters match to query parameters.
+#'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
   function(conn, statement, ..., params = NULL) {
-    BigQueryResult(conn, statement, params = params, ...)
+    check_for_parameters(..., call = quote(dbSendQuery()))
+    BigQueryResult(conn, statement, params = params)
   }
 )
 
@@ -96,14 +106,17 @@ setMethod(
 setMethod(
   "dbExecute",
   c("BigQueryConnection", "character"),
-  function(conn, statement, ...) {
+  function(conn, statement, ..., params = NULL) {
     ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
+    check_for_parameters(..., call = quote(dbExecute()))
     job <- bq_perform_query(
       statement,
       billing = conn@billing,
       default_dataset = ds,
       quiet = conn@quiet,
+      parameters = params,
+      labels = conn@labels,
       ...
     )
     bq_job_wait(job, quiet = conn@quiet)
@@ -113,6 +126,12 @@ setMethod(
   }
 )
 
+check_for_parameters <- function(..., parameters = NULL, call = caller_env()) {
+  if (is.null(parameters)) {
+    return()
+  }
+  cli::cli_abort("Use {.arg params} not {.arg parameters}.", call = call)
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString
@@ -221,7 +240,7 @@ dbWriteTable_bq <- function(
   }
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbWriteTable())
     )
   }
@@ -241,6 +260,7 @@ dbWriteTable_bq <- function(
     create_disposition = create_disposition,
     write_disposition = write_disposition,
     billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   invisible(TRUE)
@@ -291,6 +311,8 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
     value,
     create_disposition = "CREATE_NEVER",
     write_disposition = "WRITE_APPEND",
+    billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   on_connection_updated(conn, toString(tb))
@@ -333,7 +355,7 @@ dbCreateTable_bq <- function(
 ) {
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbCreateTable())
     )
   }

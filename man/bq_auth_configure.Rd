@@ -5,7 +5,7 @@
 \alias{bq_oauth_client}
 \title{Edit and view auth configuration}
 \usage{
-bq_auth_configure(client, path, app = deprecated())
+bq_auth_configure(client, path)
 
 bq_oauth_client()
 }
@@ -17,14 +17,11 @@ preferred to specify the client with JSON, using the \code{path} argument.}
 \item{path}{JSON downloaded from \href{https://console.cloud.google.com}{Google Cloud Console}, containing a client id and
 secret, in one of the forms supported for the \code{txt} argument of
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
-
-\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
-argument.}
 }
 \value{
 \itemize{
 \item \code{bq_auth_configure()}: An object of R6 class
-\link[gargle:AuthState-class]{gargle::AuthState}, invisibly.
+\link[gargle:AuthState]{gargle::AuthState}, invisibly.
 \item \code{bq_oauth_client()}: the current user-configured OAuth client.
 }
 }
@@ -63,8 +60,8 @@ bq_oauth_client()
 bq_auth_configure(client = original_client)
 }
 \seealso{
-Other auth functions: 
-\code{\link{bq_auth}()},
-\code{\link{bq_deauth}()}
+Other auth functions:
+\code{\link[=bq_auth]{bq_auth()}},
+\code{\link[=bq_deauth]{bq_deauth()}}
 }
 \concept{auth functions}

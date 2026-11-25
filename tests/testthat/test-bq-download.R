@@ -72,6 +72,7 @@ test_that("check_api respects inputs", {
 })
 
 test_that("uses arrow api if bigrquerystorage installed", {
+  local_mocked_bindings(is_installed = function(...) TRUE)
   expect_equal(check_api(), "arrow")
 
   local_mocked_bindings(is_installed = function(...) FALSE)
@@ -86,7 +87,8 @@ test_that("warns if supplying unnused arguments", {
       api = "arrow",
       page_size = 1,
       start_index = 1,
-      max_connections = 1
+      max_connections = 1,
+      quiet = TRUE
     )
   )
 })
@@ -125,7 +127,9 @@ test_that("arrow api can convert non-nested types", {
 })
 
 test_that("arrow api can convert nested types", {
-  skip("https://github.com/meztez/bigrquerystorage/issues/54")
+  # TODO: remove skip once https://github.com/meztez/bigrquerystorage/pull/94
+  # is released. Use-after-free in bigrquerystorage 1.3.0 segfaults on Linux.
+  skip("Segfaults with bigrquerystorage 1.3.0")
   sql <- "SELECT
     STRUCT(1.0 AS a, 'abc' AS b) as s,
     [1.0, 2.0, 3.0] as a,
@@ -136,10 +140,10 @@ test_that("arrow api can convert nested types", {
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
   df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
 
-  expect_equal(df$s, list(list(a = 1, b = "abc")))
+  expect_equal(df$s, tibble(a = 1, b = "abc"))
   expect_equal(df$a, list(c(1, 2, 3)))
   expect_equal(df$aos, list(tibble(a = c(1, 2, 3), b = c("a", "b", "c"))))
-  expect_equal(df$soa, list(list(a = c(1, 2, 3), b = c("a", "b"))))
+  expect_equal(df$soa, tibble(a = list(c(1, 2, 3)), b = list(c("a", "b"))))
 })
 
 test_that("arrow api respects bigint", {

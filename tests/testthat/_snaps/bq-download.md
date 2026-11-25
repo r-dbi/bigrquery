@@ -15,7 +15,7 @@
 
     Code
       . <- bq_table_download(tb, api = "arrow", page_size = 1, start_index = 1,
-        max_connections = 1)
+        max_connections = 1, quiet = TRUE)
     Condition
       Warning in `bq_table_download()`:
       `page_size` is ignored when `api == "arrow"`

@@ -50,7 +50,8 @@ tbl.BigQueryConnection <- function(src, from, ...) {
   schema <- bq_perform_query_schema(
     sql,
     billing = src$con@billing,
-    default_dataset = dataset
+    default_dataset = dataset,
+    labels = src$con@labels
   )
   vars <- map_chr(schema, "[[", "name")
 
@@ -61,12 +62,15 @@ tbl.BigQueryConnection <- function(src, from, ...) {
   }
 
   # This is ugly, but I don't see a better way of doing this
-  tb <- as_bq_table(src$con, from)
-  tbl$lazy_query$is_view <- !inherits(from, "sql") &&
-    tryCatch(
+  if (!inherits(from, "sql")) {
+    tb <- as_bq_table(src$con, from)
+    tbl$lazy_query$is_view <- tryCatch(
       bq_table_meta(tb, "type")$type == "VIEW",
       bigrquery_notFound = function(e) TRUE
     )
+  } else {
+    tbl$lazy_query$is_view <- FALSE
+  }
   tbl
 }
 
@@ -91,7 +95,8 @@ db_compute.BigQueryConnection <- function(
     tb <- bq_project_query(
       con@project,
       sql,
-      destination_table = destination_table
+      destination_table = destination_table,
+      labels = con@labels
     )
   } else {
     ds <- bq_dataset(con@project, con@dataset)
@@ -100,11 +105,15 @@ db_compute.BigQueryConnection <- function(
     tb <- bq_dataset_query(
       ds,
       query = sql,
-      destination_table = destination_table
+      destination_table = destination_table,
+      labels = con@labels
     )
   }
 
-  dbplyr::in_catalog(tb$project, tb$dataset, tb$table)
+  dbplyr::as_table_path(
+    I(paste(tb$project, tb$dataset, tb$table, sep = ".")),
+    con
+  )
 }
 
 # registered onLoad
@@ -127,7 +136,13 @@ db_copy_to.BigQueryConnection <- function(
 
   tb <- as_bq_table(con, table)
   write <- if (overwrite) "WRITE_TRUNCATE" else "WRITE_EMPTY"
-  bq_table_upload(tb, values, fields = types, write_disposition = write)
+  bq_table_upload(
+    tb,
+    values,
+    fields = types,
+    write_disposition = write,
+    labels = con@labels
+  )
 
   table
 }
@@ -151,6 +166,7 @@ db_copy_to.BigQueryConnection <- function(
 #'   The default, `Inf`, will retrieve all rows.
 #' @param ... Other arguments passed on to
 #'   `bq_project_query()`/`bq_project_query()`
+#' @method collect tbl_BigQueryConnection
 collect.tbl_BigQueryConnection <- function(
   x,
   ...,
@@ -175,10 +191,23 @@ collect.tbl_BigQueryConnection <- function(
     sql <- dbplyr::db_sql_render(con, x)
 
     if (is.null(con@dataset)) {
-      tb <- bq_project_query(billing, sql, quiet = con@quiet, ...)
+      tb <- bq_project_query(
+        billing,
+        sql,
+        quiet = con@quiet,
+        labels = con@labels,
+        ...
+      )
     } else {
       ds <- as_bq_dataset(con)
-      tb <- bq_dataset_query(ds, sql, quiet = con@quiet, billing = billing, ...)
+      tb <- bq_dataset_query(
+        ds,
+        sql,
+        quiet = con@quiet,
+        billing = billing,
+        labels = con@labels,
+        ...
+      )
     }
   }
 
@@ -234,15 +263,27 @@ op_can_download.lazy_base_query <- function(x) {
 }
 
 query_is_head_only <- function(x) {
-  if (!inherits(x$x, "lazy_base_remote_query")) return(FALSE)
-  if (!op_can_download(x$x)) return(FALSE)
+  if (!inherits(x$x, "lazy_base_remote_query")) {
+    return(FALSE)
+  }
+  if (!op_can_download(x$x)) {
+    return(FALSE)
+  }
 
   vars_base <- dbplyr::op_vars(x$x)
-  if (!is_select_trivial(x$select, vars_base)) return(FALSE)
+  if (!is_select_trivial(x$select, vars_base)) {
+    return(FALSE)
+  }
 
-  if (!is_empty(x$where)) return(FALSE)
-  if (!is_empty(x$order_by)) return(FALSE)
-  if (!is_false(x$distinct)) return(FALSE)
+  if (!is_empty(x$where)) {
+    return(FALSE)
+  }
+  if (!is_empty(x$order_by)) {
+    return(FALSE)
+  }
+  if (!is_false(x$distinct)) {
+    return(FALSE)
+  }
 
   TRUE
 }
@@ -273,7 +314,9 @@ op_table.lazy_query <- function(x, con) NULL
 op_table.lazy_base_remote_query <- function(x, con) x$x
 #' @export
 op_table.lazy_select_query <- function(x, con) {
-  if (!query_is_head_only(x)) return(NULL)
+  if (!query_is_head_only(x)) {
+    return(NULL)
+  }
 
   op_table(x$x)
 }

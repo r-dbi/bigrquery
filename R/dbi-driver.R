@@ -61,6 +61,7 @@ setClass("BigQueryDriver", contains = "DBIDriver")
 
 #' @rdname bigquery
 #' @inheritParams DBI::dbConnect
+#' @param drv The result of `bigquery()`.
 #' @param project,dataset Project and dataset identifiers
 #' @inheritParams bq_perform_query
 #' @inheritParams bq_projects
@@ -83,6 +84,7 @@ setMethod(
     quiet = NA,
     use_legacy_sql = FALSE,
     bigint = c("integer", "integer64", "numeric", "character"),
+    labels = getOption("bigrquery.labels"),
     ...
   ) {
     check_string(project)
@@ -92,6 +94,7 @@ setMethod(
     check_bool(quiet, allow_na = TRUE)
     check_bool(use_legacy_sql)
     bigint <- arg_match(bigint)
+    check_labels(labels, call = quote(dbConnect()))
 
     BigQueryConnection(
       project = project,
@@ -100,7 +103,8 @@ setMethod(
       page_size = page_size,
       quiet = quiet,
       use_legacy_sql = use_legacy_sql,
-      bigint = bigint
+      bigint = bigint,
+      labels = labels
     )
   }
 )

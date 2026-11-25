@@ -5,10 +5,8 @@
 #' is a simple string.
 #'
 #' @section Google BigQuery API documentation:
-#' * [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
-#' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
-#'
-#' One day we might also expose the general [project metadata](https://cloud.google.com/resource-manager/reference/rest/v1/projects).
+#' * [datasets](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
+#' * [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
 #'
 #' @return
 #' * `bq_project_datasets()`: a list of [bq_dataset]s

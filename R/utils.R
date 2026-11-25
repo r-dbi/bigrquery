@@ -5,7 +5,7 @@ as_df <- function(x) {
   x
 }
 
-check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
+check_quiet <- function(x, arg = caller_arg(x), call = caller_env()) {
   check_bool(x, allow_na = TRUE, arg = arg, call = call)
 
   if (is.na(x)) {
@@ -15,11 +15,21 @@ check_quiet <- function(x, arg = caller_arg(x), call = caller_env(call)) {
   }
 }
 
+check_digits <- function(x, arg = caller_arg(x), call = caller_env()) {
+  check_number_whole(
+    x,
+    min = 0,
+    max = 22,
+    allow_null = TRUE,
+    arg = arg,
+    call = call
+  )
+  x %||% 22
+}
+
 bq_check_namespace <- function(pkg, bq_type) {
   check_installed(pkg, sprintf("to parse BigQuery '%s' fields.", bq_type))
 }
-
-isFALSE <- function(x) identical(x, FALSE)
 
 cat_line <- function(...) {
   cat(paste0(..., "\n", collapse = ""))
@@ -46,7 +56,7 @@ as_json.NULL <- function(x) NULL
 
 # nocov start
 show_json <- function(x) {
-  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE)
+  jsonlite::toJSON(x, pretty = TRUE, auto_unbox = TRUE, digits = 22L)
 }
 
 #' @export
@@ -74,4 +84,47 @@ as_query <- function(x, error_arg = caller_arg(x), error_call = caller_env()) {
 
 has_bigrquerystorage <- function() {
   is_installed("bigrquerystorage")
+}
+
+cli_escape <- function(x) {
+  x <- gsub("{", "{{", x, fixed = TRUE)
+  x <- gsub("}", "}}", x, fixed = TRUE)
+  x
+}
+
+check_labels <- function(
+  labels,
+  arg = caller_arg(labels),
+  call = caller_env()
+) {
+  if (is.null(labels)) {
+    return(invisible())
+  }
+
+  if (!is.list(labels) || any(names2(labels) == "")) {
+    stop_input_type(
+      labels,
+      "a named list",
+      allow_null = TRUE,
+      arg = arg,
+      call = call
+    )
+  }
+  is_string <- vapply(labels, is_string, logical(1))
+  if (!all(is_string)) {
+    stop_input_type(
+      labels,
+      "a named list of strings",
+      arg = arg,
+      call = call
+    )
+  }
+
+  invisible()
+}
+
+cli_escape <- function(x) {
+  x <- gsub("{", "{{", x, fixed = TRUE)
+  x <- gsub("}", "}}", x, fixed = TRUE)
+  x
 }
