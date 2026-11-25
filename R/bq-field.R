@@ -17,7 +17,7 @@
 #'   characters.
 #' @param x A list of `bg_fields`
 #' @seealso `bq_field()` corresponds to a `TableFieldSchema`, see
-#' <https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
+#' <https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema>
 #' for more details.
 #' @export
 #' @examples
@@ -30,7 +30,13 @@
 #'
 #' # as_bq_fields() can also take a data frame
 #' as_bq_fields(mtcars)
-bq_field <- function(name, type, mode = "NULLABLE", fields = list(), description = NULL) {
+bq_field <- function(
+  name,
+  type,
+  mode = "NULLABLE",
+  fields = list(),
+  description = NULL
+) {
   check_string(name)
   check_string(type)
   check_string(mode)
@@ -143,12 +149,24 @@ print.bq_field <- function(x, ...) {
 }
 
 data_type <- function(x) {
-  if (is.factor(x)) return("STRING")
-  if (inherits(x, "POSIXt")) return("TIMESTAMP")
-  if (inherits(x, "hms")) return("TIME")
-  if (inherits(x, "wk_wkt")) return("GEOGRAPHY")
-  if (inherits(x, "blob")) return("BYTES")
-  if (inherits(x, "Date")) return("DATE")
+  if (is.factor(x)) {
+    return("STRING")
+  }
+  if (inherits(x, "POSIXt")) {
+    return("TIMESTAMP")
+  }
+  if (inherits(x, "hms")) {
+    return("TIME")
+  }
+  if (inherits(x, "wk_wkt")) {
+    return("GEOGRAPHY")
+  }
+  if (inherits(x, "blob")) {
+    return("BYTES")
+  }
+  if (inherits(x, "Date")) {
+    return("DATE")
+  }
 
   switch(
     typeof(x),

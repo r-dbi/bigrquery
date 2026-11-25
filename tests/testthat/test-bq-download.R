@@ -53,7 +53,12 @@ test_that("errors when table is known to be incomplete", {
       api = "json"
     ),
     transform = function(x) {
-      gsub("[0-9,]+ rows were received", "{n} rows were received", x, perl = TRUE)
+      gsub(
+        "[0-9,]+ rows were received",
+        "{n} rows were received",
+        x,
+        perl = TRUE
+      )
     },
     error = TRUE
   )
@@ -67,6 +72,7 @@ test_that("check_api respects inputs", {
 })
 
 test_that("uses arrow api if bigrquerystorage installed", {
+  local_mocked_bindings(is_installed = function(...) TRUE)
   expect_equal(check_api(), "arrow")
 
   local_mocked_bindings(is_installed = function(...) FALSE)
@@ -76,11 +82,13 @@ test_that("uses arrow api if bigrquerystorage installed", {
 test_that("warns if supplying unnused arguments", {
   tb <- bq_project_query(bq_test_project(), "SELECT 1.0", quiet = TRUE)
   expect_snapshot(
-    . <- bq_table_download(tb,
+    . <- bq_table_download(
+      tb,
       api = "arrow",
       page_size = 1,
       start_index = 1,
-      max_connections = 1
+      max_connections = 1,
+      quiet = TRUE
     )
   )
 })
@@ -119,7 +127,9 @@ test_that("arrow api can convert non-nested types", {
 })
 
 test_that("arrow api can convert nested types", {
-  skip("https://github.com/meztez/bigrquerystorage/issues/54")
+  # TODO: remove skip once https://github.com/meztez/bigrquerystorage/pull/94
+  # is released. Use-after-free in bigrquerystorage 1.3.0 segfaults on Linux.
+  skip("Segfaults with bigrquerystorage 1.3.0")
   sql <- "SELECT
     STRUCT(1.0 AS a, 'abc' AS b) as s,
     [1.0, 2.0, 3.0] as a,
@@ -130,24 +140,47 @@ test_that("arrow api can convert nested types", {
   tb <- bq_project_query(bq_test_project(), sql, quiet = TRUE)
   df <- bq_table_download(tb, api = "arrow", quiet = TRUE)
 
-  expect_equal(df$s, list(list(a = 1, b = "abc")))
+  expect_equal(df$s, tibble(a = 1, b = "abc"))
   expect_equal(df$a, list(c(1, 2, 3)))
   expect_equal(df$aos, list(tibble(a = c(1, 2, 3), b = c("a", "b", "c"))))
-  expect_equal(df$soa, list(list(a = c(1, 2, 3), b = c("a", "b"))))
+  expect_equal(df$soa, tibble(a = list(c(1, 2, 3)), b = list(c("a", "b"))))
 })
 
 test_that("arrow api respects bigint", {
-  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
-  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  x <- c(
+    "-2147483648",
+    "-2147483647",
+    "-1",
+    "0",
+    "1",
+    "2147483647",
+    "2147483648"
+  )
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x")
   qry <- bq_project_query(bq_test_project(), sql)
 
-  out_int64 <- bq_table_download(qry, bigint = "integer64", api = "arrow", quiet = TRUE)$x
+  out_int64 <- bq_table_download(
+    qry,
+    bigint = "integer64",
+    api = "arrow",
+    quiet = TRUE
+  )$x
   expect_identical(out_int64, bit64::as.integer64(x))
 
-  out_dbl <- bq_table_download(qry, bigint = "numeric", api = "arrow", quiet = TRUE)$x
+  out_dbl <- bq_table_download(
+    qry,
+    bigint = "numeric",
+    api = "arrow",
+    quiet = TRUE
+  )$x
   expect_identical(out_dbl, as.double(x))
 
-  out_chr <- bq_table_download(qry, bigint = "character", api = "arrow", quiet = TRUE)$x
+  out_chr <- bq_table_download(
+    qry,
+    bigint = "character",
+    api = "arrow",
+    quiet = TRUE
+  )$x
   expect_identical(out_chr, x)
 })
 
@@ -287,7 +320,7 @@ test_that("can parse fractional seconds", {
   expect_equal(parsed - trunc(parsed), c(0.67, 0, 0.123456), tolerance = 1e-6)
 })
 
-test_that("correctly parse logical values" ,{
+test_that("correctly parse logical values", {
   query <- "SELECT TRUE as x"
   tb <- bq_project_query(bq_test_project(), query)
   df <- bq_table_download(tb, api = "json")
@@ -296,8 +329,16 @@ test_that("correctly parse logical values" ,{
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
-  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
-  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  x <- c(
+    "-2147483648",
+    "-2147483647",
+    "-1",
+    "0",
+    "1",
+    "2147483647",
+    "2147483648"
+  )
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x")
   qry <- bq_project_query(bq_test_project(), sql)
 
   expect_warning(
@@ -333,9 +374,29 @@ test_that("can convert bytes type", {
   expect_identical(
     df$bytes,
     blob::blob(
-      as.raw(c(0x01, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
-               0xff, 0xff, 0x3d, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24,
-               0x40))
+      as.raw(c(
+        0x01,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0x3d,
+        0x40,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x24,
+        0x40
+      ))
     )
   )
 })

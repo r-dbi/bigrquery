@@ -78,8 +78,13 @@ bq_test_dataset <- function(name = random_name(), location = "US") {
 }
 
 bq_test_table <- function() {
-  ds <- env_cache(the, "test_dataset", bq_test_dataset())
-  bq_table(ds, random_name())
+  bq_table(bq_test_shared_dataset(), random_name())
+}
+
+# A dataset shared across the whole test session; it's created on first use
+# and deleted when the session ends. Use a random table name within it.
+bq_test_shared_dataset <- function() {
+  env_cache(the, "test_dataset", bq_test_dataset())
 }
 
 #' @export

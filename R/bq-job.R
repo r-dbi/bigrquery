@@ -4,7 +4,7 @@
 #' (in various forms) about an existing job.
 #'
 #' @section Google BigQuery API documentation:
-#' * [get](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
+#' * [get](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get)
 #'
 #' @examplesIf bq_testable()
 #' jobs <- bq_project_jobs(bq_test_project())
@@ -22,7 +22,7 @@ NULL
 #' @name api-job
 #' @param x A [bq_job]
 #' @param fields An optional field specification for
-#'   [partial response](https://cloud.google.com/bigquery/docs/api-performance#partial-response)
+#'   [partial response](https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response)
 bq_job_meta <- function(x, fields = NULL) {
   x <- as_bq_job(x)
   bq_get(
@@ -71,10 +71,12 @@ bq_job_show_statistics <- function(x) {
 #' @export
 #' @name api-job
 #' @inheritParams rlang::args_error_context
-bq_job_wait <- function(x,
-                        quiet = getOption("bigrquery.quiet"),
-                        pause = 0.5,
-                        call = caller_env()) {
+bq_job_wait <- function(
+  x,
+  quiet = getOption("bigrquery.quiet"),
+  pause = 0.5,
+  call = caller_env()
+) {
   x <- as_bq_job(x)
   quiet <- check_quiet(quiet)
   check_number_decimal(pause)
@@ -88,20 +90,27 @@ bq_job_wait <- function(x,
   }
 
   repeat {
-    if (!quiet) cli::cli_progress_update()
-    # https://cloud.google.com/bigquery/docs/error-messages
+    if (!quiet) {
+      cli::cli_progress_update()
+    }
+    # https://docs.cloud.google.com/bigquery/docs/error-messages
     # Switch to req_retry() when we move to httr2
     status <- tryCatch(
       bq_job_status(x),
       bigrquery_http_503 = function(err) NULL
     )
-    if (!quiet) cli::cli_progress_update()
+    if (!quiet) {
+      cli::cli_progress_update()
+    }
 
-    if (!is.null(status) && status$state == "DONE") break
+    if (!is.null(status) && status$state == "DONE") {
+      break
+    }
     Sys.sleep(pause)
   }
-  if (!quiet) cli::cli_progress_done()
-
+  if (!quiet) {
+    cli::cli_progress_done()
+  }
 
   errors <- status$errors
   if (length(errors) > 0) {
@@ -110,7 +119,9 @@ bq_job_wait <- function(x,
       errors <- errors[-1]
     }
 
-    bullets <- map_chr(errors, function(x) paste0(x$message, " [", x$reason, "]"))
+    bullets <- map_chr(errors, function(x) {
+      cli_escape(paste0(x$message, " [", x$reason, "]"))
+    })
     bullets <- set_names(bullets, "x")
     cli::cli_abort(c("Job {x} failed", bullets), call = call)
   }

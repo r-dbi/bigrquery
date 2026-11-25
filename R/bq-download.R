@@ -12,7 +12,7 @@
 #' The arrow API is much faster, but has heavier dependencies: bigrquerystorage
 #' requires the arrow package, which can be tricky to compile on Linux (but you
 #' usually should be able to get a binary from
-#' [Posit Public Package Manager](https://posit.co/products/cloud/public-package-manager/).
+#' [Posit Public Package Manager](https://p3m.dev/).
 #'
 #' There's one known limitation of `api = "arrow"`: when querying public data,
 #' you'll now need to provide a `billing` project.
@@ -65,24 +65,23 @@
 #' @param billing (Arrow only) Project to bill; defaults to the project of `x`,
 #'   and typically only needs to be specified if you're working with public
 #'   datasets.
-#' @param max_results `r lifecycle::badge("deprecated")` Deprecated. Please use
-#'   `n_max` instead.
 #' @section Google BigQuery API documentation:
-#' * [list](https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
+#' * [list](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list)
 #' @export
 #' @examplesIf bq_testable()
 #' df <- bq_table_download("publicdata.samples.natality", n_max = 35000, billing = bq_test_project())
 bq_table_download <-
-  function(x,
-           n_max = Inf,
-           page_size = NULL,
-           start_index = 0L,
-           max_connections = 6L,
-           quiet = NA,
-           bigint = c("integer", "integer64", "numeric", "character"),
-           api = c("json", "arrow"),
-           billing = x$project,
-           max_results = deprecated()) {
+  function(
+    x,
+    n_max = Inf,
+    page_size = NULL,
+    start_index = 0L,
+    max_connections = 6L,
+    quiet = getOption("bigrquery.quiet", NA),
+    bigint = c("integer", "integer64", "numeric", "character"),
+    api = c("json", "arrow"),
+    billing = x$project
+  ) {
     x <- as_bq_table(x)
     check_number_whole(n_max, min = 0, allow_infinite = TRUE)
     check_number_whole(start_index, min = 0)
@@ -91,15 +90,11 @@ bq_table_download <-
     bigint <- arg_match(bigint)
     api <- check_api(api)
 
-    if (lifecycle::is_present(max_results)) {
-      lifecycle::deprecate_warn(
-        "1.4.0", "bq_table_download(max_results)", "bq_table_download(n_max)"
-      )
-      n_max <- max_results
-    }
-
     if (api == "arrow") {
-      check_installed("bigrquerystorage", "required to download using arrow API")
+      check_installed(
+        "bigrquerystorage",
+        "required to download using arrow API"
+      )
       if (!missing(page_size)) {
         cli::cli_warn(
           '{.arg page_size} is ignored when {.code api == "arrow"}',
@@ -125,7 +120,7 @@ bq_table_download <-
         n_max = n_max,
         quiet = quiet,
         bigint = bigint,
-        as_tibble = TRUE
+        type = "tibble"
       ))
     }
 
@@ -264,7 +259,6 @@ check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
 # This function is a modified version of
 # https://github.com/r-dbi/RPostgres/blob/master/R/PqResult.R
 parse_postprocess <- function(df, bigint) {
-
   df <- col_apply(
     df,
     function(x) identical(attr(x, "bq_type"), "DATE"),
@@ -308,7 +302,7 @@ col_apply <- function(x, p, f) {
 bq_datetime_parse <- function(x) {
   # `format` matches clock already.
   # Bigquery DATETIME is documented as microsecond precision.
-  # https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#datetime_type
+  # https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/data-types#datetime_type
   x <- clock::year_month_day_parse(x, precision = "microsecond")
 
   # Manually retain microseconds for the POSIXct
@@ -337,15 +331,17 @@ set_row_params <- function(nrow, n_max = Inf, start_index = 0L) {
   list(n_max = n_max, start_index = start_index)
 }
 
-bq_download_plan <- function(n_max,
-                             chunk_size = NULL,
-                             n_chunks = NULL,
-                             start_index = 0) {
+bq_download_plan <- function(
+  n_max,
+  chunk_size = NULL,
+  n_chunks = NULL,
+  start_index = 0
+) {
   params <- set_chunk_params(n_max, chunk_size, n_chunks)
   list(
-    n_max      = n_max,
+    n_max = n_max,
     chunk_size = params$chunk_size,
-    n_chunks   = params$n_chunks,
+    n_chunks = params$n_chunks,
     dat = set_chunk_plan(
       n_max,
       params$chunk_size,
@@ -373,7 +369,10 @@ set_chunk_plan <- function(n_max, chunk_size, n_chunks, start_index = 0) {
     chunk_begin,
     chunk_rows,
     path = sort(
-      tempfile(rep_len("bq-download-", length.out = n_chunks), fileext = ".json")
+      tempfile(
+        rep_len("bq-download-", length.out = n_chunks),
+        fileext = ".json"
+      )
     )
   )
 }
@@ -390,7 +389,10 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
     maxResults = format(max_results, scientific = FALSE)
   )
 
-  url <- paste0(base_url, bq_path(x$project, dataset = x$dataset, table = x$table, data = ""))
+  url <- paste0(
+    base_url,
+    bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
+  )
   url <- httr::modify_url(url, query = prepare_bq_query(query))
 
   if (bq_has_token()) {
@@ -414,7 +416,9 @@ bq_download_callback <- function(path, progress = NULL, call = caller_env()) {
   force(progress)
 
   function(result) {
-    if (!is.null(progress)) cli::cli_progress_update(id = progress)
+    if (!is.null(progress)) {
+      cli::cli_progress_update(id = progress)
+    }
 
     bq_check_response(
       status = result$status_code,

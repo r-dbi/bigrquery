@@ -25,7 +25,7 @@ bq_job_wait(
 \item{x}{A \link{bq_job}}
 
 \item{fields}{An optional field specification for
-\href{https://cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
+\href{https://docs.cloud.google.com/bigquery/docs/api-performance#partial-response}{partial response}}
 
 \item{quiet}{If \code{FALSE}, displays progress bar; if \code{TRUE} is silent;
 if \code{NA} picks based on whether or not you're in an interactive context.}
@@ -44,12 +44,12 @@ To perform a job, see \link{api-perform}. These functions all retrieve metadata
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}{get}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/get}{get}
 }
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 jobs <- bq_project_jobs(bq_test_project())
 jobs[[1]]
 

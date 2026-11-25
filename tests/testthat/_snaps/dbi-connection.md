@@ -33,7 +33,20 @@
       DBI::dbWriteTable(con, "x", df, temporary = TRUE)
     Condition
       Error in `DBI::dbWriteTable()`:
-      ! `temporary = FALSE` not supported by bigrquery.
+      ! `temporary = TRUE` not supported by bigrquery.
+
+# can't use parameters
+
+    Code
+      DBI::dbGetQuery(con, "SELECT @x AS value", parameters = list(x = 1))
+    Condition
+      Error in `dbSendQuery()`:
+      ! Use `params` not `parameters`.
+    Code
+      DBI::dbExecute(con, "DELETE table WHERE x <= @x", parameters = list(x = 1))
+    Condition
+      Error in `dbExecute()`:
+      ! Use `params` not `parameters`.
 
 # dataset is optional
 

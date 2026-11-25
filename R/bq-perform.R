@@ -12,13 +12,13 @@
 #' * `bq_perform_extract()`: [bq_table_save()].
 #'
 #' @section Google BigQuery API documentation:
-#' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
+#' * [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs)
 #'
 #' Additional information at:
-#' * [exporting data](https://cloud.google.com/bigquery/docs/exporting-data)
-#' * [loading data](https://cloud.google.com/bigquery/docs/loading-data)
-#' * [writing queries](https://cloud.google.com/bigquery/docs/writing-results)
-#' * [copying a table](https://cloud.google.com/bigquery/docs/managing-tables#copy-table)
+#' * [exporting data](https://docs.cloud.google.com/bigquery/docs/exporting-data)
+#' * [loading data](https://docs.cloud.google.com/bigquery/docs/loading-data)
+#' * [writing queries](https://docs.cloud.google.com/bigquery/docs/writing-results)
+#' * [copying a table](https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table)
 #'
 #' @return A [bq_job].
 #' @keywords internal
@@ -56,20 +56,28 @@ NULL
 #'   snake_case names are automatically converted to camelCase.
 #' @param print_header Whether to print out a header row in the results.
 #' @param billing Identifier of project to bill.
-bq_perform_extract <- function(x,
-                               destination_uris,
-                               destination_format = "NEWLINE_DELIMITED_JSON",
-                               compression = "NONE",
-                               ...,
-                               print_header = TRUE,
-                               billing = x$project) {
-
+#' @param labels A named list of strings used to attach
+#'   [BigQuery labels](https://docs.cloud.google.com/bigquery/docs/labels-intro)
+#'   to the resulting job, e.g. `list(env = "prod", team = "data")`. This
+#'   is most useful for cost allocation and other FinOps reporting.
+#'   Defaults to the value of `getOption("bigrquery.labels")`.
+bq_perform_extract <- function(
+  x,
+  destination_uris,
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  compression = "NONE",
+  ...,
+  print_header = TRUE,
+  billing = x$project,
+  labels = getOption("bigrquery.labels")
+) {
   x <- as_bq_table(x)
   destination_uris <- as.character(destination_uris) # for gs_object
   check_string(destination_format)
   check_string(compression)
   check_bool(print_header)
   check_string(billing)
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
   body <- list(
@@ -80,7 +88,8 @@ bq_perform_extract <- function(x,
         destinationFormat = unbox(destination_format),
         compression = unbox(compression),
         printHeader = unbox(print_header)
-      )
+      ),
+      labels = labels
     )
   )
 
@@ -115,15 +124,20 @@ bq_perform_extract <- function(x,
 #'     to the table.
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
-bq_perform_upload <- function(x, values,
-                              fields = NULL,
-                              source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
-                              create_disposition = "CREATE_IF_NEEDED",
-                              write_disposition = "WRITE_EMPTY",
-                              ...,
-                              billing = x$project
-                              ) {
-
+#' @param json_digits Species the number of digits for formatting
+#'   numeric values.
+bq_perform_upload <- function(
+  x,
+  values,
+  fields = NULL,
+  source_format = c("NEWLINE_DELIMITED_JSON", "PARQUET"),
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = x$project,
+  json_digits = NULL,
+  labels = getOption("bigrquery.labels")
+) {
   x <- as_bq_table(x)
   if (!is.data.frame(values)) {
     cli::cli_abort("{.arg values} must be a data frame.")
@@ -133,6 +147,8 @@ bq_perform_upload <- function(x, values,
   check_string(create_disposition)
   check_string(write_disposition)
   check_string(billing)
+  json_digits <- check_digits(json_digits)
+  check_labels(labels)
 
   load <- list(
     sourceFormat = unbox(source_format),
@@ -148,20 +164,30 @@ bq_perform_upload <- function(x, values,
     load$autodetect <- unbox(TRUE)
   }
 
-  metadata <- list(configuration = list(load = load))
+  metadata <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
   metadata <- bq_body(metadata, ...)
   metadata <- list(
     "type" = "application/json; charset=UTF-8",
-    "content" = jsonlite::toJSON(metadata, pretty = TRUE)
+    "content" = jsonlite::toJSON(
+      metadata,
+      auto_unbox = TRUE,
+      pretty = TRUE,
+      digits = json_digits
+    )
   )
 
   if (source_format == "NEWLINE_DELIMITED_JSON") {
     media <- list(
       "type" = "application/json; charset=UTF-8",
-      "content" = export_json(values)
+      "content" = export_json(values, json_digits = json_digits)
     )
   } else {
-    # https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
+    # https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
     media <- list(
       "type" = "application/vnd.apache.parquet",
       "content" = nanoparquet::write_parquet(values, ":raw:")
@@ -178,14 +204,16 @@ bq_perform_upload <- function(x, values,
   as_bq_job(res$jobReference)
 }
 
-# https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
-export_json <- function(values) {
+# https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
+export_json <- function(values, json_digits = NULL) {
   # Eliminate row names
   rownames(values) <- NULL
 
   # Convert times to canonical format
   is_time <- vapply(values, function(x) inherits(x, "POSIXt"), logical(1))
-  values[is_time] <- lapply(values[is_time], format, "%Y-%m-%d %H:%M:%S")
+  values[is_time] <- lapply(values[is_time], function(x) {
+    format(x, "%Y-%m-%d %H:%M:%OS6", tz = "UTC")
+  })
 
   # Convert wk_wkt to text
   is_wk <- vapply(values, function(x) inherits(x, "wk_vctr"), logical(1))
@@ -199,7 +227,13 @@ export_json <- function(values) {
 
   con <- rawConnection(raw(0), "r+")
   defer(close(con))
-  jsonlite::stream_out(values, con, verbose = FALSE, na = "null")
+  jsonlite::stream_out(
+    values,
+    con,
+    verbose = FALSE,
+    na = "null",
+    digits = json_digits
+  )
 
   rawToChar(rawConnectionValue(con))
 }
@@ -228,16 +262,18 @@ export_json <- function(values) {
 #'   (like a data frame). Leave as `NULL` to allow BigQuery to auto-detect
 #'   the fields.
 #' @param nskip For `source_format = "CSV"`, the number of header rows to skip.
-bq_perform_load <- function(x,
-                            source_uris,
-                            billing = x$project,
-                            source_format = "NEWLINE_DELIMITED_JSON",
-                            fields = NULL,
-                            nskip = 0,
-                            create_disposition = "CREATE_IF_NEEDED",
-                            write_disposition = "WRITE_EMPTY",
-                            ...
-                            ) {
+bq_perform_load <- function(
+  x,
+  source_uris,
+  billing = x$project,
+  source_format = "NEWLINE_DELIMITED_JSON",
+  fields = NULL,
+  nskip = 0,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  labels = getOption("bigrquery.labels")
+) {
   x <- as_bq_table(x)
   source_uris <- as.character(source_uris)
   check_string(billing)
@@ -245,6 +281,7 @@ bq_perform_load <- function(x,
   check_number_decimal(nskip, min = 0)
   check_string(create_disposition)
   check_string(write_disposition)
+  check_labels(labels)
 
   load <- list(
     sourceUris = as.list(source_uris),
@@ -265,7 +302,12 @@ bq_perform_load <- function(x,
     load$autodetect <- TRUE
   }
 
-  body <- list(configuration = list(load = load))
+  body <- list(
+    configuration = list(
+      load = load,
+      labels = labels
+    )
+  )
 
   url <- bq_path(billing, jobs = "")
   res <- bq_post(
@@ -286,7 +328,7 @@ bq_perform_load <- function(x,
 #'   converted to the correct type. If you need greater control, you can call
 #'   [bq_param_scalar()] or [bq_param_array()] explicitly.
 #'
-#'   See <https://cloud.google.com/bigquery/docs/parameterized-queries>
+#'   See <https://docs.cloud.google.com/bigquery/docs/parameterized-queries>
 #'   for more details.
 #' @param destination_table A [bq_table] where results should be stored.
 #'   If not supplied, results will be saved to a temporary table that lives
@@ -297,17 +339,19 @@ bq_perform_load <- function(x,
 #'   but are not rate-limited in the same way as interactive queries.
 #' @param default_dataset A [bq_dataset] used to automatically qualify table names.
 #' @param use_legacy_sql If `TRUE` will use BigQuery's legacy SQL format.
-bq_perform_query <- function(query, billing,
-                             ...,
-                             parameters = NULL,
-                             destination_table = NULL,
-                             default_dataset = NULL,
-                             create_disposition = "CREATE_IF_NEEDED",
-                             write_disposition = "WRITE_EMPTY",
-                             use_legacy_sql = FALSE,
-                             priority = "INTERACTIVE"
-                             ) {
-
+bq_perform_query <- function(
+  query,
+  billing,
+  ...,
+  parameters = NULL,
+  destination_table = NULL,
+  default_dataset = NULL,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  use_legacy_sql = FALSE,
+  priority = "INTERACTIVE",
+  labels = getOption("bigrquery.labels")
+) {
   query <- as_query(query)
   check_string(billing)
 
@@ -315,6 +359,7 @@ bq_perform_query <- function(query, billing,
   check_string(write_disposition)
   check_bool(use_legacy_sql)
   check_string(priority)
+  check_labels(labels)
 
   query <- list(
     query = unbox(query),
@@ -331,8 +376,9 @@ bq_perform_query <- function(query, billing,
     query$destinationTable <- tableReference(destination_table)
     query$createDisposition <- unbox(create_disposition)
     query$writeDisposition <- unbox(write_disposition)
-    if (use_legacy_sql)
+    if (use_legacy_sql) {
       query$allowLargeResults <- unbox(TRUE)
+    }
   }
 
   if (!is.null(default_dataset)) {
@@ -340,7 +386,12 @@ bq_perform_query <- function(query, billing,
   }
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels
+    )
+  )
 
   res <- bq_post(
     url,
@@ -352,22 +403,31 @@ bq_perform_query <- function(query, billing,
 
 #' @export
 #' @rdname api-perform
-bq_perform_query_dry_run <- function(query, billing,
-                                     ...,
-                                     default_dataset = NULL,
-                                     parameters = NULL,
-                                     use_legacy_sql = FALSE) {
-
-
+bq_perform_query_dry_run <- function(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE,
+  labels = getOption("bigrquery.labels")
+) {
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
     parameters = parameters,
     use_legacy_sql = use_legacy_sql
   )
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
@@ -380,36 +440,48 @@ bq_perform_query_dry_run <- function(query, billing,
 
 #' @export
 #' @rdname api-perform
-bq_perform_query_schema <- function(query, billing,
-                                    ...,
-                                    default_dataset = NULL,
-                                    parameters = NULL) {
-
+bq_perform_query_schema <- function(
+  query,
+  billing,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  labels = getOption("bigrquery.labels")
+) {
   query <- bq_perform_query_data(
     query = query,
     default_dataset = default_dataset,
     parameters = parameters,
     use_legacy_sql = FALSE
   )
+  check_labels(labels)
 
   url <- bq_path(billing, jobs = "")
-  body <- list(configuration = list(query = query, dryRun = unbox(TRUE)))
+  body <- list(
+    configuration = list(
+      query = query,
+      labels = labels,
+      dryRun = unbox(TRUE)
+    )
+  )
 
   res <- bq_post(
     url,
     body = bq_body(body, ...),
     query = list(fields = "statistics")
   )
-  # https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableSchema
+  # https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableSchema
   res$statistics$query$schema$fields
 }
 
-bq_perform_query_data <- function(query,
-                                  ...,
-                                  default_dataset = NULL,
-                                  parameters = NULL,
-                                  use_legacy_sql = FALSE,
-                                  call = caller_env()) {
+bq_perform_query_data <- function(
+  query,
+  ...,
+  default_dataset = NULL,
+  parameters = NULL,
+  use_legacy_sql = FALSE,
+  call = caller_env()
+) {
   check_string(query, error_call = call)
   check_bool(use_legacy_sql, error_call = call)
 
@@ -429,17 +501,20 @@ bq_perform_query_data <- function(query,
 }
 
 
-
 #' @export
 #' @rdname api-perform
-bq_perform_copy <- function(src, dest,
-                            create_disposition = "CREATE_IF_NEEDED",
-                            write_disposition = "WRITE_EMPTY",
-                            ...,
-                            billing = NULL) {
-
+bq_perform_copy <- function(
+  src,
+  dest,
+  create_disposition = "CREATE_IF_NEEDED",
+  write_disposition = "WRITE_EMPTY",
+  ...,
+  billing = NULL,
+  labels = getOption("bigrquery.labels")
+) {
   billing <- billing %||% dest$project
   url <- bq_path(billing, jobs = "")
+  check_labels(labels)
 
   body <- list(
     configuration = list(
@@ -448,7 +523,8 @@ bq_perform_copy <- function(src, dest,
         destinationTable = tableReference(dest),
         createDisposition = unbox(create_disposition),
         writeDisposition = unbox(write_disposition)
-      )
+      ),
+      labels = labels
     )
   )
 

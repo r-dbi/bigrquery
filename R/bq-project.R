@@ -5,10 +5,8 @@
 #' is a simple string.
 #'
 #' @section Google BigQuery API documentation:
-#' * [datasets](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
-#' * [jobs](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
-#'
-#' One day we might also expose the general [project metadata](https://cloud.google.com/resource-manager/reference/rest/v1/projects).
+#' * [datasets](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list)
+#' * [jobs](https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs/list)
 #'
 #' @return
 #' * `bq_project_datasets()`: a list of [bq_dataset]s
@@ -26,7 +24,12 @@ NULL
 #' @rdname api-project
 #' @param x A string giving a project name.
 #' @inheritParams bq_projects
-bq_project_datasets <- function(x, page_size = 100, max_pages = 1, warn = TRUE) {
+bq_project_datasets <- function(
+  x,
+  page_size = 100,
+  max_pages = 1,
+  warn = TRUE
+) {
   check_string(x)
   check_number_whole(page_size, min = 1)
   check_number_whole(max_pages, min = 1, allow_infinite = TRUE)

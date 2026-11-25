@@ -1,24 +1,28 @@
 #' @include dbi-driver.R
 NULL
 
-BigQueryConnection <- function(project,
-                               dataset,
-                               billing,
-                               page_size = 1e4,
-                               quiet = NA,
-                               use_legacy_sql = FALSE,
-                               bigint = c("integer", "integer64", "numeric", "character")) {
-
+BigQueryConnection <- function(
+  project,
+  dataset,
+  billing,
+  page_size = 1e4,
+  quiet = NA,
+  use_legacy_sql = FALSE,
+  bigint = c("integer", "integer64", "numeric", "character"),
+  labels = NULL
+) {
   connection_capture()
 
-  new("BigQueryConnection",
+  new(
+    "BigQueryConnection",
     project = project,
     dataset = dataset,
     billing = billing,
     page_size = as.integer(page_size),
     quiet = quiet,
     use_legacy_sql = use_legacy_sql,
-    bigint = match.arg(bigint)
+    bigint = match.arg(bigint),
+    labels = labels
   )
 }
 
@@ -34,7 +38,8 @@ setClass(
     use_legacy_sql = "logical",
     page_size = "integer",
     quiet = "logical",
-    bigint = "character"
+    bigint = "character",
+    labels = "ANY"
   )
 )
 
@@ -42,7 +47,8 @@ setClass(
 #' @inheritParams methods::show
 #' @export
 setMethod(
-  "show", "BigQueryConnection",
+  "show",
+  "BigQueryConnection",
   function(object) {
     cat_line("<BigQueryConnection>")
 
@@ -50,63 +56,89 @@ setMethod(
       cat_line("  Dataset: ", object@project, ".", object@dataset)
     }
     cat_line("  Billing: ", object@billing)
-
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbIsValid
+#' @param dbObj An object inheriting from [DBI::DBIObject-class],
+#' i.e. [DBI::DBIDriver-class], [DBI::DBIConnection-class], or a [DBI::DBIResult-class].
+#' @param conn A [DBI::DBIConnection-class] object, as returned by
+#'   [DBI::dbConnect()].
 #' @export
 setMethod(
-  "dbIsValid", "BigQueryConnection",
+  "dbIsValid",
+  "BigQueryConnection",
   function(dbObj, ...) {
     TRUE
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbDisconnect
 #' @export
 setMethod(
-  "dbDisconnect", "BigQueryConnection",
+  "dbDisconnect",
+  "BigQueryConnection",
   function(conn, ...) {
     on_connection_closed(conn)
     invisible(TRUE)
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
+#' @param params Named list of parameters match to query parameters.
+#'   Parameter `x` will be matched to placeholder `@x`.
 #' @export
 setMethod(
   "dbSendQuery",
   c("BigQueryConnection", "character"),
   function(conn, statement, ..., params = NULL) {
-    BigQueryResult(conn, statement, params = params, ...)
+    check_for_parameters(..., call = quote(dbSendQuery()))
+    BigQueryResult(conn, statement, params = params)
   }
 )
 
 #' @rdname DBI
 #' @inheritParams DBI::dbSendQuery
 #' @export
-setMethod("dbExecute", c("BigQueryConnection", "character"), function(conn, statement, ...) {
-  ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
+setMethod(
+  "dbExecute",
+  c("BigQueryConnection", "character"),
+  function(conn, statement, ..., params = NULL) {
+    ds <- if (!is.null(conn@dataset)) as_bq_dataset(conn)
 
-  job <- bq_perform_query(statement,
-    billing = conn@billing,
-    default_dataset = ds,
-    quiet = conn@quiet,
-    ...
-  )
-  bq_job_wait(job, quiet = conn@quiet)
+    check_for_parameters(..., call = quote(dbExecute()))
+    job <- bq_perform_query(
+      statement,
+      billing = conn@billing,
+      default_dataset = ds,
+      quiet = conn@quiet,
+      parameters = params,
+      labels = conn@labels,
+      ...
+    )
+    bq_job_wait(job, quiet = conn@quiet)
 
-  meta <- bq_job_meta(job, "statistics(query(numDmlAffectedRows))")
-  as.numeric(meta$statistics$query$numDmlAffectedRows %||% 0)
-})
+    meta <- bq_job_meta(job, "statistics(query(numDmlAffectedRows))")
+    as.numeric(meta$statistics$query$numDmlAffectedRows %||% 0)
+  }
+)
 
+check_for_parameters <- function(..., parameters = NULL, call = caller_env()) {
+  if (is.null(parameters)) {
+    return()
+  }
+  cli::cli_abort("Use {.arg params} not {.arg parameters}.", call = call)
+}
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteString
 #' @export
 setMethod(
-  "dbQuoteString", c("BigQueryConnection", "character"),
+  "dbQuoteString",
+  c("BigQueryConnection", "character"),
   function(conn, x, ...) {
     if (length(x) == 0) {
       return(SQL(character()))
@@ -115,21 +147,25 @@ setMethod(
     out <- encodeString(x, na.encode = FALSE, quote = "'")
     out[is.na(x)] <- "NULL"
     SQL(out, names = names(x))
-  })
+  }
+)
 
 #' @rdname DBI
 #' @export
 setMethod(
-  "dbQuoteString", c("BigQueryConnection", "SQL"),
+  "dbQuoteString",
+  c("BigQueryConnection", "SQL"),
   function(conn, x, ...) {
     x
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbQuoteIdentifier
 #' @export
 setMethod(
-  "dbQuoteIdentifier", c("BigQueryConnection", "character"),
+  "dbQuoteIdentifier",
+  c("BigQueryConnection", "character"),
   function(conn, x, ...) {
     if (length(x) == 0) {
       return(SQL(character()))
@@ -146,12 +182,14 @@ setMethod(
     }
 
     SQL(out, names = names(x))
-  })
+  }
+)
 
 #' @rdname DBI
 #' @export
 setMethod(
-  "dbQuoteIdentifier", c("BigQueryConnection", "SQL"),
+  "dbQuoteIdentifier",
+  c("BigQueryConnection", "SQL"),
   function(conn, x, ...) {
     x
   }
@@ -160,7 +198,8 @@ setMethod(
 #' @rdname DBI
 #' @export
 setMethod(
-  "dbQuoteLiteral", c("BigQueryConnection", "logical"),
+  "dbQuoteLiteral",
+  c("BigQueryConnection", "logical"),
   function(conn, x, ...) {
     x <- as.character(x)
     x[is.na(x)] <- "NULL"
@@ -172,22 +211,24 @@ setMethod(
 #' @inheritParams DBI::dbDataType
 #' @export
 setMethod(
-  "dbDataType", "BigQueryConnection",
+  "dbDataType",
+  "BigQueryConnection",
   function(dbObj, obj, ...) {
     data_type(obj)
   }
 )
 
-dbWriteTable_bq <- function(conn,
-                            name,
-                            value,
-                            ...,
-                            overwrite = FALSE,
-                            append = FALSE,
-                            field.types = NULL,
-                            temporary = FALSE,
-                            row.names = NA) {
-
+dbWriteTable_bq <- function(
+  conn,
+  name,
+  value,
+  ...,
+  overwrite = FALSE,
+  append = FALSE,
+  field.types = NULL,
+  temporary = FALSE,
+  row.names = NA
+) {
   check_bool(overwrite)
   check_bool(append)
 
@@ -199,7 +240,7 @@ dbWriteTable_bq <- function(conn,
   }
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbWriteTable())
     )
   }
@@ -219,6 +260,7 @@ dbWriteTable_bq <- function(conn,
     create_disposition = create_disposition,
     write_disposition = write_disposition,
     billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   invisible(TRUE)
@@ -264,9 +306,13 @@ setMethod(
 dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
   tb <- as_bq_table(conn, name)
 
-  bq_table_upload(tb, value,
+  bq_table_upload(
+    tb,
+    value,
     create_disposition = "CREATE_NEVER",
     write_disposition = "WRITE_APPEND",
+    billing = conn@billing,
+    labels = conn@labels,
     ...
   )
   on_connection_updated(conn, toString(tb))
@@ -277,25 +323,39 @@ dbAppendTable_bq <- function(conn, name, value, ..., row.names = NULL) {
 #' @inheritParams DBI::dbAppendTable
 #' @rdname DBI
 #' @export
-setMethod("dbAppendTable", c("BigQueryConnection", "character", "data.frame"), dbAppendTable_bq)
+setMethod(
+  "dbAppendTable",
+  c("BigQueryConnection", "character", "data.frame"),
+  dbAppendTable_bq
+)
 
 #' @rdname DBI
 #' @export
-setMethod("dbAppendTable", c("BigQueryConnection", "Id", "data.frame"), dbAppendTable_bq)
+setMethod(
+  "dbAppendTable",
+  c("BigQueryConnection", "Id", "data.frame"),
+  dbAppendTable_bq
+)
 
 #' @rdname DBI
 #' @export
-setMethod("dbAppendTable", c("BigQueryConnection", "AsIs", "data.frame"), dbAppendTable_bq)
+setMethod(
+  "dbAppendTable",
+  c("BigQueryConnection", "AsIs", "data.frame"),
+  dbAppendTable_bq
+)
 
-dbCreateTable_bq <- function(conn,
-                             name,
-                             fields,
-                             ...,
-                             row.names = NULL,
-                             temporary = FALSE) {
+dbCreateTable_bq <- function(
+  conn,
+  name,
+  fields,
+  ...,
+  row.names = NULL,
+  temporary = FALSE
+) {
   if (!identical(temporary, FALSE)) {
     cli::cli_abort(
-      "{.code temporary = FALSE} not supported by bigrquery.",
+      "{.code temporary = TRUE} not supported by bigrquery.",
       call = quote(DBI::dbCreateTable())
     )
   }
@@ -338,7 +398,8 @@ setMethod("dbReadTable", c("BigQueryConnection", "AsIs"), dbReadTable_bq)
 #' @inheritParams DBI::dbListTables
 #' @export
 setMethod(
-  "dbListTables", "BigQueryConnection",
+  "dbListTables",
+  "BigQueryConnection",
   function(conn, ...) {
     if (is.null(conn@dataset)) {
       cli::cli_abort("Can't list tables without a connection `dataset`.")
@@ -347,7 +408,8 @@ setMethod(
 
     tbs <- bq_dataset_tables(ds, ...)
     map_chr(tbs, function(x) x$table)
-  })
+  }
+)
 
 dbExistsTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
@@ -356,7 +418,11 @@ dbExistsTable_bq <- function(conn, name, ...) {
 #' @inheritParams DBI::dbExistsTable
 #' @rdname DBI
 #' @export
-setMethod("dbExistsTable", c("BigQueryConnection", "character"), dbExistsTable_bq)
+setMethod(
+  "dbExistsTable",
+  c("BigQueryConnection", "character"),
+  dbExistsTable_bq
+)
 
 #' @rdname DBI
 #' @export
@@ -395,7 +461,11 @@ dbRemoveTable_bq <- function(conn, name, ...) {
 #' @inheritParams DBI::dbRemoveTable
 #' @rdname DBI
 #' @export
-setMethod("dbRemoveTable", c("BigQueryConnection", "character"), dbRemoveTable_bq)
+setMethod(
+  "dbRemoveTable",
+  c("BigQueryConnection", "character"),
+  dbRemoveTable_bq
+)
 
 #' @rdname DBI
 #' @export
@@ -410,7 +480,8 @@ setMethod("dbRemoveTable", c("BigQueryConnection", "AsIs"), dbRemoveTable_bq)
 #' @inheritParams DBI::dbGetInfo
 #' @export
 setMethod(
-  "dbGetInfo", "BigQueryConnection",
+  "dbGetInfo",
+  "BigQueryConnection",
   function(dbObj, ...) {
     list(
       db.version = NA,
@@ -419,36 +490,42 @@ setMethod(
       host = NA,
       port = NA
     )
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbBegin
 #' @export
 setMethod(
-  "dbBegin", "BigQueryConnection",
+  "dbBegin",
+  "BigQueryConnection",
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbBegin(Connection)")
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbCommit
 #' @export
 setMethod(
-  "dbCommit", "BigQueryConnection",
+  "dbCommit",
+  "BigQueryConnection",
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbCommit(Connection)")
-  })
+  }
+)
 
 #' @rdname DBI
 #' @inheritParams DBI::dbRollback
 #' @export
 setMethod(
-  "dbRollback", "BigQueryConnection",
+  "dbRollback",
+  "BigQueryConnection",
   function(conn, ...) {
     testthat::skip("Not yet implemented: dbRollback(Connection)")
-  })
+  }
+)
 # nocov end
-
 
 # Convert to bq objects ---------------------------------------------------
 
@@ -460,9 +537,14 @@ as_bq_dataset.BigQueryConnection <- function(x, ..., error_arg, error_call) {
 
 #' @export
 as_bq_table.BigQueryConnection <- function(x, name, ...) {
-  if (inherits(name, "dbplyr_table_path")) { # dbplyr 2.5.0
-    pieces <- utils::getFromNamespace("table_path_components", "dbplyr")(name, x)[[1]]
-  } else if (inherits(name, "dbplyr_table_ident")) { # dbplyr 2.4.0
+  if (inherits(name, "dbplyr_table_path")) {
+    # dbplyr 2.5.0
+    pieces <- utils::getFromNamespace("table_path_components", "dbplyr")(
+      name,
+      x
+    )[[1]]
+  } else if (inherits(name, "dbplyr_table_ident")) {
+    # dbplyr 2.4.0
     name <- unclass(name)
     pieces <- c(name$catalog, name$schema, name$table)
     pieces <- pieces[!is.na(pieces)]
@@ -489,7 +571,8 @@ as_bq_table.BigQueryConnection <- function(x, name, ...) {
     )
   }
 
-  switch(length(pieces),
+  switch(
+    length(pieces),
     bq_table(x@project, x@dataset, pieces[[1]]),
     bq_table(x@project, pieces[[1]], pieces[[2]]),
     bq_table(pieces[[1]], pieces[[2]], pieces[[3]])

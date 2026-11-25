@@ -74,15 +74,21 @@ test_that("can get metadata", {
   expect_equal(col_info$name, c("cyl", "mpg"))
 
   expect_equal(DBI::dbGetStatement(res), sql)
-
 })
 
 test_that("dbExecute returns modified rows", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
+  name <- random_name()
 
-  DBI::dbExecute(con, "CREATE TABLE foo (a INT64)")
-  expect_equal(DBI::dbExecute(con, "INSERT INTO foo VALUES (1), (2), (3)"), 3)
-  expect_equal(DBI::dbExecute(con, "DELETE FROM foo WHERE a >= 2"), 2)
-  DBI::dbExecute(con, "DROP TABLE foo")
+  DBI::dbExecute(con, sprintf("CREATE TABLE %s (a INT64)", name))
+  expect_equal(
+    DBI::dbExecute(con, sprintf("INSERT INTO %s VALUES (1), (2), (3)", name)),
+    3
+  )
+  expect_equal(
+    DBI::dbExecute(con, sprintf("DELETE FROM %s WHERE a >= 2", name)),
+    2
+  )
+  DBI::dbExecute(con, sprintf("DROP TABLE %s", name))
 })

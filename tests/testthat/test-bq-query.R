@@ -21,4 +21,3 @@ test_that("bq_dataset_query inputs are checked", {
     bq_dataset_query("abc.def", "SELECT *", quiet = 1)
   })
 })
-

@@ -1,13 +1,42 @@
 # bigrquery (development version)
 
+# bigrquery 1.6.2
+
+* BigQuery error messages containing `{` or `}` are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (#677).
+* `bq_dataset_query()`, `bq_project_query()`, `bq_table_copy()`, `bq_table_download()`, `bq_table_load()`, `bq_table_save()`, and `bq_table_upload()` now respect `getOption("bigrquery.quiet")` as the default for `quiet` (@r2evans, #663).
+* `bq_perform_query()` and friends gain a `labels` argument that attaches [BigQuery labels](https://docs.cloud.google.com/bigquery/docs/labels-intro) to the resulting job, useful for cost allocation. `dbConnect()` gains a matching `labels` argument that is forwarded to every job run on the connection. Defaults to `getOption("bigrquery.labels")` (@JulianUmbhau, #673).
+* `bq_perform_upload()` and friends now default to 22 digits of accuracy, and allow you to change this value with the new `json_digits` argument. They now also upload `POSIXt` objects with 6 digits (i.e. microsecond) precision (#660), and correctly set the `"tzone"` attribute of uploaded `POSIXt` columns to `Sys.timezone()` when the timezone is empty or not defined (@r2evans, #660).
+* `dbAppendTable()` now correctly uses the billing project from the connection (@eheinzen, #638).
+* `dbCreateTable()` and `dbWriteTable()` now correctly say that `temporary = TRUE` (rather than `FALSE`) is unsupported (#670).
+* `dbExecute()` gains `params=` support (@r2evans, #667).
+* `dbExecute()` and `dbSendQuery()` error if you accidentally use `parameters`  (@r2evans, #667).
+* `tbl()` no longer errors when given a literal SQL query that contains three or more periods (#611).
+
+# bigrquery 1.6.1
+
+* Fix test failure on CRAN.
+
+# bigrquery 1.6.0
+
+## New features
+
 * If the bigrquerystorage package is installed, `bq_table_download()` (and
-  hence `collect()`, `dbGetQuery()` and `dbFetch()` will use it. This will
+  hence `collect()`, `dbGetQuery()` and `dbFetch()`) will use it. This will
   drastically improve the speed of downloading large datasets. A big thanks
   to @meztez for creating the bigrquerystorage package!
 
-* The `bq_perform_upload()` function now allows users to choose the transmission format (JSON or PARQUET) for data sent to BigQuery (@apalacio9502, #608).
+## Bug fixes and minor improvements
 
-* bigrquery now requires R 4.0, in line with our version support principles.
+* Various R CMD check fixes
+
+* Functions and arguments deprecated in bigrquery 1.4.0 (released) have now
+  been removed.
+
+* The `bq_perform_upload()` function now allows users to choose the 
+  transmission format (JSON or PARQUET) for data sent to BigQuery 
+  (@apalacio9502, #608).
+
+* bigrquery now requires R 4.1, inline with our version support principles.
 
 # bigrquery 1.5.1
 

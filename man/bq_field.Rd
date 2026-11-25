@@ -52,6 +52,6 @@ as_bq_fields(mtcars)
 }
 \seealso{
 \code{bq_field()} corresponds to a \code{TableFieldSchema}, see
-\url{https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema}
+\url{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/tables#TableFieldSchema}
 for more details.
 }

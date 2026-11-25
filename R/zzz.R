@@ -1,6 +1,6 @@
 .onLoad <- function(libname, pkgname) {
   .auth <<- gargle::init_AuthState(
-    package     = "bigrquery",
+    package = "bigrquery",
     auth_active = TRUE
   )
 
@@ -23,10 +23,13 @@
   op <- options()
   defaults <- list(
     bigrquery.quiet = NA,
-    bigrquery.page.size = 1e4
+    bigrquery.page.size = 1e4,
+    bigrquery.labels = NULL
   )
   toset <- !(names(defaults) %in% names(op))
-  if (any(toset)) options(defaults[toset])
+  if (any(toset)) {
+    options(defaults[toset])
+  }
 
   invisible()
 }

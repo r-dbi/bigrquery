@@ -31,7 +31,6 @@ test_that("pagination warns if pages left on server", {
     ),
     "Only first 20 results"
   )
-
 })
 
 test_that("error call is forwarded all the way down", {

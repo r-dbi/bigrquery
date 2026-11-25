@@ -7,11 +7,11 @@
 ## The roxygen comments for these functions are mostly generated from data
 ## in this list and template text maintained in gargle.
 gargle_lookup_table <- list(
-  PACKAGE     = "bigrquery",
-  YOUR_STUFF  = "your BigQuery projects",
-  PRODUCT     = "Google BigQuery",
-  API         = "BigQuery API",
-  PREFIX      = "bq"
+  PACKAGE = "bigrquery",
+  YOUR_STUFF = "your BigQuery projects",
+  PRODUCT = "Google BigQuery",
+  API = "BigQuery API",
+  PREFIX = "bq"
 )
 
 #' Authorize bigrquery
@@ -48,15 +48,17 @@ gargle_lookup_table <- list(
 #' }
 #'
 #' @importFrom gargle token_fetch
-bq_auth <- function(email = gargle::gargle_oauth_email(),
-                    path = NULL,
-                    scopes = c(
-                      "https://www.googleapis.com/auth/bigquery",
-                      "https://www.googleapis.com/auth/cloud-platform"
-                    ),
-                    cache = gargle::gargle_oauth_cache(),
-                    use_oob = gargle::gargle_oob_default(),
-                    token = NULL) {
+bq_auth <- function(
+  email = gargle::gargle_oauth_email(),
+  path = NULL,
+  scopes = c(
+    "https://www.googleapis.com/auth/bigquery",
+    "https://www.googleapis.com/auth/cloud-platform"
+  ),
+  cache = gargle::gargle_oauth_cache(),
+  use_oob = gargle::gargle_oob_default(),
+  token = NULL
+) {
   if (!missing(email) && !missing(path)) {
     cli::cli_warn(c(
       "It is very unusual to provide both {.arg email} and \\
@@ -88,8 +90,9 @@ bq_auth <- function(email = gargle::gargle_oauth_email(),
   if (!inherits(cred, "Token2.0")) {
     cli::cli_abort(c(
       "Can't get Google credentials.",
-      i = if (!is_interactive())
+      i = if (!is_interactive()) {
         "Try calling {.fun bq_auth} directly with necessary specifics."
+      }
     ))
   }
   .auth$set_cred(cred)
@@ -163,7 +166,10 @@ bq_has_token <- function() {
 #' Edit and view auth configuration
 #'
 #' @eval gargle:::PREFIX_auth_configure_description(gargle_lookup_table, .has_api_key = FALSE)
-#' @eval gargle:::PREFIX_auth_configure_params(.has_api_key = FALSE)
+#' @param client A Google OAuth client, presumably constructed via
+#'   [gargle::gargle_oauth_client_from_json()]. Note, however, that it is
+#'   preferred to specify the client with JSON, using the `path` argument.
+#' @inheritParams gargle::gargle_oauth_client_from_json
 #' @eval gargle:::PREFIX_auth_configure_return(gargle_lookup_table, .has_api_key = FALSE)
 #'
 #' @family auth functions
@@ -186,16 +192,7 @@ bq_has_token <- function() {
 #'
 #' # restore original auth config
 #' bq_auth_configure(client = original_client)
-bq_auth_configure <- function(client, path, app = deprecated()) {
-  if (lifecycle::is_present(app)) {
-    lifecycle::deprecate_warn(
-      "1.4.2",
-      "bq_auth_configure(app)",
-      "bq_auth_configure(client)"
-    )
-    return(bq_auth_configure(client = app, path = path))
-  }
-
+bq_auth_configure <- function(client, path) {
   check_exclusive(client, path)
   if (!missing(path)) {
     check_string(path)
@@ -234,23 +231,3 @@ bq_user <- function() {
     NULL
   }
 }
-
-# deprecated functions ----
-
-#' Get currently configured OAuth app (deprecated)
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#'
-#' In light of the new [gargle::gargle_oauth_client()] constructor and class of
-#' the same name, `bq_oauth_app()` is being replaced by
-#' [bq_oauth_client()].
-#' @keywords internal
-#' @export
-bq_oauth_app <- function() {
-  lifecycle::deprecate_warn(
-    "1.4.2", "bq_oauth_app()", "bq_oauth_client()"
-  )
-  bq_oauth_client()
-}
-

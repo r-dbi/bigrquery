@@ -28,10 +28,16 @@ bq_path <- function(project, dataset = NULL, table = NULL, ...) {
 
 bq_ua <- function() {
   paste0(
-    "bigrquery/", utils::packageVersion("bigrquery"), " ",
-    "(GPN:RStudio; )", " ",
-    "gargle/", utils::packageVersion("gargle"), " ",
-    "httr/", utils::packageVersion("httr")
+    "bigrquery/",
+    utils::packageVersion("bigrquery"),
+    " ",
+    "(GPN:RStudio; )",
+    " ",
+    "gargle/",
+    utils::packageVersion("gargle"),
+    " ",
+    "httr/",
+    utils::packageVersion("httr")
   )
 }
 
@@ -66,14 +72,21 @@ bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
 
 
 #' @importFrom httr GET config
-bq_get_paginated <- function(url, ..., query = NULL, token = bq_token(),
-                             page_size = 50, max_pages = Inf, warn = TRUE) {
-
+bq_get_paginated <- function(
+  url,
+  ...,
+  query = NULL,
+  token = bq_token(),
+  page_size = 50,
+  max_pages = Inf,
+  warn = TRUE
+) {
   check_number_whole(max_pages, min = 1, allow_infinite = TRUE)
   check_number_whole(page_size, min = 1)
 
-  if (!is.null(query$fields))
+  if (!is.null(query$fields)) {
     query$fields <- paste0(query$fields, ",nextPageToken")
+  }
 
   query <- utils::modifyList(list(maxResults = page_size), query %||% list())
   pages <- list()
@@ -94,7 +107,9 @@ bq_get_paginated <- function(url, ..., query = NULL, token = bq_token(),
 
   if (isTRUE(warn) && !is.null(page_token)) {
     warning(
-      "Only first ", big_mark(max_pages * page_size), " results retrieved. ",
+      "Only first ",
+      big_mark(max_pages * page_size),
+      " results retrieved. ",
       "Adjust with `max_pages` and `page_size` parameters.",
       call. = FALSE
     )
@@ -149,9 +164,17 @@ bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
 
 #' @importFrom httr POST PUT add_headers headers config status_code
 # https://cloud.google.com/bigquery/docs/reference/api-uploads
-bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) {
-
-  query <-  utils::modifyList(list(fields = "jobReference",uploadType = "resumable"), query)
+bq_upload <- function(
+  url,
+  metadata,
+  media,
+  query = list(),
+  token = bq_token()
+) {
+  query <- utils::modifyList(
+    list(fields = "jobReference", uploadType = "resumable"),
+    query
+  )
   config <- add_headers("Content-Type" = metadata[["type"]])
 
   req <- POST(
@@ -164,7 +187,6 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
   )
 
   if (status_code(req) == 200) {
-
     config <- add_headers("Content-Type" = media[["type"]])
 
     req <- PUT(
@@ -174,7 +196,6 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
       token,
       config
     )
-
   }
 
   process_request(req)
@@ -185,7 +206,9 @@ bq_upload <- function(url, metadata, media, query = list(), token = bq_token()) 
 process_request <- function(req, raw = FALSE, call = caller_env()) {
   status <- status_code(req)
   # No content -> success
-  if (status == 204) return(TRUE)
+  if (status == 204) {
+    return(TRUE)
+  }
 
   type <- req$headers$`Content-type`
   content <- content(req, "raw")
@@ -252,12 +275,13 @@ gargle_abort <- function(reason, message, status, call = caller_env()) {
       advice <- "Try increasing the `page_size` value of `bq_table_download()`"
     }
     message <- c(
-      paste0(message, " [", reason, "] "),
+      cli_escape(paste0(message, " [", reason, "] ")),
       i = advice
     )
     class <- c(paste0("bigrquery_", reason), class)
+  } else {
+    message <- cli_escape(message)
   }
 
   cli::cli_abort(message, class = class, call = call)
 }
-

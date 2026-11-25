@@ -8,13 +8,14 @@
 [![CRAN
 Status](https://www.r-pkg.org/badges/version/bigrquery)](https://cran.r-project.org/package=bigrquery)
 [![R-CMD-check](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-dbi/bigrquery/actions/workflows/R-CMD-check.yaml)
+
 [![Codecov test
-coverage](https://codecov.io/gh/r-dbi/bigrquery/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery?branch=main)
+coverage](https://codecov.io/gh/r-dbi/bigrquery/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/bigrquery)
 <!-- badges: end -->
 
 The bigrquery package makes it easy to work with data stored in [Google
-BigQuery](https://cloud.google.com/bigquery/docs) by allowing you to
-query BigQuery tables and retrieve metadata about your projects,
+BigQuery](https://docs.cloud.google.com/bigquery/docs) by allowing you
+to query BigQuery tables and retrieve metadata about your projects,
 datasets, tables, and jobs. The bigrquery package provides three levels
 of abstraction on top of BigQuery:
 
@@ -63,16 +64,16 @@ bq_table_download(tb, n_max = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    12    14          8.88
-#>  2  1969     1    22          7.44
-#>  3  1969     4    11          6.12
-#>  4  1969     3    15          9.06
-#>  5  1969    11    18          7.44
-#>  6  1969     5     5          7.00
-#>  7  1969     9    20          8.13
-#>  8  1969     3    20          7.37
-#>  9  1969     3    20          6.81
-#> 10  1969    12     1          8.50
+#>  1  1969     9     5          7.00
+#>  2  1969     6    16          8.06
+#>  3  1969    12    17          5.94
+#>  4  1969     9     1          7.44
+#>  5  1969     4    25          7.94
+#>  6  1969     3    13          7.31
+#>  7  1969     4    17          7.13
+#>  8  1969     7    19          7.00
+#>  9  1969    12    13          7.75
+#> 10  1969     7    22          6.38
 ```
 
 ### DBI
@@ -99,16 +100,16 @@ dbGetQuery(con, sql, n = 10)
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  1969    12    14          8.88
-#>  2  1969     1    22          7.44
-#>  3  1969     4    11          6.12
-#>  4  1969     3    15          9.06
-#>  5  1969    11    18          7.44
-#>  6  1969     5     5          7.00
-#>  7  1969     9    20          8.13
-#>  8  1969     3    20          7.37
-#>  9  1969     3    20          6.81
-#> 10  1969    12     1          8.50
+#>  1  1969     9     5          7.00
+#>  2  1969     6    16          8.06
+#>  3  1969    12    17          5.94
+#>  4  1969     9     1          7.44
+#>  5  1969     4    25          7.94
+#>  6  1969     3    13          7.31
+#>  7  1969     4    17          7.13
+#>  8  1969     7    19          7.00
+#>  9  1969    12    13          7.75
+#> 10  1969     7    22          6.38
 ```
 
 ### dplyr
@@ -125,16 +126,16 @@ natality %>%
 #> # A tibble: 10 × 4
 #>     year month   day weight_pounds
 #>    <int> <int> <int>         <dbl>
-#>  1  2005     5    NA          7.56
-#>  2  2005     6    NA          4.75
-#>  3  2005    11    NA          7.37
-#>  4  2005     6    NA          7.81
-#>  5  2005     5    NA          3.69
-#>  6  2005    10    NA          6.95
-#>  7  2005    12    NA          8.44
-#>  8  2005    10    NA          8.69
-#>  9  2005    10    NA          7.63
-#> 10  2005     7    NA          8.27
+#>  1  2005     8    NA          7.81
+#>  2  2005    10    NA          7.10
+#>  3  2005    12    NA          7.31
+#>  4  2005     2    NA          3.75
+#>  5  2005     1    NA          7.35
+#>  6  2005    12    NA          3.19
+#>  7  2005     7    NA          7.87
+#>  8  2005     4    NA          8.31
+#>  9  2005     4    NA          7.56
+#> 10  2005    10    NA          7.19
 ```
 
 ## Important details
@@ -144,10 +145,10 @@ natality %>%
 To use bigrquery, you’ll need a BigQuery project. Fortunately, if you
 just want to play around with the BigQuery API, it’s easy to start with
 Google’s free [public
-data](https://cloud.google.com/bigquery/public-data) and the [BigQuery
-sandbox](https://cloud.google.com/bigquery/docs/sandbox). This gives you
-some fun data to play with along with enough free compute (1 TB of
-queries & 10 GB of storage per month) to learn the ropes.
+data](https://docs.cloud.google.com/bigquery/public-data) and the
+[BigQuery sandbox](https://docs.cloud.google.com/bigquery/docs/sandbox).
+This gives you some fun data to play with along with enough free compute
+(1 TB of queries & 10 GB of storage per month) to learn the ropes.
 
 To get started, open <https://console.cloud.google.com/bigquery> and
 create a project. Make a note of the “Project ID” as you’ll use this as
@@ -157,10 +158,10 @@ the `project` when you work with your own data.
 ### Authentication and authorization
 
 When using bigrquery interactively, you’ll be prompted to [authorize
-bigrquery](https://cloud.google.com/bigquery/docs/authorization) in the
-browser. You’ll be asked if you want to cache tokens for reuse in future
-sessions. For non-interactive usage, it is preferred to use a service
-account token, if possible. More places to learn about auth:
+bigrquery](https://docs.cloud.google.com/bigquery/docs/authorization) in
+the browser. You’ll be asked if you want to cache tokens for reuse in
+future sessions. For non-interactive usage, it is preferred to use a
+service account token, if possible. More places to learn about auth:
 
 - Help for
   [`bigrquery::bq_auth()`](https://bigrquery.r-dbi.org/reference/bq_auth.html).
@@ -182,14 +183,15 @@ account token, if possible. More places to learn about auth:
 Note that bigrquery requests permission to modify your data; but it will
 never do so unless you explicitly request it (e.g. by calling
 `bq_table_delete()` or `bq_table_upload()`). Our [Privacy
-policy](https://www.tidyverse.org/google_privacy_policy) provides more
+policy](https://tidyverse.org/google_privacy_policy/) provides more
 info.
 
 ## Useful links
 
 - [SQL
-  reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
-- [API reference](https://cloud.google.com/bigquery/docs/reference/rest)
+  reference](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators)
+- [API
+  reference](https://docs.cloud.google.com/bigquery/docs/reference/rest)
 - [Query/job console](https://console.cloud.google.com/bigquery/)
 - [Billing console](https://console.cloud.google.com/)
 
@@ -199,4 +201,4 @@ Please note that the ‘bigrquery’ project is released with a [Contributor
 Code of Conduct](https://bigrquery.r-dbi.org/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
 
-[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+[Privacy policy](https://tidyverse.org/google_privacy_policy/)

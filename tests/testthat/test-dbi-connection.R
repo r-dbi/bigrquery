@@ -14,7 +14,12 @@ test_that("can round-trip connection to bq_dataset", {
 })
 
 test_that("useful print with and without dataset", {
-  con1 <- DBI::dbConnect(bigquery(), project = "p", dataset = "x", billing = "b")
+  con1 <- DBI::dbConnect(
+    bigquery(),
+    project = "p",
+    dataset = "x",
+    billing = "b"
+  )
   con2 <- DBI::dbConnect(bigquery(), project = "p")
 
   expect_snapshot({
@@ -65,11 +70,12 @@ test_that("can retrieve information about public dataset", {
 })
 
 test_that("can roundtrip a data frame", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
+  name <- random_name()
 
-  DBI::dbWriteTable(con, "mtcars", mtcars)
-  df <- DBI::dbReadTable(con, "mtcars")
+  DBI::dbWriteTable(con, name, mtcars)
+  df <- DBI::dbReadTable(con, name)
 
   expect_equal(nrow(df), 32)
   expect_equal(ncol(df), 11)
@@ -83,7 +89,6 @@ test_that("dbWriteTable errors on unsupported arguments", {
     DBI::dbWriteTable(con, "x", df, field.types = list())
     DBI::dbWriteTable(con, "x", df, temporary = TRUE)
   })
-
 })
 
 test_that("can execute a query", {
@@ -98,19 +103,35 @@ test_that("can execute a query", {
   expect_equal(out, 2)
 })
 
-test_that("can use parameters", {
+test_that("can use params", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
 
+  # in dbGetQuery
   df <- DBI::dbGetQuery(con, "SELECT @x AS value", params = list(x = 1))
   expect_equal(df, tibble(value = 1))
+
+  # in dbExecute
+  expect_equal(DBI::dbExecute(con, "SELECT @x", params = list(x = 1)), 0)
 })
 
+
+test_that("can't use parameters", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  # in dbGetQuery
+  expect_snapshot(error = TRUE, {
+    DBI::dbGetQuery(con, "SELECT @x AS value", parameters = list(x = 1))
+    DBI::dbExecute(con, "DELETE table WHERE x <= @x", parameters = list(x = 1))
+  })
+})
+
+
 test_that("can use DBI::Id()", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
 
   df <- data.frame(x = 1:10)
-  id <- DBI::Id(table = "mytable")
+  id <- DBI::Id(table = random_name())
 
   expect_no_error(DBI::dbCreateTable(con, id, df))
   expect_no_error(DBI::dbAppendTable(con, id, df))
@@ -190,11 +211,27 @@ test_that("as_bq_table checks its input types", {
 })
 
 test_that("the return type of integer columns is set by the bigint argument", {
-  x <- c("-2147483648", "-2147483647", "-1", "0", "1", "2147483647", "2147483648")
-  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x");
+  x <- c(
+    "-2147483648",
+    "-2147483647",
+    "-1",
+    "0",
+    "1",
+    "2147483647",
+    "2147483648"
+  )
+  sql <- paste0("SELECT * FROM UNNEST ([", paste0(x, collapse = ","), "]) AS x")
 
-  con_integer64 <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "integer64")
-  con_character <- DBI::dbConnect(bigquery(), project = bq_test_project(), bigint = "character")
+  con_integer64 <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    bigint = "integer64"
+  )
+  con_character <- DBI::dbConnect(
+    bigquery(),
+    project = bq_test_project(),
+    bigint = "character"
+  )
 
   expect_equal(DBI::dbGetQuery(con_integer64, sql)$x, bit64::as.integer64(x))
   expect_equal(DBI::dbGetQuery(con_character, sql)$x, x)

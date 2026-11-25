@@ -7,17 +7,24 @@ connection_capture <- function() {
   }
 
   addTaskCallback(function(expr, ...) {
-    tryCatch({
-      # notify if this is an assignment we can replay
-      if (is_call(expr, c("<-", "=")) && is_call(expr[[3]], "dbConnect")) {
-        on_connection_opened(
-          eval(expr[[2]]),
-          paste(c("library(bigrquery)", deparse(expr)), collapse = "\n")
+    tryCatch(
+      {
+        # notify if this is an assignment we can replay
+        if (is_call(expr, c("<-", "=")) && is_call(expr[[3]], "dbConnect")) {
+          on_connection_opened(
+            eval(expr[[2]]),
+            paste(c("library(bigrquery)", deparse(expr)), collapse = "\n")
+          )
+        }
+      },
+      error = function(e) {
+        warning(
+          "Could not notify connection observer. ",
+          e$message,
+          call. = FALSE
         )
       }
-    }, error = function(e) {
-      warning("Could not notify connection observer. ", e$message, call. = FALSE)
-    })
+    )
 
     # always return false so the task callback is run at most once
     FALSE
@@ -27,8 +34,9 @@ connection_capture <- function() {
 # https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-closed
 on_connection_closed <- function(con) {
   observer <- getOption("connectionObserver")
-  if (is.null(observer))
+  if (is.null(observer)) {
     return(invisible(NULL))
+  }
 
   observer$connectionClosed(bq_type, con@project)
 }
@@ -36,8 +44,9 @@ on_connection_closed <- function(con) {
 # https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-updated
 on_connection_updated <- function(con, hint) {
   observer <- getOption("connectionObserver")
-  if (is.null(observer))
+  if (is.null(observer)) {
     return(invisible(NULL))
+  }
 
   observer$connectionUpdated(bq_type, con@project, hint = hint)
 }
@@ -45,8 +54,9 @@ on_connection_updated <- function(con, hint) {
 # https://rstudio.github.io/rstudio-extensions/connections-contract.html#connection-opened
 on_connection_opened <- function(con, code) {
   observer <- getOption("connectionObserver")
-  if (is.null(observer))
+  if (is.null(observer)) {
     return(invisible(NULL))
+  }
 
   observer$connectionOpened(
     type = bq_type,
@@ -84,7 +94,12 @@ on_connection_opened <- function(con, code) {
     },
 
     # column enumeration code
-    listColumns = function(dataset = con@dataset, table = NULL, view = NULL, ...) {
+    listColumns = function(
+      dataset = con@dataset,
+      table = NULL,
+      view = NULL,
+      ...
+    ) {
       x <- bq_table(con@project, dataset, paste0(table, view))
       fields <- bq_table_fields(x)
 
@@ -95,16 +110,21 @@ on_connection_opened <- function(con, code) {
     },
 
     # table preview code
-    previewObject = function(rowLimit, dataset = con@dataset, table = NULL, view = NULL, ...) {
+    previewObject = function(
+      rowLimit,
+      dataset = con@dataset,
+      table = NULL,
+      view = NULL,
+      ...
+    ) {
       x <- bq_table(con@project, dataset, paste0(table, view))
-      bq_table_download(x, max_results = rowLimit)
+      bq_table_download(x, n_max = rowLimit)
     },
 
     # no actions
 
     # raw connection object
     connectionObject = con
-
   )
 }
 

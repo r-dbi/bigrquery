@@ -18,7 +18,8 @@ bq_perform_extract(
   compression = "NONE",
   ...,
   print_header = TRUE,
-  billing = x$project
+  billing = x$project,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_upload(
@@ -29,7 +30,9 @@ bq_perform_upload(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = x$project
+  billing = x$project,
+  json_digits = NULL,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_load(
@@ -41,7 +44,8 @@ bq_perform_load(
   nskip = 0,
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
-  ...
+  ...,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query(
@@ -54,7 +58,8 @@ bq_perform_query(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   use_legacy_sql = FALSE,
-  priority = "INTERACTIVE"
+  priority = "INTERACTIVE",
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query_dry_run(
@@ -63,7 +68,8 @@ bq_perform_query_dry_run(
   ...,
   default_dataset = NULL,
   parameters = NULL,
-  use_legacy_sql = FALSE
+  use_legacy_sql = FALSE,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_query_schema(
@@ -71,7 +77,8 @@ bq_perform_query_schema(
   billing,
   ...,
   default_dataset = NULL,
-  parameters = NULL
+  parameters = NULL,
+  labels = getOption("bigrquery.labels")
 )
 
 bq_perform_copy(
@@ -80,7 +87,8 @@ bq_perform_copy(
   create_disposition = "CREATE_IF_NEEDED",
   write_disposition = "WRITE_EMPTY",
   ...,
-  billing = NULL
+  billing = NULL,
+  labels = getOption("bigrquery.labels")
 )
 }
 \arguments{
@@ -114,6 +122,12 @@ snake_case names are automatically converted to camelCase.}
 \item{print_header}{Whether to print out a header row in the results.}
 
 \item{billing}{Identifier of project to bill.}
+
+\item{labels}{A named list of strings used to attach
+\href{https://docs.cloud.google.com/bigquery/docs/labels-intro}{BigQuery labels}
+to the resulting job, e.g. \code{list(env = "prod", team = "data")}. This
+is most useful for cost allocation and other FinOps reporting.
+Defaults to the value of \code{getOption("bigrquery.labels")}.}
 
 \item{values}{Data frame of values to insert.}
 
@@ -153,6 +167,9 @@ to the table.
 'duplicate' error is returned in the job result.
 }}
 
+\item{json_digits}{Species the number of digits for formatting
+numeric values.}
+
 \item{source_uris}{The fully-qualified URIs that point to your data in
 Google Cloud.
 
@@ -176,7 +193,7 @@ Generally, you can supply R vectors and they will be automatically
 converted to the correct type. If you need greater control, you can call
 \code{\link[=bq_param_scalar]{bq_param_scalar()}} or \code{\link[=bq_param_array]{bq_param_array()}} explicitly.
 
-See \url{https://cloud.google.com/bigquery/docs/parameterized-queries}
+See \url{https://docs.cloud.google.com/bigquery/docs/parameterized-queries}
 for more details.}
 
 \item{destination_table}{A \link{bq_table} where results should be stored.
@@ -210,20 +227,20 @@ you should use instead:
 \section{Google BigQuery API documentation}{
 
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}
+\item \href{https://docs.cloud.google.com/bigquery/docs/reference/rest/v2/jobs}{jobs}
 }
 
 Additional information at:
 \itemize{
-\item \href{https://cloud.google.com/bigquery/docs/exporting-data}{exporting data}
-\item \href{https://cloud.google.com/bigquery/docs/loading-data}{loading data}
-\item \href{https://cloud.google.com/bigquery/docs/writing-results}{writing queries}
-\item \href{https://cloud.google.com/bigquery/docs/managing-tables#copy-table}{copying a table}
+\item \href{https://docs.cloud.google.com/bigquery/docs/exporting-data}{exporting data}
+\item \href{https://docs.cloud.google.com/bigquery/docs/loading-data}{loading data}
+\item \href{https://docs.cloud.google.com/bigquery/docs/writing-results}{writing queries}
+\item \href{https://docs.cloud.google.com/bigquery/docs/managing-tables#copy-table}{copying a table}
 }
 }
 
 \examples{
-\dontshow{if (bq_testable()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (bq_testable()) withAutoprint(\{ # examplesIf}
 ds <- bq_test_dataset()
 bq_mtcars <- bq_table(ds, "mtcars")
 job <- bq_perform_upload(bq_mtcars, mtcars)

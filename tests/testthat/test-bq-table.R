@@ -87,23 +87,19 @@ test_that("can round trip atomic vectors", {
 })
 
 test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
-  df <- tibble(datetime = as.POSIXct("2020-01-01 09:00", tz = "UTC"))
+  x <- as.POSIXct("2020-01-01 09:00", tz = "UTC")
+  df <- tibble(timestamp = x, datetime = x)
 
-  tb1 <- bq_table_create(
+  tb <- bq_table_create(
     bq_test_table(),
-    bq_fields(list(bq_field("datetime", "TIMESTAMP")))
+    bq_fields(list(
+      bq_field("timestamp", "TIMESTAMP"),
+      bq_field("datetime", "DATETIME")
+    ))
   )
-  bq_table_upload(tb1, df)
-  df1 <- bq_table_download(tb1, api = "json")
-  expect_equal(df1, df)
-
-  tb2 <- bq_table_create(
-    bq_test_table(),
-    bq_fields(list(bq_field("datetime", "DATETIME")))
-  )
-  bq_table_upload(tb2, df)
-  df2 <- bq_table_download(tb2, api = "json")
-  expect_equal(df2, df)
+  bq_table_upload(tb, df)
+  df2 <- bq_table_download(tb, api = "json")
+  expect_equal(df2[names(df)], df)
 })
 
 test_that("can round trip data frame with list-cols", {
@@ -135,7 +131,11 @@ test_that("can create table field description", {
 
   bq_table_create(
     partition_table,
-    fields = bq_fields(list(bq_field("id", "integer", description = "Key field")))
+    fields = bq_fields(list(bq_field(
+      "id",
+      "integer",
+      description = "Key field"
+    )))
   )
 
   meta <- bq_table_meta(partition_table)

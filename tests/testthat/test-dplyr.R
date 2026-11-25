@@ -18,6 +18,13 @@ test_that("can work with literal SQL", {
 
   expect_s3_class(x, "tbl")
   expect_true("fips_code" %in% dbplyr::op_vars(x))
+
+  # If if has three or more periods (#611)
+  y <- dplyr::tbl(
+    con_us,
+    dplyr::sql("SELECT c.fips_code, c.country_name FROM country_code_iso c")
+  )
+  expect_s3_class(y, "tbl")
 })
 
 test_that("can work with nested table identifier", {
@@ -32,7 +39,6 @@ test_that("can work with nested table identifier", {
   table_name <- I("bigquery-public-data.utility_us.country_code_iso")
   expect_no_error(dplyr::collect(head(dplyr::tbl(con1, table_name))))
 
-
   con2 <- DBI::dbConnect(
     bigquery(),
     project = "bigquery-public-data",
@@ -43,7 +49,7 @@ test_that("can work with nested table identifier", {
 })
 
 test_that("can copy_to", {
-  ds <- bq_test_dataset()
+  ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
 
   expect_snapshot(dplyr::copy_to(con, mtcars), error = TRUE)
@@ -66,7 +72,9 @@ test_that("can collect and compute (no dataset)", {
 
   # compute: persistent
   name <- paste0("basedata.", random_name())
-  if (packageVersion("dbplyr") >= "2.4.0.9000") name <- I(name)
+  if (packageVersion("dbplyr") >= "2.4.0.9000") {
+    name <- I(name)
+  }
   perm <- dplyr::compute(bq_mtcars, name = name, temporary = FALSE)
   defer(DBI::dbRemoveTable(con, name))
 
@@ -75,7 +83,8 @@ test_that("can collect and compute (no dataset)", {
 })
 
 test_that("can collect and compute (with dataset)", {
-  con <- DBI::dbConnect(bigquery(),
+  con <- DBI::dbConnect(
+    bigquery(),
     project = bq_test_project(),
     dataset = "basedata"
   )
@@ -129,9 +138,13 @@ test_that("collect can identify directly download tables", {
   expect_false(op_can_download(bq5))
   expect_false(op_can_download(head(bq5)))
 
-  DBI::dbExecute(con, 'CREATE VIEW mtcars2 AS SELECT * FROM basedata.mtcars')
-  defer(DBI::dbExecute(con, 'DROP VIEW mtcars2'))
-  bq6 <- dplyr::tbl(con, "mtcars2")
+  view_name <- random_name()
+  DBI::dbExecute(
+    con,
+    paste0("CREATE VIEW ", view_name, " AS SELECT * FROM basedata.mtcars")
+  )
+  defer(DBI::dbExecute(con, paste0("DROP VIEW ", view_name)))
+  bq6 <- dplyr::tbl(con, view_name)
   expect_false(op_can_download(bq6))
 
   # INFORMATION_SCHEMA.TABLES errors when we attempt to get metadata
@@ -142,23 +155,25 @@ test_that("collect can identify directly download tables", {
 
 test_that("casting uses bigquery types", {
   skip_if_not_installed("dbplyr")
+  con <- simulate_bigrquery()
 
-  sql <- dbplyr::lazy_frame(x = "1") %>%
-    dplyr::mutate(y = as.integer(x), z = as.numeric(x)) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], 'SAFE_CAST(`x` AS INT64)')
-  expect_equal(sql$select[[3]], 'SAFE_CAST(`x` AS FLOAT64)')
+  expect_equal(
+    dbplyr::translate_sql(as.integer(x), con = con),
+    dbplyr::sql("SAFE_CAST(`x` AS INT64)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(as.numeric(x), con = con),
+    dbplyr::sql("SAFE_CAST(`x` AS FLOAT64)")
+  )
 })
 
 test_that("%||% translates to IFNULL", {
   skip_if_not_installed("dbplyr")
 
-  sql <- dbplyr::lazy_frame(x = 1L) %>%
-    dplyr::mutate(y = x %||% 2L) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], 'IFNULL(`x`, 2)')
+  expect_equal(
+    dbplyr::translate_sql(x %||% 2L, con = simulate_bigrquery()),
+    dbplyr::sql("IFNULL(`x`, 2)")
+  )
 })
 
 test_that("suffixes use _", {
@@ -203,7 +218,11 @@ test_that("string functions correctly", {
 
 test_that("median is correctly translated", {
   expect_equal(
-    dbplyr::translate_sql(median(x), con = simulate_bigrquery(), window = FALSE),
+    dbplyr::translate_sql(
+      median(x),
+      con = simulate_bigrquery(),
+      window = FALSE
+    ),
     dbplyr::sql("APPROX_QUANTILES(`x`, 2)[SAFE_ORDINAL(2)]")
   )
 })
@@ -225,71 +244,33 @@ test_that("can correctly print a lazy query", {
   )
 })
 
-test_that("get clock functions translate to correct sql", {
+test_that("clock functions translate to correct sql", {
   skip_if_not_installed("dbplyr")
+  con <- simulate_bigrquery()
+  tr <- function(x) dbplyr::translate_sql(!!rlang::enquo(x), con = con)
 
-  sql <- dbplyr::lazy_frame(x = "2008-12-25") %>%
-    dplyr::mutate(
-      year = get_year(x),
-      month = get_month(x),
-      day = get_day(x)
-    ) %>%
-    dbplyr::sql_build(simulate_bigrquery())
+  expect_equal(tr(get_year(x)), dbplyr::sql("EXTRACT(YEAR FROM `x`)"))
+  expect_equal(tr(get_month(x)), dbplyr::sql("EXTRACT(MONTH FROM `x`)"))
+  expect_equal(tr(get_day(x)), dbplyr::sql("EXTRACT(DAY FROM `x`)"))
 
-  expect_equal(sql$select[[2]], "EXTRACT(YEAR FROM `x`)")
-  expect_equal(sql$select[[3]], "EXTRACT(MONTH FROM `x`)")
-  expect_equal(sql$select[[4]], "EXTRACT(DAY FROM `x`)")
-})
+  expect_equal(
+    tr(add_years(x, 1L)),
+    dbplyr::sql("DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 YEAR)")
+  )
+  expect_equal(
+    tr(add_days(x, 1L)),
+    dbplyr::sql("DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 DAY)")
+  )
 
+  expect_equal(tr(date_build(y, m, d)), dbplyr::sql("DATE(`y`, `m`, `d`)"))
+  expect_equal(tr(date_build(y)), dbplyr::sql("DATE(`y`, 1, 1)"))
 
-test_that("add clock functions translate to correct sql", {
-  skip_if_not_installed("dbplyr")
-
-  sql <- dbplyr::lazy_frame(x = "2008-12-25") %>%
-    dplyr::mutate(
-      date1 = add_years(x, 1L),
-      date2 = add_days(x, 1L)
-    ) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], "DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 YEAR)")
-  expect_equal(sql$select[[3]], "DATE_ADD(CAST(`x`AS DATE), INTERVAL 1 DAY)")
-})
-
-test_that("date_build clock function translates to correct sql", {
-  skip_if_not_installed("dbplyr")
-
-  sql <- dbplyr::lazy_frame(y = "2008", m = "08", d = "1") %>%
-    dplyr::mutate(
-      full_date = date_build(y, m, d),
-      full_date2 = date_build(y)
-    ) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], "DATE(`y`, `m`, `d`)")
-  expect_equal(sql$select[[3]], "DATE(`y`, 1, 1)")
-})
-
-test_that("date_count_between clock function translates to correct sql", {
-  skip_if_not_installed("dbplyr")
-
-  sql <- dbplyr::lazy_frame(start = "2008-12-25", end = "2008-12-26") %>%
-    dplyr::mutate(
-      dcb = date_count_between(start, end, "DAY")
-    ) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`end` AS DATE), CAST(`start` AS DATE), DAY)")
-})
-
-test_that("difftime clock function translates to correct sql", {
-  skip_if_not_installed("dbplyr")
-
-  sql <- dbplyr::lazy_frame(time1 = "2008-12-25", time2 = "2008-12-26") %>%
-    dplyr::mutate(
-      dcb = difftime(time1 = time1, time2 = time2, units = "DAY")
-    ) %>%
-    dbplyr::sql_build(simulate_bigrquery())
-
-  expect_equal(sql$select[[2]], "DATE_DIFF(CAST(`time1` AS DATE), CAST(`time2` AS DATE), DAY)")
+  expect_equal(
+    tr(date_count_between(start, end, "DAY")),
+    dbplyr::sql("DATE_DIFF(CAST(`end` AS DATE), CAST(`start` AS DATE), DAY)")
+  )
+  expect_equal(
+    tr(difftime(time1 = time1, time2 = time2, units = "DAY")),
+    dbplyr::sql("DATE_DIFF(CAST(`time1` AS DATE), CAST(`time2` AS DATE), DAY)")
+  )
 })
