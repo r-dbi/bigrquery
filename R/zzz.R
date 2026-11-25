@@ -14,7 +14,6 @@
   s3_register("dplyr::same_src", "tbl_BigQueryConnection")
   s3_register("dplyr::slice_max", "tbl_BigQueryConnection")
   s3_register("dplyr::slice_min", "tbl_BigQueryConnection")
-  s3_register("dplyr::slice_sample", "tbl_BigQueryConnection")
 
   s3_register("dbplyr::dbplyr_edition", "BigQueryConnection")
   s3_register("dbplyr::db_compute", "BigQueryConnection")

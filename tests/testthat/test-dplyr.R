@@ -292,57 +292,102 @@ test_that("clock functions translate to correct sql", {
   )
 })
 
-test_that("slice_*() use ARRAY_AGG() when with_ties = FALSE", {
+test_that("slice extrema use whole-row aggregates for grouped n = 1", {
   lf <- dbplyr::lazy_frame(g = 1, x = 1, y = 1, con = simulate_bigrquery())
 
   expect_snapshot({
     lf |>
-      dplyr::slice_max(x, n = 2, with_ties = FALSE, by = g) |>
+      dplyr::slice_max(x, n = 1, with_ties = FALSE, by = g) |>
       dplyr::show_query()
     lf |>
       dplyr::group_by(g) |>
       dplyr::slice_min(x, with_ties = FALSE) |>
       dplyr::show_query()
-    lf |> dplyr::slice_sample(n = 1, by = g) |> dplyr::show_query()
-    lf |> dplyr::slice_min(x + y, with_ties = FALSE) |> dplyr::show_query()
   })
 
   out <- lf |> dplyr::group_by(g) |> dplyr::slice_max(x, with_ties = FALSE)
   expect_equal(dplyr::group_vars(out), "g")
+  out <- lf |> dplyr::slice_max(x, with_ties = FALSE, by = g)
+  expect_equal(dplyr::group_vars(out), character())
+  expect_s3_class(out, "tbl_BigQueryConnection")
+  expect_match(dbplyr::sql_render(out), "MAX_BY")
 })
 
 test_that("slice_*() fall back to window functions otherwise", {
-  lf <- dbplyr::lazy_frame(g = 1, x = 1, con = simulate_bigrquery())
-  expect_match(dbplyr::sql_render(dplyr::slice_max(lf, x, by = g)), "OVER")
+  lf <- dbplyr::lazy_frame(g = 1, x = 1, y = 1, con = simulate_bigrquery())
+  for (slice in list(dplyr::slice_max, dplyr::slice_min)) {
+    for (out in list(
+      slice(lf, x, by = g),
+      slice(lf, x, prop = 0.5, by = g),
+      slice(lf, x, n = 2, with_ties = FALSE, by = g),
+      slice(lf, x, with_ties = FALSE),
+      slice(lf, x + y, with_ties = FALSE, by = g),
+      slice(lf, dplyr::desc(x), with_ties = FALSE, by = g),
+      slice(lf, tibble::tibble(x, y), with_ties = FALSE, by = g)
+    )) {
+      expect_match(dbplyr::sql_render(out), "OVER")
+      expect_s3_class(out, "tbl_BigQueryConnection")
+    }
+  }
   expect_match(
-    dbplyr::sql_render(dplyr::slice_min(lf, x, prop = 0.5, by = g)),
+    dbplyr::sql_render(dplyr::slice_sample(lf, n = 1, by = g)),
     "OVER"
   )
-  expect_snapshot(dplyr::slice_sample(lf, n = 1, weight_by = x), error = TRUE)
 })
 
-test_that("slice_*() with ARRAY_AGG() return correct rows", {
+test_that("slice extrema retain dbplyr argument validation", {
+  lf <- dbplyr::lazy_frame(g = 1, x = 1, con = simulate_bigrquery())
+  grouped <- dplyr::group_by(lf, g)
+  expect_snapshot(
+    error = TRUE,
+    dplyr::slice_max(grouped, x, by = g, with_ties = FALSE)
+  )
+  expect_snapshot(
+    error = TRUE,
+    dplyr::slice_min(grouped, x, by = character(), with_ties = FALSE)
+  )
+  expect_snapshot(
+    error = TRUE,
+    dplyr::slice_max(lf, x, n = 1, prop = 0.5, by = g, with_ties = FALSE)
+  )
+  expect_error(
+    dplyr::slice_min(lf, x, by = g, with_ties = FALSE, na_rm = FALSE),
+    class = "dbplyr_error_unsupported_arg"
+  )
+})
+
+test_that("slice extrema preserve whole rows and NULL behavior", {
   con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+  on.exit(DBI::dbDisconnect(con))
   df <- dplyr::tbl(
     con,
     dplyr::sql(
       "SELECT * FROM UNNEST([
-        STRUCT(1 AS g, 3.0 AS x, 1 AS y), (1, 1.0, 2), (1, NULL, 3),
-        (2, 5.0, 4), (3, NULL, 5)
+        STRUCT(1 AS g, 3.0 AS x, 1 AS id, CAST(NULL AS STRING) AS a, 'first' AS b),
+        (1, 3.0, 2, 'second', NULL), (1, 1.0, 3, 'third', 'third'),
+        (1, NULL, 4, 'fourth', 'fourth'), (2, 5.0, 5, NULL, NULL),
+        (3, NULL, 6, 'sixth', 'sixth'), (NULL, 2.0, 7, 'seventh', NULL)
       ])"
     )
   )
 
-  out <- df |>
-    dplyr::slice_max(x, n = 2, with_ties = FALSE, by = g) |>
-    dplyr::collect()
-  expect_equal(sort(out$y), c(1L, 2L, 4L))
+  original <- dplyr::collect(df)
+  for (slice in list(dplyr::slice_max, dplyr::slice_min)) {
+    out <- df |> slice(x, with_ties = FALSE, by = g) |> dplyr::collect()
+    expect_equal(nrow(out), 3L)
+    expect_equal(
+      nrow(dplyr::anti_join(out, original, by = names(original))),
+      0L
+    )
+    expected <- if (identical(slice, dplyr::slice_max)) {
+      c(2, 3, 5)
+    } else {
+      c(1, 2, 5)
+    }
+    expect_equal(sort(out$x), expected)
+    expect_equal(sum(is.na(out$g)), 1L)
 
-  out <- df |>
-    dplyr::slice_min(x, with_ties = FALSE, by = g) |>
-    dplyr::collect()
-  expect_equal(sort(out$y), c(2L, 4L))
-
-  out <- df |> dplyr::slice_sample(n = 1, by = g) |> dplyr::collect()
-  expect_equal(sort(out$g), c(1L, 2L, 3L))
+    empty <- df |> dplyr::filter(FALSE) |> slice(x, with_ties = FALSE, by = g)
+    expect_equal(nrow(dplyr::collect(empty)), 0L)
+  }
 })
