@@ -397,11 +397,23 @@ sql_translation.BigQueryConnection <- function(x) {
       # clock functions
       add_days = function(x, n, ...) {
         check_dots_empty()
-        dbplyr::build_sql("DATE_ADD(CAST(", x, "AS DATE), INTERVAL ", n, " DAY)")
+        dbplyr::build_sql(
+          "DATE_ADD(CAST(",
+          x,
+          "AS DATE), INTERVAL ",
+          n,
+          " DAY)"
+        )
       },
       add_years = function(x, n, ...) {
         check_dots_empty()
-        dbplyr::build_sql("DATE_ADD(CAST(", x, "AS DATE), INTERVAL ", n, " YEAR)")
+        dbplyr::build_sql(
+          "DATE_ADD(CAST(",
+          x,
+          "AS DATE), INTERVAL ",
+          n,
+          " YEAR)"
+        )
       },
       date_build = function(year, month = 1L, day = 1L, ..., invalid = NULL) {
         check_dots_empty()
@@ -412,7 +424,13 @@ sql_translation.BigQueryConnection <- function(x) {
         check_dots_empty()
         dbplyr:::check_unsupported_arg(precision, allowed = "DAY")
         dbplyr:::check_unsupported_arg(n, allowed = 1L)
-        dbplyr::build_sql("DATE_DIFF(CAST(", end, " AS DATE), CAST(", start, " AS DATE), DAY)")
+        dbplyr::build_sql(
+          "DATE_DIFF(CAST(",
+          end,
+          " AS DATE), CAST(",
+          start,
+          " AS DATE), DAY)"
+        )
       },
       get_year = function(x) {
         dbplyr::build_sql("EXTRACT(YEAR FROM ", x, ")")
@@ -427,7 +445,13 @@ sql_translation.BigQueryConnection <- function(x) {
         dbplyr:::check_unsupported_arg(tz)
         dbplyr:::check_unsupported_arg(units, allowed = "DAY")
 
-        dbplyr::build_sql("DATE_DIFF(CAST(", time1, " AS DATE), CAST(", time2, " AS DATE), DAY)")
+        dbplyr::build_sql(
+          "DATE_DIFF(CAST(",
+          time1,
+          " AS DATE), CAST(",
+          time2,
+          " AS DATE), DAY)"
+        )
       },
     ),
     dbplyr::sql_translator(
