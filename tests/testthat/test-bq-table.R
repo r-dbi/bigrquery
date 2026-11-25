@@ -188,11 +188,18 @@ test_that("arrow upload can round-trip atomic vectors, POSIXt, GEOGRAPHY, BYTES,
     int = c(-1L, 1L, NA),
     dbl = c(-1.5, 1.5, NA),
     chr = c("A", "B", NA),
-    ts = as.POSIXct(c("2020-01-01 09:00:00", "2020-01-02 10:00:00", NA), tz = "UTC"),
+    ts = as.POSIXct(
+      c("2020-01-01 09:00:00", "2020-01-02 10:00:00", NA),
+      tz = "UTC"
+    ),
     geo = wk::wkt(c("POINT(30 10)", "POINT(15 5)", NA)),
     raw_bytes = blob::blob(charToRaw("hi!"), charToRaw("bye"), NULL),
     array = list(1L:3L, integer(), 4L:5L),
-    struct = tibble(x = c("a", "b", NA), y = c(1.5, 2.5, NA), z = c(2L, 3L, NA)),
+    struct = tibble(
+      x = c("a", "b", NA),
+      y = c(1.5, 2.5, NA),
+      z = c(2L, 3L, NA)
+    ),
     array_struct = list(
       tibble(x = c("a", "b"), y = c(1.5, 2.5), z = c(2L, 3L)),
       tibble(x = character(), y = double(), z = integer()),
@@ -222,4 +229,3 @@ test_that("arrow upload warns when json_digits is supplied", {
     "json_digits"
   )
 })
-
