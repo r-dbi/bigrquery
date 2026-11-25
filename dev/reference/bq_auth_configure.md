@@ -36,7 +36,7 @@ bq_oauth_client()
   JSON downloaded from [Google Cloud
   Console](https://console.cloud.google.com), containing a client id and
   secret, in one of the forms supported for the `txt` argument of
-  [`jsonlite::fromJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+  [`jsonlite::fromJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html)
   (typically, a file path or JSON string).
 
 ## Value
@@ -72,7 +72,7 @@ bq_auth_configure(path = path_to_json)
 # confirm the changes
 bq_oauth_client()
 #> <gargle_oauth_client>
-#> name: a_project_d1c5a8066d2cbe48e8d94514dd286163
+#> name: a_project_59aa1797ab7ac4667a77617c3400999c
 #> id: abc.apps.googleusercontent.com
 #> secret: <REDACTED>
 #> type: installed
