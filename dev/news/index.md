@@ -2,6 +2,12 @@
 
 ## bigrquery (development version)
 
+- dbplyr translations now support the clock functions `add_days()`,
+  `add_years()`, `date_build()`, `date_count_between()`, `get_year()`,
+  `get_month()`, and `get_day()`, as well as
+  [`difftime()`](https://rdrr.io/r/base/difftime.html)
+  ([@IoannaNika](https://github.com/IoannaNika)).
+
 ## bigrquery 1.6.2
 
 CRAN release: 2026-05-12
