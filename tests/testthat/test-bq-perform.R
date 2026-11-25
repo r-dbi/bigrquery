@@ -20,7 +20,19 @@ test_that("bq_perform_upload preserves numerical precision", {
   tb <- bq_test_table()
   bq_table_upload(tb, data.frame(dbl = pi))
   df <- bq_table_download(tb)
-  expect_identical(df$dbl, pi)
+  expect_equal(df$dbl, pi)
+})
+
+test_that("bq_perform_upload can upload doubles to NUMERIC columns (#692)", {
+  tb <- bq_test_table()
+  bq_table_create(tb, fields = list(bq_field("num", "NUMERIC")))
+  bq_table_upload(
+    tb,
+    data.frame(num = 1.06),
+    write_disposition = "WRITE_APPEND"
+  )
+  df <- bq_table_download(tb)
+  expect_equal(df$num, 1.06)
 })
 
 test_that("bq_perform_upload uses data frame types and column order (#624)", {

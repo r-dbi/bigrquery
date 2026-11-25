@@ -20,11 +20,11 @@ check_digits <- function(x, arg = caller_arg(x), call = caller_env()) {
     x,
     min = 0,
     max = 22,
-    allow_null = TRUE,
+    allow_na = TRUE,
     arg = arg,
     call = call
   )
-  x %||% 22
+  x
 }
 
 bq_check_namespace <- function(pkg, bq_type) {

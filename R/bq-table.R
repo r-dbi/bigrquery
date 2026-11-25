@@ -151,7 +151,7 @@ bq_table_upload <- function(
   ...,
   api = c("json", "arrow"),
   quiet = getOption("bigrquery.quiet", NA),
-  json_digits = NULL
+  json_digits = NA
 ) {
   x <- as_bq_table(x)
   api <- check_api(api)

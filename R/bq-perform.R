@@ -124,8 +124,16 @@ bq_perform_extract <- function(
 #'     to the table.
 #'   * "WRITE_EMPTY": If the table already exists and contains data, a
 #'     'duplicate' error is returned in the job result.
-#' @param json_digits Species the number of digits for formatting
-#'   numeric values.
+#' @param json_digits Controls how doubles are formatted when uploading as
+#'   JSON. Passed on to the `digits` argument of [jsonlite::toJSON()]:
+#'
+#'   * `NA` (the default) uses 15 significant digits. This is the
+#'     maximum number of digits that a double can reliably represent, and
+#'     avoids floating point artefacts (e.g. `1.06` becoming
+#'     `1.0600000000000001`) that `NUMERIC` columns reject.
+#'   * A whole number uses at most that many digits after the decimal point.
+#'     Use `22` to preserve every bit of a double, but note that the extra
+#'     digits may cause uploads to `NUMERIC` columns to fail.
 bq_perform_upload <- function(
   x,
   values,
@@ -135,7 +143,7 @@ bq_perform_upload <- function(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NULL,
+  json_digits = NA,
   labels = getOption("bigrquery.labels")
 ) {
   x <- as_bq_table(x)
@@ -214,7 +222,7 @@ bq_perform_upload <- function(
 }
 
 # https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#details_of_loading_json_data
-export_json <- function(values, json_digits = NULL) {
+export_json <- function(values, json_digits = NA) {
   # Eliminate row names
   rownames(values) <- NULL
 
