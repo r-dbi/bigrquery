@@ -22,6 +22,12 @@
   turned whole-number doubles into integers and could reorder columns
   ([\#624](https://github.com/r-dbi/bigrquery/issues/624)).
 
+- The BigQuery API host can now be overridden with the
+  `BIGQUERY_EMULATOR_HOST` env var, matching other BigQuery SDKs. This
+  is useful for local emulators and proxies; when it is set, bigrquery
+  no longer requires authentication
+  ([\#648](https://github.com/r-dbi/bigrquery/issues/648)).
+
 - nanoparquet is now a suggested dependency, since it’s only needed for
   `bq_perform_upload(source_format = "PARQUET")`
   ([\#690](https://github.com/r-dbi/bigrquery/issues/690)).
