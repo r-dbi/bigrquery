@@ -205,6 +205,12 @@ test_that("can create bq_table() from connection + Id", {
   )
 })
 
+test_that("quoted dbplyr path containing . suggests I() (#656)", {
+  con <- DBI::dbConnect(bigquery(), project = "p")
+  path <- dbplyr::as_table_path("x.y.z", con)
+  expect_snapshot(as_bq_table(con, path), error = TRUE)
+})
+
 test_that("as_bq_table checks its input types", {
   con1 <- DBI::dbConnect(bigquery(), project = "p")
   expect_snapshot(as_bq_table(con1, letters), error = TRUE)

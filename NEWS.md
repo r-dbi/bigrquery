@@ -7,6 +7,7 @@
 * `bq_perform_upload()` and friends now default to `json_digits = NA`, which formats doubles with 15 significant digits. This avoids floating point artefacts, so values like `1.06` can once again be uploaded to `NUMERIC` columns. Use `json_digits = 22` if you need every double to round-trip exactly (#692).
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
 * `bq_table_download()` now preserves column types when the result has zero rows (#615).
+* `collect()` now gives a more informative error when a table name like `tbl(con, "project.dataset.table")` is treated as a single identifier, suggesting `I()` instead (#656).
 
 # bigrquery 1.6.2
 

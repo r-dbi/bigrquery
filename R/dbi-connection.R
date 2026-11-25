@@ -543,6 +543,12 @@ as_bq_table.BigQueryConnection <- function(x, name, ...) {
       name,
       x
     )[[1]]
+    if (length(pieces) == 1 && grepl(".", pieces, fixed = TRUE)) {
+      cli::cli_abort(c(
+        "{.arg name} ({.str {pieces}}) is a single identifier containing {.str .}.",
+        i = "Use {.code I(\"{pieces}\")} to refer to a table by its full path."
+      ))
+    }
   } else if (inherits(name, "dbplyr_table_ident")) {
     # dbplyr 2.4.0
     name <- unclass(name)
