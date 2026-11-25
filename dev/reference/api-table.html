@@ -86,6 +86,8 @@ various values from the metadata.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">destination_uris</span>,</span>
 <span>  <span class="va">...</span>,</span>
+<span>  destination_format <span class="op">=</span> <span class="st">"NEWLINE_DELIMITED_JSON"</span>,</span>
+<span>  compression <span class="op">=</span> <span class="st">"NONE"</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.quiet"</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -150,6 +152,22 @@ Storage URIs where the extracted table should be written. Can export
 up to 1 Gb of data per file. Use a wild card URI (e.g.
 <code>gs://[YOUR_BUCKET]/file-name-*.json</code>) to automatically create any
 number of files.</p></dd>
+
+
+<dt id="arg-destination-format">destination_format<a class="anchor" aria-label="anchor" href="#arg-destination-format"></a></dt>
+<dd><p>The exported file format:</p><ul><li><p>For CSV files, specify "CSV" (Nested and repeated data is not supported).</p></li>
+<li><p>For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".</p></li>
+<li><p>For Avro, specify "AVRO".</p></li>
+<li><p>For parquet, specify "PARQUET".</p></li>
+</ul></dd>
+
+
+<dt id="arg-compression">compression<a class="anchor" aria-label="anchor" href="#arg-compression"></a></dt>
+<dd><p>The compression type to use for exported files:</p><ul><li><p>For CSV files: "GZIP" or "NONE".</p></li>
+<li><p>For newline-delimited JSON: "GZIP" or "NONE".</p></li>
+<li><p>For Avro: "DEFLATE", "SNAPPY" or "NONE".</p></li>
+<li><p>For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".</p></li>
+</ul></dd>
 
 
 <dt id="arg-source-uris">source_uris<a class="anchor" aria-label="anchor" href="#arg-source-uris"></a></dt>

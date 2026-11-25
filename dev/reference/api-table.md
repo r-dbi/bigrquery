@@ -37,6 +37,8 @@ bq_table_save(
   x,
   destination_uris,
   ...,
+  destination_format = "NEWLINE_DELIMITED_JSON",
+  compression = "NONE",
   quiet = getOption("bigrquery.quiet", NA)
 )
 
@@ -106,6 +108,31 @@ bq_table_patch(x, fields)
   per file. Use a wild card URI (e.g.
   `gs://[YOUR_BUCKET]/file-name-*.json`) to automatically create any
   number of files.
+
+- destination_format:
+
+  The exported file format:
+
+  - For CSV files, specify "CSV" (Nested and repeated data is not
+    supported).
+
+  - For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON".
+
+  - For Avro, specify "AVRO".
+
+  - For parquet, specify "PARQUET".
+
+- compression:
+
+  The compression type to use for exported files:
+
+  - For CSV files: "GZIP" or "NONE".
+
+  - For newline-delimited JSON: "GZIP" or "NONE".
+
+  - For Avro: "DEFLATE", "SNAPPY" or "NONE".
+
+  - For parquet: "SNAPPY", "GZIP", "ZSTD" or "NONE".
 
 - source_uris:
 
