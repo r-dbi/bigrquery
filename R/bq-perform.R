@@ -157,11 +157,19 @@ bq_perform_upload <- function(
     writeDisposition = unbox(write_disposition)
   )
 
+  if (is.null(fields) && !bq_table_exists(x)) {
+    # Autodetection guesses types from the serialized values (e.g. 5.0 becomes
+    # INTEGER) and doesn't preserve column order, so supply the schema
+    # whenever we can derive it from the data frame
+    is_list <- map_lgl(values, \(x) is.list(x) && !inherits(x, "blob"))
+    if (any(is_list)) {
+      load$autodetect <- unbox(TRUE)
+    } else {
+      fields <- as_bq_fields(values)
+    }
+  }
   if (!is.null(fields)) {
     load$schema <- list(fields = as_json(fields))
-  }
-  if (!bq_table_exists(x)) {
-    load$autodetect <- unbox(TRUE)
   }
 
   metadata <- list(
@@ -232,7 +240,7 @@ export_json <- function(values, json_digits = NULL) {
     con,
     verbose = FALSE,
     na = "null",
-    digits = json_digits
+    digits = check_digits(json_digits)
   )
 
   rawToChar(rawConnectionValue(con))
