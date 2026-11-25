@@ -79,7 +79,7 @@ various values from the metadata.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"arrow"</span><span class="op">)</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"bigrquery.quiet"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>  json_digits <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  json_digits <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_table_save</span><span class="op">(</span></span>
@@ -133,8 +133,15 @@ bigrquerystorage is installed, <code>api = "arrow"</code> is used by default.</p
 
 
 <dt id="arg-json-digits">json_digits<a class="anchor" aria-label="anchor" href="#arg-json-digits"></a></dt>
-<dd><p>Species the number of digits for formatting
-numeric values.</p></dd>
+<dd><p>Controls how doubles are formatted when uploading as
+JSON. Passed on to the <code>digits</code> argument of <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>:</p><ul><li><p><code>NA</code> (the default) uses 15 significant digits. This is the
+maximum number of digits that a double can reliably represent, and
+avoids floating point artefacts (e.g. <code>1.06</code> becoming
+<code>1.0600000000000001</code>) that <code>NUMERIC</code> columns reject.</p></li>
+<li><p>A whole number uses at most that many digits after the decimal point.
+Use <code>22</code> to preserve every bit of a double, but note that the extra
+digits may cause uploads to <code>NUMERIC</code> columns to fail.</p></li>
+</ul></dd>
 
 
 <dt id="arg-destination-uris">destination_uris<a class="anchor" aria-label="anchor" href="#arg-destination-uris"></a></dt>

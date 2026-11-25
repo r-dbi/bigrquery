@@ -43,7 +43,7 @@ bq_perform_upload(
   write_disposition = "WRITE_EMPTY",
   ...,
   billing = x$project,
-  json_digits = NULL,
+  json_digits = NA,
   labels = getOption("bigrquery.labels")
 )
 
@@ -218,7 +218,18 @@ bq_perform_copy(
 
 - json_digits:
 
-  Species the number of digits for formatting numeric values.
+  Controls how doubles are formatted when uploading as JSON. Passed on
+  to the `digits` argument of
+  [`jsonlite::toJSON()`](https://rdrr.io/pkg/jsonlite/man/fromJSON.html):
+
+  - `NA` (the default) uses 15 significant digits. This is the maximum
+    number of digits that a double can reliably represent, and avoids
+    floating point artefacts (e.g. `1.06` becoming `1.0600000000000001`)
+    that `NUMERIC` columns reject.
+
+  - A whole number uses at most that many digits after the decimal
+    point. Use `22` to preserve every bit of a double, but note that the
+    extra digits may cause uploads to `NUMERIC` columns to fail.
 
 - source_uris:
 
