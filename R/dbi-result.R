@@ -22,9 +22,13 @@ BigQueryResult <- function(conn, sql, params = NULL, ...) {
     )
   )
 
-  tb <- as_bq_table(meta$configuration$query$destinationTable)
+  dest <- meta$configuration$query$destinationTable
+  tb <- as_bq_table(dest)
 
-  if (meta$statistics$query$statementType == "SELECT") {
+  # Scripts (e.g. with DECLARE) have a destination table only if the last
+  # statement is a SELECT
+  type <- meta$statistics$query$statementType
+  if (type == "SELECT" || (type == "SCRIPT" && !is.null(dest))) {
     nrow <- bq_table_nrow(tb)
   } else {
     nrow <- 0
