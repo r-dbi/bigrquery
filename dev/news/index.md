@@ -2,6 +2,13 @@
 
 ## bigrquery (development version)
 
+- [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
+  and
+  [`dbWriteTable()`](https://dbi.r-dbi.org/reference/dbWriteTable.html)
+  now create new tables using the column types and order of the data
+  frame, rather than relying on BigQuery’s schema autodetection, which
+  turned whole-number doubles into integers and could reorder columns
+  ([\#624](https://github.com/r-dbi/bigrquery/issues/624)).
 - nanoparquet is now a suggested dependency, since it’s only needed for
   `bq_perform_upload(source_format = "PARQUET")`
   ([\#690](https://github.com/r-dbi/bigrquery/issues/690)).
