@@ -22,15 +22,15 @@
     Code
       dbplyr::translate_sql(ceiling_date(x, "hour"), con = con)
     Output
-      <SQL> IF(DATE_TRUNC(`x`, HOUR) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, HOUR), INTERVAL 1 HOUR))
+      <SQL> IF(TYPEOF(`x`) != 'DATE' AND DATE_TRUNC(`x`, HOUR) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, HOUR), INTERVAL 1 HOUR))
     Code
       dbplyr::translate_sql(ceiling_date(x, "month"), con = con)
     Output
-      <SQL> IF(DATE_TRUNC(`x`, MONTH) = `x`, `x`, DATE_TRUNC(DATE_ADD(DATE_TRUNC(`x`, MONTH), INTERVAL 31 DAY), MONTH))
+      <SQL> IF(TYPEOF(`x`) != 'DATE' AND DATE_TRUNC(`x`, MONTH) = `x`, `x`, DATE_TRUNC(DATE_ADD(DATE_TRUNC(`x`, MONTH), INTERVAL 31 DAY), MONTH))
     Code
       dbplyr::translate_sql(round_date(x, "day"), con = con)
     Output
-      <SQL> IF(`x` - DATE_TRUNC(`x`, DAY) < IF(DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY)) - `x`, DATE_TRUNC(`x`, DAY), IF(DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY)))
+      <SQL> IF((`x`) - DATE_TRUNC(`x`, DAY) < IF(DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY)) - (`x`), DATE_TRUNC(`x`, DAY), IF(DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY)))
 
 ---
 
@@ -39,4 +39,3 @@
     Condition
       Error in `floor_date()`:
       ! `unit` must be one of "second", "minute", "hour", "day", "week", "month", "quarter", or "year", not "fortnight".
-

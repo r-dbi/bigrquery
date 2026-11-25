@@ -368,15 +368,15 @@ sql_translation.BigQueryConnection <- function(x) {
         unit <- bq_date_unit(unit)
         bq_floor_date(x, unit)
       },
-      ceiling_date = function(x, unit = "seconds") {
+      ceiling_date = function(x, unit = "seconds", change_on_boundary = NULL) {
         unit <- bq_date_unit(unit)
-        bq_ceiling_date(x, unit)
+        bq_ceiling_date(x, unit, change_on_boundary)
       },
       round_date = function(x, unit = "seconds") {
         unit <- bq_date_unit(unit)
         lo <- bq_floor_date(x, unit)
-        hi <- bq_ceiling_date(x, unit)
-        dbplyr::sql_glue("IF({x} - {lo} < {hi} - {x}, {lo}, {hi})")
+        hi <- bq_ceiling_date(x, unit, change_on_boundary = FALSE)
+        dbplyr::sql_glue("IF(({x}) - {lo} < {hi} - ({x}), {lo}, {hi})")
       },
 
       # Regular expressions
@@ -506,7 +506,7 @@ bq_floor_date <- function(x, unit) {
   dbplyr::sql_glue("DATE_TRUNC({x}, {.sql unit})")
 }
 
-bq_ceiling_date <- function(x, unit) {
+bq_ceiling_date <- function(x, unit, change_on_boundary = NULL) {
   floor <- bq_floor_date(x, unit)
   # TIMESTAMPs can't add units larger than a day, so for larger units add
   # enough days to reach the next period, then truncate again
@@ -520,5 +520,14 @@ bq_ceiling_date <- function(x, unit) {
   } else {
     next_floor <- dbplyr::sql_glue("DATE_ADD({floor}, INTERVAL 1 {.sql unit})")
   }
-  dbplyr::sql_glue("IF({floor} = {x}, {x}, {next_floor})")
+  # https://lubridate.tidyverse.org/reference/round_date.html#rounding-up-date-objects
+  if (is.null(change_on_boundary)) {
+    dbplyr::sql_glue(
+      "IF(TYPEOF({x}) != 'DATE' AND {floor} = {x}, {x}, {next_floor})"
+    )
+  } else if (change_on_boundary) {
+    next_floor
+  } else {
+    dbplyr::sql_glue("IF({floor} = {x}, {x}, {next_floor})")
+  }
 }
