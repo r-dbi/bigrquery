@@ -194,7 +194,9 @@ bq_table_download <-
     chunk_data <- bq_parse_file(schema_path, path_first_chunk)
     n_got <- nrow(chunk_data)
 
-    if (n_got >= n_max || (nrow == 0 && (is.null(page_size) || n_got < page_size))) {
+    if (
+      n_got >= n_max || (nrow == 0 && (is.null(page_size) || n_got < page_size))
+    ) {
       if (!quiet) {
         cli::cli_inform("First chunk includes all requested rows.")
       }
