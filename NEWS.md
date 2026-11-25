@@ -1,5 +1,6 @@
 # bigrquery (development version)
 
+* bigrquery now displays a startup message recommending that you install (or update) bigrquerystorage if it is not available.
 * If the bigrquerystorage (>= 1.3.0) package is installed, `bq_table_upload()` (and hence `db_copy_to()` and `dbWriteTable()` will use it (@meztez, #695).
 * `bq_table_upload()` and `dbWriteTable()` now create new tables using the column types and order of the data frame, rather than relying on BigQuery's schema autodetection, which turned whole-number doubles into integers and could reorder columns (#624).
 * nanoparquet is now a suggested dependency, since it's only needed for `bq_perform_upload(source_format = "PARQUET")` (#690).
