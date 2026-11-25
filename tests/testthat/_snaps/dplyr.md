@@ -20,14 +20,6 @@
 # lubridate rounding functions translate to correct sql
 
     Code
-      dbplyr::translate_sql(floor_date(x), con = con)
-    Output
-      <SQL> DATE_TRUNC(`x`, SECOND)
-    Code
-      dbplyr::translate_sql(floor_date(x, "months"), con = con)
-    Output
-      <SQL> DATE_TRUNC(`x`, MONTH)
-    Code
       dbplyr::translate_sql(ceiling_date(x, "hour"), con = con)
     Output
       <SQL> IF(DATE_TRUNC(`x`, HOUR) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, HOUR), INTERVAL 1 HOUR))

@@ -248,9 +248,15 @@ test_that("lubridate rounding functions translate to correct sql", {
   skip_if_not_installed("dbplyr")
   con <- simulate_bigrquery()
 
+  expect_equal(
+    dbplyr::translate_sql(floor_date(x), con = con),
+    dbplyr::sql("DATE_TRUNC(`x`, SECOND)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(floor_date(x, "months"), con = con),
+    dbplyr::sql("DATE_TRUNC(`x`, MONTH)")
+  )
   expect_snapshot({
-    dbplyr::translate_sql(floor_date(x), con = con)
-    dbplyr::translate_sql(floor_date(x, "months"), con = con)
     dbplyr::translate_sql(ceiling_date(x, "hour"), con = con)
     dbplyr::translate_sql(ceiling_date(x, "month"), con = con)
     dbplyr::translate_sql(round_date(x, "day"), con = con)
