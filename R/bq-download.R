@@ -91,10 +91,6 @@ bq_table_download <-
     api <- check_api(api)
 
     if (api == "arrow") {
-      check_installed(
-        "bigrquerystorage",
-        "required to download using arrow API"
-      )
       if (!missing(page_size)) {
         cli::cli_warn(
           '{.arg page_size} is ignored when {.code api == "arrow"}',
@@ -269,7 +265,16 @@ check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
   if (identical(api, c("json", "arrow"))) {
     if (has_bigrquerystorage()) "arrow" else "json"
   } else {
-    arg_match(api, error_call = error_call)
+    api <- arg_match(api, error_call = error_call)
+    if (api == "arrow") {
+      check_installed(
+        "bigrquerystorage",
+        "required to use the arrow API",
+        version = "1.3.0",
+        call = error_call
+      )
+    }
+    api
   }
 }
 

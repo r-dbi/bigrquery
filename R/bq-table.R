@@ -155,32 +155,27 @@ bq_table_upload <- function(
 ) {
   x <- as_bq_table(x)
   api <- check_api(api)
+  quiet <- check_quiet(quiet)
 
   if (api == "arrow") {
-    check_installed(
-      "bigrquerystorage",
-      "required to upload using arrow API"
-    )
     if (!missing(json_digits)) {
       cli::cli_warn(
         '{.arg json_digits} is ignored when {.code api == "arrow"}',
         call = environment()
       )
     }
-    quiet <- check_quiet(quiet)
-    return(invisible(bigrquerystorage::bqs_table_upload(
+    bigrquerystorage::bqs_table_upload(
       x = x,
       values = values,
       quiet = quiet,
       ...
-    )))
+    )
+  } else {
+    json_digits <- check_digits(json_digits)
+
+    job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
+    bq_job_wait(job, quiet = quiet)
   }
-
-  json_digits <- check_digits(json_digits)
-
-  job <- bq_perform_upload(x, values, ..., json_digits = json_digits)
-  bq_job_wait(job, quiet = quiet)
-
   invisible(x)
 }
 
