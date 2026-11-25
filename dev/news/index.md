@@ -65,6 +65,11 @@
   now returns all rows when reading a view, rather than 0 rows
   ([\#633](https://github.com/r-dbi/bigrquery/issues/633)).
 
+- dbplyr translations now support lubridate’s `floor_date()`,
+  `ceiling_date()`, and `round_date()` for `DATE`, `DATETIME`, and
+  `TIMESTAMP` columns
+  ([\#536](https://github.com/r-dbi/bigrquery/issues/536)).
+
 ## bigrquery 1.6.2
 
 CRAN release: 2026-05-12

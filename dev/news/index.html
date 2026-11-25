@@ -54,6 +54,7 @@
 <li><p><code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now preserves column types when the result has zero rows (<a href="https://github.com/r-dbi/bigrquery/issues/615" class="external-link">#615</a>).</p></li>
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now gives a more informative error when a table name like <code>tbl(con, "project.dataset.table")</code> is treated as a single identifier, suggesting <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> instead (<a href="https://github.com/r-dbi/bigrquery/issues/656" class="external-link">#656</a>).</p></li>
 <li><p><code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable()</a></code> now returns all rows when reading a view, rather than 0 rows (<a href="https://github.com/r-dbi/bigrquery/issues/633" class="external-link">#633</a>).</p></li>
+<li><p>dbplyr translations now support lubridate’s <code>floor_date()</code>, <code>ceiling_date()</code>, and <code>round_date()</code> for <code>DATE</code>, <code>DATETIME</code>, and <code>TIMESTAMP</code> columns (<a href="https://github.com/r-dbi/bigrquery/issues/536" class="external-link">#536</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.2" id="bigrquery-162">bigrquery 1.6.2<a class="anchor" aria-label="anchor" href="#bigrquery-162"></a></h2><p class="text-muted">CRAN release: 2026-05-12</p>
