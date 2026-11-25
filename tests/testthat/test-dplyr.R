@@ -291,3 +291,58 @@ test_that("clock functions translate to correct sql", {
     dbplyr::sql("DATE_DIFF(CAST(`time1` AS DATE), CAST(`time2` AS DATE), DAY)")
   )
 })
+
+test_that("slice_*() use ARRAY_AGG() when with_ties = FALSE", {
+  lf <- dbplyr::lazy_frame(g = 1, x = 1, y = 1, con = simulate_bigrquery())
+
+  expect_snapshot({
+    lf |>
+      dplyr::slice_max(x, n = 2, with_ties = FALSE, by = g) |>
+      dplyr::show_query()
+    lf |>
+      dplyr::group_by(g) |>
+      dplyr::slice_min(x, with_ties = FALSE) |>
+      dplyr::show_query()
+    lf |> dplyr::slice_sample(n = 1, by = g) |> dplyr::show_query()
+    lf |> dplyr::slice_min(x + y, with_ties = FALSE) |> dplyr::show_query()
+  })
+
+  out <- lf |> dplyr::group_by(g) |> dplyr::slice_max(x, with_ties = FALSE)
+  expect_equal(dplyr::group_vars(out), "g")
+})
+
+test_that("slice_*() fall back to window functions otherwise", {
+  lf <- dbplyr::lazy_frame(g = 1, x = 1, con = simulate_bigrquery())
+  expect_match(dbplyr::sql_render(dplyr::slice_max(lf, x, by = g)), "OVER")
+  expect_match(
+    dbplyr::sql_render(dplyr::slice_min(lf, x, prop = 0.5, by = g)),
+    "OVER"
+  )
+  expect_snapshot(dplyr::slice_sample(lf, n = 1, weight_by = x), error = TRUE)
+})
+
+test_that("slice_*() with ARRAY_AGG() return correct rows", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+  df <- dplyr::tbl(
+    con,
+    dplyr::sql(
+      "SELECT * FROM UNNEST([
+        STRUCT(1 AS g, 3.0 AS x, 1 AS y), (1, 1.0, 2), (1, NULL, 3),
+        (2, 5.0, 4), (3, NULL, 5)
+      ])"
+    )
+  )
+
+  out <- df |>
+    dplyr::slice_max(x, n = 2, with_ties = FALSE, by = g) |>
+    dplyr::collect()
+  expect_equal(sort(out$y), c(1L, 2L, 4L))
+
+  out <- df |>
+    dplyr::slice_min(x, with_ties = FALSE, by = g) |>
+    dplyr::collect()
+  expect_equal(sort(out$y), c(2L, 4L))
+
+  out <- df |> dplyr::slice_sample(n = 1, by = g) |> dplyr::collect()
+  expect_equal(sort(out$g), c(1L, 2L, 3L))
+})

@@ -474,3 +474,215 @@ simulate_bigrquery <- function(use_legacy_sql = FALSE) {
     quiet = TRUE
   )
 }
+
+# slice_*() ---------------------------------------------------------------
+# For the common `with_ties = FALSE` case, select the top rows of each group
+# with a single ARRAY_AGG() aggregate rather than a ROW_NUMBER() window
+# function. This avoids sorting each partition, and keeps each row intact.
+
+# registered onLoad
+slice_max.tbl_BigQueryConnection <- function(
+  .data,
+  order_by,
+  ...,
+  n,
+  by = NULL,
+  prop,
+  with_ties = TRUE,
+  na_rm = TRUE
+) {
+  size <- if (missing(n)) 1 else n
+  if (
+    missing(prop) && isFALSE(with_ties) && isTRUE(na_rm) && is_slice_n(size)
+  ) {
+    slice_array_agg(.data, {{ order_by }}, n = size, by = {{ by }}, desc = TRUE)
+  } else {
+    out <- dplyr::slice_max(
+      as_dbplyr_tbl(.data),
+      {{ order_by }},
+      ...,
+      n = n,
+      by = {{ by }},
+      prop = prop,
+      with_ties = with_ties,
+      na_rm = na_rm
+    )
+    as_bq_tbl(out)
+  }
+}
+
+# registered onLoad
+slice_min.tbl_BigQueryConnection <- function(
+  .data,
+  order_by,
+  ...,
+  n,
+  by = NULL,
+  prop,
+  with_ties = TRUE,
+  na_rm = TRUE
+) {
+  size <- if (missing(n)) 1 else n
+  if (
+    missing(prop) && isFALSE(with_ties) && isTRUE(na_rm) && is_slice_n(size)
+  ) {
+    slice_array_agg(
+      .data,
+      {{ order_by }},
+      n = size,
+      by = {{ by }},
+      desc = FALSE
+    )
+  } else {
+    out <- dplyr::slice_min(
+      as_dbplyr_tbl(.data),
+      {{ order_by }},
+      ...,
+      n = n,
+      by = {{ by }},
+      prop = prop,
+      with_ties = with_ties,
+      na_rm = na_rm
+    )
+    as_bq_tbl(out)
+  }
+}
+
+# registered onLoad
+slice_sample.tbl_BigQueryConnection <- function(
+  .data,
+  ...,
+  n,
+  prop,
+  by = NULL,
+  weight_by = NULL,
+  replace = FALSE
+) {
+  size <- if (missing(n)) 1 else n
+  no_weight <- quo_is_null(enquo(weight_by))
+  if (missing(prop) && no_weight && isFALSE(replace) && is_slice_n(size)) {
+    slice_array_agg(.data, n = size, by = {{ by }})
+  } else {
+    out <- dplyr::slice_sample(
+      as_dbplyr_tbl(.data),
+      ...,
+      n = n,
+      prop = prop,
+      by = {{ by }},
+      weight_by = {{ weight_by }},
+      replace = replace
+    )
+    as_bq_tbl(out)
+  }
+}
+
+# Removing the bigrquery class lets dispatch reach dbplyr's method. Unlike
+# NextMethod(), this preserves tidy evaluation of arguments forwarded with {{ }}.
+as_dbplyr_tbl <- function(x) {
+  class(x) <- setdiff(class(x), "tbl_BigQueryConnection")
+  x
+}
+
+as_bq_tbl <- function(x) {
+  class(x) <- c("tbl_BigQueryConnection", class(x))
+  x
+}
+
+is_slice_n <- function(n) {
+  is.numeric(n) && length(n) == 1 && !is.na(n) && n >= 1 && n == trunc(n)
+}
+
+slice_array_agg <- function(.data, order_by, n, by = NULL, desc = FALSE) {
+  con <- dbplyr::remote_con(.data)
+  vars <- colnames(.data)
+
+  by_vars <- colnames(dplyr::select(dplyr::ungroup(.data), {{ by }}))
+  if (length(by_vars) > 0) {
+    if (dplyr::is_grouped_df(.data)) {
+      cli::cli_abort("Can't supply {.arg by} when {.arg .data} is grouped.")
+    }
+    groups <- character()
+  } else {
+    by_vars <- groups <- dplyr::group_vars(.data)
+  }
+
+  if (missing(order_by)) {
+    order_sql <- "RAND()"
+    data <- dplyr::ungroup(.data)
+  } else {
+    order_var <- unique_name("bigrquery_order", vars)
+    data <- .data |>
+      dplyr::ungroup() |>
+      dplyr::mutate(!!order_var := {{ order_by }}) |>
+      dplyr::filter(!is.na(!!sym(order_var)))
+    order_sql <- paste0(
+      "`bigrquery_row`.",
+      dbplyr::sql_escape_ident(con, order_var),
+      if (desc) " DESC"
+    )
+  }
+  from <- dbplyr::sql_render(data, con = con)
+
+  n <- format(n, scientific = FALSE)
+  if (length(by_vars) == 0) {
+    select <- paste0("`bigrquery_row`.", escape_idents(con, vars))
+    sql <- paste0(
+      "SELECT ",
+      paste(select, collapse = ", "),
+      "\nFROM (\n",
+      from,
+      "\n) AS `bigrquery_row`",
+      "\nORDER BY ",
+      order_sql,
+      "\nLIMIT ",
+      n
+    )
+  } else {
+    select <- paste0("`bigrquery_slice`.", escape_idents(con, vars))
+    group_by <- paste0("`bigrquery_row`.", escape_idents(con, by_vars))
+    sql <- paste0(
+      "SELECT ",
+      paste(select, collapse = ", "),
+      "\nFROM (\n",
+      "  SELECT ARRAY_AGG(`bigrquery_row` ORDER BY ",
+      order_sql,
+      " LIMIT ",
+      n,
+      ") AS `bigrquery_rows`\n",
+      "  FROM (\n",
+      from,
+      "\n  ) AS `bigrquery_row`\n",
+      "  GROUP BY ",
+      paste(group_by, collapse = ", "),
+      "\n), UNNEST(`bigrquery_rows`) AS `bigrquery_slice`"
+    )
+  }
+
+  out <- dbplyr::tbl_sql(
+    "BigQueryConnection",
+    .data$src,
+    dbplyr::sql(sql),
+    vars = vars
+  )
+  out$lazy_query$is_view <- FALSE
+  if (length(groups) > 0) {
+    out <- dplyr::group_by(out, !!!syms(groups))
+  }
+  out
+}
+
+escape_idents <- function(con, x) {
+  vapply(
+    x,
+    \(x) dbplyr::sql_escape_ident(con, x),
+    character(1),
+    USE.NAMES = FALSE
+  )
+}
+
+unique_name <- function(name, existing) {
+  while (name %in% existing) {
+    name <- paste0(name, "_")
+  }
+  name
+}
