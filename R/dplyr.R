@@ -341,7 +341,6 @@ sql_join_suffix.BigQueryConnection <- function(con, ...) {
 
 # registered onLoad
 sql_translation.BigQueryConnection <- function(x) {
-  con <- x
   dbplyr::sql_variant(
     dbplyr::sql_translator(
       .parent = dbplyr::base_scalar,
@@ -398,34 +397,32 @@ sql_translation.BigQueryConnection <- function(x) {
       # clock functions
       add_days = function(x, n, ...) {
         check_dots_empty()
-        dbplyr::sql_glue2(con, "DATE_ADD(CAST({x} AS DATE), INTERVAL {n} DAY)")
+        dbplyr::sql_glue("DATE_ADD(CAST({x} AS DATE), INTERVAL {n} DAY)")
       },
       add_years = function(x, n, ...) {
         check_dots_empty()
-        dbplyr::sql_glue2(con, "DATE_ADD(CAST({x} AS DATE), INTERVAL {n} YEAR)")
+        dbplyr::sql_glue("DATE_ADD(CAST({x} AS DATE), INTERVAL {n} YEAR)")
       },
       date_build = function(year, month = 1L, day = 1L, ..., invalid = NULL) {
         check_dots_empty()
         dbplyr:::check_unsupported_arg(invalid, allow_null = TRUE)
-        dbplyr::sql_glue2(con, "DATE({year}, {month}, {day})")
+        dbplyr::sql_glue("DATE({year}, {month}, {day})")
       },
       date_count_between = function(start, end, precision, ..., n = 1L) {
         check_dots_empty()
         dbplyr:::check_unsupported_arg(precision, allowed = "DAY")
         dbplyr:::check_unsupported_arg(n, allowed = 1L)
-        dbplyr::sql_glue2(
-          con,
+        dbplyr::sql_glue(
           "DATE_DIFF(CAST({end} AS DATE), CAST({start} AS DATE), DAY)"
         )
       },
-      get_year = function(x) dbplyr::sql_glue2(con, "EXTRACT(YEAR FROM {x})"),
-      get_month = function(x) dbplyr::sql_glue2(con, "EXTRACT(MONTH FROM {x})"),
-      get_day = function(x) dbplyr::sql_glue2(con, "EXTRACT(DAY FROM {x})"),
+      get_year = function(x) dbplyr::sql_glue("EXTRACT(YEAR FROM {x})"),
+      get_month = function(x) dbplyr::sql_glue("EXTRACT(MONTH FROM {x})"),
+      get_day = function(x) dbplyr::sql_glue("EXTRACT(DAY FROM {x})"),
       difftime = function(time1, time2, tz, units = "DAY") {
         dbplyr:::check_unsupported_arg(tz)
         dbplyr:::check_unsupported_arg(units, allowed = "DAY")
-        dbplyr::sql_glue2(
-          con,
+        dbplyr::sql_glue(
           "DATE_DIFF(CAST({time1} AS DATE), CAST({time2} AS DATE), DAY)"
         )
       },
