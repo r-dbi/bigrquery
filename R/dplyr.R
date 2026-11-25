@@ -364,6 +364,20 @@ sql_translation.BigQueryConnection <- function(x) {
       # Date/time
       Sys.date = sql_prefix("current_date"),
       Sys.time = sql_prefix("current_time"),
+      floor_date = function(x, unit = "seconds") {
+        unit <- bq_date_unit(unit)
+        bq_floor_date(x, unit)
+      },
+      ceiling_date = function(x, unit = "seconds", change_on_boundary = NULL) {
+        unit <- bq_date_unit(unit)
+        bq_ceiling_date(x, unit, change_on_boundary)
+      },
+      round_date = function(x, unit = "seconds") {
+        unit <- bq_date_unit(unit)
+        lo <- bq_floor_date(x, unit)
+        hi <- bq_ceiling_date(x, unit, change_on_boundary = FALSE)
+        dbplyr::sql_glue("IF(({x}) - {lo} < {hi} - ({x}), {lo}, {hi})")
+      },
 
       # Regular expressions
       grepl = function(pattern, x) {
@@ -473,4 +487,47 @@ simulate_bigrquery <- function(use_legacy_sql = FALSE) {
     page_size = 0L,
     quiet = TRUE
   )
+}
+
+# lubridate rounding helpers. These use DATE_TRUNC() and DATE_ADD() because
+# both are overloaded for DATE, DATETIME, and TIMESTAMP, and preserve the type.
+bq_date_unit <- function(unit, call = caller_env()) {
+  unit <- arg_match0(
+    sub("s$", "", unit),
+    c("second", "minute", "hour", "day", "week", "month", "quarter", "year"),
+    arg_nm = "unit",
+    error_call = call
+  )
+  toupper(unit)
+}
+
+bq_floor_date <- function(x, unit) {
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/date_functions#date_trunc
+  dbplyr::sql_glue("DATE_TRUNC({x}, {.sql unit})")
+}
+
+bq_ceiling_date <- function(x, unit, change_on_boundary = NULL) {
+  floor <- bq_floor_date(x, unit)
+  # TIMESTAMPs can't add units larger than a day, so for larger units add
+  # enough days to reach the next period, then truncate again
+  days <- c(WEEK = 7L, MONTH = 31L, QUARTER = 92L, YEAR = 366L)
+  # https://cloud.google.com/bigquery/docs/reference/standard-sql/date_functions#date_add
+  if (unit %in% names(days)) {
+    next_floor <- bq_floor_date(
+      dbplyr::sql_glue("DATE_ADD({floor}, INTERVAL {days[[unit]]} DAY)"),
+      unit
+    )
+  } else {
+    next_floor <- dbplyr::sql_glue("DATE_ADD({floor}, INTERVAL 1 {.sql unit})")
+  }
+  # https://lubridate.tidyverse.org/reference/round_date.html#rounding-up-date-objects
+  if (is.null(change_on_boundary)) {
+    dbplyr::sql_glue(
+      "IF(TYPEOF({x}) != 'DATE' AND {floor} = {x}, {x}, {next_floor})"
+    )
+  } else if (change_on_boundary) {
+    next_floor
+  } else {
+    dbplyr::sql_glue("IF({floor} = {x}, {x}, {next_floor})")
+  }
 }

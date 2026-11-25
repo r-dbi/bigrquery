@@ -244,6 +244,80 @@ test_that("can correctly print a lazy query", {
   )
 })
 
+test_that("lubridate rounding functions translate to correct sql", {
+  skip_if_not_installed("dbplyr")
+  con <- simulate_bigrquery()
+
+  expect_equal(
+    dbplyr::translate_sql(floor_date(x), con = con),
+    dbplyr::sql("DATE_TRUNC(`x`, SECOND)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(floor_date(x, "months"), con = con),
+    dbplyr::sql("DATE_TRUNC(`x`, MONTH)")
+  )
+  expect_snapshot({
+    dbplyr::translate_sql(ceiling_date(x, "hour"), con = con)
+    dbplyr::translate_sql(ceiling_date(x, "month"), con = con)
+    dbplyr::translate_sql(round_date(x, "day"), con = con)
+  })
+  expect_snapshot(
+    dbplyr::translate_sql(floor_date(x, "fortnight"), con = con),
+    error = TRUE
+  )
+})
+
+test_that("ceiling_date supports change_on_boundary", {
+  con <- simulate_bigrquery()
+  expect_equal(
+    dbplyr::translate_sql(
+      ceiling_date(x, "day", change_on_boundary = FALSE),
+      con = con
+    ),
+    dbplyr::sql(
+      "IF(DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY))"
+    )
+  )
+  expect_equal(
+    dbplyr::translate_sql(
+      ceiling_date(x, "day", change_on_boundary = NULL),
+      con = con
+    ),
+    dbplyr::translate_sql(ceiling_date(x, "day"), con = con)
+  )
+  expect_equal(
+    dbplyr::translate_sql(ceiling_date(x, "day"), con = con),
+    dbplyr::sql(
+      "IF(TYPEOF(`x`) != 'DATE' AND DATE_TRUNC(`x`, DAY) = `x`, `x`, DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY))"
+    )
+  )
+  expect_equal(
+    dbplyr::translate_sql(
+      ceiling_date(x, "day", change_on_boundary = TRUE),
+      con = con
+    ),
+    dbplyr::sql("DATE_ADD(DATE_TRUNC(`x`, DAY), INTERVAL 1 DAY)")
+  )
+  expect_equal(
+    dbplyr::translate_sql(
+      ceiling_date(x, "month", change_on_boundary = TRUE),
+      con = con
+    ),
+    dbplyr::sql(
+      "DATE_TRUNC(DATE_ADD(DATE_TRUNC(`x`, MONTH), INTERVAL 31 DAY), MONTH)"
+    )
+  )
+})
+
+test_that("round_date preserves compound expressions", {
+  sql <- dbplyr::translate_sql(
+    round_date(x + 1L, "day"),
+    con = simulate_bigrquery()
+  )
+  expect_match(sql, "IF((`x` + 1) - ", fixed = TRUE)
+  expect_match(sql, " - (`x` + 1), ", fixed = TRUE)
+})
+
 test_that("clock functions translate to correct sql", {
   skip_if_not_installed("dbplyr")
   con <- simulate_bigrquery()
