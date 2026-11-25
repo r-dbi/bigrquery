@@ -4,9 +4,6 @@
 * `bq_table_upload()` and `dbWriteTable()` now create new tables using the column types and order of the data frame, rather than relying on BigQuery's schema autodetection, which turned whole-number doubles into integers and could reorder columns (#624).
 * nanoparquet is now a suggested dependency, since it's only needed for `bq_perform_upload(source_format = "PARQUET")` (#690).
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
-
-## Bug fixes
-
 * `bq_table_download()` now preserves column types when the result has zero rows (#615).
 
 # bigrquery 1.6.2
