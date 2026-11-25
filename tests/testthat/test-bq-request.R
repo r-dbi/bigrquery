@@ -19,6 +19,23 @@ test_that("explicit api keys override env vars", {
   )
 })
 
+test_that("BIGQUERY_EMULATOR_HOST overrides host", {
+  withr::local_envvar(BIGQUERY_EMULATOR_HOST = NA)
+  expect_equal(base_url(), "https://bigquery.googleapis.com/bigquery/v2/")
+
+  withr::local_envvar(BIGQUERY_EMULATOR_HOST = "localhost:9050")
+  expect_equal(base_url(), "http://localhost:9050/bigquery/v2/")
+  expect_equal(upload_url(), "http://localhost:9050/upload/bigquery/v2/")
+
+  withr::local_envvar(BIGQUERY_EMULATOR_HOST = "https://proxy.example.com/")
+  expect_equal(base_url(), "https://proxy.example.com/bigquery/v2/")
+})
+
+test_that("no auth needed when using emulator", {
+  withr::local_envvar(BIGQUERY_EMULATOR_HOST = "localhost:9050")
+  expect_null(bq_token())
+})
+
 test_that("pagination warns if pages left on server", {
   skip_if_no_auth()
 

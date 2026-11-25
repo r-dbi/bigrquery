@@ -3,6 +3,7 @@
 * bigrquery now displays a startup message recommending that you install (or update) bigrquerystorage if it is not available (#695).
 * If the bigrquerystorage (>= 1.3.0) package is installed, `bq_table_upload()` (and hence `copy_to()` and `dbWriteTable()`) will use it (@meztez, #695).
 * `bq_table_upload()` and `dbWriteTable()` now create new tables using the column types and order of the data frame, rather than relying on BigQuery's schema autodetection, which turned whole-number doubles into integers and could reorder columns (#624).
+* The BigQuery API host can now be overridden with the `BIGQUERY_EMULATOR_HOST` env var, matching other BigQuery SDKs. This is useful for local emulators and proxies; when it is set, bigrquery no longer requires authentication (#648).
 * nanoparquet is now a suggested dependency, since it's only needed for `bq_perform_upload(source_format = "PARQUET")` (#690).
 * `bq_perform_upload()` and friends now default to `json_digits = NA`, which formats doubles with 15 significant digits. This avoids floating point artefacts, so values like `1.06` can once again be uploaded to `NUMERIC` columns. Use `json_digits = 22` if you need every double to round-trip exactly (#692).
 * `dbGetQuery()` and `dbFetch()` now return results from multi-statement scripts (e.g. queries that use `DECLARE`), rather than zero rows (#635).
