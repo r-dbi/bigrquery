@@ -11,6 +11,7 @@
 * `collect()` now gives a more informative error when a table name like `tbl(con, "project.dataset.table")` is treated as a single identifier, suggesting `I()` instead (#656).
 
 * `dbReadTable()` now returns all rows when reading a view, rather than 0 rows (#633).
+* dbplyr translations now support lubridate's `floor_date()`, `ceiling_date()`, and `round_date()` for `DATE`, `DATETIME`, and `TIMESTAMP` columns (#536).
 
 # bigrquery 1.6.2
 
