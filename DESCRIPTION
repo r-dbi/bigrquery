@@ -34,7 +34,7 @@ Suggests:
     bigrquerystorage (>= 1.3.0),
     blob,
     covr,
-    dbplyr (>= 2.4.0),
+    dbplyr (>= 2.6.0),
     dplyr (>= 1.1.0),
     hms,
     readr,
