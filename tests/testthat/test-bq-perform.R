@@ -18,7 +18,7 @@ test_that("bq_perform_upload creates job that succeeds", {
 
 test_that("bq_perform_upload preserves numerical precision", {
   tb <- bq_test_table()
-  bq_table_upload(tb, data.frame(dbl = pi))
+  bq_table_upload(tb, data.frame(dbl = pi), api = "json")
   df <- bq_table_download(tb)
   expect_equal(df$dbl, pi)
 })
@@ -29,6 +29,7 @@ test_that("bq_perform_upload can upload doubles to NUMERIC columns (#692)", {
   bq_table_upload(
     tb,
     data.frame(num = 1.06),
+    api = "json",
     write_disposition = "WRITE_APPEND"
   )
   df <- bq_table_download(tb)
