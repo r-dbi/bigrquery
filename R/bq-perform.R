@@ -188,6 +188,7 @@ bq_perform_upload <- function(
     )
   } else {
     # https://docs.cloud.google.com/bigquery/docs/loading-data-cloud-storage-parquet?hl=es-419
+    check_installed("nanoparquet (>= 0.3.1)", "to upload data as parquet.")
     media <- list(
       "type" = "application/vnd.apache.parquet",
       "content" = nanoparquet::write_parquet(values, ":raw:")
