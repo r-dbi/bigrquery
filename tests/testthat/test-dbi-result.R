@@ -20,6 +20,13 @@ test_that("can retrieve without dataset", {
   expect_equal(df, tibble(count = 32L))
 })
 
+test_that("can retrieve results of a multi-statement script (#635)", {
+  con <- DBI::dbConnect(bigquery(), project = bq_test_project())
+
+  df <- DBI::dbGetQuery(con, "DECLARE x INT64 DEFAULT 1; SELECT x")
+  expect_equal(df, tibble(x = 1L))
+})
+
 test_that("can retrieve query in pieces and that quiet is respected", {
   con <- DBI::dbConnect(
     bigquery(),

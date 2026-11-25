@@ -1,5 +1,6 @@
 # bigrquery (development version)
 
+* `dbGetQuery()` and `dbFetch()` now return results from multi-statement scripts (e.g. queries that use `DECLARE`), rather than zero rows (#635).
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
 
 # bigrquery 1.6.2
