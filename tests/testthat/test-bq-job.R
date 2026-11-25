@@ -24,7 +24,7 @@ test_that("informative errors on failure", {
       bq_dataset_query(ds, "SELECT 1 +")
 
       "Multiple errors"
-      bq_table_upload(tb, data.frame(x = "x", y = 1:5))
+      bq_table_upload(tb, data.frame(x = "x", y = 1:5), api = "json")
     },
     error = TRUE,
     transform = function(x) gsub("Job (.*?) failed", "Job <bq_job> failed", x)
