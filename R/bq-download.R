@@ -390,12 +390,12 @@ bq_download_chunk_handle <- function(x, begin = 0L, max_results = 1e4) {
   )
 
   url <- paste0(
-    base_url,
+    base_url(),
     bq_path(x$project, dataset = x$dataset, table = x$table, data = "")
   )
   url <- httr::modify_url(url, query = prepare_bq_query(query))
 
-  if (bq_has_token()) {
+  if (!bq_using_emulator() && bq_has_token()) {
     token <- .auth$get_cred()
     signed <- token$sign("GET", url)
     url <- signed$url

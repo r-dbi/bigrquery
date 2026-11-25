@@ -1,5 +1,19 @@
-base_url <- "https://bigquery.googleapis.com/bigquery/v2/"
-upload_url <- "https://bigquery.googleapis.com/upload/bigquery/v2/"
+bq_using_emulator <- function() {
+  nzchar(Sys.getenv("BIGQUERY_EMULATOR_HOST"))
+}
+
+bq_host <- function() {
+  host <- Sys.getenv("BIGQUERY_EMULATOR_HOST")
+  if (!nzchar(host)) {
+    return("https://bigquery.googleapis.com")
+  }
+  if (!grepl("^https?://", host)) {
+    host <- paste0("http://", host)
+  }
+  sub("/+$", "", host)
+}
+base_url <- function() paste0(bq_host(), "/bigquery/v2/")
+upload_url <- function() paste0(bq_host(), "/upload/bigquery/v2/")
 
 prepare_bq_query <- function(query) {
   api_key <- Sys.getenv("BIGRQUERY_API_KEY")
@@ -50,7 +64,7 @@ bq_body <- function(body, ...) {
 #' @importFrom httr GET config
 bq_get <- function(url, ..., query = NULL, raw = FALSE, token = bq_token()) {
   req <- GET(
-    paste0(base_url, url),
+    paste0(base_url(), url),
     token,
     httr::user_agent(bq_ua()),
     ...,
@@ -61,7 +75,7 @@ bq_get <- function(url, ..., query = NULL, raw = FALSE, token = bq_token()) {
 
 bq_exists <- function(url, ..., query = NULL, token = bq_token()) {
   req <- GET(
-    paste0(base_url, url),
+    paste0(base_url(), url),
     token,
     httr::user_agent(bq_ua()),
     ...,
@@ -122,7 +136,7 @@ bq_get_paginated <- function(
 #' @importFrom httr DELETE config
 bq_delete <- function(url, ..., query = NULL, token = bq_token()) {
   req <- DELETE(
-    paste0(base_url, url),
+    paste0(base_url(), url),
     token,
     httr::user_agent(bq_ua()),
     ...,
@@ -136,7 +150,7 @@ bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
   json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
 
   req <- POST(
-    paste0(base_url, url),
+    paste0(base_url(), url),
     body = json,
     httr::user_agent(bq_ua()),
     token,
@@ -151,7 +165,7 @@ bq_post <- function(url, body, ..., query = NULL, token = bq_token()) {
 bq_patch <- function(url, body, ..., query = NULL, token = bq_token()) {
   json <- jsonlite::toJSON(body, pretty = TRUE, auto_unbox = TRUE)
   req <- PATCH(
-    paste0(base_url, url),
+    paste0(base_url(), url),
     body = json,
     httr::user_agent(bq_ua()),
     token,
@@ -178,7 +192,7 @@ bq_upload <- function(
   config <- add_headers("Content-Type" = metadata[["type"]])
 
   req <- POST(
-    paste0(upload_url, url),
+    paste0(upload_url(), url),
     body = metadata[["content"]],
     httr::user_agent(bq_ua()),
     token,

@@ -1,5 +1,6 @@
 # bigrquery (development version)
 
+* The BigQuery API host can now be overridden with the `BIGQUERY_EMULATOR_HOST` env var, matching other BigQuery SDKs. This is useful for local emulators and proxies; when it is set, bigrquery no longer requires authentication (#648).
 * nanoparquet is now a suggested dependency, since it's only needed for `bq_perform_upload(source_format = "PARQUET")` (#690).
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
 

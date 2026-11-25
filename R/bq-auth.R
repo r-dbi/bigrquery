@@ -143,6 +143,9 @@ bq_deauth <- function() {
 #' bq_token()
 #' }
 bq_token <- function() {
+  if (bq_using_emulator()) {
+    return(NULL)
+  }
   if (!bq_has_token()) {
     bq_auth()
   }
