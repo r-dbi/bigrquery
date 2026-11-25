@@ -394,6 +394,38 @@ sql_translation.BigQueryConnection <- function(x) {
         RAND <- NULL # quiet R CMD check
         dbplyr::sql_runif(RAND(), n = {{ n }}, min = min, max = max)
       },
+      # clock functions
+      add_days = function(x, n, ...) {
+        check_dots_empty()
+        dbplyr::sql_glue("DATE_ADD(CAST({x} AS DATE), INTERVAL {n} DAY)")
+      },
+      add_years = function(x, n, ...) {
+        check_dots_empty()
+        dbplyr::sql_glue("DATE_ADD(CAST({x} AS DATE), INTERVAL {n} YEAR)")
+      },
+      date_build = function(year, month = 1L, day = 1L, ..., invalid = NULL) {
+        check_dots_empty()
+        check_unsupported_arg(invalid, allow_null = TRUE)
+        dbplyr::sql_glue("DATE({year}, {month}, {day})")
+      },
+      date_count_between = function(start, end, precision, ..., n = 1L) {
+        check_dots_empty()
+        check_unsupported_arg(precision, allowed = "DAY")
+        check_unsupported_arg(n, allowed = 1L)
+        dbplyr::sql_glue(
+          "DATE_DIFF(CAST({end} AS DATE), CAST({start} AS DATE), DAY)"
+        )
+      },
+      get_year = function(x) dbplyr::sql_glue("EXTRACT(YEAR FROM {x})"),
+      get_month = function(x) dbplyr::sql_glue("EXTRACT(MONTH FROM {x})"),
+      get_day = function(x) dbplyr::sql_glue("EXTRACT(DAY FROM {x})"),
+      difftime = function(time1, time2, tz, units = "DAY") {
+        check_unsupported_arg(tz)
+        check_unsupported_arg(units, allowed = "DAY")
+        dbplyr::sql_glue(
+          "DATE_DIFF(CAST({time1} AS DATE), CAST({time2} AS DATE), DAY)"
+        )
+      },
     ),
     dbplyr::sql_translator(
       .parent = dbplyr::base_agg,

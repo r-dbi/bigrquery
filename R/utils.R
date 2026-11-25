@@ -128,3 +128,36 @@ cli_escape <- function(x) {
   x <- gsub("}", "}}", x, fixed = TRUE)
   x
 }
+
+# Adapted from dbplyr:::check_unsupported_arg()
+check_unsupported_arg <- function(
+  x,
+  allowed = NULL,
+  allow_null = FALSE,
+  arg = caller_arg(x),
+  call = caller_env()
+) {
+  if (is_missing(x)) {
+    return()
+  }
+  if (allow_null && is_null(x)) {
+    return()
+  }
+  if (identical(x, allowed)) {
+    return()
+  }
+
+  if (is_null(allowed)) {
+    msg <- "Argument {.arg {arg}} isn't supported in BigQuery translation."
+  } else {
+    msg <- "{.code {arg} = {.val {x}}} isn't supported in BigQuery translation."
+    if (allow_null) {
+      allow_msg <- "It must be {.val {allowed}} or {.code NULL} instead."
+    } else {
+      allow_msg <- "It must be {.val {allowed}} instead."
+    }
+    msg <- c(msg, i = allow_msg)
+  }
+
+  cli::cli_abort(msg, call = call)
+}
