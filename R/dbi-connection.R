@@ -378,6 +378,19 @@ setMethod("dbCreateTable", "BigQueryConnection", dbCreateTable_bq)
 
 dbReadTable_bq <- function(conn, name, ...) {
   tb <- as_bq_table(conn, name)
+
+  # Views (and other non-tables) have no stored data, so must be queried
+  type <- bq_table_meta(tb, "type")$type
+  if (!identical(type, "TABLE")) {
+    sql <- paste0("SELECT * FROM `", toString(tb), "`")
+    tb <- bq_project_query(
+      conn@billing,
+      sql,
+      quiet = conn@quiet,
+      labels = conn@labels
+    )
+  }
+
   bq_table_download(tb, ..., api = "json")
 }
 

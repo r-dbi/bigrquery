@@ -2,6 +2,8 @@
 
 * dbplyr translations now support the clock functions `add_days()`, `add_years()`, `date_build()`, `date_count_between()`, `get_year()`, `get_month()`, and `get_day()`, as well as `difftime()` (@IoannaNika).
 
+* `dbReadTable()` now returns all rows when reading a view, rather than 0 rows (#633).
+
 # bigrquery 1.6.2
 
 * BigQuery error messages containing `{` or `}` are no longer mistaken for cli expressions, so the underlying server message is shown instead of a cli parse failure (#677).
