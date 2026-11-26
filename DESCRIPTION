@@ -77,6 +77,8 @@ Collate:
     'dbi-connection.R'
     'dbi-result.R'
     'dplyr.R'
+    'dplyr-collect.R'
+    'dplyr-translate.R'
     'gs-object.R'
     'import-standalone-obj-type.R'
     'import-standalone-s3-register.R'
