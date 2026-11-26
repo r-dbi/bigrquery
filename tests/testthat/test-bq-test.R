@@ -2,7 +2,7 @@ test_that("can init and clean up dataset", {
   ds <- bq_test_dataset()
   expect_true(bq_dataset_exists(ds))
 
-  bq_test_init(ds$dataset)
+  bq_test_init(ds$dataset, api = "arrow")
   expect_true(bq_table_exists(bq_table(ds, "mtcars")))
 
   attr(ds, "env") <- NULL

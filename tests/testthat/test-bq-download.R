@@ -82,10 +82,16 @@ test_that("check_api respects inputs", {
 
 test_that("uses arrow api if bigrquerystorage installed", {
   local_mocked_bindings(is_installed = function(...) TRUE)
-  expect_equal(check_api(), "arrow")
+  expect_snapshot(expect_equal(check_api(), "arrow"))
 
   local_mocked_bindings(is_installed = function(...) FALSE)
-  expect_equal(check_api(), "json")
+  expect_snapshot(expect_equal(check_api(), "json"))
+})
+
+test_that("explicit api selection is silent", {
+  local_mocked_bindings(is_installed = function(...) TRUE)
+  expect_silent(check_api("arrow"))
+  expect_silent(check_api("json"))
 })
 
 test_that("warns if supplying unnused arguments", {
@@ -291,7 +297,7 @@ test_that("set_chunk_plan() works", {
 test_that("can read utf-8 strings", {
   sql <- "SELECT '\U0001f603' as x"
   tb <- bq_project_query(bq_test_project(), sql)
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "json")
   x <- df$x[[1]]
 
   expect_equal(Encoding(x), "UTF-8")

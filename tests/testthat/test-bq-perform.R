@@ -19,7 +19,7 @@ test_that("bq_perform_upload creates job that succeeds", {
 test_that("bq_perform_upload preserves numerical precision", {
   tb <- bq_test_table()
   bq_table_upload(tb, data.frame(dbl = pi), api = "json")
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "arrow")
   expect_equal(df$dbl, pi)
 })
 
@@ -32,13 +32,13 @@ test_that("bq_perform_upload can upload doubles to NUMERIC columns (#692)", {
     api = "json",
     write_disposition = "WRITE_APPEND"
   )
-  df <- bq_table_download(tb)
+  df <- bq_table_download(tb, api = "arrow")
   expect_equal(df$num, 1.06)
 })
 
 test_that("bq_perform_upload uses data frame types and column order (#624)", {
   tb <- bq_test_table()
-  bq_table_upload(tb, data.frame(a = 5.4, b = 5.0))
+  bq_table_upload(tb, data.frame(a = 5.4, b = 5.0), api = "json")
 
   fields <- bq_table_fields(tb)
   expect_equal(map_chr(fields, \(x) x$name), c("a", "b"))
@@ -50,8 +50,8 @@ test_that("bq_perform_upload preserves microsecond precision", {
   attr(tbl$psx, "tzone") <- "UTC"
 
   ds <- bq_test_table()
-  bq_table_upload(ds, tbl)
-  tbl2 <- bq_table_download(ds)
+  bq_table_upload(ds, tbl, api = "json")
+  tbl2 <- bq_table_download(ds, api = "arrow")
 
   expect_equal(tbl$psx, tbl2$psx)
 })
@@ -68,8 +68,8 @@ test_that("bq_perform_upload correclty assigns tzone", {
     ny = .POSIXct(0, tz = "America/New_York"),
     nz = .POSIXct(0, tz = "Pacific/Auckland")
   )
-  bq_table_upload(ds, df)
-  db <- bq_table_download(ds)
+  bq_table_upload(ds, df, api = "json")
+  db <- bq_table_download(ds, api = "arrow")
 
   expect_equal(db$utc, .POSIXct(0, tz = "UTC"))
   expect_equal(db$null, .POSIXct(0, tz = "UTC"))
@@ -116,7 +116,7 @@ test_that("can round trip extract + load", {
   job <- bq_perform_load(tb_ks, tmp)
   bq_job_wait(job)
 
-  df <- bq_table_download(tb_ks)
+  df <- bq_table_download(tb_ks, api = "arrow")
   expect_equal(nrow(df), 1)
   expect_named(df, "count")
 })
@@ -146,7 +146,7 @@ test_that("can supply scalar parameters", {
     "SELECT 1 + @x",
     parameters = list(x = bq_param_scalar(1))
   )
-  df <- bq_table_download(job)
+  df <- bq_table_download(job, api = "arrow")
   expect_setequal(df[[1]], 2)
 })
 
@@ -156,7 +156,7 @@ test_that("can supply array parameters", {
     "SELECT values FROM UNNEST(@x) values",
     parameters = list(x = bq_param_array(c("a", "b")))
   )
-  df <- bq_table_download(job)
+  df <- bq_table_download(job, api = "arrow")
   expect_setequal(df$values, c("a", "b"))
 })
 

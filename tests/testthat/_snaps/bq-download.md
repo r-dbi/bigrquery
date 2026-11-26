@@ -11,6 +11,20 @@
       x 35,000 rows were requested, but only {n} rows were received.
       i Leave `page_size` unspecified or use an even smaller value.
 
+# uses arrow api if bigrquerystorage installed
+
+    Code
+      expect_equal(check_api(), "arrow")
+    Message
+      Using `api = "arrow"`.
+
+---
+
+    Code
+      expect_equal(check_api(), "json")
+    Message
+      Using `api = "json"`.
+
 # warns if supplying unnused arguments
 
     Code

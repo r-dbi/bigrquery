@@ -74,7 +74,7 @@ test_that("can roundtrip a data frame", {
   con <- DBI::dbConnect(ds)
   name <- random_name()
 
-  DBI::dbWriteTable(con, name, mtcars)
+  DBI::dbWriteTable(con, name, mtcars, api = "arrow")
   df <- DBI::dbReadTable(con, name)
 
   expect_equal(nrow(df), 32)
@@ -85,7 +85,7 @@ test_that("can read a view", {
   ds <- bq_test_shared_dataset()
   con <- DBI::dbConnect(ds)
   name <- random_name()
-  DBI::dbWriteTable(con, name, mtcars)
+  DBI::dbWriteTable(con, name, mtcars, api = "arrow")
   view_name <- random_name()
   DBI::dbExecute(
     con,
@@ -117,7 +117,7 @@ test_that("can execute a query", {
   tb <- bq_test_table()
   con <- DBI::dbConnect(bq_dataset(tb$project, tb$dataset))
 
-  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4))
+  DBI::dbWriteTable(con, tb$table, data.frame(x = 1:4), api = "arrow")
   out <- dbExecute(con, sprintf("UPDATE %s SET x = x + 1 WHERE true", tb$table))
   expect_equal(out, 4)
 
@@ -156,8 +156,14 @@ test_that("can use DBI::Id()", {
   id <- DBI::Id(table = random_name())
 
   expect_no_error(DBI::dbCreateTable(con, id, df))
-  expect_no_error(DBI::dbAppendTable(con, id, df))
-  expect_no_error(DBI::dbWriteTable(con, id, df, overwrite = TRUE))
+  expect_no_error(DBI::dbAppendTable(con, id, df, api = "arrow"))
+  expect_no_error(DBI::dbWriteTable(
+    con,
+    id,
+    df,
+    overwrite = TRUE,
+    api = "arrow"
+  ))
   expect_no_error(DBI::dbReadTable(con, id))
   expect_true(DBI::dbExistsTable(con, id))
   expect_no_error(DBI::dbListFields(con, id))
@@ -172,12 +178,11 @@ test_that("can create an empty dataset then append to it", {
   DBI::dbCreateTable(con, tb$table, df)
   expect_equal(bq_table_nrow(tb), 0)
 
-  # Storage Write API does not immediately update `numRows` in REST metadata
-  DBI::dbWriteTable(con, tb$table, df, append = TRUE)
+  DBI::dbWriteTable(con, tb$table, df, append = TRUE, api = "arrow")
   expect_equal(nrow(DBI::dbReadTable(con, tb$table)), 1)
 
   # Or with dbAppend
-  DBI::dbAppendTable(con, tb$table, df)
+  DBI::dbAppendTable(con, tb$table, df, api = "arrow")
   expect_equal(nrow(DBI::dbReadTable(con, tb$table)), 2)
 })
 

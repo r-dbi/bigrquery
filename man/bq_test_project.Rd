@@ -12,7 +12,7 @@
 \usage{
 bq_test_project()
 
-bq_test_init(name = "basedata")
+bq_test_init(name = "basedata", api = c("json", "arrow"))
 
 bq_test_dataset(name = random_name(), location = "US")
 
@@ -26,6 +26,11 @@ gs_test_object(name = random_name())
 }
 \arguments{
 \item{name}{Dataset name - used only for testing.}
+
+\item{api}{Which API to use? \code{"json"} uploads using a BigQuery load job
+(\code{bq_perform_upload()}), while \code{"arrow"} streams data via the BigQuery
+Storage Write API (\code{bigrquerystorage::bqs_table_upload()}). If
+bigrquerystorage is installed, \code{api = "arrow"} is used by default.}
 }
 \value{
 \code{bq_test_project()} returns the name of a project suitable for use in

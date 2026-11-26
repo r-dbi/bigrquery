@@ -46,7 +46,8 @@ bq_test_project <- function() {
 #' @export
 #' @rdname bq_test_project
 #' @param name Dataset name - used only for testing.
-bq_test_init <- function(name = "basedata") {
+#' @inheritParams bq_table_upload
+bq_test_init <- function(name = "basedata", api = c("json", "arrow")) {
   proj <- bq_test_project()
 
   basedata <- bq_dataset(proj, name)
@@ -56,7 +57,7 @@ bq_test_init <- function(name = "basedata") {
 
   bq_mtcars <- bq_table(basedata, "mtcars")
   if (!bq_table_exists(bq_mtcars)) {
-    job <- bq_table_upload(bq_mtcars, values = datasets::mtcars)
+    job <- bq_table_upload(bq_mtcars, values = datasets::mtcars, api = api)
   }
 }
 
