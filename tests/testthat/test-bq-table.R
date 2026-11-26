@@ -36,7 +36,7 @@ test_that("can round trip to non-default location", {
   df1 <- tibble(x = 1:10, y = letters[1:10])
 
   bq_df <- bq_table(dallas, "df")
-  bq_table_upload(bq_df, df1)
+  bq_table_upload(bq_df, df1, api = "arrow")
 
   df2 <- bq_table_download(bq_df, api = "json")
   df2 <- df2[order(df2$x), names(df1)] # BQ doesn't guarantee order
@@ -77,7 +77,7 @@ test_that("can round trip atomic vectors", {
   )
 
   bq_df <- bq_test_table()
-  bq_table_upload(bq_df, df1)
+  bq_table_upload(bq_df, df1, api = "arrow")
 
   df2 <- bq_table_download(bq_df, bigint = "integer", api = "json")
   df2 <- df2[order(df2[[1]]), names(df1)] # BQ doesn't gaurantee order
@@ -97,7 +97,7 @@ test_that("can round-trip POSIXt to either TIMESTAMP or DATETIME", {
       bq_field("datetime", "DATETIME")
     ))
   )
-  bq_table_upload(tb, df)
+  bq_table_upload(tb, df, api = "arrow")
   df2 <- bq_table_download(tb, api = "json")
   expect_equal(df2[names(df)], df)
 })
@@ -111,7 +111,7 @@ test_that("can round trip data frame with list-cols", {
     struct = list(list(x = "a", y = 1.5, z = 2L)),
     array_struct = list(tibble::tibble(x = "a", y = 1.5, z = 2L))
   )
-  bq_table_upload(tb, df1)
+  bq_table_upload(tb, df1, api = "arrow")
 
   df2 <- bq_table_download(tb, bigint = "integer", api = "json")
   # restore column order
@@ -163,7 +163,7 @@ test_that("can round-trip GEOGRAPHY", {
   df <- tibble(geography = wk::wkt("POINT(30 10)"))
 
   tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
-  bq_table_upload(tb1, df)
+  bq_table_upload(tb1, df, api = "arrow")
   df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 })
@@ -172,7 +172,7 @@ test_that("can round-trip BYTES", {
   df <- tibble(x = blob::blob(charToRaw("hi!"), charToRaw("bye")))
 
   tb1 <- bq_table_create(bq_test_table(), as_bq_fields(df))
-  bq_table_upload(tb1, df)
+  bq_table_upload(tb1, df, api = "arrow")
   df1 <- bq_table_download(tb1, api = "json")
   expect_equal(df1, df)
 })

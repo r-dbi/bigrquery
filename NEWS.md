@@ -7,8 +7,10 @@
 * nanoparquet is now a suggested dependency, since it's only needed for `bq_perform_upload(source_format = "PARQUET")` (#690).
 * `bq_perform_upload(api = "json")` and friends now default to `json_digits = NA`, which formats doubles with 15 significant digits. This avoids floating point artifacts, so values like `1.06` can once again be uploaded to `NUMERIC` columns. Use `json_digits = 22` if you need every double to round-trip exactly (#692).
 * `bq_table_download()` now preserves column types when the result has zero rows (#615).
+* `bq_table_download()`, `bq_table_upload()`, and `collect()` now report which API they select by default. Specify `api` explicitly to silence the message.
 * `bq_table_upload()` (and hence `copy_to()` and `dbWriteTable()`) now uses bigrquerystorage if version 1.3.0 or later is installed. This uses the BigQuery Storage Write API for much faster, higher-fidelity uploads. You can explicitly select this API with `api = "arrow"`, or use `api = "json"` to retain the previous behavior (@meztez, #695).
 * `bq_table_upload()` and `dbWriteTable()` now create new tables using the column types and order of the data frame, rather than relying on BigQuery's schema autodetection, which turned whole-number doubles into integers and could reorder columns (#624).
+* `bq_test_init()` gains an `api` argument to select the upload API.
 * `collect()` now gives a more informative error when a table name like `tbl(con, "project.dataset.table")` is treated as a single identifier, suggesting `I()` instead (#656).
 * `dbGetQuery()` and `dbFetch()` now return results from multi-statement scripts (e.g. queries that use `DECLARE`), rather than zero rows (#635).
 * `dbReadTable()` now returns all rows when reading a view, rather than 0 rows (#633).

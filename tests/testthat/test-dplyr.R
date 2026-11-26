@@ -37,7 +37,10 @@ test_that("can work with nested table identifier", {
   # a default project; you can either provide a default dataset + project or
   # nothing
   table_name <- I("bigquery-public-data.utility_us.country_code_iso")
-  expect_no_error(dplyr::collect(head(dplyr::tbl(con1, table_name))))
+  expect_no_error(dplyr::collect(
+    head(dplyr::tbl(con1, table_name)),
+    api = "arrow"
+  ))
 
   con2 <- DBI::dbConnect(
     bigquery(),
@@ -45,7 +48,10 @@ test_that("can work with nested table identifier", {
     dataset = "utility_us",
     billing = bq_test_project(),
   )
-  expect_no_error(dplyr::collect(head(dplyr::tbl(con2, "country_code_iso"))))
+  expect_no_error(dplyr::collect(
+    head(dplyr::tbl(con2, "country_code_iso")),
+    api = "arrow"
+  ))
 })
 
 test_that("can copy_to", {
@@ -53,7 +59,7 @@ test_that("can copy_to", {
   con <- DBI::dbConnect(ds)
 
   expect_snapshot(dplyr::copy_to(con, mtcars), error = TRUE)
-  bq_mtcars <- dplyr::copy_to(con, mtcars, temporary = FALSE)
+  bq_mtcars <- suppressMessages(dplyr::copy_to(con, mtcars, temporary = FALSE))
 
   expect_s3_class(bq_mtcars, "tbl_BigQueryConnection")
 })
@@ -63,12 +69,12 @@ test_that("can collect and compute (no dataset)", {
   bq_mtcars <- dplyr::tbl(con, "basedata.mtcars") %>% dplyr::filter(cyl == 4)
 
   # collect
-  x <- dplyr::collect(bq_mtcars)
+  x <- dplyr::collect(bq_mtcars, api = "arrow")
   expect_equal(dim(x), c(11, 11))
 
   # compute: temporary
   temp <- dplyr::compute(bq_mtcars)
-  expect_equal(dim(dplyr::collect(temp)), c(11, 11))
+  expect_equal(dim(dplyr::collect(temp, api = "arrow")), c(11, 11))
 
   # compute: persistent
   name <- paste0("basedata.", random_name())
@@ -79,7 +85,7 @@ test_that("can collect and compute (no dataset)", {
   defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
-  expect_equal(dim(dplyr::collect(perm)), c(11, 11))
+  expect_equal(dim(dplyr::collect(perm, api = "arrow")), c(11, 11))
 })
 
 test_that("can collect and compute (with dataset)", {
@@ -91,17 +97,17 @@ test_that("can collect and compute (with dataset)", {
   bq_mtcars <- dplyr::tbl(con, "mtcars") %>% dplyr::filter(cyl == 4)
 
   # collect
-  x <- dplyr::collect(bq_mtcars)
+  x <- dplyr::collect(bq_mtcars, api = "arrow")
   expect_equal(dim(x), c(11, 11))
 
   # compute: temporary
   temp <- dplyr::compute(bq_mtcars)
-  expect_equal(dim(dplyr::collect(temp)), c(11, 11))
+  expect_equal(dim(dplyr::collect(temp, api = "arrow")), c(11, 11))
 
   # compute: persistent
   name <- random_name()
   perm <- dplyr::compute(bq_mtcars, temporary = FALSE, name = name)
-  expect_equal(dim(dplyr::collect(perm)), c(11, 11))
+  expect_equal(dim(dplyr::collect(perm, api = "arrow")), c(11, 11))
   defer(DBI::dbRemoveTable(con, name))
 
   expect_true(DBI::dbExistsTable(con, name))
@@ -131,7 +137,7 @@ test_that("collect can identify directly download tables", {
   bq3 <- dplyr::filter(bq1, cyl == 1)
   expect_false(op_can_download(bq3))
 
-  x <- dplyr::collect(bq1)
+  x <- dplyr::collect(bq1, api = "arrow")
   expect_s3_class(x, "tbl")
 
   bq5 <- dplyr::tbl(con, dplyr::sql("SELECT * FROM mtcars"))
@@ -239,7 +245,7 @@ test_that("can correctly print a lazy query", {
   # not a snapshot test because column order can vary
   expect_no_error(
     expect_output(
-      print(bq_mtcars)
+      suppressMessages(print(bq_mtcars))
     )
   )
 })

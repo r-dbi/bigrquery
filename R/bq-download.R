@@ -263,7 +263,9 @@ bq_table_download <-
 
 check_api <- function(api = c("json", "arrow"), error_call = caller_env()) {
   if (identical(api, c("json", "arrow"))) {
-    if (has_bigrquerystorage()) "arrow" else "json"
+    api <- if (has_bigrquerystorage()) "arrow" else "json"
+    cli::cli_inform('Using {.code api = "{api}"}.')
+    api
   } else {
     api <- arg_match(api, error_call = error_call)
     if (api == "arrow") {
