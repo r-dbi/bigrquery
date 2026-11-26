@@ -16,7 +16,7 @@ a user with permission to work in `BIGQUERY_TEST_PROJECT`, run
 ``` r
 bq_test_project()
 
-bq_test_init(name = "basedata")
+bq_test_init(name = "basedata", api = c("json", "arrow"))
 
 bq_test_dataset(name = random_name(), location = "US")
 
@@ -34,6 +34,14 @@ gs_test_object(name = random_name())
 - name:
 
   Dataset name - used only for testing.
+
+- api:
+
+  Which API to use? `"json"` uploads using a BigQuery load job
+  ([`bq_perform_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-perform.md)),
+  while `"arrow"` streams data via the BigQuery Storage Write API
+  ([`bigrquerystorage::bqs_table_upload()`](https://rdrr.io/pkg/bigrquerystorage/man/bqs_table_upload.html)).
+  If bigrquerystorage is installed, `api = "arrow"` is used by default.
 
 ## Value
 

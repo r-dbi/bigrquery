@@ -68,7 +68,7 @@ logged in, via <code><a href="bq_auth.html">bq_auth()</a></code>, as a user with
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bq_test_project</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">bq_test_init</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"basedata"</span><span class="op">)</span></span>
+<span><span class="fu">bq_test_init</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"basedata"</span>, api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"arrow"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">bq_test_dataset</span><span class="op">(</span>name <span class="op">=</span> <span class="fu">random_name</span><span class="op">(</span><span class="op">)</span>, location <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span></span>
 <span></span>
@@ -87,6 +87,13 @@ logged in, via <code><a href="bq_auth.html">bq_auth()</a></code>, as a user with
 
 <dl><dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
 <dd><p>Dataset name - used only for testing.</p></dd>
+
+
+<dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
+<dd><p>Which API to use? <code>"json"</code> uploads using a BigQuery load job
+(<code><a href="api-perform.html">bq_perform_upload()</a></code>), while <code>"arrow"</code> streams data via the BigQuery
+Storage Write API (<code><a href="https://rdrr.io/pkg/bigrquerystorage/man/bqs_table_upload.html" class="external-link">bigrquerystorage::bqs_table_upload()</a></code>). If
+bigrquerystorage is installed, <code>api = "arrow"</code> is used by default.</p></dd>
 
 </dl></div>
     <div class="section level2">

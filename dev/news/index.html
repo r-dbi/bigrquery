@@ -53,9 +53,13 @@
 <li>
 <code><a href="../reference/bq_table_download.html">bq_table_download()</a></code> now preserves column types when the result has zero rows (<a href="https://github.com/r-dbi/bigrquery/issues/615" class="external-link">#615</a>).</li>
 <li>
+<code><a href="../reference/bq_table_download.html">bq_table_download()</a></code>, <code><a href="../reference/api-table.html">bq_table_upload()</a></code>, and <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now report which API they select by default. Specify <code>api</code> explicitly to silence the message.</li>
+<li>
 <code><a href="../reference/api-table.html">bq_table_upload()</a></code> (and hence <code><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code>) now uses bigrquerystorage if version 1.3.0 or later is installed. This uses the BigQuery Storage Write API for much faster, higher-fidelity uploads. You can explicitly select this API with <code>api = "arrow"</code>, or use <code>api = "json"</code> to retain the previous behavior (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/r-dbi/bigrquery/issues/695" class="external-link">#695</a>).</li>
 <li>
 <code><a href="../reference/api-table.html">bq_table_upload()</a></code> and <code><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable()</a></code> now create new tables using the column types and order of the data frame, rather than relying on BigQuery’s schema autodetection, which turned whole-number doubles into integers and could reorder columns (<a href="https://github.com/r-dbi/bigrquery/issues/624" class="external-link">#624</a>).</li>
+<li>
+<code><a href="../reference/bq_test_project.html">bq_test_init()</a></code> gains an <code>api</code> argument to select the upload API.</li>
 <li>
 <code><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">collect()</a></code> now gives a more informative error when a table name like <code>tbl(con, "project.dataset.table")</code> is treated as a single identifier, suggesting <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> instead (<a href="https://github.com/r-dbi/bigrquery/issues/656" class="external-link">#656</a>).</li>
 <li>

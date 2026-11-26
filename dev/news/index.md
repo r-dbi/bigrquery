@@ -31,6 +31,11 @@
 - [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md)
   now preserves column types when the result has zero rows
   ([\#615](https://github.com/r-dbi/bigrquery/issues/615)).
+- [`bq_table_download()`](https://bigrquery.r-dbi.org/dev/reference/bq_table_download.md),
+  [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md),
+  and [`collect()`](https://dplyr.tidyverse.org/reference/compute.html)
+  now report which API they select by default. Specify `api` explicitly
+  to silence the message.
 - [`bq_table_upload()`](https://bigrquery.r-dbi.org/dev/reference/api-table.md)
   (and hence
   [`copy_to()`](https://dplyr.tidyverse.org/reference/copy_to.html) and
@@ -48,6 +53,8 @@
   frame, rather than relying on BigQuery’s schema autodetection, which
   turned whole-number doubles into integers and could reorder columns
   ([\#624](https://github.com/r-dbi/bigrquery/issues/624)).
+- [`bq_test_init()`](https://bigrquery.r-dbi.org/dev/reference/bq_test_project.md)
+  gains an `api` argument to select the upload API.
 - [`collect()`](https://dplyr.tidyverse.org/reference/compute.html) now
   gives a more informative error when a table name like
   `tbl(con, "project.dataset.table")` is treated as a single identifier,
