@@ -70,6 +70,7 @@ Collate:
     'bq-request.R'
     'bq-table.R'
     'bq-test.R'
+    'bq-tranfer-config.R'
     'camelCase.R'
     'connections-page.R'
     'cpp11.R'

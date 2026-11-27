@@ -13,3 +13,7 @@ toCamel <- function(x) {
 
   x
 }
+
+camelList <- function(...) {
+  toCamel(list2(...))
+}
